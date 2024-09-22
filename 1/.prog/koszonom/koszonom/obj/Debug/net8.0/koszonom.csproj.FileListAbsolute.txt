@@ -1,0 +1,14 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\bin\Debug\net8.0\koszonom.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\bin\Debug\net8.0\koszonom.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\bin\Debug\net8.0\koszonom.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\bin\Debug\net8.0\koszonom.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\bin\Debug\net8.0\koszonom.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\refint\koszonom.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\koszonom.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\prog\koszonom\koszonom\obj\Debug\net8.0\ref\koszonom.dll
