@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
+#include <stdlib.h>
 
 void k() {
     // 1
@@ -82,8 +84,89 @@ int divisor(int num) {
     return num;
 }
 
+int nehezsegKiszamolo(int nehezseg) {
+    if(nehezseg == 1) {
+        return 10;
+    } else if (nehezseg == 2) {
+        return 100;
+    } else if (nehezseg == 3) {
+        return 10000;
+    }
+    return 0;
+}
+
+void o() {
+    int guess;
+    int probak = 1;
+    int nehezseg;
+    int nehezsegSzorzo;
+    int num;
+    // string dicseretek[3] = ["nagyon profi vagy", "nem rossz", "jo bena volt nem rosszbol"]; sajnos egy ilyen elavult fos nyelvben nincs string
+
+    printf("koszontelek a guessing jatekban! Eloszor valaszd ki a nehezseget\n1 - konnyu\n2 - kozepes\n3 - nehez\n\n");
+
+    bool helyesNehezseg = false;
+    while(!helyesNehezseg) {
+        scanf("%d", &nehezseg);
+        nehezsegSzorzo = nehezsegKiszamolo(nehezseg);
+        if(!nehezsegSzorzo) {
+            printf("nem jo (1-3)\n");
+        } else {
+            num = rand() % nehezsegSzorzo;
+            helyesNehezseg = true;
+        }
+    }
+
+    printf("Talald ki melyik szamra gondoltam\n");
+
+    bool helyesTipp = false;
+    while(!helyesTipp) {
+        scanf("%d", &guess);
+        
+        // igy irja egy normalis ember
+        if(guess == num) {
+            printf("helyesTipp, %d probalkozasbol sikerult. ", probak);
+            helyesTipp = true;
+
+            if(probak < 5) {
+                printf("nagyon profi vagy\n\n");
+            } else if (probak < 10) {
+                printf("nem rossz\n\n");
+            } else {
+                printf("jo bena volt nem rosszbol\n\n");
+            }
+        } else {
+            printf("helytelen, ");
+            ++probak;
+
+            if(guess > num) {
+                printf("tul nagy a tipp\n");
+            } else {
+                printf("tul kicsi a tipp\n");
+            }
+        }
+
+        // igy irja az akit megvertek kiskoraban minden nap
+        /*
+        (guess == num) ? (
+            (printf("helyesTipp\n\n"), helyesTipp = true)
+        ) : (
+            printf("helytelen, "),
+            (guess > num) ? (
+                printf("tul nagy a tipp\n")
+            ) : (
+                printf("tul kicsi a tipp\n")
+            )
+        );
+        */
+    }
+}
+
+
 int main() {
-    k();
+    srand(time(NULL));
+    // k();
     // printf("%d\n\n", divisor(43));
+    // o();
     return 0;
 }

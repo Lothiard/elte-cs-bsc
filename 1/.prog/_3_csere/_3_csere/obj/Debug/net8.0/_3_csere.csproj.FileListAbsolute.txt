@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\bin\Debug\net8.0\_3_csere.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\bin\Debug\net8.0\_3_csere.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\bin\Debug\net8.0\_3_csere.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\bin\Debug\net8.0\_3_csere.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\bin\Debug\net8.0\_3_csere.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\refint\_3_csere.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\_3_csere.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\_3_csere\_3_csere\obj\Debug\net8.0\ref\_3_csere.dll
