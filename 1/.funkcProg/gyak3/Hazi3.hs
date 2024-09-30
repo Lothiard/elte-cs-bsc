@@ -31,6 +31,12 @@ module Hazi3 where
     compress :: (Eq a, Num b) => [a] -> [(a,b)]
     compress xs = [(head x, fromIntegral(length x)) | x <- group xs]
 
+    {-
+    -- megoldas
+    compress :: (Eq a, Num b) => [a] -> [(a,b)]
+    compress l = [ (head l, fromIntegral $ length l) | l <- (group list) ]
+    -}
+
     -- 6
-    -- decompress :: Integral b => [(a,b)] -> [a]
-    -- decompress ?
+    decompress :: Integral b => [(a,b)] -> [a]
+    decompress list = [ char | (char, db) <- list, _ <- [1..db] ]

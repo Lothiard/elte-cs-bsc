@@ -55,3 +55,12 @@ module Gyak3 where
 
     evens :: [Integer]
     evens = [ x | x <- [1..10], even x, x > 10 ]
+
+    add1 :: Num a => [a] -> [a]
+    add1 list = [ x+1 | x <- list]
+
+    onlyAs :: [String] -> [String]
+    onlyAs s = [ "a" | "a" <- s ]
+
+    firstIsA :: [String] -> [String]
+    firstIsA s = [ w | w@('a':xs) <- s ]
