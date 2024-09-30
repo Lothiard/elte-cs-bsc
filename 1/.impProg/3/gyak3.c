@@ -101,6 +101,7 @@ void o() {
     int nehezseg;
     int nehezsegSzorzo;
     int num;
+    int dicseretSzorzo;
     // string dicseretek[3] = ["nagyon profi vagy", "nem rossz", "jo bena volt nem rosszbol"]; sajnos egy ilyen elavult fos nyelvben nincs string
 
     printf("koszontelek a guessing jatekban! Eloszor valaszd ki a nehezseget\n1 - konnyu\n2 - kozepes\n3 - nehez\n\n");
@@ -112,12 +113,13 @@ void o() {
         if(!nehezsegSzorzo) {
             printf("nem jo (1-3)\n");
         } else {
-            num = rand() % nehezsegSzorzo;
+            num = rand() % nehezsegSzorzo + 1;
             helyesNehezseg = true;
         }
     }
 
-    printf("Talald ki melyik szamra gondoltam\n");
+    dicseretSzorzo = nehezseg;
+    printf("Talald ki melyik szamra gondoltam (1 - %d)\n", nehezsegSzorzo);
 
     bool helyesTipp = false;
     while(!helyesTipp) {
@@ -125,12 +127,12 @@ void o() {
         
         // igy irja egy normalis ember
         if(guess == num) {
-            printf("helyesTipp, %d probalkozasbol sikerult. ", probak);
+            printf("helyes tipp, %d probalkozasbol sikerult. ", probak);
             helyesTipp = true;
 
-            if(probak < 5) {
+            if(probak < 5 * dicseretSzorzo) {
                 printf("nagyon profi vagy\n\n");
-            } else if (probak < 10) {
+            } else if (probak < 10 * dicseretSzorzo) {
                 printf("nem rossz\n\n");
             } else {
                 printf("jo bena volt nem rosszbol\n\n");
@@ -167,6 +169,6 @@ int main() {
     srand(time(NULL));
     // k();
     // printf("%d\n\n", divisor(43));
-    // o();
+    o();
     return 0;
 }
