@@ -1,4 +1,5 @@
 module Lesson04 where
+import Data.List (genericReplicate)
 
 ----------------------------------
 -- Rekurzió
@@ -87,28 +88,32 @@ fact 5 ≡⟨ nem 0 ⟩
 -- Definiáld a sum' függvényt, amely összegzi egy számokat tartalmazó lista elemeit.
 -- A listáról feltehető, hogy véges.
 -- Mi lesz a legáltalánosabb típusa?
-sum' :: undefined
-sum' = undefined
+sum' :: Num a => [a] -> a
+sum' [] = 0
+sum' (x:xs) = x + sum' xs
 
 -- Definiáld a product' függvényt, amely összeszorozza egy számokat tartalmazó lista elemeit.
 -- A listáról feltehető, hogy véges.
 -- Mi lesz a legáltalánosabb típusa?
-product' :: undefined
-product' = undefined
+product' :: Num a => [a] -> a
+product' [] = 1
+product' (x:xs) = x * product' xs
 
 -- Definiáld az elem' függvényt, amely megállapítja, hogy egy elem benne van-e egy listában.
 -- A függvénynek működnie kell végtelen listán, de csak akkor, ha a keresett elem benne van a listában. (Mert csak akkor van értelme.)
 -- Mi lesz a legáltalánosabb típusa?
-elem' :: undefined
-elem' = undefined
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' a (x:xs) = a == x || elem' a xs
 
 -- SZÉP KÓD: Ha az eredmény egy Bool típusú érték, akkor felesleges bármilyen jellegű elágazást használni. A logikai műveletek elegek.
 
 -- Definiáld a genericLength' függvényt, amely megadja, hogy egy lista hány elemű.
 -- A listáról feltehető, hogy véges.
 -- Mi lesz a lehető legáltalánosabb típusa?
-genericLength' :: undefined
-genericLength' = undefined
+genericLength' :: Num b => [a] -> b
+genericLength' [] = 0
+genericLength' (_:xs) = 1 + genericLength' xs
 -- Az eredeti függvény a Data.List modulban érhető el.
 
 -- HELYES KÓD: Nem érdemes a sima length függvényt használni, mert az csak Int-et ad vissza, amelyről megtanultuk,
@@ -119,7 +124,7 @@ genericLength' = undefined
 -- Segítség: a faktoriális csak 1-től n-ig a szorzata a számoknak. Hogy tudunk 1-től n-ig számokat generálni?
 --           Melyik függvényt tudjuk felhasználni utána?
 factorial :: Integral a => a -> a
-factorial n = undefined
+factorial n = product[1..n]
 
 -- Definiáld a replicateFact függvényt, amely egy adott lista elemszámának faktoriálisaszor ismétel meg egy adott elemet.
 -- replicateFact [1,2] 'a' == "aa" -- 2! = 2
@@ -129,7 +134,7 @@ factorial n = undefined
 -- Csak meglévő függvényekkel definiáljuk rekurzió nélkül, de rosszul.
 -- Használjuk a replicate, factorial, length függvényeket!
 replicateFact :: [a] -> b -> [b]
-replicateFact i e = undefined
+replicateFact i e = replicate (factorial (length i)) e
 
 -- Próbáljuk ki:
 -- replicateFact [1..21] 'a'
@@ -143,8 +148,7 @@ replicateFact i e = undefined
 -- Próbáljuk meg jobban definiálni, mi van akkor, ha átalakítjuk az Int-et Integer-ré az ismert fromIntegral függvénnyel?
 -- A replicate függvényt cseréljük le a fenti rep függvényre, ugyanazt csinálja, csak az Integer-rel működik.
 replicateFact' :: [a] -> b -> [b]
-replicateFact' i e = undefined
-
+replicateFact' i e = genericReplicate (factorial (length i)) e
 -- Próbáljuk ki:
 -- replicateFact [1..21] 'a'
 -- Mi lesz az eredmény?
@@ -169,15 +173,17 @@ Az összes ilyen függvény a Data.List modulban található!
 
 -- Feladatok:
 -- Definiáld a (+++) függvényt, amely két listát összefűz!
-(+++) :: undefined
-(+++) = undefined
+(+++) :: [a] -> [a] -> [a]
+[] +++ ys = ys
+(x:xs) +++ ys = x : (xs +++ ys)
 
 infixr 5 +++
 -- Megj.: Az eredeti függvény neve (++).
 
 -- Definiáld az előző óráról ismert concat' függvényt rekurzívan!
 concat' :: [[a]] -> [a]
-concat' = undefined
+concat' [] = []
+concat' (xs:xss) = xs ++ concat' xss 
 
 -- Definiáld a slowReverse függvényt, amely egy lista elemeinek sorrendjét megfordítja egy naív módon.
 -- A listáról feltehető, hogy véges.
