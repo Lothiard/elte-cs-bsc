@@ -15,8 +15,8 @@ module Hazi4 where
     lucas n = lucas (n - 1) + lucas (n - 2) 
 
     longerThan :: Integral i => [a] -> i -> Bool
-    longerThan [] _ = False
     longerThan _ n | n < 0 = True
+    longerThan [] _ = False
     longerThan (_:xs) 0 = True
     longerThan (_:xs) n = longerThan xs (n - 1)
 
