@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\bin\Debug\net8.0\esos_napok.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\bin\Debug\net8.0\esos_napok.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\bin\Debug\net8.0\esos_napok.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\bin\Debug\net8.0\esos_napok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\bin\Debug\net8.0\esos_napok.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\refint\esos_napok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\esos_napok.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\esos_napok\esos_napok\obj\Debug\net8.0\ref\esos_napok.dll
