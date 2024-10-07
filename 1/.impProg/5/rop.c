@@ -2,8 +2,13 @@
 
 char substitute(char c, int shift) {
     // TODO: implementáld!
-
-    return c + shift;
+    if(c >= 'a' && c <= 'z') {
+        return 'a' + ((c - 'a' + shift) % 26);
+    }
+    if(c >= 'A' && c <= 'Z') {
+        return 'A' + ((c - 'A' + shift) % 26);
+    }
+    return c;
 }
 
 int main() {
@@ -11,16 +16,11 @@ int main() {
     printf("Eltolas merteke: ");
     scanf("%d", &shift);
 
-    // TODO: implementáld!
+    // TODO: implementáld! 
     char input;
-    int i = 0;
-    char jelszo[100]; 
     while((input = getchar()) != EOF && !(input == '.')) {
-        jelszo[i] = substitute(input, shift);
-        i++;
+        printf("%c", substitute(input, shift));
     }
-
-    printf(jelszo);
 
     return 0;
 }
