@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\bin\Debug\net8.0\balaton.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\bin\Debug\net8.0\balaton.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\bin\Debug\net8.0\balaton.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\bin\Debug\net8.0\balaton.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\bin\Debug\net8.0\balaton.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\refint\balaton.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\balaton.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\balaton\balaton\obj\Debug\net8.0\ref\balaton.dll
