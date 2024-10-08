@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\bin\Debug\net8.0\fagyosNapok.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\bin\Debug\net8.0\fagyosNapok.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\bin\Debug\net8.0\fagyosNapok.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\bin\Debug\net8.0\fagyosNapok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\bin\Debug\net8.0\fagyosNapok.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\refint\fagyosNapok.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\fagyosNapok.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\fagyosNapok\fagyosNapok\obj\Debug\net8.0\ref\fagyosNapok.dll
