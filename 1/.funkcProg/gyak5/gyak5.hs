@@ -1,5 +1,4 @@
 module Gyak5 where
-import Distribution.Compat.Lens (_1)
 
     numberWords :: [String] -> Int -> [(Int, String)]
     numberWords [] _ = []

@@ -22,7 +22,9 @@ module Hazi4 where
 
 
     format :: Integral i => i -> String -> String
-    format n (x:xs) = undefined
+    format 0 s = s
+    format n [] = ' ' : format (n - 1) []
+    format n (x:xs) = x : format (n - 1) xs
 
     merge :: [a] -> [a] -> [a]
     merge [] ys = ys
