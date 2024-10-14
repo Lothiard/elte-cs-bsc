@@ -81,8 +81,30 @@ void f3() {
     printf("massalhangzok: %d\n", massalhangzok);
 }
 
+/*
+    -1 ha a < b
+    0 ha a == b
+    1 ha a > b
+    strcomp nelkul
+*/
+
+void f7(char *a, char *b) {
+    int i = 0;
+    while(a[i] != '\0' && b[i] != '\0') {
+        if(a[i] < b[i]) { return -1; }
+        if(a[i] > b[i]) { return 1; }
+        if()
+
+        ++i;
+    }
+    if(a[i] == '\0' && b[i] == '\0') { return 0; }
+    if(a[i] == '\0') { return -1; }
+    return 1;
+}
+
 int main () {
     // f1();
     // f2();
-    f3();
+    // f3();
+    f7();
 }
