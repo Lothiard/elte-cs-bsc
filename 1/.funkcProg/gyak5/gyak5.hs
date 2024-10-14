@@ -32,6 +32,8 @@ module Gyak5 where
     drop' k [] = []
     drop' k (x:xs) = drop' (k-1) xs
 
+    {-
+
     splitAt' :: Integral a => a -> [b] -> ([a],[b])
     splitAt' k list = (take' k list, drop' k list)
 
@@ -39,3 +41,5 @@ module Gyak5 where
     replicate' k _
         | k <= 0 = []
         | otherwise = e : replicate' (k-1) e
+
+-}

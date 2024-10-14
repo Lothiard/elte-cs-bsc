@@ -47,3 +47,16 @@ module Hazi5 where
     deleteDuplicateSpaces [] = []
     deleteDuplicateSpaces (' ': ' ': xs) = deleteDuplicateSpaces (' ': xs)
     deleteDuplicateSpaces (x:xs) = x : deleteDuplicateSpaces xs
+
+    {-
+    igy kellett volna
+    deleteDuplicateSpaces :: String -> String
+    deleteDuplicateSpaces xs = helper (dropwhile (==' ') xs) where
+        helper [] = []
+        helper (' ':x:xs)
+            | x == ' ' = helper (x:xs)
+            | otherwise = ' ' : x : helper (xs)
+        helper (x:xs)
+            | x == ' ' = helper xs
+            | otherwise = ?
+    -}
