@@ -18,7 +18,7 @@ int main() {
         i++;
     }
 
-    short *ptr2, *end;
+    short *ptr2, *end2;
     ptr2 = (short*)var;
     end2 = (short*)(var + MAX - 1);
 
@@ -33,3 +33,4 @@ int main() {
         ptr2++;
         i++;
     }
+}

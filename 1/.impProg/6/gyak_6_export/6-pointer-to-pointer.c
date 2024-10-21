@@ -21,6 +21,9 @@ int main() {
     **pptr = 42;
     /* what happens now? */
     /* printf("var = %d\n", var); */
+    printf("Value of var = %d\n", var);
+    printf("Value available at *ptr = %d\n", *ptr);
+    printf("Value available at **pptr = %d\n", **pptr);
 
     return 0;
 }
