@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("esos_napok")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c37099e080a765d9d80230baa817068e193e2a0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+679528c2f4c69df4c23d05368f8c0ce227d27470")]
 [assembly: System.Reflection.AssemblyProductAttribute("esos_napok")]
 [assembly: System.Reflection.AssemblyTitleAttribute("esos_napok")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
