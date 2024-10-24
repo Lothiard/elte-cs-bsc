@@ -1,39 +1,24 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-// 6. gyakrol
-int a[5] = {1, 2, 3, 4, 5};
-
-double avg(int *begin, int *end) {
-    int n = end - begin;
-
-    double sum = 0;
-    while(begin < end) {
-        sum += *begin;
-        ++begin;
+void hex_to_dec() {
+    char hex[100];
+    while (scanf("%s", hex) != EOF) {
+        long decimal = strtol(hex, NULL, 16);
+        printf("%ld\n", decimal);
     }
-
-    return sum / n;
 }
 
-int *max_element(int *begin, int *end) {
-    int *maxp = begin;
-
-    while (begin < end) {
-        if(*begin > *maxp) {
-            maxp = begin;
+void fill_multiplication_table(int n, int matrix[n][n]) {
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            matrix[i-1][j-1] = i * j;
         }
-        ++begin;
     }
-
-    return maxp;
 }
-
-// 7
-int convert()
 
 int main() {
-    printf("%f\n", avg(&a[0], &a[5]));
-
-
+    hex_to_dec();
+    fill_multiplication_table;
     return 0;
 }
