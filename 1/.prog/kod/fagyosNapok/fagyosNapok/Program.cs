@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Restye János Barnabás | F8U9I2 | f8u9i2@inf.elte.hu
+
+using System;
 
 namespace fagyosNapok {
     public struct Idojaras {
@@ -20,7 +22,7 @@ namespace fagyosNapok {
                 ho[i - 1].max = int.Parse(input[1]);
             }
 
-            // feladat megoldas
+            // feladatmegoldas
             fagy = 0;
             for(i = 1; i <= n; ++i) {
                 if (ho[i - 1].min < 0) {
