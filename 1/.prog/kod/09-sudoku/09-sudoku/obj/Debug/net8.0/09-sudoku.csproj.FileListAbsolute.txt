@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\bin\Debug\net8.0\09-sudoku.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\bin\Debug\net8.0\09-sudoku.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\bin\Debug\net8.0\09-sudoku.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\bin\Debug\net8.0\09-sudoku.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\bin\Debug\net8.0\09-sudoku.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\refint\09-sudoku.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\09-sudoku.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-sudoku\09-sudoku\obj\Debug\net8.0\ref\09-sudoku.dll
