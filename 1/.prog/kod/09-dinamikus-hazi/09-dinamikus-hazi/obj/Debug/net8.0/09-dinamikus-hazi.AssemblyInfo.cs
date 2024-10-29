@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("09-dinamikus-hazi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61974484f9c8f79b442bff3db1c56d7e1901f0d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e51ea12b84dd979d4373c1f731a4b0ffc8503905")]
 [assembly: System.Reflection.AssemblyProductAttribute("09-dinamikus-hazi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("09-dinamikus-hazi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
