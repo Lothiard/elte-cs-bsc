@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\bin\Debug\net8.0\09-dinamikus-hazi.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\bin\Debug\net8.0\09-dinamikus-hazi.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\bin\Debug\net8.0\09-dinamikus-hazi.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\bin\Debug\net8.0\09-dinamikus-hazi.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\bin\Debug\net8.0\09-dinamikus-hazi.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\refint\09-dinamikus-hazi.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\09-dinamikus-hazi.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\09-dinamikus-hazi\09-dinamikus-hazi\obj\Debug\net8.0\ref\09-dinamikus-hazi.dll
