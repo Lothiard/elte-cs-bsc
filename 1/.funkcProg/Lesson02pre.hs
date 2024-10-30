@@ -134,7 +134,8 @@ Hogyan definiáljuk? Lényegében a kód pontosan ugyanúgy fog kinézni, ahogy 
 -}
 
 not' :: Bool -> Bool
-not' = undefined
+not' True = False
+not' False = True
 
 {-
 FONTOS! A minta illeszkedésének ellenőrzése FENTRŐL LEFELÉ sorrendben történik.
@@ -181,13 +182,16 @@ Ha előbb van az a minta, ami több mindenre illeszkedik (általánosabb), akkor
 -- Gyakorlás, ötletelés:
 -- Definiáld az (&&&) függvényt mintaillesztéssel, amely a logikai és műveletét végzi el két Bool értéken!
 
-(&&&) :: undefined
-(&&&) = undefined
+(&&&) :: Bool -> Bool -> Bool
+(&&&) True True = True
+(&&&) _ _ = False
 
 -- Definiáld a (|||) függvényt mintaillesztéssel, amely a logikai vagy műveletét végzi el két Bool értéken!
 
-(|||) :: undefined
-(|||) = undefined
+(|||) :: Bool -> Bool -> Bool
+(|||) True _ = True
+(|||) _ True = True
+(|||) _ _ = False
 
 {-
 Ezen fenti függvényeket sokféleképpen lehet definiálni.
@@ -248,11 +252,14 @@ A lustaság miatt a kifejezés maradék részére rá se kell nézni, az (&&) de
 
 -- Definiáld az isZero függvényt mintaillesztéssel, amely egy számról ellenőrzi, hogy 0-e.
 isZero :: Integer -> Bool
-isZero = undefined
+isZero 0 = True
+isZero _ = False
 
 -- Definiáld az isAorB függvényt mintaillesztéssel, amely egy karakterről eldönti, hogy az a nagy A vagy a nagy B-e.
 isAorB :: Char -> Bool
-isAorB = undefined
+isAorB 'A' = True
+isAorB 'B' = True
+isAorB _ = False
 
 ---------------------------------------
 -- Rendezett pár (rendezett n-es)
@@ -300,20 +307,22 @@ sum3 (x,y,z) = x + y + z
 -- Definiáld az fst és snd-vel, illetve definiáld mintaillesztéssel is.
 
 incBoth :: (Integer,Double) -> (Integer,Double)
-incBoth = undefined
+incBoth tuple = (fst tuple + 1, snd tuple + 1)
 
 incBoth' :: (Integer,Double) -> (Integer,Double)
-incBoth' = undefined
+incBoth' (x,y) = (x + 1, y + 1)
 
 -- Definiáld az isOrigo függvényt, amely meghatározza egy 3 dimenziós Descartes-féle koordináta-rendszerben ábrázolt pontról, hogy az az origó-e.
 isOrigo :: (Integer,Integer,Integer) -> Bool
-isOrigo = undefined
+isOrigo (0,0,0) = True
+isOrigo _ = False
 
 -- Definiáld az x0 függvényt, amely azt csinálja, hogy ha egy rendezett pár első komponense 0, akkor a másodikhoz hozzáad 1-et,
 -- egyébként pedig kivon 1-et a második komponensből.
 
 x0 :: (Integer,Integer) -> (Integer,Integer)
-x0 = undefined
+x0 (0,y) = (0, y + 1)
+x0 (x,y) = (x, y - 1)
 
 -- SZÉP KÓD: Amikor tehetjük, mindig használjunk mintaillesztést. Sokkal szebb és olvashatóbb. Ez később még inkább igaz lesz, amikor több eszközünk lesz.
 --           (Karakterek és számok mintaillesztése macerás, ott nem igazán elvárt azon értékek mintaillesztése. Bármi más viszont jól illeszthető.)
