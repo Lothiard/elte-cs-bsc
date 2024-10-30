@@ -126,20 +126,22 @@ Típusszinonimákról még későbbi órákon lesz szó.
 -- Feladat:
 -- Definiáld a null' függvényt MINTAILLESZTÉSSEL, amely egy listáról ellenőrzi, hogy üres-e.
 null' :: [a] -> Bool
-null' = undefined
+null' [] = True
+null' _ = False
 
 -- Definiáld a notNull függvényt MINTAILLESZTÉSSEL, amely egy listáról ellenőrzi, hogy nem üres-e.
 notNull :: [a] -> Bool
-notNull = undefined
+notNull [] = False
+notNull _ = True
 
 -- Definiáld a head' függvényt MINTAILLESZTÉSSEL, amely egy listának veszi az első elemét.
 -- Mi lesz a típusa?
-head' :: undefined
-head' = undefined
+head' :: [a] -> a
+head' (x:xs) = x
 
 -- Definiáld a tail' függvényt MINTAILLESZTÉSSEL, amely egy listának eldobja az első elemét.
-tail' :: undefined
-tail' = undefined
+tail' :: [a] -> [a]
+tail' (x:xs) = xs
 
 -- Észrevehetjük, hogy a head' és a tail' üres lista esetén csúnyán viselkednek, futási hibát okoznak.
 -- Az ilyen függvényeket szokás parciális függvényeknek nevezni.
@@ -162,7 +164,7 @@ SZÉP KÓD: A parciális függvények használatát kerüljük el!! Túl egyszer
 
 -- Definiáld azt a függvényt, amely egy legalább három elemű lista második elemét elhagyja, minden más esetben az eredeti listát adja vissza!
 remove2nd :: [a] -> [a]
-remove2nd = undefined
+remove2nd (x:_:xs) = x:xs
 
 -- As pattern @ : A mintaillesztés egyes részeinek tudunk nevet adni például az alábbi formában:
 alma :: [a] -> [a]
@@ -176,7 +178,7 @@ alma (_:_:ys@(_:_:xs)) = ys
 
 -- Definiáld újra a fenti függvényt a @ elnevezést használva.
 remove2nd' :: [a] -> [a]
-remove2nd' = undefined
+remove2nd' (x:_:xs@(y:_:ys)) = x:xs -- ?
 
 ----------------------------------------
 -- Lista .. kifejezések (range)
@@ -255,17 +257,17 @@ A generátorok mindig balról jobbra sorrendben lépkednek, ez az előző kifeje
 
 -- Definiáld az add1 függvényt, amely egy lista minden számához hozzáad 1-et.
 add1 :: Num a => [a] -> [a]
-add1 = undefined
+add1 n = [ x + 1 | x <- n ]
 
 -- Definiáld a rep függvényt, amely egy adott elemszámú azonos elemekből álló listát készít.
 rep :: Integer -> a -> [a]
-rep = undefined
+rep n x = [ x | _ <- [1..n] ]
 -- Az eredeti függvénye a replicate, azonban az historical reasons miatt csak Int-tel működik, nem jó ötlet használni.
 
 -- Definiáld az onlyUpper függvényt, amely egy szövegből csak a nagybetűket tartja meg.
 -- Segítség: ÚJ DOLOG kell! Az isUpper függvény egy karakterről megállapítja, hogy nagybetű-e. Ez a függvény azonban a Data.Char nevű modulban található.
 -- Importálni csomagokat az "import <csomag>" módon lehet a MODULDEKLARÁCIÓ UTÁN KÖZVETLEN
--- -- Ezen modulban a "module Lesson03 where" után kell rakni az első függvénydefiníció előtt.
+-- -- Ezen modulban a "module Lesson03 where" után kell rakni az első függvénydefiníció előtt
 onlyUpper :: String -> [Char]
 onlyUpper = undefined
 
