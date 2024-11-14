@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tanorak")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d3b30f94e58347a52ae2078ca74aa6c91110687")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d84e707a50ac15a5490934612de0e16784254662")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tanorak")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tanorak")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
