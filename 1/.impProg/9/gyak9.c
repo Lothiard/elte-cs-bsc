@@ -14,13 +14,13 @@ int main(int argc, const char *argv[]) {
         return 1;
     }
 
-    if(strcmp(argv[1], "1")) {
+    if(strcmp(argv[1], "1") == 0) {
         elso();
-    } else if (strcmp(argv[1], "2")) {
+    } else if (strcmp(argv[1], "2") == 0) {
         masodik();
-    } else if(strcmp(argv[1], "3")) {
+    } else if(strcmp(argv[1], "3") == 0) {
         harmadik();
-    } else if(strcmp(argv[1], "4")) {
+    } else if(strcmp(argv[1], "4") == 0) {
         negyedik();
     }
     return 0;
