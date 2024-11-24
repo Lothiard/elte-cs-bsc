@@ -9,131 +9,124 @@ namespace Tanorak {
         static void Main(string[] args) {
             // deklaralas
             // Be
-            int n;
-            int t;
-            string oa;
-            string[] tanar;
-            Tora[] orak;
-
-            // Sa
-            int maxoraszam;
-            int maxtanardb;
-            string[] maxtanarok;
-
-            // Ki
-            int[] osszoraszam;
-            string maxtanar;
-            int osztalyoraidb;
-            string[] osztalyorai;
-            int targyakdb;
-            string[] targyak;
+            int n, t, i;
+            string oa, s;
+            string[] temp;
 
             // beolvasas
-            beolvas(out n, out t, out oa, out tanar, out orak, out maxtanarok, out osszoraszam, out osztalyorai, out targyak);
-
-            // feladatmegoldas
-            a_feladat(t, n, orak, ref osszoraszam);
-            b_feladat(out maxoraszam, orak, n, out maxtanardb, maxtanarok, tanar, out maxtanar);
-            c_feladat(out osztalyoraidb, n, orak, oa, osztalyorai);
-            d_feladat(out targyakdb, n, orak, targyak);
-
-            // kiiras
-            kiiras(t, osszoraszam, maxtanar, osztalyoraidb, osztalyorai, targyakdb, targyak);
-
-        }
-
-        // beolvas
-        static void beolvas(out int n, out int t, out string oa, out string[] tanar, out Tora[] orak, out string[] maxtanarok, out int[] osszoraszam, out string[] osztalyorai, out string[] targyak) {
-            string[] temp = Console.ReadLine().Split(' ');
+            temp = Console.ReadLine().Split(' ');
             int.TryParse(temp[0], out n);
             int.TryParse(temp[1], out t);
             oa = temp[2];
 
-            tanar = new string[t];
-            orak = new Tora[n];
-            maxtanarok = new string[t];
-            osszoraszam = new int[t];
-            osztalyorai = new string[n];
-            targyak = new string[t];
+            Tora[] orak = new Tora[n + 1];
+            string[] tanar = new string[t + 1];
 
 
-            for (int i = 1; i <= t; ++i) {
+            for (i = 1; i <= t; ++i) {
                 tanar[i - 1] = Console.ReadLine();
             }
 
-            for (int i = 1; i <= n; ++i) {
+
+            for (i = 1; i <= n; ++i) {
                 orak[i - 1].targynev = Console.ReadLine();
                 int.TryParse(Console.ReadLine(), out orak[i - 1].tanar);
                 int.TryParse(Console.ReadLine(), out orak[i - 1].oraszam);
                 orak[i - 1].osztaly = Console.ReadLine();
             }
+
+            // Sa
+            int maxoraszam, maxtanardb;
+            string[] maxtanarok = new string[t + 1];
+
+
+            // Ki
+            int[] osszoraszam = new int[t + 1];
+            string maxtanar;
+            string[] osztalyorai = new string[t + 1];
+            int osztalyoraidb;
+            string[] targyak = new string[t + 1];
+            int targyakdb;
+
+            // feladatmegoldas
+            a_feladat(i, t, ref osszoraszam, orak);
+            b_feladat(i, out maxoraszam, orak, n, out maxtanardb, maxtanarok, tanar, out maxtanar);
+            c_feladat(i, out osztalyoraidb, n, orak, oa, osztalyorai);
+            d_feladat(i, out targyakdb, n, orak, targyak);
+
+            // kiiras
+            kiiras(i, t, osszoraszam, maxtanar, osztalyoraidb, osztalyorai, targyakdb, targyak);
+
         }
 
         // a) feladat
-        static void a_feladat(int t, int n, Tora[] orak, ref int[] osszoraszam) {
-            for (int i = 1; i <= t; ++i) {
-                osszoraszam[i - 1] = tanaroraszam(i, n, orak);
+        static void a_feladat(int i, int t, ref int[] osszoraszam, Tora[] orak) {
+            for (i = 1; i <= t; ++i) {
+                osszoraszam[i - 1] = tanaroraszam(i, orak);
             }
         }
 
-        static int tanaroraszam(int tanar, int n, Tora[] orak) {
-            int tanaroraszam = 0;
-            for (int i = 1; i <= n; ++i) {
-                tanaroraszam += tanaroraja(tanar, i, orak);
+        static int tanaroraszam(int tanar, Tora[] orak) {
+            int s = 0;
+            for (int i = 1; i <= orak.Length - 1; ++i) {
+                s += tanaroraja(tanar, i, orak);
             }
-            return tanaroraszam;
+            return s;
         }
 
         static int tanaroraja(int tanar, int ora, Tora[] orak) {
+            int res;
             if (tanar == orak[ora - 1].tanar) {
-                return orak[ora - 1].oraszam;
+                 res = orak[ora - 1].oraszam;
             } else {
-                return 0;
+                res = 0;
             }
+
+            return res;
         }
 
         // b) feladat
-        static void b_feladat(out int maxoraszam, Tora[] orak, int n, out int maxtanardb, string[] maxtanarok, string[] tanar, out string maxtanar) {
+        static void b_feladat(int i, out int maxoraszam, Tora[] orak, int n, out int maxtanardb, string[] maxtanarok, string[] tanar, out string maxtanar) {
             maxoraszam = orak[1 - 1].oraszam;
-            for (int i = 1 + 1; i <= n; ++i) {
-                if(maxoraszam > orak[i - 1].oraszam) {
+            for (i = 1 + 1; i <= n; ++i) {
+                if(maxoraszam < orak[i - 1].oraszam) {
                     maxoraszam = orak[i - 1].oraszam;
                 }
             }
 
             maxtanardb = 0;
-            for (int i = 1; i <= n; ++i) {
+            for (i = 1; i <= n; ++i) {
                 if (orak[i - 1].oraszam == maxoraszam) {
-                    maxtanardb++;
+                    ++maxtanardb;
                     maxtanarok[maxtanardb - 1] = tanar[orak[i - 1].tanar - 1];
                 }
             }
 
             maxtanar = maxtanarok[1 - 1];
-            for (int i = 1 + 1; i <= maxtanardb; ++i) {
-                if (String.Compare(maxtanar, maxtanarok[i - 1], StringComparison.Ordinal) < 0) { // valami nem jo
+            for (i = 1 + 1; i <= maxtanardb; ++i) {
+                if (maxtanar.CompareTo(maxtanarok[i - 1]) > 0) { // valami nem jo
                     maxtanar = maxtanarok[i - 1];
                 }
             }
         }
 
         // c) feladat
-        static void c_feladat(out int osztalyoraidb, int n, Tora[] orak, string oa, string[] osztalyorai) {
+        static void c_feladat(int i, out int osztalyoraidb, int n, Tora[] orak, string oa, string[] osztalyorai) {
             osztalyoraidb = 0;
-            for (int i = 1; i <= n; ++i) {
+            for (i = 1; i <= n; ++i) {
                 if (orak[i - 1].osztaly == oa) {
-                    osztalyoraidb++;
+                    ++osztalyoraidb;
                     osztalyorai[osztalyoraidb - 1] = orak[i - 1].targynev;
                 }
             }
         }
 
         // d) feladat
-        static void d_feladat(out int targyakdb, int n, Tora[] orak, string[] targyak) {
+        static void d_feladat(int i, out int targyakdb, int n, Tora[] orak, string[] targyak) {
             targyakdb = 0;
-            for (int i = 1; i < n; ++i) {
+            for (i = 1; i <= n; ++i) {
                 if(elso(i, orak)) {
-                    targyakdb++;
+                    ++targyakdb;
                     targyak[targyakdb - 1] = orak[i - 1].targynev;
                 }
             }
@@ -147,10 +140,10 @@ namespace Tanorak {
             return i > ora - 1;
         }
 
-        static void kiiras(int t, int[] osszoraszam, string maxtanar, int osztalyoraidb, string[] osztalyorai, int targyakdb, string[] targyak) {
+        static void kiiras(int i, int t, int[] osszoraszam, string maxtanar, int osztalyoraidb, string[] osztalyorai, int targyakdb, string[] targyak) {
             // a) feladat
-            for (int i = 1; i <= t; ++i) {
-                Console.Write(osszoraszam[i - 1] + " ");
+            for (i = 1; i <= t; ++i) {
+                Console.Write("{0} ", osszoraszam[i - 1]);
             }
             Console.WriteLine();
 
@@ -159,15 +152,15 @@ namespace Tanorak {
 
             // c) feladat
             Console.Write(osztalyoraidb);
-            for (int i = 1; i <= osztalyorai.Length; ++i) {
-                Console.Write("," + osztalyorai[i - 1]); // TODO fix ,,,,
+            for (i = 1; i <= osztalyoraidb; ++i) {
+                Console.Write(",{0}", osztalyorai[i - 1]);
             }
             Console.WriteLine();
 
             // d) feladat
             Console.Write(targyakdb);
-            for (int i = 1; i <= targyak.Length; ++i) {
-                Console.Write("," + targyak[i - 1]); // TODO fix bad result
+            for (i = 1; i <= targyakdb; ++i) {
+                Console.Write(",{0}", targyak[i - 1]);
             }
             Console.WriteLine();
         }
