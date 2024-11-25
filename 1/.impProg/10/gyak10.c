@@ -4,15 +4,11 @@
 
 char *read_str() {
     char buf[21];
-    char *ptr = fgets(buf, 21, stdin);
-    
-    if(ptr == NULL) {
-        puts("anyad");
-        return NULL;
-    }
+    fgets(buf, 21, stdin);
 
     char *copy = malloc(strlen(buf) + 1);
     strcpy(copy, buf);
+
     return copy;
 }
 
@@ -31,24 +27,27 @@ char *read_word() {
 // call
 char *reverse(char *str) {
     int n = strlen(str);
-
     int i = 0;
     int j = n - 1;
-    while(i < j) {
+
+    while (i < j) {
         char tmp = str[i];
-        str[i] = tmp[j];
+        str[i] = str[j];
         str[j] = tmp;
         ++i;
         --j;
     }
 
-    return *str;
+    return str;
 }
 
 int main() {
+    // 1
     char *copy = read_str();
+    printf("%s", copy);
     free(copy);
 
+    // 2
     char *words[5];
 
     printf("irj 5 szot:\n");
