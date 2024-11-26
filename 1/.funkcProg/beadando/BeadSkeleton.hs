@@ -23,7 +23,7 @@ instance Show a => Show (Tok a)
     show (TokLit a) = "TokLit " ++ show a
     show (TokBinOp _ op ero kotes) = "TokBinOp " ++ show op ++ " " ++ show ero ++ " " ++ show kotes
 
--- Eq pendany
+-- Eq peldany
 instance Eq a => Eq (Tok a)
   where
     BrckOpen == BrckOpen = True
@@ -50,7 +50,6 @@ operatorTable =
     ]
 
 -- 2.
--- operatorFromChar
 operatorFromChar :: OperatorTable a -> Char -> Maybe (Tok a)
 operatorFromChar [] _ = Nothing
 operatorFromChar ((funk, (op, ero, kotes)):xs) x
@@ -61,33 +60,55 @@ getOp :: (Floating a) => Char -> Maybe (Tok a)
 getOp = operatorFromChar operatorTable
 
 -- 3.
--- parseTokens
 parseTokens :: Read a => OperatorTable a -> String -> Maybe [Tok a]
 parseTokens opTable input = traverse id $ tokenize [] input
   where
-    tokenize temp [] = reverse temp -- alapeset
+    tokenize temp [] = reverse temp                                                 -- alapeset
     tokenize temp (x:xs)
-      | isSpace x = tokenize temp xs
-      | x == '(' = Just BrckOpen : tokenize temp xs -- ha (
-      | x == ')' = Just BrckClose : tokenize temp xs -- ha )
-      | isDigit x = -- ha literal
+      | isSpace x = tokenize temp xs                                                -- hs ws
+      | x == '(' = Just BrckOpen : tokenize temp xs                                 -- ha (
+      | x == ')' = Just BrckClose : tokenize temp xs                                -- ha )
+      | isDigit x =                                                                 -- ha literal
         case span (\x -> isDigit x || x == '.') (x:xs) of
           (num, maradek) -> Just (TokLit (read num)) : tokenize temp maradek
-      | otherwise = case lookup x opTable of -- ha op
-        Just (op, prec, dir) -> Just (TokBinOp op x prec dir) : tokenize temp xs
-        Nothing -> [Nothing]
+      | otherwise =                                                                 -- ha op
+        case lookup x opTable of 
+          Just (op, prec, dir) -> Just (TokBinOp op x prec dir) : tokenize temp xs
+          Nothing -> [Nothing]
   
 parse :: String -> Maybe [Tok Double]
 parse = parseTokens operatorTable
 
--- parseAndEval :: (String -> Maybe [Tok a]) -> ([Tok a] -> ([a], [Tok a])) -> String -> Maybe ([a], [Tok a])
--- parseAndEval parse eval input = maybe Nothing (Just . eval) (parse input)
+parseAndEval :: (String -> Maybe [Tok a]) -> ([Tok a] -> ([a], [Tok a])) -> String -> Maybe ([a], [Tok a])
+parseAndEval parse eval input = maybe Nothing (Just . eval) (parse input)
 
--- syNoEval :: String -> Maybe ([Double], [Tok Double])
--- syNoEval = parseAndEval parse shuntingYardBasic
+-- 4.
+shuntingYardBasic :: [Tok a] -> ([a], [Tok a])
+shuntingYardBasic tokens = shunt tokens [] []
+  where
+    shunt [] lit op = (lit, op)                              -- alapeset
+    shunt (x:xs) lit op
+      | TokLit x <- x = shunt xs (x : lit) op                -- ha literal -> literal lista
+      | BrckOpen <- x = shunt xs lit (x : op)                -- ha ( -> operator lista
+      | TokBinOp _ _ _ _ <- x = shunt xs lit (x : op)        -- ha operator -> operator lista
+      | BrckClose <- x = shunt xs newLit newOp               -- ha ) -> eval
+        where
+          (newLit, newOp) = eval lit op
 
--- syEvalBasic :: String -> Maybe ([Double], [Tok Double])
--- syEvalBasic = parseAndEval parse (\t -> shuntingYardBasic $ BrckOpen : (t ++ [BrckClose]))
+    eval lit (BrckOpen : ops) = (lit, ops)
+    eval (x2 : x1 : xs) (TokBinOp f _ _ _ : ops) = eval (result : xs) ops
+      where
+        result = f x1 x2
+      
+
+syNoEval :: String -> Maybe ([Double], [Tok Double])
+syNoEval = parseAndEval parse shuntingYardBasic
+
+syEvalBasic :: String -> Maybe ([Double], [Tok Double])
+syEvalBasic = parseAndEval parse (\t -> shuntingYardBasic $ BrckOpen : (t ++ [BrckClose]))
+
+-- 5.
+-- shuntingYardPrecedence :: [Tok a] -> ([a], [Tok a])
 
 -- syEvalPrecedence :: String -> Maybe ([Double], [Tok Double])
 -- syEvalPrecedence = parseAndEval parse (\t -> shuntingYardPrecedence $ BrckOpen : (t ++ [BrckClose]))
