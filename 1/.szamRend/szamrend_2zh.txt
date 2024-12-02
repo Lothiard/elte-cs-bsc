@@ -1,0 +1,349 @@
+Melyik leírás NEM jellemző egy ma használatos általános számítógép-operációs rendszer világra?
+Csak egy jellemző célfeladat megoldására használt számítógépes rendszer.
+
+Mit jelent, hogy digitális, diszkrét rendszereket, értékeket használunk a mai informatika világában?
+Azt, hogy az analóg világból a konverzió során csak a mintavételnek(ábrázolt bitszámnak) megfelelő értékeket tudjuk tárolni.
+
+Sorolja fel, hogy milyen műveletek(aritmetikai, logikai) léteznek a UNIX shellben?
+A Unix operációs rendszertípusok alatt nincsenek aritmetikai, logikai műveletek.
+
+Milyen műveletek elvégzését biztosítja a Unix shell környezete?
+Nincs más csak szöveg összefűzés. Ez van ezt kell szeretni.
+
+Melyik(ek) az alábbiak közül nem szükséges egy számítógéphez?
+monitor
+
+Melyik shell utasításnak van befejezési eredménye?
+Mindegyiknek, ez általános operációs rendszer tulajdonság.
+
+Az alábbi utasításban echo "cat>$i<<'$i vege'", az i változó melyik esetben kerül behelyettesítésre? (i létezik)
+Az összes előfordulásnál behelyettesítésre kerül.
+
+Milyen a kettes komplemensű számábrázolás?
+Olyan egész szám ábrázolás, ahol a szám -1 szerese így számítható: negált + 1
+
+Mi a szöveges FTP fájlátvitel jellegzetessége?
+A sorvég karakter különböző értelmezése Unix és Windows világban.
+
+Mi dönti ma el, hogy egy számítógépes rendszer "kliens" vagy "szerver" gépnek tekinthető?
+A használat jellege. Egy jellemzően kliens rendszeren is futhatnak szolgáltatások, szervizek.
+
+Mi a szerepe annak, ha egy szkriptet "pontosan" (pont helyköz szkripnév) indítunk? Így: . szkript
+Az, hogy szkriptben definiált függvények, változók a shellből is elérhetők lesznek.
+
+Egy Unix környezetben, milyen esetben, mikor használhatjuk az alábbi reguláris kifejezést mint paramétert: "^Szia\.$"
+Bármely parancs paraméterként használhatjuk. legfeljebb nem érti!
+
+Mi történik, ha egy fájlhoz létrehozunk egy hard linket is, majd az eredeti fájlt töröljük?
+A hard linken keresztül továbbra is elérhető a tartalom
+
+Mik azok a környezeti változók?
+Azon változók köre, melyeket egy terminál kapcsolatban használt folyamatok közül bármelyik használhat.
+
+Mit értünk az informatika világában célszámítógép alatt?
+Olyan számítógép amelyik valamilyen feladatcsoport(ipari) végrehajtáshoz van tervezve, nem biztos, hogy vannak klasszikus perifériái.
+
+Milyen célt szolgál az ACL használata Unix-Linux rendszerben?
+A klasszikus rwx hármast kiegészítik más felhasználó, más csoportok jogosítványának megadására.
+
+Mit jelent egy Unix parancs futási eredményessége, eredménye?
+Minden Unix parancs a C main függvényének zárásaként szereplő return utasítás által visszaadott értéket.
+
+Melyik operációs rendszerben nem használhatók az ACL (Acces Control List) alapú hozzáférési listák?
+Ez nem operációs rendszer, hanem fájlrendszer függő.
+
+Igaz-e, hogy egyetlen folyamat futtatható csak az előtérben?
+Igaz
+
+Mi a CPU feladata?
+A benne definiált (bináris) parancsok végrehajtása.
+
+Mire jó a "sticky bit"?
+A kiegészítő bithármas harmadik része, a törlés finomítását adja.
+
+Shell scriptben mi az alapja a logikai igaz-hamis alapú ciklusoknak? (while vagy until)
+A while vagy until kulcsszavak utáni, do előtti utasítások közül az utolsó visszatérési értéke.
+
+Mikor fejeződik be a következő ciklus? while read x; do echo $x; done
+Ez bizony soha.
+
+Melyik leírás NEM jellemző egy ma használatos általános számítógép-operációs rendszer világra?
+Csak egy jellemző célfeladat megoldására használt számítógépes rendszer.
+
+A lebegőpontos számábrázolás karakterisztikája mit határoz meg?
+A szám nagyságrendjét.
+
+Mire használtak a speciális fájlnév karakterek (",?,[],!)?
+Egy speciális kifejezés formával tudunk egy vagy több névre hivatkozni vagy megadni.
+
+Tudunk-e "titkosítani" egy tetszőleges szöveget egy kódtábla segítségével?
+Akár azzal is titkosíthatunk, de az nem lesz egy szupertitkos valami.
+
+Az alábbi utasítás exit 0|| echo "Az élet szép!" mikor írja ki, hogy "Az élet szép!'?
+Sajnos sose!
+
+Hány belépési pont van a LINUX-UNIX fájlrendszerekben?
+Egy belépési pont van
+
+Mi lesz a who parancs eredménye?
+logikai igaz
+
+Mi lesz az x=echo "Eötvös Loránd Tudomány Egyetem" | cut -f4 -d" " utasítás után az x változó értéke?
+szintaktikai hibát eredményez
+
+Hány szűrő kell egy csővezetékhez?
+Egy csővezeték parancskapcsolathoz legalább egy szűrő parancs kell.
+
+Mi fogja lefuttatni a shell szkript fájlt, ha a legfelső sorából hiányzik a shellhez az útvonal megadása? A szkript fájlnak van futási joga és a hívása ./szkript
+A default shell
+
+Mi lesz az eredménye a cat >> c parancsnak?
+A standard inputról megadott adatok a c fájlba kerülnek.
+
+Egy háttérben futó folyamatnak, hogy tud STOP jelzést küldeni?
+Az operációs rendszer segítségével, például a kill paranccsal.
+
+Milyen célt szolgál a UNIX-ban a folyamatok prioritása?
+A végrehajtási sorrendet befolyásoló jellemző a prioritás. Egy magasabb prioritású alkalmazás előbb esetleg több CPU időhöz is juthat.
+
+Mit tartalmaz az awk-ban a $0 változó?
+Az aktuális sor értékét
+
+Igaz-e, hogy minden felhasználónak csak egyetlen futó folyamata lehet?
+Hamis
+
+Hol helyezkedhet el a read parancs egy csővezetékben?
+sehol
+
+Mi az AWK?
+Egy C nyelvű interpreterhez hasonlű funkciókat nyújtó szűrő.
+
+Lehet-e karakter kódtáblával adatokat, szöveget titkosítani?
+A filmekben is gyakran használt módszer, akár használható is!
+
+Mondjon példát arra, hol használhat reguláris kifejezéseket?
+Bármely szövegrészben használhatunk reguláris kifejezéseket. Más kérdés ki mit csinál vele!
+
+Mi a különbség a mikroprocesszor és a mikrokontroller között?
+A kontroller még a központi egységen túl más számítógép komponenseket is tartalmaz.
+
+Hogyan készíthet ciklust sed scriptben?
+SED-ben csak a feltételes, feltétel nélküli ugrások léteznek, így csak ezen lehetőségekkel lehet valami "kezdetleges" ciklust készíteni.
+
+Mondjon példát a "setuid" bit hasznosságára!
+Ez olyasmi mint a Windows alatt a "Run as administrator", például ennek segítségével tudunk jelszót váltani Unix rendszer alatt.
+
+Lebegőpontos számábrázolás során mi a karakterisztika szerepe, jelentősége?
+A szám nagyságrendjét adja meg, ha nagyobb a karakterisztikád, nagyobb vagy!
+
+Mi a különbség az ssh és a telnet kapcsolat között?
+Az ssh Secure Shell, míg a telnet Unsecure Shell
+
+A mai 64 bites CPU egységek segítségével tudunk-e 64 bitnél nagyobb méretű műveleteket végrehajtani? (Például tudunk-e 139 bites műveleteket használni?)
+Igen, a CPU bitmérete gyakorlatilag semmit nem befolyásol, legfeljebb nem sokat segít.
+
+Melyik szövegekre illeszkedik a következő reguláris kifejezés "[A-Z][a-z0-9]*.*$"
+?Alma?, ALMa12
+
+Hogyan tudunk létrehozni majd futtatni ma gey Windows rendszerben egy bach fáljt?
+Egy szövegszerkesztővel létrehozom, bat kiterjesztést adok neki, majd ezután tudom futtatni.
+
+Powershellben hogyan számolhatjuk meg a bemenetre érkező sorok számát?
+Az a helyzet, hogy a Powershell objektumorientált, így objektumokat számol, mégpedig alapból a Count mezőben.
+
+Powershell környezetben hogyan tudunk-e nyomkövetés (lépésenkénti végrehajtás) segítségével hibát keresni? Melyik ehhez kapcsolódó állítás nem igaz?
+Nem tudunk, ahogy shell scriptben, itt sincs nyomkövetés. A scriptek nem erre vannak tervezve, egy kivétellel, ha Debug.ps1 névvel mentjük el, akkor automatikusan lépésenként hajtja végre.
+
+Mi a szerepe annak, ha egy szkriptet "pontosan" (pont helyköz szkriptnév) indítunk? Így: . .\szkript.ps1
+Az, hogy szkriptben definiált függvények, változók a powershellből is elérhetők lesznek.
+
+A SED szerkesztőben milyen vezérlő szerkezet nyomai fedezhető fel?
+Valamilyen gépi kódú programozásból ismert "Ugrás ha sikeres utasítás volt!" forma használható.
+
+Mire jó a Windows Script(ing) Host?
+Egy ma is használatos script eszköz, ami bármely mai Windows rendszeren használható.
+
+Hogy tudunk .vbs, Windows Script Host állományt készíteni, futtatni?
+Például Linux alatt megszerkesztjük az állományt, FTP segítségével letöltjük Windows rendszerünkre és simán elindítjuk.
+
+Mely sorokon hajtódik végre egy sed parancs?
+Amilyen sorokra a parancs vagy parancsok megadják!
+
+Hogyan tudunk nevesített paraméteres függvényt definiálni Powershellben?
+A függvény paraméter nevével vagy a PARAM blokk használatával.
+
+Milyen típusokat ismer a Powershell?
+Gyakorlatilag a .NET frameworkben ismerteket.
+
+Mit csinál az alábbi script parancspár?
+	x=Tibi; echo Laci ügyes!|sed 's/Laci/$x/'
+-- A sorokban a Laci-t $x-re cseréli.
+
+Mit jelent a PowerShell függvények nevesített paraméterezési lehetősége?
+A paraméter nevek mint a függvény vagy scrpit változóként is használhatók.
+
+Mi a PowerShell modul állomány? (*.psm1)
+Egy szöveges könyvtárgyűjtemény. Lehet rendzsermodul vagy saját modul is.
+
+Mely művelet(ek) nem végezhetőek el a sed szűrővel?
+matematikai függvények kezelése
+
+AWK használat során hogyan érhetjük el az aktuális feldolgozandó sor tartalmát?
+A $0 tartalmazza a teljes sort.
+
+Van-e a sed-ben Begin-Process-End végrehajtási minta?
+-- Nincs, de akár kereshetem bármelyik említett mintát.
+
+Miért nincs a Windows kliens környezetünkben Active Directory Powershell modul?
+Maximum azért mert nem installáltuk!
+
+Mi helyettesíti a "here input" funkciót PowerShellben?
+A többszörös, több soros szöveg definiálása ad hasonló lehetőséget.
+
+Milyen típusokat ismer a Powershell?
+Gyakorlatilag a .NET frameworkben ismerteket.
+
+Mit jelent a PowerShell függvények nevesített paraméterezési lehetősége?
+A paraméter nevek mint függvény vagy script változóként is használhatók.
+
+Mi a szerepe annak, ha egy szkriptet "pontosan" (pont helyköz szkriptnév)
+indítunk? Így: . .\szkript.ps1
+Az, hogy szkriptben definiált függvények, változók a powershellből is elérhetők
+lesznek.
+
+Mit csinál az alábbi script-sed parancspár? x=Tibi; echo Laci ügyes!|sed ’s/Laci/$x/’
+A sorokban a Laci-t $x-re cseréli.
+
+Mire jó a Windows Script(ing) Host?
+Egy ma is használatos script eszköz, ami bármely mai Windows rendszeren
+használható.
+
+Hogyan tudunk nevesített paraméteres függvényt definiálni Powershellben?
+A függvény paraméter nevével vagy a PARAM blokk használatával.
+
+Mit jelent a Powershell függvények nevesített paraméterezési lehetősége?
+A paraméter nevek mint függvény vagy script változóként is használhatók.
+
+Mely műveletek nem végezhetőek el sed szűrővel?
+matematikai függvények kezelése
+
+Hogyan tudunk létrehozni majd futtatni ma egy Windows rendszerben egy batch fájlt?
+Egy szövegszerkesztővel létrehozom, bat kiterjesztést adok neki, majd ezután tudom futtatni.
+
+Mely sorokon hajtódik végre egy sed parancs?
+Amilyen sorokra a parancs vagy a parancsok megadják.
+
+Hogyan készithet ciklust sed scriptben?
+SED-ben csak a feltételes, feltétel nélküli ugrások léteznek, így csak ezen lehetőségekkel lehet valami „kezdetleges” ciklust készíteni.
+
+Mit csinál az alábbi script-sed parancs? x=Tibi; echo Laci ügyes!|sed’s/Laci/$x/’
+A sorokban a Laci-t $x-re cseréli.
+
+Mi a szerepe annak, ha egy szkriptet „pontosan” indítunk? ..\szkript.ps1
+Az, hogy a szkriptben definiált függvények, változók a powershellből is elérhetők lesznek.
+
+A SED szerkesztőben milyen vezérlő szerkezet nyomai fedezhető fel?
+Valamilyen gépi kódú programozásból ismert  „Ugrás, ha sikeres utasítás volt!” forma használható.
+
+Mi helyettesíti a „here input” funkciót Powershellben?
+A többszörös, több soros szöveg definiálása ad hasonló lehetőséget.
+
+Powershellben hogyan számolhatjuk meg a bemenetre érkező sorok számát?
+Az a helyzet, hogy a Powershell objektumorientált, így objektumokat számol, mégpedig alapból a Count mezőben.
+
+Powershell környezetben hogyan tudunk-e nyomkövetés segítségével hibát keresni? Melyik ehhez kapcsolódó állítás nem igaz?
+Nem tudunk, ahogy shell scriptben, itt sincs nyomkövetés. A scriptek nem erre vannak tervezve, egy kivétellel, ha Debug.ps1 névvel mentjük el, akkor automatikusan lépésenként hajtja végre.
+
+Mire jó a Windows Scripting Host?
+Egy ma is használatos script eszköz, ami bármely mai Windows rendszeren használható.
+
+Hogy tudunk .vbs, Windows Script Host állományt készíteni, futtatni?
+Például Unix alatt megszerkesztjük az állományt, FTP segítségével letöltjük Windows rendszerünkre és simán elindítjuk.
+
+Milyen típusokat ismer a Powershell?
+Gyakorlatilag a .NET frameworkben ismerteket.
+
+Mi az AWK?
+Egy C nyelvű interpreterhez hasonló funkciókat nyújtó szűrő.
+
+Mi a Powershell modul állománya? (*.psm1)
+Egy szöveges könyvtárgyűjtemény. Lehet rendszermodul vagy saját modul is.
+
+AWK gasználat során, hogyan érhetjük el az aktuális feldolgozandó sor tartalmát?
+A $0 tartamazza a teljes sort.
+
+Van-e sed-ben Begin-Process-End végrehajtási minta?
+Nincs, de akár kereshetem bármelyik említett mintát.
+
+Miért nincs a Windows kliens környezetünkben Active Directory Powershell modul?
+Maximum azért, mert nem installáltuk.
+
+Hogyan tudunk létrehozni majd futtatni ma egy Windows rendszerben egy batch fájlt?
+    Egy szövegszerkesztővel létrehozom, bat kiterjesztést adok neki, majd ezután tudom futtatni.
+
+Powershellben hogyan számolhatjuk meg a bemenetre érkező sorok számát?
+    Az a helyzet, hogy a Powershell objektumorientált, így objektumokat számol, mégpedig alapból a Count mezőben.
+
+Powershell környezetben hogyan tudunk-e nyomkövetés(lépésenkénti végrehajtás) segítségével hibát keresni? Melyik ehhez kapcsolódó állítás nem igaz?
+    Nem tudunk, ahogy shell scriptben, itt sincs nyomkövetés. A scriptek nem erre vannak tervezve, egy kivétellel, ha Debug.ps1 névvel mentjük el, akkor automatikusan lépésenként hajtja végre..
+
+Mi szerepe annak, ha egy szkriptet "pontosan" (pont helyköz szkriptnév) indítunk? Így: . .\szkript.ps1
+    Az, hogy szkriptben definiált függvények, változók a powershellből is elérhetők lesznek.
+
+A SED szerkesztőben milyen vezérlő szerkezet nyomai fedezhetők fel?
+    Valamilyen gépi kódú programozásból ismert "Ugrás ha sikeres utasítás volt!" forma használható.
+
+Mire jó a Windows Script(ing) Host?
+    Egy ma is használatos script eszköz, ami bármely mai Windows rendszeren használható.
+
+Hogyan készíthet ciklust sed scriptben?
+    SED-ben csak a feltételes, feltétel nélküli ugrások léteznek, így csak ezen lehetőségekkel lehet valami "kezdetleges" ciklust készíteni.
+
+Hogyan tudunk .vbs, Windows Script Host állományt készíteni, futtatni?
+    Például Linux alatt megszerkesztjük az állományt, FTP segítségével letöltjük Windows rendszerünkre és simán elindítjuk.
+
+Mely sorokon hajtódik végre egy sed parancs?
+    Amilyen sorokra a parancs bagy parancsok megadják!
+
+Hogyan tudunk nevesített paraméteres függvényt definiálni Powershellben?
+    A függvény paraméter nevével vagy PARAM blokk használatával.
+
+Milyen típusokat ismer a Powershell?
+    Gyakorlatilag a .NET frameworkben ismerteket.
+
+Mi az AWK?
+    Egy C nyelvű interpreterhez hasonló funkciókat nyújtó szűrő.
+
+Mit csinál az alábbi script-sed parancspár? x=Tibi; echo Laci ügyes!|sed 's/Laci/$x/'
+    A sorokban a Laci-t $x-re cseréli.
+
+Mit jelent a PowerShell függvények nevesített paraméterezési lehetősége?
+    A paraméter nevek mint függvény vagy script változóként is használhatók.
+
+Mi a PowerShell modul állomány? (*.psm1)
+    Egy szöveges könyvtárgyűjtemény. Lehet rendszermodul vagy saját modul is.
+
+Mely művelet(ek) nem végezhetőek el a sed szűrővel.
+    matematikai függvények kezelése
+
+AWK használat során hogyan érhetjük el az aktuális feldolgozandó sor tartalmát?
+    A $0 tartalmazza a teljes sort.
+
+Van-e a sed-ben Begin-Process-End végrehajtási minta?
+    ? Nincs alapból, de használhatom a Begin és Process paramétereket. (Lehetne még: Nincs, de létezik a Process paraméter, ami majdnem az.)
+
+Miért nincs a Windows kliens környezetünkben Active Directory Powershell modul?
+    Maximum azért mert nem installáltuk!
+
+Mi helyettesíti a "here input" funkciót PowerShellben?
+    ? A többszörös, több soros szöveg definiálása ad hasonló lehetőséget. (Lehetne még: Az Input-Here powershell parancs adja ezt a lehetőséget.)
+
+
+
+
+
+
+
+
+
+

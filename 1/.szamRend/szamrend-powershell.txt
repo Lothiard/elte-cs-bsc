@@ -1,0 +1,42 @@
+Mit jelent a Power$Shell függvények nevesített paraméterezési lehetősége? 
+A paraméter nevek mint függvény vagy script változóként is használhatók. 
+
+Hogyan tudunk nevesített paraméteres függvényt definiálni Powershellben? 
+A függvény paraméter nevével vagy a PARAM blokk használatával. 
+
+Mi helyettesíti a "here input" funkciót PowerShellben?
+A többsoros szöveg definiálására ad lehetőséget!
+
+Hogy tudunk .vbs, VVindows Script Host állományt készíteni, futtatni? 
+Például Linux alatt megszerkesztjük az állományt, FTP segítségével letöltjük Windows rendszerünkre és simán elindítjuk. 
+
+Miért nincs a Windows kliens környezetünkben Active Directory Powershell modul? 
+Maximum azért mert nem installáltuk! 
+
+Mi a szerepe annak, ha egy szkriptet "pontosan" (pont helyköz szkriptnév) indítunk? Így: . Aszkript.ps1 
+Az, hogy szkriptben definiált függvények, változók a powershellből is elérhetők lesznek. 
+
+Milyen típusokat ismer a Powershell? 
+Gyakorlatilag a .NET frameworkben ismerteket. 
+
+Powershellben hogyan számolhatjuk meg a bemenetre érkező sorok számát? 
+Az a helyzet, hogy a Powershell objektumorientált, így objektumokat számol, mégpedig alapból a Count mezőben. 
+
+Mi a PowerShell modul állomány? (".psm1) 
+Egy szöveges könyvtárgyűjtemény. Lehet rendszermodul vagy saját modul is. 
+
+Powershell környezetben hogyan tudunk-e nyomkövetésílépésenkénti végrehajtás) segítségével hibát keresni? Melyik ehhez kapcsolódó állítás nem igaz? 
+Nem tudunk, ahogy Shell scriptben, itt sincs nyomkövetés
+
+
+Mire jó a Windows Script(ing) Host? 
+Egy ma is használatos script eszköz, ami bármely mai Windows rendszeren használható. 
+
+
+
+
+
+
+
+
+
