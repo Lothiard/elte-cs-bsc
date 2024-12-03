@@ -10,7 +10,7 @@
 #define BG_CYAN     "\033[46m"
 #define BG_WHITE    "\033[47m"
 
-enum color {
+typedef enum color {
     black,
     red,
     green,
@@ -19,40 +19,40 @@ enum color {
     magenta,
     cyan,
     white
-};
+} Color;
 
 void color_print() {
-    enum color;
-    scanf("szin pls: %d", color);
+    char input[2];
+    fgets(input, 2, stdin);
     
-    switch(color) {
-        case: 1
+    Color szin = (Color)input;
+    
+    switch(szin) {
+        case 1:
             printf("%s", BG_RED);
             break;
-        case: 2
+        case 2:
             printf("%s", BG_GREEN);
             break;
-        case: 3 
+        case 3:
             printf("%s", BG_YELLOW);
             break;
-        case: 4 
+        case 4:
             printf("%s", BG_BLUE);
             break;
-        case: 5
+        case 5:
             printf("%s", BG_MAGENTA);
             break;
-        case: 6
+        case 6:
             printf("%s", BG_CYAN);
             break;
-        case: 7
+        case 7:
             printf("%s", BG_WHITE);
             break;
         default:
-            printf("%s", BG_BLACK);
+            printf("helytelen input\n");
             break;
     }
-
-    printf("%s", color);
 }
 
 int main() {
