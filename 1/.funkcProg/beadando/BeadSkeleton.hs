@@ -4,6 +4,7 @@ import Data.Either
 import Data.Maybe
 import Text.Read (readMaybe)
 import Data.Char (isDigit, isSpace)
+import Data.List (find)
 
 basicInstances = 0 -- Mágikus tesztelőnek kell ez, NE TÖRÖLD!
 
@@ -21,15 +22,16 @@ instance Show a => Show (Tok a)
     show BrckOpen = "BrckOpen"
     show BrckClose = "BrckClose"
     show (TokLit a) = "TokLit " ++ show a
-    show (TokBinOp _ op ero kotes) = "TokBinOp " ++ show op ++ " " ++ show ero ++ " " ++ show kotes
+    show (TokBinOp _ op prec dir) = "TokBinOp " ++ show op ++ " " ++ show prec ++ " " ++ show dir
 
 -- Eq peldany
 instance Eq a => Eq (Tok a)
   where
     BrckOpen == BrckOpen = True
     BrckClose == BrckClose = True
-    TokLit a == TokLit b = True
-    TokBinOp _ op1 ero1 kotes1 == TokBinOp _ op2 ero2 kotes2 = op1 == op2 && ero1 == ero2 && kotes1 == kotes2 
+    TokLit a == TokLit b = a == b
+    TokBinOp _ op1 prec1 dir1 == TokBinOp _ op2 prec2 dir2 = op1 == op2 && prec1 == prec2 && dir1 == dir2
+    _ == _ = False
 
 type OperatorTable a = [(Char, (a -> a -> a, Int, Dir))]
 
@@ -41,41 +43,63 @@ tDiv = TokBinOp (/) '/' 7 InfixL
 tPow = TokBinOp (**) '^' 8 InfixR
 
 operatorTable :: (Floating a) => OperatorTable a
-operatorTable =
-    [ ('+', ((+), 6, InfixL))
-    , ('-', ((-), 6, InfixL))
-    , ('*', ((*), 7, InfixL))
-    , ('/', ((/), 7, InfixL))
-    , ('^', ((**), 8, InfixR))
+operatorTable = [
+    ('+', ((+), 6, InfixL)),
+    ('-', ((-), 6, InfixL)),
+    ('*', ((*), 7, InfixL)),
+    ('/', ((/), 7, InfixL)),
+    ('^', ((**), 8, InfixR))
     ]
 
--- 2.
 operatorFromChar :: OperatorTable a -> Char -> Maybe (Tok a)
-operatorFromChar [] _ = Nothing
-operatorFromChar ((funk, (op, ero, kotes)):xs) x
-  | funk == x = Just $ TokBinOp op funk ero kotes
-  | otherwise = operatorFromChar xs x
+operatorFromChar ops x = matchOperator (find ((== x) . fst) ops)
+  where
+    matchOperator Nothing = Nothing 
+    matchOperator (Just (_, (opFunc, prec, dir))) = Just $ TokBinOp opFunc x prec dir
 
 getOp :: (Floating a) => Char -> Maybe (Tok a)
 getOp = operatorFromChar operatorTable
 
--- 3.
 parseTokens :: Read a => OperatorTable a -> String -> Maybe [Tok a]
-parseTokens opTable input = traverse id $ tokenize [] input
+parseTokens ops input = processTokens tokens []
   where
-    tokenize temp [] = reverse temp                                                 -- alapeset
-    tokenize temp (x:xs)
-      | isSpace x = tokenize temp xs                                                -- hs ws
-      | x == '(' = Just BrckOpen : tokenize temp xs                                 -- ha (
-      | x == ')' = Just BrckClose : tokenize temp xs                                -- ha )
-      | isDigit x =                                                                 -- ha literal
-        case span (\x -> isDigit x || x == '.') (x:xs) of
-          (num, maradek) -> Just (TokLit (read num)) : tokenize temp maradek
-      | otherwise =                                                                 -- ha op
-        case lookup x opTable of 
-          Just (op, prec, dir) -> Just (TokBinOp op x prec dir) : tokenize temp xs  -- ha nem letezo op
-          Nothing -> [Nothing]
-  
+    tokens = tokenize input -- tokenekre bontas
+
+    tokenize :: String -> Maybe [String]
+    tokenize = splitTokens [] False
+      where
+        splitTokens acc _ [] = Just (reverse acc)                 -- alapeset
+        splitTokens acc prevBracket (c:cs)                        -- karakterek feldolgozasa
+          | isSpace c = splitTokens acc False cs                  -- ws atugras
+          | c == '(' = splitTokens ("(":acc) True cs              -- ( hozzaadas
+          | c == ')' = splitTokens (")":acc) True cs              -- ) hozzaadas
+          | isTokenChar c = 
+              let (tok, rest) = span isTokenChar (c:cs)           -- token kiszedese
+              in validateToken tok rest acc prevBracket           -- token validalasa
+          | otherwise = Nothing                                   -- invalid karakter
+
+        validateToken tok rest acc prevBracket                    -- token validalasa
+          | prevBracket = Nothing                                 -- helytelen: zarojel elott operator
+          | nextCharIsBracket rest = Nothing                      -- helytelen: zarojel utan operator
+          | otherwise = splitTokens (tok:acc) False rest          -- helyes
+
+        nextCharIsBracket [] = False                              -- nincs tobb karakter
+        nextCharIsBracket (x:_) = x == '(' || x == ')'            -- zarojel
+
+        isTokenChar x = not (isSpace x || x == '(' || x == ')')   -- token karakter
+
+    processTokens Nothing _ = Nothing                             -- invalid token
+    processTokens (Just []) acc = Just (reverse acc)              -- alapeset
+    processTokens (Just (t:ts)) acc = processToken t ts acc
+
+    processToken "(" ts acc = processTokens (Just ts) (BrckOpen : acc)                    -- ( token
+    processToken ")" ts acc = processTokens (Just ts) (BrckClose : acc)                   -- ) token
+    processToken [op] ts acc                                                              -- operator token
+      | Just (f,p,d) <- lookup op ops = processTokens (Just ts) (TokBinOp f op p d : acc) -- operator
+    processToken tok ts acc                                                               -- literal token
+      | Just n <- readMaybe tok = processTokens (Just ts) (TokLit n : acc)                -- literal
+      | otherwise = Nothing                                                               -- invalid token
+
 parse :: String -> Maybe [Tok Double]
 parse = parseTokens operatorTable
 
@@ -108,33 +132,36 @@ syEvalBasic = parseAndEval parse (\t -> shuntingYardBasic $ BrckOpen : (t ++ [Br
 
 -- 5.
 shuntingYardPrecedence :: [Tok a] -> ([a], [Tok a])
-shuntingYardPrecedence tokens = shunt tokens [] []
+shuntingYardPrecedence tokens = process tokens [] []
   where
-    shunt [] lit op = eval lit op
-    shunt (TokLit x : xs) lit op = shunt xs (x : lit) op                      -- 1, lit eseten -> lit
-    shunt (BrckOpen : xs) lit op = shunt xs lit (BrckOpen : op)               -- 2, ( eseten -> op
-    shunt (BrckClose : xs) lit ((TokBinOp f _ _ _):ops) = shunt xs newLit ops -- 3, ) es op list tetejen op van
-      where
-        (x2:x1:rest) = lit      -- elso ket szam
-        newLit = f x1 x2 : rest -- kiszamolo
-    shunt (BrckClose : xs) lit (BrckOpen:ops) = shunt xs lit ops              -- 4, ) es op list tetejen ( van
-    
-    shunt (curr@(TokBinOp _ _ p1 d1) : xs) lit ((TokBinOp f _ p2 _):ops)      -- 5, eltero prec
-      | p1 < p2 || (p1 <= p2 && d1 == InfixL) = shunt (curr:xs) newLit ops
-      where
-        (x2:x1:rest) = lit      -- elso ket szam
-        newLit = f x1 x2 : rest -- kiszamolo
-    shunt (op:xs) lit ops = shunt xs lit (op:ops)
+    process [] litStack opStack = (litStack, opStack) -- nincs tobb token
+    process (TokLit x : ts) litStack opStack = 
+        process ts (x : litStack) opStack -- literal
+    process (BrckOpen : ts) litStack opStack = 
+        process ts litStack (BrckOpen : opStack) -- nyito zarojel
+    process (BrckClose : ts) litStack opStack =
+        let (ops, rest) = breakBracket opStack [] -- zaro zarojel
+            newLits = foldOperators litStack ops -- operatorok kiszamolasa
+        in process ts newLits rest -- folytatas
+    process (curr@(TokBinOp _ _ currPrec currAssoc) : ts) litStack opStack =
+        let (toApply, remaining) = getPrecedenceOps curr opStack [] -- operatorok kivalasztasa
+            newLits = foldOperators litStack toApply -- operatorok kiszamolasa
+        in process ts newLits (curr:remaining) -- folytatas
 
-    -- helper eval
-    eval lit [] = (lit, [])
-    eval lit (BrckOpen:ops) = eval lit ops              -- 1, ( atugorjuk
-    eval lit (BrckClose:ops) = eval lit ops             -- 2, ) atugorjuk
-    eval lit ((TokBinOp f _ _ _):ops) = eval newLit ops -- 3, szamolas
-      where
-        (x2:x1:rest) = lit
-        newLit = f x1 x2 : rest
-        
+    breakBracket (BrckOpen:rest) acc = (reverse acc, rest) -- zarojel kereses
+    breakBracket (op:rest) acc = breakBracket rest (op:acc) -- operatorok kereses
+    breakBracket [] acc = (reverse acc, []) -- nincs zarojel
+
+    getPrecedenceOps _ [] acc = (reverse acc, []) -- nincs operator
+    getPrecedenceOps curr@(TokBinOp _ _ p1 a1) (top@(TokBinOp _ _ p2 _):rest) acc -- operatorok kivalasztasa
+      | p2 > p1 || (p2 == p1 && a1 == InfixL) = getPrecedenceOps curr rest (top:acc) -- operatorok kivalasztasa
+      | otherwise = (reverse acc, top:rest) -- operatorok kivalasztasa
+    getPrecedenceOps _ (BrckOpen:rest) acc = (reverse acc, BrckOpen:rest) -- zarojel
+    getPrecedenceOps curr (op:rest) acc = (reverse acc, op:rest) -- operator
+
+    foldOperators (x:y:rest) (TokBinOp f _ _ _:ops) = foldOperators (f y x : rest) ops -- operatorok kiszamolasa
+    foldOperators lits _ = lits -- nincs operator
+
 syEvalPrecedence :: String -> Maybe ([Double], [Tok Double])
 syEvalPrecedence = parseAndEval parse (\t -> shuntingYardPrecedence $ BrckOpen : (t ++ [BrckClose]))
 
@@ -151,93 +178,6 @@ data ShuntingYardError =
     deriving (Show, Eq)
 
 type ShuntingYardResult a = Either ShuntingYardError a
-
--- 2. parseSafe
-bindE :: Either e a -> (a -> Either e b) -> Either e b
-bindE (Left e) _ = Left e
-bindE (Right a) f = f a
-
-parseSafe :: Read a => OperatorTable a -> String -> Either ErrorType [Tok a]
-parseSafe opTable input = tokenize [] input ExpectLit []
-  where
-    data ExpectNext = ExpectLit | ExpectOp
-
-    tokenize :: [Tok a] -> String -> ExpectNext -> [Char] -> Either ErrorType [Tok a]
-    tokenize temp [] expect stack
-      | not (null stack) = Left NoClosingParen
-      | expect == ExpectOp = Right (reverse temp)
-      | otherwise = Left OperatorOrClosingParenExpected
-
-    tokenize temp (x:xs) expect stack
-      | isSpace x = tokenize temp xs expect stack
-
-      -- Handle opening parenthesis '('
-      | x == '(' =
-          if expect == ExpectLit
-            then tokenize (BrckOpen : temp) xs ExpectLit ('(' : stack)
-            else Left LiteralOrOpeningParenExpected
-
-      -- Handle closing parenthesis ')'
-      | x == ')' =
-          if null stack
-            then Left NoOpeningParen
-            else
-              let stack' = tail stack
-              in if expect == ExpectOp
-                    then tokenize (BrckClose : temp) xs ExpectOp stack'
-                    else Left OperatorOrClosingParenExpected
-
-      -- Handle numbers (literals)
-      | isDigit x || x == '.' =
-          if expect == ExpectLit
-            then parseNumber (x:xs) temp stack
-            else Left OperatorOrClosingParenExpected
-
-      -- Handle operators
-      | otherwise =
-          if expect == ExpectOp
-            then parseOperator x xs temp stack
-            else Left LiteralOrOpeningParenExpected
-
-    -- Parsing numbers
-    parseNumber s temp stack =
-      let (numStr, rest) = span isNumChar s
-          numMaybe = readMaybe numStr
-      in case numMaybe of
-          Just num -> tokenize (TokLit num : temp) rest ExpectOp stack
-          Nothing -> Left ParseError
-
-    -- Parsing operators
-    parseOperator c xs temp stack
-      | Just (op, prec, dir) <- lookup c opTable =
-          tokenize (TokBinOp op c prec dir : temp) xs ExpectLit stack
-      | otherwise = Left ParseError
-
-    isNumChar c = isDigit c || c == '.'
-    parseNumber s temp stack = tokenizeNumber (span isNumChar s) temp stack
-
-    tokenizeNumber (numStr, rest) temp stack
-      | Just num <- readMaybe numStr = tokenize (TokLit num : temp) rest ExpectOp stack
-      | otherwise = Left ParseError  -- Error parsing number
-
-    parseOperator c xs temp stack
-      | Just (op, prec, dir) <- lookup c opTable = tokenize (TokBinOp op c prec dir : temp) xs ExpectLit stack
-      | otherwise = Left ParseError  -- Unknown operator
-
-    isNumChar c = isDigit c || c == '.'
-
--- Ezt akkor vedd ki a kommentblokkból, ha a 3 pontos "A parser és az algoritmus újradefiniálása" feladatot megcsináltad.
-parseAndEvalSafe ::
-    (String -> ShuntingYardResult [Tok a]) ->
-    ([Tok a] -> ShuntingYardResult ([a], [Tok a])) ->
-    String -> ShuntingYardResult ([a], [Tok a])
-parseAndEvalSafe parse eval input = either Left eval (parse input)
-
-sySafe :: String -> ShuntingYardResult ([Double], [Tok Double])
-sySafe = parseAndEvalSafe
-  (parseSafe operatorTable)
-  (\ts -> shuntingYardSafe (BrckOpen : ts ++ [BrckClose]))
-
 
 {-
 -- Ezt akkor vedd ki a kommentblokkból, ha az 1 pontos "Függvénytábla és a típus kiegészítése" feladatot megcsináltad.
