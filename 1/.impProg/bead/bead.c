@@ -67,7 +67,11 @@ void image_print() {
 
     Image img;
     fscanf(f, "%d %d", &img.width, &img.height); // printf("width: %d, height: %d\n", img.width, img.height);
-
+    if(img.width > MAX_WIDTH || img.height > MAX_HEIGHT || img.width < 1 || img.height < 1) {
+        printf("invalid kepmeret\n");
+        return;
+    }
+    
     img.pixels = malloc(img.height * sizeof(Color *));
     for (int i = 0; i < img.height; ++i) {
         img.pixels[i] = malloc(img.width * sizeof(Color));
