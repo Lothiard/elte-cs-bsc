@@ -98,7 +98,14 @@ parseTokens ops input = processTokens tokens []
       | Just (f,p,d) <- lookup op ops = processTokens (Just ts) (TokBinOp f op p d : acc) -- operator
     processToken tok ts acc                                                               -- literal token
       | Just n <- readMaybe tok = processTokens (Just ts) (TokLit n : acc)                -- literal
-      | otherwise = Nothing                                                               -- invalid token
+      | otherwise = Nothing        
+      
+    checkFirstTwoChars (c1:c2:_) result
+      | isOperatorChar c1 && isOperatorChar c2 = Nothing  -- Consecutive operators found
+    checkFirstTwoChars _ result = result  -- No issue, proceed with result
+
+    -- Helper function to identify operator characters
+    isOperatorChar c = any (\(opChar, _) -> c == opChar) ops                                                       -- invalid token
 
 parse :: String -> Maybe [Tok Double]
 parse = parseTokens operatorTable
@@ -134,33 +141,33 @@ syEvalBasic = parseAndEval parse (\t -> shuntingYardBasic $ BrckOpen : (t ++ [Br
 shuntingYardPrecedence :: [Tok a] -> ([a], [Tok a])
 shuntingYardPrecedence tokens = process tokens [] []
   where
-    process [] litStack opStack = (litStack, opStack) -- nincs tobb token
+    process [] litStack opStack = (litStack, opStack)                           -- nincs tobb token
     process (TokLit x : ts) litStack opStack = 
-        process ts (x : litStack) opStack -- literal
+        process ts (x : litStack) opStack                                       -- literal
     process (BrckOpen : ts) litStack opStack = 
-        process ts litStack (BrckOpen : opStack) -- nyito zarojel
+        process ts litStack (BrckOpen : opStack)                                -- nyito zarojel
     process (BrckClose : ts) litStack opStack =
-        let (ops, rest) = breakBracket opStack [] -- zaro zarojel
-            newLits = foldOperators litStack ops -- operatorok kiszamolasa
-        in process ts newLits rest -- folytatas
+        let (ops, rest) = breakBracket opStack []                               -- zaro zarojel
+            newLits = foldOperators litStack ops                                -- operatorok kiszamolasa
+        in process ts newLits rest                                              -- folytatas
     process (curr@(TokBinOp _ _ currPrec currAssoc) : ts) litStack opStack =
-        let (toApply, remaining) = getPrecedenceOps curr opStack [] -- operatorok kivalasztasa
-            newLits = foldOperators litStack toApply -- operatorok kiszamolasa
-        in process ts newLits (curr:remaining) -- folytatas
+        let (toApply, remaining) = getPrecedenceOps curr opStack []             -- operatorok kivalasztasa
+            newLits = foldOperators litStack toApply                            -- operatorok kiszamolasa
+        in process ts newLits (curr:remaining)                                  -- folytatas
 
-    breakBracket (BrckOpen:rest) acc = (reverse acc, rest) -- zarojel kereses
-    breakBracket (op:rest) acc = breakBracket rest (op:acc) -- operatorok kereses
-    breakBracket [] acc = (reverse acc, []) -- nincs zarojel
+    breakBracket (BrckOpen:rest) acc = (reverse acc, rest)                      -- zarojel kereses
+    breakBracket (op:rest) acc = breakBracket rest (op:acc)                     -- operatorok kereses
+    breakBracket [] acc = (reverse acc, [])                                     -- nincs zarojel
 
-    getPrecedenceOps _ [] acc = (reverse acc, []) -- nincs operator
-    getPrecedenceOps curr@(TokBinOp _ _ p1 a1) (top@(TokBinOp _ _ p2 _):rest) acc -- operatorok kivalasztasa
-      | p2 > p1 || (p2 == p1 && a1 == InfixL) = getPrecedenceOps curr rest (top:acc) -- operatorok kivalasztasa
-      | otherwise = (reverse acc, top:rest) -- operatorok kivalasztasa
+    getPrecedenceOps _ [] acc = (reverse acc, [])                                     -- nincs operator
+    getPrecedenceOps curr@(TokBinOp _ _ p1 a1) (top@(TokBinOp _ _ p2 _):rest) acc     -- operatorok kivalasztasa
+      | p2 > p1 || (p2 == p1 && a1 == InfixL) = getPrecedenceOps curr rest (top:acc)  -- operatorok kivalasztasa
+      | otherwise = (reverse acc, top:rest)                               -- operatorok kivalasztasa
     getPrecedenceOps _ (BrckOpen:rest) acc = (reverse acc, BrckOpen:rest) -- zarojel
-    getPrecedenceOps curr (op:rest) acc = (reverse acc, op:rest) -- operator
+    getPrecedenceOps curr (op:rest) acc = (reverse acc, op:rest)          -- operator
 
     foldOperators (x:y:rest) (TokBinOp f _ _ _:ops) = foldOperators (f y x : rest) ops -- operatorok kiszamolasa
-    foldOperators lits _ = lits -- nincs operator
+    foldOperators lits _ = lits                                                        -- nincs operator
 
 syEvalPrecedence :: String -> Maybe ([Double], [Tok Double])
 syEvalPrecedence = parseAndEval parse (\t -> shuntingYardPrecedence $ BrckOpen : (t ++ [BrckClose]))
