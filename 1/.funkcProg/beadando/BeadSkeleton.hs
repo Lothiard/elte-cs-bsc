@@ -14,7 +14,7 @@ data Dir = InfixL | InfixR
   deriving (Show, Eq, Ord)
 
 -- Tok tipus
-data Tok a = BrckOpen | BrckClose | TokLit a | TokBinOp (a -> a -> a) Char Int Dir
+data Tok a = BrckOpen | BrckClose | TokLit a | TokBinOp (a -> a -> a) Char Int Dir | TokFun (a -> a) String
 
 -- Show peldany
 instance Show a => Show (Tok a)
@@ -23,6 +23,7 @@ instance Show a => Show (Tok a)
     show BrckClose = "BrckClose"
     show (TokLit a) = "TokLit " ++ show a
     show (TokBinOp _ op prec dir) = "TokBinOp " ++ show op ++ " " ++ show prec ++ " " ++ show dir
+    show (TokFun _ name) = "TokFun " ++ name
 
 -- Eq peldany
 instance Eq a => Eq (Tok a)
@@ -31,6 +32,7 @@ instance Eq a => Eq (Tok a)
     BrckClose == BrckClose = True
     TokLit a == TokLit b = a == b
     TokBinOp _ op1 prec1 dir1 == TokBinOp _ op2 prec2 dir2 = op1 == op2 && prec1 == prec2 && dir1 == dir2
+    TokFun _ name1 == TokFun _ name2 = name1 == name2
     _ == _ = False
 
 type OperatorTable a = [(Char, (a -> a -> a, Int, Dir))]
@@ -44,13 +46,14 @@ tPow = TokBinOp (**) '^' 8 InfixR
 
 operatorTable :: (Floating a) => OperatorTable a
 operatorTable = [
-    ('+', ((+), 6, InfixL)),
-    ('-', ((-), 6, InfixL)),
-    ('*', ((*), 7, InfixL)),
-    ('/', ((/), 7, InfixL)),
-    ('^', ((**), 8, InfixR))
-    ]
+  ('+', ((+), 6, InfixL)),
+  ('-', ((-), 6, InfixL)),
+  ('*', ((*), 7, InfixL)),
+  ('/', ((/), 7, InfixL)),
+  ('^', ((**), 8, InfixR))
+  ]
 
+-- 2.
 operatorFromChar :: OperatorTable a -> Char -> Maybe (Tok a)
 operatorFromChar ops x = matchOperator (find ((== x) . fst) ops)
   where
@@ -60,6 +63,7 @@ operatorFromChar ops x = matchOperator (find ((== x) . fst) ops)
 getOp :: (Floating a) => Char -> Maybe (Tok a)
 getOp = operatorFromChar operatorTable
 
+-- 3.
 parseTokens :: Read a => OperatorTable a -> String -> Maybe [Tok a]
 parseTokens ops input = processTokens tokens []
   where
@@ -172,7 +176,6 @@ shuntingYardPrecedence tokens = process tokens [] []
 syEvalPrecedence :: String -> Maybe ([Double], [Tok Double])
 syEvalPrecedence = parseAndEval parse (\t -> shuntingYardPrecedence $ BrckOpen : (t ++ [BrckClose]))
 
--- eqError-t vedd ki a kommentből, ha megcsináltad az 1 pontos "Hibatípus definiálása" feladatot
 eqError = 0 -- Mágikus tesztelőnek szüksége van rá, NE TÖRÖLD!
 
 -- 1. hibatipus
@@ -186,8 +189,19 @@ data ShuntingYardError =
 
 type ShuntingYardResult a = Either ShuntingYardError a
 
-{-
--- Ezt akkor vedd ki a kommentblokkból, ha az 1 pontos "Függvénytábla és a típus kiegészítése" feladatot megcsináltad.
+-- 2. fv tabla
+type FunctionTable a = [(String, a -> a)]
+
+functionTable :: (RealFrac a, Floating a) => FunctionTable a
+functionTable = [
+  ("sin", sin),
+  ("cos", cos),
+  ("log", log),
+  ("exp", exp),
+  ("sqrt", sqrt),
+  ("round", (\x -> fromIntegral (round x :: Integer)))
+  ]
+
 tSin, tCos, tLog, tExp, tSqrt :: Floating a => Tok a
 tSin = TokFun sin "sin"
 tCos = TokFun cos "cos"
@@ -195,29 +209,5 @@ tLog = TokFun log "log"
 tExp = TokFun exp "exp"
 tSqrt = TokFun sqrt "sqrt"
 
-functionTable :: (RealFrac a, Floating a) => FunctionTable a
-functionTable =
-    [ ("sin", sin)
-    , ("cos", cos)
-    , ("log", log)
-    , ("exp", exp)
-    , ("sqrt", sqrt)
-    , ("round", (\x -> fromIntegral (round x :: Integer)))
-    ]
--}
-
-{-
--- Ezt akkor vedd ki a kommentblokkból, ha a 2 pontos "Függvények parse-olása és kiértékelése" feladatot megcsináltad.
-syFun :: String -> Maybe ([Double], [Tok Double])
-syFun = parseAndEval
-  (parseWithFunctions operatorTable functionTable)
-  (\t -> shuntingYardWithFunctions $ BrckOpen : (t ++ [BrckClose]))
--}
-
-{-
--- Ezt akkor vedd ki a kommentblokkból, ha minden más feladatot megcsináltál ez előtt.
-syComplete :: String -> ShuntingYardResult ([Double], [Tok Double])
-syComplete = parseAndEvalSafe
-  (parseComplete operatorTable functionTable)
-  (\ts -> shuntingYardComplete (BrckOpen : ts ++ [BrckClose]))
--}
+tRound :: (Floating a, RealFrac a) => Tok a 
+tRound = TokFun (\x -> fromIntegral (round x :: Integer)) "round"
