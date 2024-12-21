@@ -1,0 +1,4 @@
+elso 1
+masodik 2
+harmadik 3
+anyad 10

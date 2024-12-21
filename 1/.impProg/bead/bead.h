@@ -21,7 +21,7 @@
 #define TERMINAL_HOME "\033[2H"
 
 typedef enum {
-   black,
+    black,
     red,
     green,
     yellow,

@@ -1,0 +1,1 @@
+ez azert letezik mert nem ertek hozza es most addig fogom csinalni amig ra nem jovok
