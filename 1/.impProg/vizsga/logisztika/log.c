@@ -3,7 +3,7 @@
 #include "log.h"
 
 Node* create_pkg(int distance) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+    Node* newNode = malloc(sizeof(Node));
     if(!newNode) return NULL;
     newNode->distance = distance;
     newNode->left = NULL;
@@ -51,7 +51,7 @@ static int count_nodes(Node* root) {
 Node** get_manifest(Node* root, int* size) {
     *size = count_nodes(root);
     if(*size == 0) return NULL;
-    Node** arr = (Node**)malloc(*size * sizeof(Node*));
+    Node** arr = malloc(*size * sizeof(Node*));
     int index = 0;
     fill_manifest(root, arr, &index);
     return arr;

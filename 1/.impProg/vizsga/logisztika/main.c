@@ -4,14 +4,12 @@
 
 int main() {
     Node* root = NULL;
-
     /*
     int initial[] = {8, 10, 3, 14, 1, 13, 6, 4, 7};
     for(int i = 0; i < 9; i++) {
         root = insert_pkg(root, initial[i]);
     }
-    */
-
+ */
     int running = 1;
     while(running) {
         printf("\nMenu:\n");
