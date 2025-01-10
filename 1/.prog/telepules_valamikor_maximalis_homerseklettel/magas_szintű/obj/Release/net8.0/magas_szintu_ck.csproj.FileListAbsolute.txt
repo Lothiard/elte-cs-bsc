@@ -1,0 +1,15 @@
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\bin\Release\net8.0\magas_szintu_ck.exe
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\bin\Release\net8.0\magas_szintu_ck.deps.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\bin\Release\net8.0\magas_szintu_ck.runtimeconfig.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\bin\Release\net8.0\magas_szintu_ck.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\bin\Release\net8.0\magas_szintu_ck.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.AssemblyInfoInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.AssemblyInfo.cs
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.csproj.CoreCompileInputs.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.sourcelink.json
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\refint\magas_szintu_ck.dll
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.pdb
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\magas_szintu_ck.genruntimeconfig.cache
+C:\Users\Lothiard\OneDrive\Asztali gép\ELTE\repo\elte-cs-bsc\1\.prog\kod\magas_szintu_ck\magas_szintu_ck\obj\Release\net8.0\ref\magas_szintu_ck.dll
