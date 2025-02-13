@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="hu" xml:lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="ELTE Informatikai Kar" />
+  <title>Programozási nyelvek Java</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style type="text/css">
+  body {
+      max-width: 100% !important;
+  }
+
+  pre > code
+  {
+      all: unset;
+  }
+
+  code
+  {
+      color: blue;
+      font-size: 14px;
+      white-space: pre;
+      border-radius: 3px;
+      font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+      padding: 2px 4px;
+
+      display: inline-block;
+
+      background-image: radial-gradient(ellipse farthest-corner at 50% 50%, #e4e4e4, #ffffff);
+  }
+
+
+  pre code,
+  code.sourceCode
+  {
+    	margin-left: 3em;
+    	padding: 0.5em;
+
+    	border: 0.1em green solid !important;
+
+      display: inline-block;
+  }
+
+  table {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 24px;
+      border-spacing: 0;
+      border-bottom: 2px solid black;
+      border-top: 2px solid black;
+      width: auto !important;
+  }
+
+  table th {
+      padding: 3px 10px;
+      background-color: white;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid black;
+  }
+
+  table td {
+      padding: 3px 10px;
+      border-top: none;
+      border-left: none;
+      border-bottom: none;
+      border-right: none;
+  }
+
+  nav#TOC {
+      position: fixed;
+      top: .2em;
+      right: .2em;
+      border: 1px solid black;
+  }
+
+  h2#toc-title {
+      margin-top: 0em;
+  }
+
+  nav#TOC::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  a {
+      color: blue;
+      text-decoration: underline !important;
+  }
+
+  </style>
+
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Programozási nyelvek Java</h1>
+<p class="subtitle">Gyakorlati feladatsor</p>
+<p class="author">ELTE Informatikai Kar</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Tartalomjegyzék</h2>
+<ul>
+<li><a href="#alapok" id="toc-alapok">01. Alapok</a></li>
+<li><a href="#osztály-adattag-metódus"
+id="toc-osztály-adattag-metódus">02. Osztály, adattag, metódus</a></li>
+<li><a href="#csomagkezelés" id="toc-csomagkezelés">03.
+Csomagkezelés</a></li>
+<li><a href="#egységtesztelés-junit"
+id="toc-egységtesztelés-junit">04-05. Egységtesztelés: JUnit</a></li>
+<li><a href="#tömb-enum-memmap" id="toc-tömb-enum-memmap">06. Tömb,
+enum, memmap</a></li>
+<li><a href="#io-kivétel" id="toc-io-kivétel">07. I/O, kivétel</a></li>
+<li><a href="#list-set-map" id="toc-list-set-map">08. <code>List</code>,
+<code>Set</code>, <code>Map</code></a></li>
+<li><a href="#sablon" id="toc-sablon">09. Sablon</a></li>
+<li><a href="#öröklődés" id="toc-öröklődés">10. Öröklődés</a></li>
+<li><a href="#interfész-egyenlőség" id="toc-interfész-egyenlőség">11.
+Interfész, egyenlőség</a></li>
+</ul>
+</nav>
+<h1 class="hu" id="alapok">01. Alapok</h1>
+<h2 class="en hu" id="demo-1">Demo</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsük el a lehető legrövidebb Java fordítási egységet.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> A <span class="op">{}</span></span></code></pre></div>
+<p>Fordítsuk is le.</p>
+<pre><code>javac A.java</code></pre>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Készítsünk futtatható, üres törzsű programot.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Skip <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Fordítsuk és futtassuk.</p>
+<pre><code>javac Skip.java
+java Skip</code></pre>
+<h2 class="hu" id="feladatok-1">Feladatok</h2>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Készítsünk programot, amely a billentyűzetről kéri be a felhasználó
+nevét, majd üdvözli. Használjuk az alábbi két parancsot.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">System</span><span class="op">.</span><span class="fu">console</span><span class="op">().</span><span class="fu">readLine</span><span class="op">()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">System</span><span class="op">.</span><span class="fu">console</span><span class="op">().</span><span class="fu">printf</span><span class="op">(</span><span class="kw">...</span><span class="op">)</span></span></code></pre></div>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>Készítsünk programot, amely a felhasználónevet parancssori
+argumentumként kapja, majd üdvözli a felhasználót. A szabványos
+kimenetre történő kiírás ezzel a paranccsal is elvégezhető - ezt
+használjuk majdnem mindig.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="kw">...</span><span class="op">)</span></span></code></pre></div>
+<h3 class="hu" id="feladat-4">5. feladat</h3>
+<p>Az alábbi Java program feladata, hogy kiírja az 1-től 4-ig lévő
+számok felét.</p>
+<p>Az elvárt kimenet:</p>
+<pre><code>0.5
+1.0
+1.5
+2.0
+Kiirtam 4 szamot</code></pre>
+<p>Javítsa ki a programot.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Print <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">Println</span><span class="op">(</span>i<span class="op">/</span><span class="dv">2</span><span class="op">);</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">&quot;Kiirtam &quot;</span> <span class="op">+</span> i <span class="op">+</span> <span class="st">&quot; szamot&quot;</span><span class="op">)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="hu" id="feladat-5">6. feladat</h3>
+<p>Készítsünk programot, amely bekér két egész számot, és kiírja a
+köztük lévő egész számok felét. A beolvasás során kapott szövegeket
+egész számmá az alábbi konverziós függvénnyel alakíthatjuk át.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Integer</span><span class="op">.</span><span class="fu">parseInt</span><span class="op">(</span><span class="kw">...</span><span class="op">)</span></span></code></pre></div>
+<h3 class="hu" id="feladat-6">7. feladat</h3>
+<p>Készítsünk egy programot, amely kiszámolja két egész szám összegét,
+különbségét, szorzatát, hányadosát, és az osztási maradékot is megadja.
+Figyeljen a nullával való osztásra (ez esetben ne végezze el az
+osztást). A két számot parancssori paraméterként kell megadni.
+Vizsgáljuk meg azt is, hogy megfelelő számú parancssori paramétert
+adtunk–e át. Ennek a hibaüzenetét a standard hibakimenetre
+(<code>System.err</code>) írjuk ki.</p>
+<h3 class="hu" id="feladat-7">8. feladat</h3>
+<p>Írjuk meg az <code>n</code> természetes szám faktoriálisát kiszámoló
+programot.</p>
+<h2 class="hu" id="gyakorló-feladatok-1">Gyakorló feladatok</h2>
+<h3 class="hu" id="gyakorló-feladat">1. gyakorló feladat</h3>
+<p>Készítsünk programot, amely a parancssori argumentumában megadott
+számról eldönti, hogy tökéletes–e. A számelméletben tökéletes számnak
+nevezzük azokat a természetes számokat, amelyek megegyeznek az
+önmaguknál kisebb osztóik összegével (vagyis az összes osztóik összege a
+szám kétszerese). Az első négy ilyen szám: 6, 28, 496 és 8128.</p>
+<h3 class="hu" id="gyakorló-feladat-1">2. gyakorló feladat</h3>
+<p>Módosítsuk az előző megoldásunkat úgy, hogy 1–től a paraméterként
+megadott határig minden egész számra vizsgálja a tökéletességet és adja
+meg, hogy abban az intervallumban mennyi ilyet talált. Ha nem talált
+egyetlen ilyen számot sem, akkor írja ki, hogy egyetlen tökéletes szám
+sincs a megadott intervallumban.</p>
+<h3 class="hu" id="gyakorló-feladat-2">3. gyakorló feladat</h3>
+<p>Számoljuk ki a parancssori argumentumként kapott egész számok
+legnagyobb közös osztóját. (Nem csak 2 számét, hanem az összes kapott
+számét.)</p>
+<p>A paraméterként kapott egész számok és az eredmény is legyen
+<code>long</code> típusú. Szövegeket ilyen típusú értékre a
+<code>Long.parseLong(...)</code> függvénnyel alakíthatunk.</p>
+<h3 class="hu" id="gyakorló-feladat-3">4. gyakorló feladat</h3>
+<p>Írjunk programot, mely kiszámítja egy szám négyzetgyökét a babilóniai
+módszerrel.</p>
+<p>Az <span class="math inline">\(S\)</span> szám négyzetgyökének
+megállapításához számoljuk ki az alábbi <span
+class="math inline">\(x_n\)</span> sorozat első néhány elemét. A program
+kérje be az <span class="math inline">\(S\)</span> számot, és kérjen be
+egy <span class="math inline">\(\varepsilon\)</span> pontosságot. A
+számolást addig folytassuk, amíg két egymást követő <span
+class="math inline">\(x_i\)</span> érték különbsége nagyobb, mint <span
+class="math inline">\(\varepsilon\)</span>. A sorozat legutolsó
+kiszámított elemét írjuk ki.</p>
+<p><span class="math display">\[x_0 = {S \over 2}\]</span> <span
+class="math display">\[x_{n+1} = {1 \over 2} \left(x_n + {S \over
+x_n}\right)\]</span></p>
+<p>Egy szöveget a <code>Double.parseDouble(...)</code> függvénnyel
+konvertálhatunk <code>double</code> típusúvá.</p>
+<h3 class="hu" id="gyakorló-feladat-4">5. gyakorló feladat</h3>
+<p>Számoljuk ki <span class="math inline">\(\sqrt{2}\)</span> értékét
+közelítőleg lánctört kiértékelésével.</p>
+<p><span class="math display">\[\sqrt{2} - 1 = {1 \over {2 + {1 \over {2
++ {1 \over {2 + \dots}}}}}}\]</span></p>
+<h3 class="hu" id="gyakorló-feladat-5">6. gyakorló feladat</h3>
+<p>Számoljuk ki <span class="math inline">\(e\)</span> értékét
+közelítőleg lánctört segítségével.</p>
+<p><span class="math display">\[e - 1 = 1 + {1 \over {1 + {1 \over {2 +
+{1 \over {1 + {1 \over {1 + {1 \over {4 + {1 \over {1 + {1 \over {1 + {1
+\over {6 + \dots}}}}}}}}}}}}}}}}\]</span></p>
+<h1 class="hu" id="osztály-adattag-metódus">02. Osztály, adattag,
+metódus</h1>
+<h2 class="en hu" id="demo-2">Demo</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsen egy <code>Point</code> osztályt <code>double</code> típusú
+<code>x</code> és <code>y</code> mezőkkel. Írja meg a
+<code>move(dx,dy)</code> műveletet, mellyel egy pontot el lehet tolni
+<code>dx</code> és <code>dy</code> koordinátákkal, valamint a
+<code>mirror(cx,cy)</code> műveletet, mely egy <code>cx</code> és
+<code>cy</code> koordinátájú pontra való tükrözést valósít meg.</p>
+<p>Készítsen <code>PointMain</code> néven Java programot, amelyben
+bemutatja a <code>Point</code> osztály használatát.</p>
+<h2 class="hu" id="feladatok-2">Feladatok</h2>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Módosítsa a <code>Point</code> osztályban a <code>mirror(p)</code>
+műveletet úgy, hogy paramétere (a tükrözési középpont) egy
+<code>Point</code> objektum legyen!</p>
+<p>Írjon <code>distance(p)</code> műveletet is, mely kiszámolja az adott
+pont távolságát egy paraméterként kapott <code>p</code> ponttól.
+Használja a <code>Math.sqrt(...)</code> függvényt és a Pitagorasz
+tételt!</p>
+<p>Frissítse a <code>PointMain</code> osztályt az új műveletekkel!</p>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Javasoljuk ezt a feladatot önállóan megoldani.</p>
+<p>Valósítsa meg a <code>Complex</code> osztályt <code>double</code>
+típusú valós és képzetes résszel! Írjon <code>abs()</code> metódust,
+amely kiszámolja a komplex szám abszolút értékét. Valósítsa meg az
+<code>add(c)</code>, a <code>sub(c)</code> és a <code>mul(c)</code>
+műveleteket oly módon, hogy az <code>add</code> adja hozzá a komplex
+számhoz a paraméterként kapott <code>c</code> komplex számot, a
+<code>sub</code> vonja ki belőle, a <code>mul</code> pedig szorozza
+hozzá.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>alpha<span class="op">.</span><span class="fu">re</span> <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>alpha<span class="op">.</span><span class="fu">im</span> <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>beta<span class="op">.</span><span class="fu">re</span> <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>beta<span class="op">.</span><span class="fu">im</span> <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>alpha<span class="op">.</span><span class="fu">add</span><span class="op">(</span>beta<span class="op">)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">// alpha.re == 4 &amp;&amp; alpha.im == 4 &amp;&amp; beta.re == 1 &amp;&amp; beta.im == 2</span></span></code></pre></div>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>Készítsen <code>Circle</code> néven kört reprezentáló osztályt. Egy
+körnek van középpontja (<code>x</code> és <code>y</code> nevű,
+<code>double</code> típusú adattag) és sugara (<code>radius</code> nevű,
+<code>double</code> típusú adattag).</p>
+<p>Írjon <code>enlarge(f)</code> metódust, amellyel a kör sugarát
+<code>f</code>-szeresére változtatja, illetve <code>getArea()</code>
+metódust, amely megadja a kör területét. Használjuk a
+<code>Math.PI</code> értéket!</p>
+<h3 class="hu" id="feladat-4">5. feladat</h3>
+<p>Készítsen egy <code>Distance</code> programot. Ez a parancssori
+paramétereket pontoknak értelmezi: a pontok szóközzel elválasztva vannak
+felsorolva, minden pontnál elöl az <code>x</code>, utána az
+<code>y</code> koordináta (ezek is szóközzel elválasztva).</p>
+<p>Feltételezhetjük, hogy páros számú paraméter van, amelyek mind egész
+számok.</p>
+<p>A program a <code>Point</code> osztály felhasználásával számítsa ki
+és adja össze az egymás mellett lévő pontok távolságát (pl. 3 pont
+esetén az 1. és a 2. pont távolságához hozzá kell adni a 2. és a 3. pont
+távolságát), majd az eredményt írja ki.</p>
+<p>Példák:</p>
+<pre><code>&gt; java Distance
+0.0
+&gt; java Distance 1 2
+0.0
+&gt; java Distance 0 0 3 4
+5.0
+&gt; java Distance 1 2 4 6
+5.0
+&gt; java Distance 1 2 4 6 7 6
+8.0</code></pre>
+<h2 class="hu" id="gyakorló-feladatok-2">Gyakorló feladatok</h2>
+<h3 class="hu" id="gyakorló-feladat">1. gyakorló feladat</h3>
+<p>Készítsük el a Complex osztályban a <code>conjugate()</code>
+műveletet, mely a komplex számot átalakítja a komplex konjugáltjára.
+Készítsük el a <code>reciprocate()</code> metódust, mely a komplex
+számot reciprokára alakítja. Definiáljuk a <code>div(c)</code>
+műveletet, mely elosztja a komplex számot a paraméterként kapott
+<code>c</code> komplex számmal. A <code>div(c)</code> metódust hasonló
+módon érdemes megcsinálni, mint a korábban létrehozott
+<code>mul(c)</code> metódus. Segítség egy komplex szám reciprokának
+kiszámításához: <span class="math inline">\(a + bi\)</span> komplex szám
+reciproka = <span class="math display">\[{a \over a^2 + b^2} - {b \over
+a^2 + b^2}i\]</span></p>
+<h3 class="hu" id="gyakorló-feladat-1">2. gyakorló feladat</h3>
+<p>Készítse el a <code>Line</code> osztályt, mellyel egy adott sík
+egyeneseit reprezentálhatjuk. Egy egyenest az <span
+class="math inline">\(ax + by = c\)</span> összefüggés ír le, ahol
+<code>a</code>, <code>b</code> és <code>c</code> számok
+<code>double</code> típusúak. (Ezek lesznek az osztály adattagjai.)</p>
+<p>Írjon az osztályba egy <code>contains(p)</code> műveletet, mely
+eldönti, hogy egy <code>p</code> pont rajta van-e az egyenesen!</p>
+<p>Írjon egy <code>isParallelWith(l)</code> és egy
+<code>isOrthogonalTo(l)</code> metódust, melyek eldöntik, hogy az
+egyenes párhuzamos-e a paraméterként kapott <code>l</code> egyenessel,
+illetve merőleges-e rá!</p>
+<h3 class="hu" id="gyakorló-feladat-2">3. gyakorló feladat</h3>
+<p>Készítse el a <code>Segment</code> osztályt, mely egy szakaszt
+reprezentál. A szakasz objektumok ábrázolásához a két végpont
+koordinátáit tároljuk el. Az adattagok <code>x1</code>, <code>y1</code>,
+<code>x2</code>, <code>y2</code> legyenek, mind <code>double</code>
+típusú.</p>
+<p>Írjon az osztályba egy <code>line()</code> metódust, mely visszaad
+egy olyan <code>Line</code> objektumot, amely a szakaszra illeszkedő
+egyenest reprezentál.</p>
+<p>Írjon az osztályba egy <code>contains(p)</code> műveletet, mely
+eldönti, hogy egy <code>p</code> pont rajta van-e a szakaszon!</p>
+<p>Készítsen <code>orientation(p)</code> metódust a <code>Segment</code>
+osztályba, mely eldönti, hogy a szakasz kezdőpontjából a végpontjába
+mutató vektor, valamint a szakasz végpontjából a paraméterként kapott
+<code>p</code> pontba mutató vektor milyen orientációjú. A metódus adjon
+vissza 0-t, ha a <code>p</code> rajta van a szakasz által meghatározott
+egyenesen, adjon vissza pozitív értéket, ha a két vektor az óramutató
+járásával megegyező irányban van egymással, illetve negatív értéket, ha
+az óramutató járásával ellenkező irányú. Ez elég egyszerű: ha a
+<code>p</code> pont koordinátáit <span
+class="math inline">\(x_3\)</span> és <span
+class="math inline">\(y_3\)</span> jelöli, akkor a metódus az alábbi
+kifejezést adja vissza.</p>
+<p><span class="math display">\[(y_2 - y_1)(x_3 - x_2) - (y_3 - y_2)(x_2
+- x_1)\]</span></p>
+<p>Készítsen egy <code>intersects(s)</code> metódust, mely visszaadja,
+hogy a szakasznak van-e közös pontja a paraméterként kapott
+<code>s</code> szakasszal! A megoldáshoz használja az alábbi
+segítséget!</p>
+<p><a href="http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf"
+class="uri">http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf</a>
+&lt;Geometry1x1.pdf&gt;</p>
+<h3 class="hu" id="gyakorló-feladat-3">4. gyakorló feladat</h3>
+<p>Készítsük el a <code>Rectangle</code> osztályt, mely a
+koordinátatengelyekkel párhuzamos oldalú téglalapok ábrázolására
+alkalmas! A <code>Rectangle</code> objektumokban tároljuk el valamelyik
+csúcspontjuk <code>x</code> és <code>y</code> koordinátáját, valamint a
+téglalap szélességét és magasságát. Ez négy adattagot jelent:
+<code>x</code>, <code>y</code>, <code>width</code> és
+<code>height</code>. Legyen mindegyik típusa dupla-pontosságú
+lebegőpontos típus.</p>
+<p>A szélesség és a magasság felvehet negatív értéket is. Ha például az
+<code>r</code> négy adattagja rendre <code>1</code>, <code>5</code>,
+<code>6</code>, <code>-2</code>, akkor az <code>r</code> bal alsó
+csúcsának koordinátái <code>1</code> és <code>3</code> lesznek.</p>
+<p>Definiáljuk a <code>Rectangle</code> objektumokon a
+<code>topLeft()</code>, a <code>topRight()</code>, a
+<code>bottomLeft()</code> és a <code>bottomRight()</code> metódusokat,
+melyek mindegyike egy <code>Point</code> objektumot ad vissza,
+értelemszerűen a téglalap megfelelő csúcsának a koordinátáit.</p>
+<p>A <code>Rectangle</code> osztályhoz készítsünk egy főprogramot, mely
+meghatározza a parancssori argumentumaként kapott téglalapok befoglaló
+téglalapjának csúcspontjait. A főprogram parancssori argumentumai számok
+legyenek (legalább 4). Minden számnégyes egy <code>Rectangle</code>
+objektumot határoz meg. Ezeket kell feldolgozni, és a végén kiírni a
+befoglaló téglalap bal alsó és jobb felső csúcsainak koordinátáit.</p>
+<pre><code>$ java RectangleMain 3 5 1 -7 2 5 8 8
+Bounding rectangle: 2.0;-2.0 - 10.0;13.0</code></pre>
+<p>A fenti példa két téglalap befoglaló téglalapját határozza meg. Az
+első téglalap egyik csúcsa <code>(3,5)</code> koordinátájú, szélessége
+<code>1</code>, magassága <code>-7</code>. A másik téglalap egyik csúcsa
+<code>(2,5)</code> koordinátájú, szélessége és magassága egyaránt
+<code>8</code>. Az eredményként kapott befoglaló téglalap bal alsó
+csúcsa <code>(2,-2)</code>, jobb felső csúcsa <code>(10,13)</code>,
+amely egyébként a második kapott téglalap jobb felső csúcsa is.</p>
+<p>Segítség: a befoglaló téglalap bal alsó csúcsának x-koordinátájának
+meghatározásához keressük meg a legkisebb értéket a kapott téglalapok
+bal alsó csúcsának x-koordinátái között, stb.</p>
+<h1 class="hu" id="csomagkezelés">03. Csomagkezelés</h1>
+<h2 class="en hu" id="demo-3">Demo</h2>
+<h3 class="hu" id="demó">1. demó</h3>
+<p>Szervezze az előző órai <code>Point</code> osztályt és az azt
+bemutató <code>PointMain</code> főprogramot a <code>point2d</code>
+csomagba.</p>
+<ol type="1">
+<li>A <code>Point</code> osztály ne látszódjon ki a csomagból: ne legyen
+publikus.</li>
+<li>Készítse el a <code>pointless.AnotherMain</code> osztályt. Ez a
+<code>pointless</code> csomag <code>AnotherMain</code> osztálya lesz. A
+megfelelő fájl: <code>pointless/AnotherMain.java</code>.
+<ul>
+<li>Próbálja példányosítani a <code>Point</code> osztályt az
+<code>AnotherMain</code> osztályból. Figyelje meg a hibaüzenetet.</li>
+</ul></li>
+</ol>
+<h2 class="hu" id="feladatok-3">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Kísérletezzünk egy kicsit az osztályok láthatóságával. A
+<code>Point</code> osztály váljon láthatóvá más csomagokból is.</p>
+<ol type="a">
+<li>Az <code>AnotherMain</code> most már valóban készítsen
+<code>Point</code> példányokat, két módon.
+<ol type="i">
+<li>A teljesen minősített neve használatával.</li>
+<li>Egy <code>import</code> segítségével.</li>
+</ol></li>
+<li>Készítse el a <code>PointMainInDefaultPackage</code> osztályt a
+névtelen csomagban.
+<ul>
+<li>Ebből használható-e a <code>Point</code>: készíthető-e
+<code>Point</code> példány a <code>PointMainInDefaultPackage</code>
+osztályban?</li>
+<li>Megfordítva: ez az osztály használható-e a <code>Point</code>
+osztályból?</li>
+</ul></li>
+</ol>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Készítsen <code>plane.PublicCircle</code> osztályt, amellyel egy
+síkbeli kört reprezentálunk. Egy körnek van középpontja,
+<code>double</code> típusú <code>x</code>, <code>y</code> adattagja,
+amelyeket inicializáljunk <code>0.0</code>-ra, illetve
+<code>double</code> típusú sugara (<code>radius</code>), amelyet
+inicializáljunk <code>1.0</code>-re. Az adattagok legyenek publikusak
+benne.</p>
+<ol type="a">
+<li>Írjon <code>getArea()</code> metódust, amely ismét a kör területével
+térjen vissza.
+<ol type="i">
+<li>A <code>plane.but.not.flying.CircleMain.main</code> metódus a
+következőket tegye.
+<ul>
+<li>Példányosítson egy <code>PublicCircle</code> objektumot.</li>
+<li>Írja ki a területét.</li>
+<li>Állítsa be a középpontját <code>(5, 2)</code>-re, sugarát
+<code>10.0</code>-re.</li>
+<li>Írja ki újra a területét.</li>
+</ul></li>
+</ol></li>
+<li>Készítsen az előzőhöz hasonló <code>plane.Circle</code> osztályt, de
+ebben az adattagokhoz csak megfelelően megírt getter és setter metódus
+férhessen hozzá.
+<ol type="i">
+<li>Az utóbbi váltson ki egy <code>IllegalArgumentException</code>
+kivételt, ha a sugara <code>0.0</code> vagy negatív szám lenne.</li>
+<li>A <code>CircleMain.main</code> próbálja ki az új funkcionalitást.
+<ul>
+<li>A kivételt nem kell elkapni, azzal az anyag későbbi részén
+foglalkozunk.</li>
+</ul></li>
+</ol></li>
+<li>A <code>Circle</code> osztályhoz készítsünk konstruktort, az
+adattagok beállítását ezzel végezzük.
+<ol type="i">
+<li>A konstruktor a setterhez hasonlóan válthasson ki kivételt.</li>
+<li>A <code>CircleMain.main</code> próbálja ki az új
+funkcionalitást.</li>
+</ol></li>
+</ol>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Készítsen <code>string.utils.IterLetter</code> osztályt.</p>
+<ol type="a">
+<li>Ennek a konstruktora <code>String</code> paraméterű.
+<ul>
+<li>Ha ez <code>null</code>, váltson ki
+<code>IllegalArgumentException</code> kivételt.</li>
+</ul></li>
+<li>Az osztálynak legyen egy <code>printNext()</code> metódusa.
+<ul>
+<li>Ez egy új sorban írja ki a szöveg első karakterét, majd újabb
+hívásra a második karakterét és így tovább.</li>
+<li>Ha a szöveg összes karakterét kiírtuk a képernyőre, akkor a metódus
+egy üres sort ír ki minden további hívásra.</li>
+</ul></li>
+<li>Készítse el a következő, főprogramot tartalmazó osztályokat:
+<code>Main</code> (a névtelen csomagban), <code>stringmain.Main</code>,
+<code>string.main.Main</code>, <code>string.utils.Main</code> és
+<code>string.utils.main.Main</code>.
+<ul>
+<li>Ezek közül egy kivételével mindegyiknek az a feladata, hogy áthívjon
+egy másik <code>main</code>re. Tehát egy négy hosszú híváslánc alakul
+ki.
+<ul>
+<li>A sorrend szabadon megválasztható.</li>
+<li>Tipp: az <code>X</code> osztály <code>y</code> (osztályszintű)
+metódusát így lehet meghívni: <code>X.y(...)</code>.
+<ul>
+<li>Milyen formában kell most <code>X</code> nevét használni?</li>
+</ul></li>
+<li>Hányfajta sorrend létezik?</li>
+<li>Néhány sorrend érvénytelen. Melyek? Miért?</li>
+</ul></li>
+<li>Az utoljára érintett főprogram két parancssori paramétert kap meg. A
+kód a <code>printNext</code> metódust annyiszor hívja meg a második
+paraméter szövegével, amennyi az első paraméterben kapott szám
+értéke.</li>
+<li>Futtassa mindegyik főprogramot. Paraméterként válasszon különféle
+szövegeket, az üreset is (ez <code>""</code> alakban adható át).</li>
+</ul></li>
+<li>Az <code>IterLetter</code> <code>reset()</code> metódusa újrakezdi a
+szöveg végigjárását.
+<ul>
+<li>Tehát a soron következő <code>printNext</code> hívások az első
+karaktertől folytatják a kiírásokat.</li>
+<li>A főprogramok egyszer hívják meg ezt a metódust <code>m</code>
+kiírás után, és még <code>k</code> kiírást tegyenek meg. Itt
+<code>m</code> és <code>k</code> a harmadik és negyedik parancssori
+paraméter.</li>
+</ul></li>
+<li>Legyen az osztályban egy <code>hasNext()</code> metódus is. Ez
+pontosan akkor tér vissza igaz értékkel, ha van még kiírható betű.
+<ul>
+<li>A főprogramok hívják ezt meg az újrakezdés előtt és után, valamint
+közvetlenül a program befejeződése előtt.</li>
+</ul></li>
+</ol>
+<h2 class="hu" id="gyakorló-feladatok-3">Gyakorló feladatok</h2>
+<h3 class="hu" id="gyakorló-feladat">1. gyakorló feladat</h3>
+<p>A <code>zoo.animal.Panda</code> osztály egy pandát reprezentál.</p>
+<ol type="a">
+<li>Az osztály a panda nevének, életkorának és tartózkodási országának
+eltárolására alkalmas. Ehhez értelemszerű típusú és nevű adattagokat
+kell használni.</li>
+<li>Az osztálynak két konstruktora van.
+<ol type="i">
+<li>Az első egy újszülött pandát ír le: megkapja és eltárolja a másik
+két adatát.</li>
+<li>A másik konstruktor a név kivételével kapja meg az adatokat. Ennek a
+pandának az legyen a neve, hogy
+<code>Y years old foundling from C</code>, ahol <code>Y</code> és
+<code>C</code> helyén az életkor és az ország szerepel.</li>
+</ol></li>
+<li>Az osztály rendelkezik egy <code>happyBirthday()</code> metódussal
+is. Ez kiírja a panda nevét, országát és az eggyel megnövekedett
+életkorát is. A metódus egy számot is kap paraméterül
+(<code>limitYear</code>), amennyiben az életkor ezt meghaladja, akkor a
+pandát visszaköltöztetik a Kínai Népköztársaságba.</li>
+<li>A <code>zoo.keeper.Crikey</code> főprogramja próbálja ki a
+fentieket.</li>
+</ol>
+<h3 class="hu" id="gyakorló-feladat-1">2. gyakorló feladat</h3>
+<p>Bővítse a <code>string.utils</code> csomagot a
+<code>string.utils.IterWord</code> osztállyal.</p>
+<ol type="a">
+<li>Az osztály konstruáláskor egy szöveget kap meg.</li>
+<li>Az osztály <code>printNext()</code> metódusa új sorban a képernyőre
+írja a szöveg következő szavát.</li>
+<li>Az osztálynak szintén legyen <code>reset()</code> és
+<code>hasNext()</code> metódusa.</li>
+<li>A már létező főprogramok mellé kerüljön egy-egy
+<code>WordMain</code>, amely bemutatja az osztály használatát.</li>
+</ol>
+<h3 class="hu" id="gyakorló-feladat-2">3. gyakorló feladat</h3>
+<p>Készítse el a <code>magic.library.Incantation</code> osztályt, amely
+egy varázslatos ráolvasást ábrázol. Ez egy <code>text</code> szöveges és
+egy <code>index</code> egész szám adatot tárol.</p>
+<ol type="a">
+<li>Az osztály egyik konstruktora átveszi és beállítja a két paraméter
+értékét.
+<ul>
+<li>Ha az előbbi <code>null</code>, váltson ki
+<code>IllegalArgumentException</code> kivételt.</li>
+</ul></li>
+<li>A másik konstruktor egy <code>Incantation</code> példányt kap meg,
+és ennek az adattagjaiból tölti fel a sajátokat.</li>
+<li>Legyen mindkét adattagnak gettere, az <code>index</code>nek settere
+is.</li>
+<li>Az osztály <code>enchant()</code> metódusa egy
+<code>Incantation</code> példányt (<code>otherInc</code>) kap meg és egy
+<code>isPrepend</code> logikai értéket. A metódus az alábbiak szerint
+módosítja a hívott példány szövegét.
+<ol type="i">
+<li>Először megpróbáljuk felvenni a <code>text</code> szöveg
+<code>index</code>edik szavát.
+<ul>
+<li>Ha például <code>index</code> értéke <code>3</code>, akkor a
+harmadik szóról van szó.</li>
+<li>Tipp: a <code>String</code> osztály <code>split</code> metódusát
+érdemes használni.</li>
+</ul></li>
+<li>Ha nincsen ilyen szó, mert <code>index</code> túl magas vagy
+alacsony (akár negatív is lehet), a metódus hamis visszatérési értéket
+ad.</li>
+<li>A felvett szót <code>otherInc</code> szövege elé írjuk, ha
+<code>isPrepend</code> értéke igaz, és mögé, ha hamis.
+<ul>
+<li>Egy szóköz is kerüljön a régi szöveg és az új szó közé.</li>
+</ul></li>
+<li>Az <code>index</code> adattag eggyel megnő/lecsökken
+<code>isPrepend</code> értékétől függően.</li>
+<li>A metódus igazzal tér vissza, jelezve, hogy a szöveg
+megváltozott.</li>
+</ol></li>
+<li>A <code>magic.Soliloquy</code> osztály
+<code>reciteIncantations()</code> metódusát a főprogram fogja hívni, és
+a következőket teszi.
+<ol type="i">
+<li>Két <code>Incantation</code> példányt kap meg (<code>inc1</code> és
+<code>inc2</code>), valamint egy <code>idx</code> egész és egy
+<code>startWithAppend</code> logikai értéket.</li>
+<li>Háromszor hívja meg az <code>inc1</code> példányra az
+<code>enchant</code> metódust. Az első paraméter mindegyik esetben
+<code>inc2</code>.
+<ul>
+<li>A második paraméter az első hívásban <code>startWithAppend</code>
+ellentéte.</li>
+<li>A másodikban <code>startWithAppend</code>.</li>
+<li>Harmadjára <code>true</code>.</li>
+</ul></li>
+<li>Mindegyik hívás után írja ki a kifejezés visszatérési értékét és
+mindkét objektum adatait.
+<ul>
+<li>Ez utóbbiakat a getterek segítségével lehet elérni.</li>
+<li>A formátumhoz lásd a lenti példát.</li>
+<li>A kiírás kódja a <code>printStatus</code> segédfüggvénybe
+kerüljön.</li>
+</ul></li>
+<li>Az első kiírás után <code>inc1</code> <code>index</code>
+adattagjának értéke álljon <code>idx</code>re.</li>
+</ol></li>
+<li>A <code>magic.Soliloquy</code> osztályban levő főprogram hat
+parancssori paramétert vár (<code>argN</code> lentebb) és a következőket
+teszi.
+<ol type="i">
+<li>Feltehető, hogy a paraméterek száma és tartalma megfelelő, nem kell
+ellenőrizni.</li>
+<li>A főprogram elkészíti az <code>inc1</code>, <code>inc2</code> és
+<code>inc3</code> <code>Incantation</code> példányokat. Az első kettő
+tartalmát az első négy parancssori paraméter értékei alapján
+inicializálja, a harmadikat pedig a másodikból.
+<ul>
+<li>Az első és harmadik parancssori paramétert idézőjellel
+(<code>"</code>) kell majd körbevenni, mert szóközöket
+tartalmaznak.</li>
+</ul></li>
+<li>Ezután a következőket teszi.
+<ul>
+<li>Meghívja a <code>reciteIncantations</code> segédfüggvényt az
+<code>inc1, inc2, arg5, true</code> paraméterekkel.</li>
+<li>Beállítja <code>inc1</code> <code>index</code>ét <code>arg6</code>
+értékre.</li>
+<li>Meghívja a <code>reciteIncantations</code> segédfüggvényt az
+<code>inc1, inc3, arg5, false</code> paraméterekkel.</li>
+</ul></li>
+</ol></li>
+<li>Kipróbálás: a főprogram kapja meg a következő paramétereket:
+<code>programming is a creative activity</code>, <code>4</code>,
+<code>to be or not to be</code>, <code>-123</code>, <code>1</code>.
+Ennek hatására a kiírások legyenek az alábbiak.</li>
+</ol>
+<pre><code>true;7;programming is a fun and creative activity;-123;to be or not to be creative
+true;1;programming is a fun and creative activity;-123;to be or not to be creative
+true;0;programming is a fun and creative activity;-123;programming to be or not to be creative
+false;0;programming is a fun and creative activity;-123;programming to be or not to be creative
+
+true;3;programming is a fun and creative activity;-123;fun to be or not to be
+true;1;programming is a fun and creative activity;-123;fun to be or not to be
+true;2;programming is a fun and creative activity;-123;fun to be or not to be programming
+true;1;programming is a fun and creative activity;-123;is fun to be or not to be programming</code></pre>
+<h3 class="hu" id="gyakorló-feladat-3">4. gyakorló feladat</h3>
+<p>Készítsen egy <code>game.utils.Vehicle</code> osztályt, amellyel egy
+játék járművét reprezentáljuk. Egy járműnek van modelid-je
+(<code>int</code>), rendszáma (<code>String</code>), és két színállapota
+(<code>color1</code>, <code>color2</code> <code>int</code> típusú
+adatok). A rendszámhoz készítsen setter és getter metódusokat.</p>
+<p>Készítsen <code>game.Player</code> osztályt, amellyel egy játékost
+reprezentálunk. Egy játékosnak van neve (<code>String</code>), IP-címe
+(<code>String</code>), egészségi állapota (<code>int</code>) és lehet
+járműve (<code>Vehicle</code>) (ha nincsen, akkor tároljunk
+<code>null</code> értéket).</p>
+<p>A játékos osztályhoz készítsen <code>print()</code> metódust,
+amellyel ki lehet íratni egy játékos legfontosabb információit: nevét,
+IP-címét, egészségi állapotát, illetve járművének rendszámát (ha
+van).</p>
+<p>Készítsen <code>game.Main</code> főprogramot, amelyben példányosít
+legalább 3 járművet és legalább 2 játékost. Az egyik játékoshoz
+tartozzon jármű. A főprogram írja ki a képernyőre a játékosok
+adatait.</p>
+<h1 class="hu" id="egységtesztelés-junit">04-05. Egységtesztelés:
+JUnit</h1>
+<h2 class="en hu" id="demo-4">Demo</h2>
+<h3 class="hu" id="demó">1. demó</h3>
+<p>Írjunk <code>fib()</code> metódust a
+<code>famous.sequence.Fibonacci</code> osztályba, amely egy
+<code>n</code> számot kap meg, és kiadja <a
+href="https://hu.wikipedia.org/wiki/Fibonacci-sz%C3%A1mok">az
+<code>n</code>-edik Fibonacci-számot</a>. Feltesszük, hogy az
+<code>n</code> bemenet kis, pozitív szám.</p>
+<p>Teszteljük a következőképpen.</p>
+<ul>
+<li>A metódus kapjon <code>static</code> minősítőt. Erről a kulcsszóról
+részletesebben később lesz szó.</li>
+<li>A mellékelt <code>famous.sequence.FibonacciStructureTest</code>
+használata.
+<ul>
+<li>Ezt a csomagjának megfelelő könyvtárba kell elhelyezni.</li>
+<li>Ez a <code>CheckThat</code> eszközt használja, aminek szintén
+elérhetőnek kell lennie.</li>
+<li>Fordítás és futtatás. A parancsokat lásd a demó <code>zip</code>
+fájlban.
+<ul>
+<li>Először a <code>FibonacciStructureTest</code> osztályt
+fordítsuk.</li>
+<li>Most a <code>Fibonacci.java</code> osztályt külön paranccsal kell
+lefordítani, mert a tesztelő nem hivatkozik rá közvetlenül, és így az
+előző fordításban a <code>javac</code> nem keresi meg.</li>
+<li>Futtassuk a teszteket.</li>
+</ul></li>
+</ul></li>
+<li>Készítsünk <code>famous.sequence.FibonacciTest</code> tesztelőt.
+<ul>
+<li>Ebben legyen teszt néhány konkrét <code>n</code> értékre.</li>
+<li>Próbáljuk ki a paraméterezett tesztelést is.</li>
+<li>Fordítás és futtatás.
+<ul>
+<li>A folyamat jobb megértése érdekében töröljük le a korábban elkészült
+összes <code>.class</code> fájlt. (A <code>.java</code> fájlok
+maradjanak meg!)</li>
+<li>Fordítsuk le a <code>FibonacciTest</code> kódját. Ez a
+<code>Fibonacci.java</code> fájlt is megtalálja és lefordítja.</li>
+<li>Futtassuk a teszteket.</li>
+</ul></li>
+</ul></li>
+<li>A mellékelt <code>famous.sequence.FibonacciTestSuite</code>
+használata.
+<ul>
+<li>Ezt is a csomagjának megfelelő könyvtárba kell elhelyezni.</li>
+<li>Ismét töröljük le a korábban elkészült összes <code>.class</code>
+fájlt.</li>
+<li>Fordítsuk le a <code>FibonacciTestSuite</code> kódját. Ezúttal
+<code>Fibonacci.java</code> és a két korábbi tesztelő is lefordul.</li>
+<li>Futtassuk a teszteket.</li>
+</ul></li>
+</ul>
+<h2 class="hu" id="feladatok-4">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsünk <a
+href="https://hu.wikipedia.org/wiki/H%C3%A1romsz%C3%B6gsz%C3%A1mok">háromszögszámokat</a>
+kiszámító
+<code>static famous.sequence.TriangularNumbers.getTriangularNumber()</code>
+metódust.</p>
+<ul>
+<li>A tesztelő kód a <code>famous.sequence.TriangularNumbersTest</code>
+osztályba kerüljön.</li>
+<li>Ehhez is jár mellékelt strukturális tesztelő és suite is, ezeknek is
+rendben le kell futniuk.
+<ul>
+<li>A fájlokat a megfelelő könyvtárba kell elhelyezni, különben nem
+működnek.</li>
+</ul></li>
+</ul>
+<p>Kipróbálandók a következő bemenetek.</p>
+<ul>
+<li>nulla</li>
+<li>egy</li>
+<li><a
+href="https://hu.wikipedia.org/wiki/Carl_Friedrich_Gauss#Fiatalkora">a
+szám, ami a fiatal Gauss anekdotájában szerepel</a></li>
+<li>mínusz egy</li>
+<li>más negatív szám</li>
+</ul>
+<p>A tesztelőbe írjunk szándékosan egy rossz tesztesetet is, direkt
+elrontott elvárt eredménnyel. Vizsgáljuk meg a futtatás eredményét,
+benne az összefoglalóval és a <em>stack trace</em> részleteivel.</p>
+<p>Az osztályba kerüljön <code>getTriangularNumberAlternative()</code>
+is. Ez a képlettel dolgozzon, és adja ugyanazt a kimenetet, mint
+<code>getTriangularNumber()</code>.</p>
+<ul>
+<li>A tesztelő próbálja ezt is ki.</li>
+</ul>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Készítsük el a
+<code>static math.operation.safe.Increment.increment()</code>
+metódust.</p>
+<ul>
+<li>Legyen <code>static</code> minősítőjű.</li>
+<li>Bemenete egy <code>int</code>.</li>
+<li>Ha a bemenete a legnagyobb ábrázolható egész, azzal tér vissza,
+különben a bemeneténél eggyel nagyobb egésszel.
+<ul>
+<li>Erre így lehet hivatkozni:
+<code>Integer.A_MEGFELELŐ_ADATTAG_NEVE</code>.</li>
+<li>A keresett név <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Integer.html#field-summary">a
+Java API dokumentációból</a> olvasható ki.</li>
+</ul></li>
+</ul>
+<p>Ugyanebbe a csomagba készítsük el az <code>IncrementTest</code>
+osztályt az <code>increment()</code> működésének kipróbálására.</p>
+<ul>
+<li>Bemenete legyen nulla.</li>
+<li>Bemenete legyen a legkisebb ábrázolható egész.</li>
+<li>Bemenete legyen a legnagyobb ábrázolható egész.</li>
+<li>Bemenete legyen egy közepesen nagy, pozitív egész.</li>
+<li>Bemenete legyen egy közepesen nagy, negatív egész.</li>
+<li>Bemenete legyen <code>-1</code>.</li>
+</ul>
+<p>Készítsünk egy hasonló tesztelő fájlt egy másik csomagba is, és
+próbáljuk ki ott is.</p>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Készítsük el a mellékelt strukturális tesztelőben
+(<code>RecordLabelStructureTest</code>,
+<code>ArtistStructureTest</code>, <code>FanStructureTest</code>) leírt
+osztályokat a megadott szerkezettel.</p>
+<p>Ebben a feladatban előre meg van adva néhány funkcionális teszt is.
+Ezeket a fájlokat bővítsük az alábbi tesztekkel.</p>
+<ul>
+<li>Tesztelendő, hogy létrehozás után mindegyik objektumra helyes
+értéket adnak a getterek.
+<ul>
+<li>A rajongónak, a rajongó művészének, és a rajongó művésze kiadójának
+a neve megfelelő kell, hogy legyen.</li>
+<li>A rajongó létrehozás után közvetlenül még nem költött el pénzt.</li>
+</ul></li>
+</ul>
+<p>A funkcionális tesztelőben az alábbi tesztek érhetők el a
+<code>Fan</code> osztályhoz. Itt a feladat a megvalósítás
+elkészítése.</p>
+<ul>
+<li><code>buyMerchandise()</code> kiszámítja a rajongó által vásárolt
+termék árát.
+<ul>
+<li>A rajongó természetesen csak a kedvenc művészétől vesz
+termékeket.</li>
+<li>Az alapár paraméterként van megadva, de ha a rajongó másokkal együtt
+veszi meg a terméket, az a darabárat fejenként 10%-kal, de legfeljebb
+20%-kal csökkenti.
+<ul>
+<li>A további rajongókat deklaráljuk egy <em>vararg</em> paraméterben,
+így: <code>Fan... friends</code>.</li>
+<li>Így hívható meg a metódus:
+<code>fan1.buyMerchandise(100, friend1, friend2, friend3)</code>, ahol
+mindegyik <code>friendN</code> egy <code>Fan</code> példány.</li>
+<li>A költségcsökkentés mértéke akkor sem haladja meg a 20%-ot, ha
+kettőnél több extra rajongó csatlakozik.</li>
+</ul></li>
+<li>A metódus visszatérési értéke a számított darabár.
+<ul>
+<li>Ezt az összeget elkölti a rajongó és mindegyik barátja.</li>
+<li>Az összes költés felét megkapja a kiadó a <code>gotIncome()</code>
+segítségével.</li>
+</ul></li>
+</ul></li>
+<li><code>favesAtSameLabel()</code> azt vizsgálja meg, hogy ugyanaz a
+művész-e két rajongó kedvence.</li>
+<li>Az alábbi négy metódus állítsa elő a rajongó szöveges
+reprezentációját. Ezek visszatérési értéke megegyezik, de más-más módon
+állítják elő azt.
+<ul>
+<li>A <code>toString1()</code> metódus a <code>+</code> operátorral fűz
+össze szövegrészleteket.
+<ul>
+<li>Ez hatékony, de macerás megírni és olvasni.</li>
+</ul></li>
+<li>A <code>toString2()</code> metódus a <code>formatted</code> metódust
+használja ilyen módon:
+<code>"%s=%d".formatted("one hundred", 100)</code>.
+<ul>
+<li>Ezt könnyű olvasni.</li>
+</ul></li>
+<li>A <code>toString3()</code> metódus ezt használja:
+<code>String.format("%s=%d", "one hundred", 100)</code>.
+<ul>
+<li>Ez az előzőhöz hasonló, kicsit régebbi stílusú.</li>
+</ul></li>
+<li>A <code>toString4()</code> metódus egy <code>StringBuilder</code>
+példányt használ.
+<ul>
+<li>A <code>sb.append(123)</code> hívással lehet bővíteni a
+tartalmat.</li>
+<li>A <code>sb.toString()</code> hívással lehet szövegként kinyerni a
+tartalmat.</li>
+<li>Ez akkor hasznos, ha a kimenet hosszú és összetett.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>A <code>math.operation.textual.Adder.addAsText()</code> metódus két
+<code>String</code> paramétert vár.</p>
+<ul>
+<li>Ha mindkettő értelmezhető egész számként, az eredmény az összegük
+szövegesen.</li>
+<li>Hasonlóan működik, ha a bemenetek értelmezhetőek lebegőpontos
+számként.</li>
+<li>Ha a bemenetek nem szám jellegűek, az eredmény a következő szöveg:
+<code>Operands are not numbers</code>.</li>
+<li>Az implementáció forráskódja <strong>nem</strong> elérhető, csak a
+<code>.class</code> fájl.
+<ul>
+<li>Ezt a megfelelő könyvtárba kell tenni.</li>
+</ul></li>
+</ul>
+<p>Ugyanebbe a csomagba készítsük el az <code>AdderTest</code> osztályt,
+ami a következőket próbálja ki.</p>
+<ul>
+<li><code>wrongInput</code>: legalább az egyik paraméter nem
+szöveges</li>
+<li><code>addZero</code>: egy számhoz nullát adunk hozzá
+<ul>
+<li>Mindkét oldal lehessen a nulla.</li>
+<li>Kipróbálandó: a nulla vagy a szám lebegőpontos.</li>
+</ul></li>
+<li><code>add</code>: összeadunk két számot
+<ul>
+<li>Az összeadás mindkét sorrendben ugyanazt az eredményt adja.</li>
+<li>Kipróbálandó: mindkét szám egész; mindkettő lebegőpontos; egyik
+ilyen, másik olyan.</li>
+</ul></li>
+<li><code>addCommutative</code>: két szám összeadva a megadott
+sorrendben és ahhoz képest fordítva ugyanazt az eredményt adja.</li>
+</ul>
+<p>Megengedett egyszerűsítés.</p>
+<ul>
+<li>Egy metódusba szabad egynél több <code>assertX</code> hívást is
+írni.</li>
+<li>Ez realisztikus kódban nem jó választás.</li>
+<li>Létezik erre jobb megoldás (<code>assertAll</code>), de az túlmutat
+a kurzus keretein.</li>
+</ul>
+<p>A fentieket a következő módokon lehet bővíteni.</p>
+<ul>
+<li>Néhány (vagy akár mindegyik) feltétel több paraméterrel is
+kipróbálható (<code>@ParameterizedTest</code>).</li>
+<li>A <code>wrongInput</code> teszt kerüljön át az
+<code>AdderInvalidTest.java</code> fájlba. Egy test suite hívja meg
+mindkét osztályt.</li>
+</ul>
+<h2 class="hu" id="gyakorló-feladatok-4">Gyakorló feladatok</h2>
+<h3 class="hu" id="gyakorló-feladat">1. gyakorló feladat</h3>
+<p>Implementálja a <a
+href="https://hu.wikipedia.org/wiki/Caesar-rejtjel">Caesar-kódolást</a>
+a <code>cipher.CaesarCipher</code> osztályban a következőek szerint.</p>
+<ul>
+<li>Az eltolási távolságot konstruktor paraméterként kapja meg
+(<code>shift</code>) és tárolja el.</li>
+<li>Az <code>encrypt()</code> metódus egy szöveget kap meg, és az
+alábbiak szerint, karakterenként kódolja el.
+<ul>
+<li>Ha a karakter nem betű (nem <code>'a'</code> és <code>'z'</code>
+közötti karakter), akkor megtartjuk. Különben a <code>shift</code>
+pozícióval odébb levő karaktert adjuk a kimenethez.
+<ul>
+<li>Például: <code>'d'</code> hárommal eltolva <code>'g'</code>
+lesz.</li>
+<li>Figyelem: az eltolás átfordulhat: <code>'z'</code> kettő távolsággal
+eltolva <code>'b'</code> lesz.</li>
+<li>Figyelem: az eltolás lehet negatív, és akkor is átfordulhat:
+<code>'c'</code> <code>-5</code> távolsággal eltolva <code>'x'</code>
+lesz.</li>
+</ul></li>
+<li>További részletek:
+<ul>
+<li>Az eredmény szöveget <code>+</code> operátorral összefűzve is elő
+lehet állítani, de még jobb <code>StringBuilder</code>
+használatával.</li>
+<li>Az eltolás után típuskényszerítést kell használni:
+<code>(char)shiftedChar</code>.</li>
+</ul></li>
+</ul></li>
+<li>A <code>decrypt()</code> metódus legyen az <code>encrypt()</code>
+ellentéte.</li>
+</ul>
+<p>A <code>cipher.CaesarCipherTest</code> osztály a következőket
+tesztelje.</p>
+<ul>
+<li><code>noShift</code>: ha <code>shift</code> értéke <code>0</code>,
+<code>encrypt()</code> és <code>decrypt()</code> egyaránt az eredeti
+szöveget adja</li>
+<li><code>encryptBy</code>: adott szöveg elkódolása adott
+<code>shift</code> távolsággal
+<ul>
+<li>üres szöveg (a <code>textBlock</code> részre <code>''</code> alakban
+írható le)</li>
+<li>egybetűs szöveg</li>
+<li>hosszabb szöveg</li>
+<li>nem csak kisbetűket tartalmazó szöveg</li>
+</ul></li>
+<li><code>inverseOperation</code>: két, egymással ellentétes hatású
+művelet meghívása egymás után, az eredmény az eredeti szöveg
+<ul>
+<li><code>encrypt()</code>, aztán <code>decrypt()</code> ugyanolyan
+<code>shift</code> távolsággal</li>
+<li><code>decrypt()</code>, aztán <code>encrypt()</code> ugyanolyan
+<code>shift</code> távolsággal</li>
+<li><code>encrypt()</code> <code>shift</code> távolsággal, aztán
+<code>encrypt()</code> <code>-shift</code> távolsággal</li>
+<li><code>encrypt()</code> <code>-shift</code> távolsággal, aztán
+<code>encrypt()</code> <code>shift</code> távolsággal</li>
+<li><code>decrypt()</code> <code>shift</code> távolsággal, aztán
+<code>decrypt()</code> <code>-shift</code> távolsággal</li>
+<li><code>decrypt()</code> <code>-shift</code> távolsággal, aztán
+<code>decrypt()</code> <code>shift</code> távolsággal</li>
+</ul></li>
+</ul>
+<h3 class="hu" id="feladat-4">2. feladat</h3>
+<h5 class="hu" id="a-1">a</h5>
+<p>Írjunk <code>static math.operation.Power.power()</code> metódust,
+amely természetes számok hatványozását valósítja meg (a hatvány alap és
+kitevő is természetes szám). Bár az eredmény mindig egész lesz, a
+visszatérési érték legyen <code>double</code>, mert nemsokára
+továbbfejlesztjük ezt a függvényt. A <code>0</code> nulladik hatványa
+most legyen <code>1</code>.</p>
+<p>Tesztelje a <code>power()</code> függvényt.</p>
+<h5 class="hu" id="b-1">b</h5>
+<p>Fejlesszük tovább a <code>power()</code> függvényt úgy, hogy negatív
+egész kitevővel is helyesen működjön.</p>
+<p>Próbálja ki, hogy az <strong>a</strong> feladatban megírt unit
+tesztek továbbra is sikeresen lefutnak-e.</p>
+<p>Bővítse a unit teszteket negatív kitevő helyességét ellenőrző
+esetekkel.</p>
+<h1 class="hu" id="tömb-enum-memmap">06. Tömb, enum, memmap</h1>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsük el az <code>ArrayUtilStructureTest</code> osztályban leírt
+szerkezetű programot. Ez egy tömb maximális elemét számítja ki az alábbi
+módokon. A visszatérési érték mindegyik esetben ugyanaz, a kiszámítás
+módja azonban eltérő.</p>
+<ul>
+<li><code>max()</code>: a tömb elemeit indexelve járjuk be a tömböt, az
+eddig érintett rész maximumát számon tartva, és lecserélve, ha az
+indexelt tömbelem ennél nagyobb
+<ul>
+<li>Üres tömb maximuma legyen <code>0</code>.</li>
+<li>Nemüres tömbre az érintett rész maximuma az
+<code>Integer.MIN_VALUE</code> értékről induljon.</li>
+<li>A csere egy egyszerű <code>if</code> vizsgálattal történjen.</li>
+</ul></li>
+<li><code>max2()</code>: hasonlóan, de a csere a <code>?:</code>
+operátorral történjen</li>
+<li><code>max3()</code>: hasonlóan, de a csere a <code>Math.max()</code>
+hívással történjen</li>
+<li><code>max4()</code>: hasonlóan, de a ciklus ne indexelő, hanem
+bejáró legyen</li>
+</ul>
+<p>Írjuk meg az alábbi funkcionális teszteket.</p>
+<ul>
+<li><code>maxLength0</code>: üres tömb maximuma <code>0</code>
+<ul>
+<li>Mind a négy metódust próbáljuk ki.</li>
+<li>A fentebb említett “Megengedett egyszerűsítés” továbbra is él.</li>
+</ul></li>
+<li><code>maxLength1</code>: egyelemű tömböt tesztel
+<ul>
+<li>Paraméterezett tesztelővel próbáljuk ki, ami az egyetlen elem
+értékét több módon állítja be.</li>
+<li>Az értékek között szerepeljen <code>0</code>, <code>1</code>, nagy
+értékek, negatív értékek.</li>
+</ul></li>
+<li><code>maxLength2</code>: kételemű tömböt tesztel
+<ul>
+<li>Paraméterezett tesztelővel próbáljuk ki, ami egy <code>min</code> és
+egy <code>max</code> értéket használ.</li>
+<li>Mind a négy metódust próbáljuk ki úgy is, hogy az értékek
+<code>min, max</code> sorrendben szerepelnek a tömbben, és úgy is, hogy
+a sorrendjük <code>max, min</code>.</li>
+</ul></li>
+</ul>
+<p>A <code>minMax()</code> metódus a tömb minimumát és maximumát egy
+kételemű tömbben adja ki.</p>
+<ul>
+<li>A megvalósítás a maximum/minimum meghatározására a fenti lehetőségek
+közül bármelyiket használhatja.</li>
+<li>Tipp: szükség lesz az <code>Integer.MAX_VALUE</code> értékre.</li>
+<li>Készüljenek ehhez funkcionális tesztek: <code>minMaxLengthN</code>,
+ahol <code>N=0, 1, 2</code>.</li>
+</ul>
+<p>A <code>array.util.main.Main.main()</code> metódus próbálja ki a
+kódot úgy, hogy a felhasználó kézzel adja meg az adatokat.</p>
+<ul>
+<li>Először az <code>arrayLenTxt</code> változóba olvassuk be a tömb
+hosszát, és alakítsuk számmá az <code>arrayLen</code> változóba.</li>
+<li>Ezután készítsünk egy <code>arrayLen</code> méretű tömböt.</li>
+<li>Utána olvassunk be <code>arrayLen</code> bemenetet, és tároljuk el
+számként a tömb elemeiben.</li>
+<li>Végül írjuk ki a tömböt magát és a fenti metódusok segítségével
+meghatározott minimumát/maximumát.
+<ul>
+<li>A tömbök <code>System.out.println(array)</code> módon kiírva nem
+mutatják meg az elemeiket…</li>
+<li>… ezért <code>System.out.println(Arrays.toString(array))</code>
+használatával lehet őket kiíratni, ahol az osztály teljes neve
+<code>java.util.Arrays</code>.</li>
+<li>A <code>minMax()</code> adta tömböt is így írjuk ki.</li>
+</ul></li>
+</ul>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Készítsük el a <code>SectorTimerTestSuite</code> osztályban leírt
+szerkezetű programokat. Ezek egy versenyautó köreinek időmérését
+próbálják megvalósítani, az utolsó kivételével szándékosan rosszul.</p>
+<p>Először a <code>race.car.WrongSectorTimer1</code> osztályt készítsük
+el. <em>Szándékosan rontsuk el úgy</em>, hogy az adattagjai
+<code>public</code> láthatóságúak legyenek. Próbáljuk ki a
+következőket.</p>
+<ul>
+<li>A következő tesztesetek mind úgy indulnak, hogy egy
+<code>1, 2, 3</code> tartalmú tömbbel példányosítani kell az osztályt.
+<ul>
+<li>Kísérletező kedvűeknek: <code>@BeforeEach</code> használatával még
+elegánsabb megoldás adható.</li>
+</ul></li>
+<li><code>seemsGood</code>: az adattag három elemű tömb a megfelelő
+értékekkel</li>
+<li><code>setArrayElemsBreaksEncapsulation</code>: a tömb mező egyes
+értékeit közvetlenül el lehet érni és be lehet állítani; ez a hosszát
+nem változtatja meg
+<ul>
+<li>Ez a teszt (és a következő) szokatlan, mert egy <strong>direkt
+rossz</strong> megvalósítást próbál ki.</li>
+<li>Éppen ezért akkor zöld (elfogadott), ha <strong>rosszul működik az
+osztály</strong>.</li>
+</ul></li>
+<li><code>setArrayElemsBreaksEncapsulation</code>: az adattagban a tömb
+teljesen lecserélhető, ez megváltoztatja a hosszát és az értékeit
+is</li>
+</ul>
+<p>Próbáljuk megjavítani: készítsük el a
+<code>race.car.WrongSectorTimer2</code> osztályt. Az adattag láthatósága
+legyen most <code>private</code>, de a getterek, setterek és a
+konstruktor megvalósítása legyen naívan egyszerű.</p>
+<ul>
+<li>Most már nem elérhető kívülről az adattag. Ez helyes.</li>
+<li><code>seemsGood</code>: mint korábban</li>
+<li><code>constructorBreaksEncapsulation</code>: a
+<code>WrongSectorTimer2</code> példányt egy lokális változóban levő,
+<code>1, 2, 3</code> tartalmú tömb inicializálja, majd írjuk a tömb
+elemeit
+<ul>
+<li>Ez a <code>timer.getSectorTimes()</code> eredményének hosszát nem
+változtatja meg.</li>
+<li>Ellenőrzendő: a <code>timer.getSectorTimes()</code> és
+<code>timer.getSectorTime()</code> eredményeként viszont így más
+eredmény adódik.</li>
+</ul></li>
+<li><code>getterBreaksEncapsulation</code>: írjuk a
+<code>timer.getSectorTimes()[n]</code> értékeket
+<ul>
+<li>Ez a <code>timer.getSectorTimes()</code> eredményének hosszát nem
+változtatja meg, de az elemeket igen.</li>
+</ul></li>
+<li><code>setterBreaksEncapsulation</code>: a setternek egy
+<code>4, 5, 6, 7</code> tartalmú, lokális változóban tárolt tömb
+átadása, majd a változón keresztül a tömbelemek módosítása
+<ul>
+<li>Ez a reprezentáció tömb hosszát és értékeit is módosítja.</li>
+</ul></li>
+</ul>
+<p>Most tényleg javítsuk meg az enkapszulációt:
+<code>race.car.SectorTimer</code> osztály.</p>
+<ul>
+<li>A konstruktor, getter, setter egyaránt készítsen másolatot annak
+során, hogy átveszi/kiadja a reprezentáció tömbjét.
+<ul>
+<li>Még jobb, ha a konstruktor és a setter egy közös, privát
+<code>initSectorTimes</code> segédfüggvényre hív át.</li>
+</ul></li>
+<li>A tesztelőben legyen <code>constructorEncapsulatesWell</code>,
+<code>getterEncapsulatesWell</code> és
+<code>setterEncapsulatesWell</code> metódus.
+<ul>
+<li>Ezek ugyanazt próbálják ki, mint a fentiek, és ugyanazokat az
+<code>assertX</code> vizsgálatokat hajtsák végre.</li>
+<li>Figyeljük meg, hogy az enkapszuláció most jól működik: nem tudunk
+kívülről ,,betörni’’ a reprezentációba.</li>
+</ul></li>
+<li>A konstruktornak/getternek/setternek legyen olyan változata is, ami
+a tömb másolását a <code>System.arraycopy</code> művelettel hajtja
+végre.
+<ul>
+<li>Célszerű aSectorelv: ne találjuk fel a spanyolviaszt, ha elérhető
+beépített/könyvtári/sztenderd megoldás/eszköz.</li>
+<li>Mivel egy osztályban nem lehet két, azonos paraméterezésű
+konstruktor, az egyik kapjon egy extra <code>boolean</code> paramétert,
+amit nem használunk benne.</li>
+<li>A konstruktor és a setter <em>vararg</em> stílusban kapja meg a
+paramétereit, ne csak egyszerű tömbként.</li>
+</ul></li>
+</ul>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Készítsük el az <code>ElectionTestSuite</code> által leírt osztály és
+felsorolási típust. Egy olyan szavazást írnak le, amelyben jelöltekre
+lehet szavazatokat leadni.</p>
+<p>Az <code>ElectionTestStructureTest</code> osztály az elkészítendő
+tesztek szerkezetét mutatja.</p>
+<ul>
+<li><code>noVotes</code>: ha nincsen egy szavazat sem, az első jelölt
+győz (ez most <code>JACK</code>)</li>
+<li><code>singleCandidate</code>: a megadott számú szavazatot adják le,
+mindegyiket ugyanarra a jelöltre, aki ezáltal győz
+<ul>
+<li>Felsorolási típus átadható a tesztelőnek: a metódus paraméterének
+legyen <code>Candidate</code> a típusa, és a CSV részre az enum-érték
+neve kerüljön.</li>
+</ul></li>
+<li><code>twoCandidatesSameVoteCount</code>: ketten ugyanannyi
+szavazatot kapnak, aki az enumban a korábbi elem, az győz
+<ul>
+<li>Kipróbálandó: bármelyik sorrendben is kapják a szavazatokat, ugyanez
+az eredmény.</li>
+</ul></li>
+<li><code>candidateVoteCount</code>: a jelöltek sorban 1, 4, 3 és 2
+szavazatot kapnak
+<ul>
+<li>Kipróbálandó: <code>getCandidatesWithMoreVotesThan</code> a helyes
+eredményt adja a 0, 1, 2, 3 és 4 paraméterre is.</li>
+<li>Mivel egy <code>@CsvSource</code> nem tud nyilvánvaló módon tömböt
+kapni paraméterként, a hívásokat és az elvárt értékeket sorrendben bele
+kell írni a metódusba.
+<ul>
+<li>Nehezebb változat: az elvárt értékeket egy szövegben (így:
+<code>'JILL,SAM,MAX'</code>) kell átadni, és ezekből egy rövid
+kódrészlet alakítja ki az elvárandó <code>Candidate</code> tömböt.</li>
+</ul></li>
+<li>Itt nem <code>assertEquals</code>, hanem
+<code>assertArrayEquals</code> vizsgálat szükséges.</li>
+</ul></li>
+</ul>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>Rajzoljon memóriatérképet (memory map) a következő Java program
+kommentben jelzett soraihoz. (Másképp: Rajzolja fel a stack és heap
+pillanatnyi állapotát következő Java program végrehajtása során). A
+konstruktor paramétereitől tekintsünk el.</p>
+<p>Az (5) végrehajtása után mely objektumokat törölheti a
+szemétgyűjtő?</p>
+<p>Main.java:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Foo <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="fu">Foo</span><span class="op">(</span><span class="dt">int</span> initX<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> initX<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Main <span class="op">{</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> counter <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>       <span class="co">// (1)</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        Foo obj<span class="op">;</span>                <span class="co">// (2)</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        obj <span class="op">=</span> <span class="kw">new</span> <span class="fu">Foo</span><span class="op">(</span><span class="dv">5</span><span class="op">);</span>       <span class="co">// (3)</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        Foo obj2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Foo</span><span class="op">(</span><span class="dv">7</span><span class="op">);</span>  <span class="co">// (4)</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        obj2 <span class="op">=</span> obj<span class="op">;</span>             <span class="co">// (5)</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ...</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Írja át <code>Foo</code> konstruktorát hogy <code>initX</code>
+helyett <code>x</code> legyen a paraméter, tegye egyértelművé a
+<code>this</code> kulcsszóval, hogy melyik <code>x</code> azonosítóra
+hivatkozik.</p>
+<h2 class="hu" id="gyakorló-feladatok-5">Gyakorló feladatok</h2>
+<h3 class="hu" id="gyakorló-feladat">1. gyakorló feladat</h3>
+<p>Rajzoljon memóriatérképet (memory map) a következő Java programhoz.
+(Másképp: Rajzolja fel a stack és heap pillanatnyi állapotát következő
+Java program végrehajtása során).</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Foo <span class="op">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="fu">Foo</span><span class="op">(</span><span class="dt">int</span> x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="fu">x</span> <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Main <span class="op">{</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        Foo obj <span class="op">=</span> <span class="kw">new</span> <span class="fu">Foo</span><span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        obj <span class="op">=</span> <span class="kw">new</span> <span class="fu">Foo</span><span class="op">(</span><span class="dv">10</span><span class="op">);</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        Foo obj2 <span class="op">=</span> obj<span class="op">;</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        obj2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Foo</span><span class="op">(</span><span class="dv">20</span><span class="op">);</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h1 class="hu" id="io-kivétel">07. I/O, kivétel</h1>
+<h2 class="hu" id="feladatok-5">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>A <code>SingleLineFileStructureTest</code> alapján írjuk meg a
+<code>text.to.numbers.SingleLineFile.addNumbers()</code> metódust, ami
+egy fájlnevet vesz át, és az első sorában található számok összegével
+tér vissza.</p>
+<ul>
+<li>Ha nem létezik a fájl, az <code>IOException</code> kivétel terjedjen
+ki a metóduson kívülre.</li>
+<li>Ha a fájl üres, váltsunk ki <code>IllegalArgumentException</code>
+kivételt <code>Empty file</code> üzenettel.</li>
+<li>A fájl első sorának minden olyan szavát, ami nem értelmezhető
+<code>int</code> értékként, írjuk ki a <code>System.err</code>
+hibafolyamra. Erre ugyanúgy lehet írni, mint a <code>System.out</code>
+folyamra.</li>
+<li>A fájl használatának a végén erőforráskezelő try eszközzel
+garantáljuk a fájl bezárását.</li>
+</ul>
+<p>Készítsük el az alábbi teszteseteket.</p>
+<ul>
+<li>A két kivételes eset tesztelése.
+<ul>
+<li>A tesztelő metódus egyszerűen kapja el a kivételeket.
+<ul>
+<li>Ha mégse váltódna ki kivétel, hívjuk meg a <code>fail()</code>
+metódust. Ez kaphat egy hibaüzenetet is.</li>
+<li>A második esetben a kivétel szövege így kérhető le:
+<code>e.getMessage()</code>.</li>
+</ul></li>
+<li>Mj.: a JUnit <code>assertThrows()</code> metódusával még elegánsabb
+megoldás adható, de ez egy haladóbb szintű eszköz, nem célunk
+használni.</li>
+</ul></li>
+<li>Egy érvényes fájl tesztelése, melynek első sora
+<code>1 2 not text 3 -123</code> tartalmú.
+<ul>
+<li>A kimenetre kiírt szövegeket nem teszteljük JUnit segítségével, de
+ott kell lenniük.</li>
+</ul></li>
+<li>Mj.: a fentiek nem valódi egységtesztek, mert a fájlrendszert is
+használják.</li>
+</ul>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>A <code>MultiLineFileStructureTest</code> alapján írjuk meg az
+<code>text.to.numbers.MultiLineFile.addNumbers()</code> metódust. Ez a
+fájl összes sorának összes számát adja meg. Ennek legyen még egy
+paramétere, az elválasztójel karaktere.</p>
+<p>Ezt is teszteljük. Az előzőhöz képest különbség: üres fájl esetén nem
+váltódik ki kivétel. Az érvényes fájlt teszteljük szóköz és vessző
+elválasztójellel egyaránt.</p>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>Az előző két megoldás ne csak a hibafolyamra, hanem a
+<code>wrong.in.txt</code> fájlba is írja ki a hibás szövegeket (ha a
+bemeneti fájl neve <code>in.txt</code>).</p>
+<p>Ehhez nem kell JUnit tesztelőt írni.</p>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>A <code>StatisticsStructureTest</code> alapján írjuk meg a
+<code>textfile.Statistics.numberOfLines()</code> metódust. Ez kapjon meg
+egy fájlnevet, és adja vissza, hány sorból áll. Ha a fájl nem létezik, a
+visszatérési érték legyen <code>0</code>.</p>
+<p>Ugyanebben az osztályban <code>numberOfCharacters()</code> adja meg
+egy fájlról, hány karaktert tartalmaz (sorvége jelek nélkül).</p>
+<p>Mindkettő tesztelendő.</p>
+<h3 class="hu" id="feladat-4">5. feladat</h3>
+<p>A <code>FileContentStructureTest</code> szerint írjuk meg a
+<code>textfile.lookup.FileContent.contentLineCount()</code> metódust. Ez
+egy fájlnevet és egy szöveget kap meg, és megadja, a fájl hány sorában
+található meg ez a szöveg.</p>
+<ul>
+<li>Tipp: <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html#method-summary">a
+<code>String</code> osztály dokumentációjában</a> található egy hasznos
+metódus ehhez.</li>
+</ul>
+<p>A <code>textfile.lookup.FileContent.contentLineNumbers()</code>
+metódus szintén egy fájlnevet és egy szöveget kap meg, és egy tömbben
+visszaadja az összes olyan sor sorszámát (egytől számozva), amelyben a
+szöveg megtalálható.</p>
+<p>Mindkettő tesztelendő.</p>
+<h2 class="hu" id="gyakorló-feladatok-6">Gyakorló feladatok</h2>
+<h3 class="hu" id="feladat-5">1. feladat</h3>
+<p>Készítsük el a <code>plane.util.CircleUtil.writeCircle()</code>
+metódust, ami egy fájlnevet és egy <code>plane.Circle</code> objektumot
+vesz át. Ez nyissa meg a fájlt, és írja bele a kör adatait a
+következőképpen:</p>
+<pre><code>12.34
+-54.12
+54.3</code></pre>
+<p>Készítsük el a <code>plane.util.CircleUtil.readCircle()</code>
+metódust, ami egy fájlnevet vesz át. A metódus a fájlból a fenti
+formátum szerint olvassa fel egy kör adatait, és ebből elkészít és
+visszaad egy <code>Circle</code> objektumot. Feltehető, hogy a fájl
+létezik, és a megfelelő módon tartalmazza az adatokat.</p>
+<p>Készítsünk tesztelőt, amely egy kör adatait beleírja egy fájlba, majd
+visszaolvassa azokat, és megvizsgálja mindegyik adattagot.</p>
+<ul>
+<li>Az <code>assertNotSame()</code> meghívásával az is ellenőrizhető,
+hogy az eredeti kör és a beolvasott különböző objektumok.</li>
+</ul>
+<h3 class="hu" id="gyakorló-feladat">2. gyakorló feladat</h3>
+<p>A <code>file.line.SumChecker.main()</code> kódja nyissa meg olvasásra
+a <code>sum_input.txt</code> fájlt, írásra a <code>sum_output.txt</code>
+fájlt. Az előbbi tartalma ilyen:</p>
+<pre><code>7 2,5,-7,6,9
+-2 2,5,-7,6,9
+12 2,5,-7,6,9
+12 2,6,5,-7,6,9</code></pre>
+<p>Készítsünk kódot, ami soronként megkeresi, hogy az első szám előáll-e
+a felsoroltak közül két szám összegeként.</p>
+<ul>
+<li>Két, egymásba ágyazott ciklussal kell bejárni a számokat.</li>
+<li>Ugyanazt a számot nem szabad kétszer felhasználni: a harmadik sorban
+nem <code>12=6+6</code> az eredmény.</li>
+</ul>
+<p>A kimenetbe ez kerüljön:</p>
+<pre><code>7=2+5
+-2=5+-7
+12 none
+12=6+6</code></pre>
+<p>Tipp: az alábbi <code>continue</code> utasítás hasznos lehet:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>outer<span class="op">:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ciklus</span> <span class="op">(</span><span class="kw">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ciklus</span> <span class="op">(</span><span class="kw">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">...</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span> outer<span class="op">;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h1 class="en hu" id="list-set-map">08. <code>List</code>,
+<code>Set</code>, <code>Map</code></h1>
+<h2 class="en hu" id="demo-5">Demo</h2>
+<h3 class="hu" id="demó">1. demó</h3>
+<p>Készítsük el a <code>WorkerScheduleStructureTest</code> szerint a
+megadott osztályt. Ennek adattagja leírja, hogy melyik héten kik
+dolgoznak. A heteket a hívó fél <code>1</code> kezdéssel számozza, de
+belül <code>0</code> kezdéssel tároljuk el.</p>
+<p>Dolgozókat két <code>add()</code> művelettel adunk a
+munkarendhez.</p>
+<ul>
+<li>Az egyik egy specifikus héthez adja hozzá a második paraméterben
+megadott dolgozókat.
+<ul>
+<li>Hozzáadhatók egyenként is, de a <code>HashSet</code> osztály
+<code>addAll()</code> metódusával is.</li>
+<li>Ha a hét még nem szerepel a <code>weekToWorkers</code> adattagban,
+be kell tenni dolgozók nélkül (üres halmazt hozzárendelve).</li>
+</ul></li>
+<li>A másik több hetet add meg, a dolgozókat mindegyikhez hozzá kell
+adni.
+<ul>
+<li>Ez a metódus hívjon át az előzőre.</li>
+</ul></li>
+</ul>
+<p>A másik két metódus megadja, hogy egy adott dolgozó szerepel-e a
+munkarend egy megadott napján, illetve megadja az összes olyan napot,
+amelyeken egy adott dolgozó dolgozik.</p>
+<ul>
+<li>Az utóbbihoz használjuk a <code>HashMap</code> osztály
+<code>entrySet()</code> metódusát a kulcs-érték párok bejárásához.
+<ul>
+<li>Ez <code>Entry&lt;kulcs típusa, érték típusa&gt;</code> értékeket
+jár be (<code>java.util.Map.Entry</code>).</li>
+</ul></li>
+</ul>
+<p>A következő módon tesztelendő.</p>
+<ul>
+<li><code>emptySchedule</code>: üres munkarendben senki nem dolgozik
+semelyik napon
+<ul>
+<li>Itt <code>assertFalse(&lt;feltétel&gt;)</code> is használható, ami
+rövidebb, mint a szintén érvényes
+<code>assertEquals(false, &lt;feltétel&gt;)</code>.</li>
+</ul></li>
+<li><code>schedule</code>: vegyünk fel néhány dolgozót mindkét
+<code>add()</code> használatával, és aztán próbáljuk ki a két másik
+metódust.
+<ul>
+<li>A második változathoz néhány <code>ArrayList</code>re van szüksége.
+Ezek összeállíthatók úgy, hogy minden névre meghívjuk az
+<code>add</code> metódust.</li>
+<li>Összeállítható így is:
+<code>new ArrayList&lt;&gt;(List.of(name1, name2, ...))</code>. Ebben
+<code>List</code> csomagja szintén <code>java.util</code>.</li>
+<li>A teszt működtethető a szokásos módon
+<code>@ParameterizedTest</code> segítségével is, amivel rövidebb és
+átfogóbb megoldás adható.</li>
+</ul></li>
+</ul>
+<h2 class="hu" id="feladatok-6">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>A következő feladatok kódját a <code>ListUtilStructureTest</code>
+szerint kell elkészíteni.</p>
+<p>A <code>divisors()</code> metódus a paraméterként kapott nemnegatív
+egész szám osztóit adja vissza egy <code>ArrayList</code>
+adatszerkezetben.</p>
+<p>Tesztelendő <code>0</code>, <code>1</code> és <code>64</code>
+bemenetekre.</p>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>A <code>withSameStartEnd()</code> metódus szövegeket kap meg
+<code>ArrayList</code> adatszerkezetben, és ezek közül azokat adja
+vissza egy másik <code>ArrayList</code>ben, amelyek nem üresek, nem is
+<code>null</code> értékek, és első és utolsó karakterük megegyezik.</p>
+<p>A tesztelés egy üres <code>ArrayList</code>tel induljon. Erre a
+<code>withSameStartEnd()</code> hívásnak üres listát kell adnia. Ezután
+ugyanebben a metódusban sorban adjuk a listához az alábbi szövegeket;
+minden hozzáadás után tesztelendő, mit ad ki a hívás.</p>
+<ul>
+<li>üres szöveg (a kimenet nem változik meg)</li>
+<li><code>null</code> (a kimenet nem változik meg)</li>
+<li>egyetlen szóközt tartozó szöveg (belekerül a kimenetbe)</li>
+<li>az <code>x</code> szöveg (belekerül a kimenetbe)</li>
+<li>üres szöveg (a kimenet nem változik meg)</li>
+<li>a <code>different start and end?</code> szöveg (a kimenet nem
+változik meg)</li>
+<li>az <code>ends and starts the same</code> szöveg (belekerül a
+kimenetbe)</li>
+</ul>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>A <code>maxToFront()</code> metódus a megkapott lista ábécérendben
+utolsó elemét helyezze át a lista elejére.</p>
+<ul>
+<li>A listát helyben kell megváltoztatni, ne jöjjön létre új lista.</li>
+<li>Ha a lista <code>null</code> vagy üres, nincsen teendő.</li>
+<li>Tipp: <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Collections.html#max(java.util.Collection)"><code>Collections.max()</code></a>.</li>
+<li>Tipp: <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/ArrayList.html#method-summary">az
+<code>ArrayList</code> osztály megfelelő metódusaival</a> el lehet
+távolítani a listából a megtalált értéket, majd vissza lehet tenni a
+<code>0</code> indexre.</li>
+</ul>
+<p>A következő bemenetek tesztelendők.</p>
+<ul>
+<li><code>null</code>: <code>assertX</code> jellegű hívásra nincsen
+szükség, csak meg kell hívni a metódust</li>
+<li>üres lista</li>
+<li>egyelemű lista</li>
+<li>három szöveget tartalmazó lista: <code>can, you, succeed</code>,
+erre az elvárt kimenet <code>you, can, succeed</code></li>
+<li>három szöveget tartalmazó lista: <code>-123, 2000, 100</code>, erre
+az elvárt kimenet <code>2000, 100, -123</code></li>
+</ul>
+<h3 class="hu" id="feladat-3">4. feladat</h3>
+<p>A <code>CharacterStatisticsStructureTest</code> osztály alapján
+dolgozzunk.</p>
+<p>Az osztály konstruktora egy szöveget kap meg, és az ebben szereplő
+összes karakterre beteszi annak előfordulási gyakoriságát az
+adattagba.</p>
+<ul>
+<li>Tipp: <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/lang/String.html#toCharArray()">a
+<code>String</code> osztály <code>toCharArray()</code> metódusa</a>
+segítségével könnyen elérhetők a szöveg karakterei.</li>
+<li>Tipp: a <code>HashMap</code> osztály <code>getOrDefault()</code>
+adattagja is jól használható itt. Oldjuk meg a feladatot a használatával
+és a használata nélkül is.</li>
+</ul>
+<p>A <code>getCount()</code> metódus az adott karakter gyakoriságát adja
+meg.</p>
+<p>Szintén elkészítendő egy <code>toString()</code> implementáció az
+osztályhoz, ami a karakterek gyakoriságának szöveges reprezentációját
+mutatja. A metódus kapja meg az <code>@Override</code> annotációt. A
+gyakoriságok az <code>entrySet()</code> sorrendjében jelenjenek meg
+benne.</p>
+<p>Tesztelés: az alábbi szövegekre mind vizsgáljuk meg legalább egy
+karakter gyakoriságát.</p>
+<ul>
+<li>Kipróbálandó az az eset is, amikor a megadott karakter nem szerepel
+a szövegben.</li>
+</ul>
+<p>A <code>toString()</code> kimenete szintén megvizsgálandó.</p>
+<ul>
+<li>A kimenetek az alábbiakhoz hasonlóak lesznek, de a karakterek
+sorrendje függhet a rendszertől.</li>
+<li>A kimenetben a szóközöknek is betűre pontosan egyezniük kell.</li>
+</ul>
+<p>A szövegek a következők:</p>
+<ul>
+<li>üres szöveg: üres kimenet</li>
+<li><code>aaaaaaaa</code>: <code>a(8)</code></li>
+<li><code>HgFeDcBa</code>:
+<code>a(1) B(1) c(1) D(1) e(1) F(1) g(1) H(1)</code></li>
+<li><code>a?!_#@{}</code>:
+<code>@(1) a(1) !(1) #(1) {(1) }(1) ?(1) _(1)</code></li>
+<li><code>Hello world!</code>:
+<code>(1) !(1) r(1) d(1) e(1) w(1) H(1) l(3) o(2)</code>
+<ul>
+<li>Itt az első karakter a szóköz (<code></code>).</li>
+</ul></li>
+</ul>
+<h1 class="hu" id="sablon">09. Sablon</h1>
+<h2 class="hu" id="feladatok-7">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsen a <code>MultiSetStructureTest</code> szerint olyan
+osztályt, amely <code>E</code> típusú elemek multiplicitásos halmazát
+reprezenzálja. Ennek adattagja leírja, hogy milyen elemből hány darab
+van a halmazban. Ezt az adatszerkezetet zsáknak (bag) is szokták
+nevezni.</p>
+<p>Az osztály konstruktora a paraméterül kapott elemekkel tölti fel
+kezdetben a zsákot.</p>
+<p>Elemeket az <code>add()</code> művelettel adhatunk a zsákhoz. Ha az
+elem még nem volt benne a zsákban, kerüljön bele <code>1</code>
+multiplictással, ha pedig már benne volt, akkor nőjön meg eggyel a
+multiplicitása. A visszatérési érték a megnövelt multiplicitás
+legyen.</p>
+<p>A <code>getCount()</code> a paraméter multiplicitását kérdezi le. Ha
+ez nem szerepel a zsákban, legyen <code>0</code> az eredmény.</p>
+<p>Az <code>intersect()</code> két zsák metszetét állítja elő. Ebben
+azok az elemek lesznek benne, amelyek mindkettőben megtalálhatóak, ennek
+a multiplicitása a kisebbik. A metódus egyik eredeti zsákot se
+változtassa meg, az eredmény egy új <code>MultiSet</code> objektum
+legyen.</p>
+<p>A <code>countExcept()</code> megadja a zsákban található összes elem
+darabszámát (multiplicitással együtt), de a paraméter elemeit nem veszi
+figyelembe.</p>
+<p>A következő módon tesztelendő:</p>
+<ul>
+<li><code>multiSetInteger</code>, <code>multiSetString</code>: a névben
+megadott típusú zsák
+<ul>
+<li>Adjunk hozzá pár elemet az <code>add()</code> metódussal, illetve a
+konstruktorban, és vizsgáljuk meg a <code>getCount()</code>
+eredményét.</li>
+</ul></li>
+<li><code>intersect</code>, <code>countExcept</code>: hozzunk létre két
+zsákot, és próbáljuk ki rajtuk az <code>intersect()</code> és
+<code>countExcept()</code> függvényeket</li>
+</ul>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Az <code>OrganiserStructureTest</code> alapján készítsünk olyan
+osztályt, amely adatokat tárol sorban az <code>elems</code>
+adattagjában. A másik adattag pozíciópárokat (cseréket) tartalmaz.</p>
+<p>A konstruktor a megkapott adatok alapján feltölti az
+<code>elems</code> adattagot. Kezdetben cserék nincsenek beállítva.</p>
+<ul>
+<li>A konstruktor kódjára figyelmeztetést fog adni a fordítóprogram.
+Mivel a megvalósításban most biztosan nem fog veszélyes kód szerepelni,
+a konstruktor megkaphatja a <code>@SafeVarargs</code> annotációt.</li>
+</ul>
+<p>A <code>get()</code> metódusnak legyen kétféle paraméterezése.</p>
+<ul>
+<li>Az egyik az <code>elems</code> egy érvényes indexét veszi át, és
+visszaadja az indexelt elemet. Feltételezhető, hogy a paraméter
+érvényes.</li>
+<li>A másik változat mindegyik eltárolt elemet visszaadja egy listában.
+<ul>
+<li>Vigyázzunk, hogy ne szivárogjon ki az osztály belső állapota!</li>
+</ul></li>
+</ul>
+<p>Az <code>addSwap()</code> művelet egy egész számokból álló párt ad a
+<code>swaps</code> adattaghoz.</p>
+<ul>
+<li>Mivel a Javának nincsen beépített pár/rendezett n-es adatszerkezete,
+az adattag <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Map.Entry.html"><code>Map.Entry</code></a>
+típusú elemekből áll.
+<ul>
+<li>Ez <code>Integer</code> típusparamétereket kap, mert
+típusparaméterek nem lehetnek primitívek.</li>
+</ul></li>
+<li>A <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Map.html#entry(K,V)">Map.entry(from,
+to)</a> hívással készíthető ilyen “pár”.</li>
+</ul>
+<p>A <code>swap()</code> segédmetódus cserélje meg a két megadott indexű
+elemet az <code>elems</code> adattagban.</p>
+<ul>
+<li>Ez a metódus ne látszódjon az osztályon kívül.</li>
+<li>Tipp: átmeneti változó tárolja el az egyik értéket.</li>
+</ul>
+<p>A <code>runSwaps()</code> sorban végrehajtja a <code>swaps</code>
+listában leírt cseréket.</p>
+<ul>
+<li>Az egyes cserék végrehajtásához a <code>swap()</code> hívandó
+meg.</li>
+</ul>
+<p>Az osztály szöveges reprezentációja ilyen alakú legyen:
+<code>[1 3 5 7 9 ]</code> vagy <code>[d a c b e ]</code>.</p>
+<h3 class="hu" id="feladat-2">3. feladat</h3>
+<p>A <code>RangedStackSuite</code> alapján készítsünk vermet ábrázoló
+osztályt, amelybe egyszerre több elem tehető be/vehető ki.</p>
+<p>Lehessen üresen is elkészíteni, és másoló konstruktorral is. Ez
+utóbbi egy másik <code>RangedStack</code> példányhoz hasonló tartalmú
+vermet készít el, de az adattagjaik ne egy közös listára mutassanak
+(aliasing).</p>
+<p>A következő módon tesztelendő.</p>
+<ul>
+<li><code>empty</code>: készüljön el egy üres <code>RangedStack</code>
+és egy másolata
+<ul>
+<li>Mindkét esetben: akárhány elemet veszünk ki (pl. <code>0</code>,
+<code>1</code> vagy <code>100</code> elemet egyszerre), a kimenet üres
+lista.</li>
+</ul></li>
+<li><code>testString</code>, <code>testInteger</code>: mindkét típusra
+készüljön el <code>6</code> elemből egy <code>RangedStack</code> (pl.
+egész típus esetén a <code>2</code>, <code>4</code>, <code>6</code>,
+<code>8</code>, <code>10</code>, <code>12</code> elemekből), és legyen
+egy másolata is
+<ul>
+<li>Az eredetiből vegyünk ki sorban <code>1</code>, majd <code>2</code>,
+majd <code>3</code>, majd <code>100</code> elemet. Az elvárt kimenetek
+sorban <code>[12]</code>, <code>[10, 8]</code>, <code>[6, 4, 2]</code>
+és az üres lista.</li>
+<li>A másolatból vegyünk ki <code>100</code> elemet, majd megint
+<code>100</code> elemet. Az első lépés elvárt kimenete
+<code>[12, 10, 8, 6, 4, 2]</code>, a másodiké egy üres listaí.</li>
+</ul></li>
+</ul>
+<h1 class="hu" id="öröklődés">10. Öröklődés</h1>
+<h2 class="hu" id="feladatok-8">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>Készítsünk a <code>BookSuite</code> alapján könyveket.</p>
+<p>Az osztály mindkét konstruktora az <code>initBook</code> metódust
+hívja meg. A paraméter nélküli konstruktor a <code>default...</code>
+mezők szerint tölti fel az adattagokat, a másik előbb megvizsgálja a
+kapott adatokat a <code>checkInitData</code> metódus segítségével. A
+vizsgálat <code>IllegalArgumentException</code> kivételt vált ki, ha az
+<code>author</code> szöveg rövidebb két betűnél, a <code>title</code>
+rövidebb négy betűnél, vagy ha <code>pageCount</code> nem pozitív
+szám.</p>
+<p>A könyv ára az oldalszámmal megegyező összeg.</p>
+<p>Teszteléshez használjuk az alábbi három könyvet.</p>
+<pre><code>John Steinbeck, Of Mice and Men, 107
+Kozsik Tamás, Java programozás, 234
+Alan Alexander Milne, Winnie-the-Pooh, 145</code></pre>
+<p>A könyvek elvárt szöveges alakja az alábbi. A <code>decode()</code>
+metódus ilyen szövegekből alakít ki könyveket, tesztelendő, hogy a
+visszakapott könyvek egyes adatai megegyeznek-e az eredeti
+példányéival.</p>
+<ul>
+<li>Tipp: szövegek elejéről és végéről a felesleges szóközök a
+<code>strip()</code> metódussal távolíthatók el.</li>
+</ul>
+<pre><code>John Steinbeck: Of Mice and Men; 107
+Kozsik Tamás: Java programozás; 234
+Alan Alexander Milne: Winnie-the-Pooh; 145</code></pre>
+<p>A <code>getShortInfo()</code> rövidített alakban írja le a könyvet. A
+szerzők neveit iniciálékkal rövidíti, ezt a
+<code>getAuthorWithInitials()</code> valósítsa meg egy
+<code>StringBuilder</code> használatával.</p>
+<pre><code>J. Steinbeck: Of M; 107
+K. Tamás: Java; 234
+A. A. Milne: Winn; 145</code></pre>
+<p>Tesztelendő továbbá, hogy olyan könyveket, amelyek nem mennek át a
+<code>checkInitData</code> vizsgálatain, nem tudunk létrehozni, és
+<code>InvalidBookException</code> kivételt váltanak ki. Tesztelendő,
+hogy ezek a kivételek tartalmazzák a könyv leendő szerzőjét és
+címét.</p>
+<p><strong>Gyermekosztály</strong>: <code>EBook</code></p>
+<p>Az <code>EBook</code> osztály konstruktora egy <code>Book</code>
+példány mellett a három új mezőnek megfelelő adatokat kap meg, ez
+utóbbiakat eltárolja.</p>
+<p>A könyv ára az oldalszámnál <code>pdfSize</code> értékkel több.</p>
+<p>Ha a fenti könyvek <code>pdfSize</code> értéke rendre 5, 10000 és 8,
+akkor a szöveges reprezentációik az alábbiak legyenek. Itt a vásárlók
+szemét megtévesztő évtizedes gyakorlat szerint a valós árnál
+<code>0.01</code> egységgel kevesebb van feltüntetve, ha az ár
+<code>1000</code> egység vagy kevesebb.</p>
+<pre><code>EBook(John Steinbeck: Of Mice and Men; 107, $111.99)
+EBook(Kozsik Tamás: Java programozás; 234, 10233 Ft)
+EBook(Alan Alexander Milne: Winnie-the-Pooh; 145, £152.99)</code></pre>
+<p>Ezeket dekódolni nehéz lenne, a <code>decode()</code> metódus váltson
+ki <code>UnsupportedOperationException</code> kivételt.</p>
+<p><strong>Gyermekosztály</strong>: <code>PrintedBook</code></p>
+<p>Egy <code>PrintedBook</code> a <code>Book</code> szokásos adatai
+mellett kaphasson meg egy <code>CoverType</code> értéket, amit tároljon
+el az adattagba. Egy <code>PrintedBook</code> a szokásos könyveknél hat
+oldallal többel rendelkezik.</p>
+<p>Egy <code>PrintedBook</code> példányt egy <code>Book</code> példány
+adatai segítségével is elő lehessen állítani. Ez legyen mindig
+keménykötésű. Ez a konstruktor hívjon át az előzőre.</p>
+<p>A könyv ára az oldalszám többszöröse legyen: puhafedelű könyvek
+esetén kétszerese, keménykötésűek esetén háromszorosa.</p>
+<p>Amennyiben a könyveket a második konstruktorral állítjuk elő, a
+szöveges reprezentációjuk az alábbi alakú legyen.</p>
+<pre><code>John Steinbeck: Of Mice and Men; 113 (HARDCOVER)
+Kozsik Tamás: Java programozás; 240 (HARDCOVER)
+Alan Alexander Milne: Winnie-the-Pooh; 151 (HARDCOVER)</code></pre>
+<p>Ezt könnyű dekódolni, a <code>decode()</code> metódus itt legyen
+megvalósítva.</p>
+<ul>
+<li>Tipp: mivel a zárójelek a <code>String</code> osztály
+<code>split()</code> metódusában speciális jelentésűek, így használandó:
+<code>txt.split("[(]")</code></li>
+</ul>
+<p><strong>Könyvgyűjtemény</strong></p>
+<p>A <code>BookCollection</code> tároljon el sok könyvet egy listában,
+és ezeket lehessen elmenteni és betölteni az alábbi formátumban.</p>
+<pre><code>Book--John Steinbeck: Of Mice and Men; 107
+Book--abcd: ABCD; 123
+EBook--EBook(abcd: ABCD; 123, 356.99$)
+PrintedBook--abcd: ABCD; 129 (HARDCOVER)</code></pre>
+<p>Ha <code>EBook</code> vagy érvénytelen adatú könyv érkezne, a helyére
+egy <code>DamagedBook</code> példány kerüljön.</p>
+<p>A mentést és töltést próbáljuk ki üres listával, egyetlen
+(alapértelmezett adatokkal elkészített) könyves listával, és egy
+mindenfélet (<code>EBook</code> és <code>PrintedBook</code> könyvet
+egyaránt tartalmazó) listával.</p>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>Készítsünk <code>StuffyList</code> adatszerkezetet a megadott
+struktúra szerint.</p>
+<p>Ez az adatszerkezet olyan, mint egy átlagos lista, ami <code>E</code>
+típusú elemek halmazaiból áll… kivéve, hogy az <code>add()</code>
+művelet garantálja, hogy egy újonnan hozzáadott halmaz tartalmazza a
+<code>neededElement</code> elemet.</p>
+<ul>
+<li>Ha a <code>neededElement</code> hiányozna a paraméterként kapott
+halmazból, ne az eredeti halmaz objektumot változtassuk meg, hanem
+készüljön új halmaz, és ez kerüljön be a listába.</li>
+</ul>
+<p>A teszteléshez készüljön néhány <code>StuffyList</code> úgy, hogy a
+megkapott halmazok tartalmazzák/nem tartalmazzák a
+<code>neededElement</code> értéket. Megvizsgálandó, hogy a hozzáadott
+halmazokban mind szerepel az elvárt érték.</p>
+<ul>
+<li>Az elvárt érték <code>List.of(...)</code> és
+<code>Set.of(...)</code> műveletekkel is előállítható.
+<ul>
+<li>Ezeket a metódusokat csak <code>assert</code> jellegű hívások elvárt
+értékeinél használjuk, <strong>máshol ne</strong>.</li>
+</ul></li>
+</ul>
+<h1 class="hu" id="interfész-egyenlőség">11. Interfész, egyenlőség</h1>
+<h2 class="hu" id="feladatok-9">Feladatok</h2>
+<h3 class="hu" id="feladat">1. feladat</h3>
+<p>A <code>MultiDimensionalPointSuite</code> alapján készítsünk
+többdimenziós pont típust. Ennek a konstruktora a kezdeti koordinátákat
+veszi át. A <code>get</code> és <code>set</code> metódusokkal egyes
+koordinátákat lehet beállítani és lekérdezni.</p>
+<p>Az osztály két interfészt valósít meg.</p>
+<ul>
+<li><code>Scalable</code>: minden koordinátát a megkapott mértékben
+növel meg</li>
+<li><code>Undoable</code>: itt összetettebb a teendő
+<ul>
+<li>Minden olyan metódus működését vissza akarjuk tudni vonni, ami
+megváltoztatja a pont állapotát.</li>
+<li>Ezt elősegítendő, a <code>lastCoordinates</code> adattag mindig a
+pont legutóbbi állapotát tartalmazza.
+<ul>
+<li>A pont elkészítése után közvetlenül a kezdeti koordinátákkal legyen
+feltöltve.</li>
+</ul></li>
+<li>Az interfész metódusa az utolsó állapotot állítja vissza.
+<ul>
+<li>Ha közvetlenül ezután újra meghívják a műveletet, az éppen lecserélt
+állapot álljon vissza.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Az alábbi három teszteset mindegyikében a következő lépéseket kell
+megtenni.</p>
+<ol type="1">
+<li>Pont elkészítése tetszőleges adatokkal.</li>
+<li>A megteendő lépés elvégzése, lásd lentebb.</li>
+<li>Megvizsgálandó mindegyik koordináta elvárt értéke.</li>
+<li>Visszalépés meghívása.</li>
+<li>Megvizsgálandó, hogy mindegyik koordináta értéke visszaállt az
+elkészítés utáni állapotra.</li>
+<li>Visszalépés meghívása ismét.</li>
+<li>Megvizsgálandó mindegyik koordináta elvárt értéke.</li>
+</ol>
+<p>A következők tesztelendők.</p>
+<ul>
+<li><code>testInitUndo</code>: a pontot csak elkészítjük</li>
+<li><code>testSet</code>: a pont elkészítése után beállítjuk egy
+koordinátáját</li>
+<li><code>testScale</code>: a pont elkészítése után felskálázzuk</li>
+</ul>
+<p>Két pont akkor minősüljön tartalmilag egyenlőnek, ha a koordinátáik
+megegyeznek. A korábbi állapotuk nem számít.</p>
+<p>A <code>testEquality</code> metódus tesztelje, hogy két olyan lista
+egyenlő, amelyben egymással egyenlő pontok szerepelnek.</p>
+<ul>
+<li>Mindkét listához használható a <code>List.of</code> művelet.</li>
+<li>A pontok különbözőek legyenek a két listában.</li>
+</ul>
+<p>Legyen természetes rendezés is adott a pontokon az alábbiak szerint.
+Ha valamelyiknek nagyobb a dimenziószáma, az minősül nagyobbnak.
+Különben az első eltérő koordinátaérték dönt, ha pedig mindegyik
+koordináta megegyezik, akkor egyenlőek.</p>
+<p>A <code>testOrdering</code> metódusban kerüljön sok különféle pont
+egy listába. Erre aztán hívjuk meg a <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Collections.html#shuffle(java.util.List)">Collections.shuffle</a>,
+majd a <a
+href="https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Collections.html#sort(java.util.List)">Collections.sort</a>
+műveletet. Ezután teszteljük, hogy a kijött lista elemei az elvárt,
+növekvő sorrendbe kerültek.</p>
+<ul>
+<li>Mivel a lista tartalma módosul, az elkészítéséhez <em>nem</em>
+használható a <code>List.of</code> művelet.
+<ul>
+<li>Az elvárt érték elkészítéséhez viszont igen.</li>
+</ul></li>
+<li>Itt nem szigorúan egységtesztelést végzünk, mert az egyes lefutások
+során különbözően keverjük össze a lista elemeit.</li>
+</ul>
+<h3 class="hu" id="feladat-1">2. feladat</h3>
+<p>A <code>GoAroundStructureTest</code> szerint készítsünk olyan
+adatszerkezetet, ami egypár elemet tárol. A bejárója
+(<code>GoAroundIteratorStructureTest</code>) működjön úgy, hogy a tárolt
+elemeket <code>roundCount</code> alkalommal adja elő.</p>
+<p>Teszteljük, hogy ha az eltárolt elemek <code>1, 2, 3, 4</code> és
+<code>roundCount</code> értéke <code>2</code>, akkor a bejáró kimenete
+<code>1, 2, 3, 4, 1, 2, 3, 4</code>. Mindegyik lépés megtétele előtt
+próbáljuk ki, hogy <code>hasNext()</code> értéke <code>true</code>, de
+az utolsó lépés megtétele után már <code>false</code>.</p>
+</body>
+</html>
