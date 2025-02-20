@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="336" height="250" viewBox="0 0 504 375" preserveAspectRatio="xMinYMin meet">
+<metadata>
+<structo:source xmlns:structo="https://nigjo.github.io/structogramview/">
+<![CDATA[CAPTION: MinKivRend(A/1:T[n])
+FOR: i = 1 to n-1
+ind := n
+FOR:j = n-1 downto i
+IF: A[j] < A[ind]
+ind := j
+ELSE:
+SKIP
+ENDIF:
+ENDFOR:
+Csere(A[j], A[ind])
+ENDFOR:]]>
+</structo:source>
+</metadata>
+<style>
+svg{stroke:none;stroke-width:1px;fill:white;}
+line{stroke:black;}
+text{font-family:sans-serif;fill:black;}
+.comment&gt;text{font-style:italic;fill:gray;}
+.whiteShadow{fill:none !important;stroke:white;stroke-width:2px;}
+.casevalue,.blocktitle{fill:gray;font-size:75%;font-style:italic;}
+.caption{font-weight:bold;font-size:1.25em;}
+svg{font-size:24px}</style>
+<g class="diagram" transform="translate(0,0)">
+<rect width="504" height="375"/>
+<text x="19.5" y="45" textLength="306" class="caption">MinKivRend(A/1:T[n])</text>
+<g class="for" transform="translate(12,57)">
+<line x1="480" y1="0" x2="480" y2="306"/>
+<line x1="0" y1="0" x2="0" y2="306"/>
+<line x1="0" y1="0" x2="480" y2="0"/>
+<line x1="0" y1="306" x2="480" y2="306"/>
+<text x="12" y="33" textLength="114">i = 1 to n-1</text>
+<g class="block" transform="translate(37.5,49.5)">
+<g class="sequence" transform="translate(0,0)">
+<line x1="0" y1="0" x2="0" y2="49.5"/>
+<line x1="0" y1="0" x2="441" y2="0"/>
+<text x="6" y="33" textLength="79.5">ind := n</text>
+</g>
+<g class="for" transform="translate(0,49.5)">
+<line x1="0" y1="0" x2="0" y2="156"/>
+<line x1="0" y1="0" x2="441" y2="0"/>
+<text x="12" y="33" textLength="163.5">j = n-1 downto i</text>
+<g class="block" transform="translate(37.5,49.5)">
+<g class="if" transform="translate(0,0)">
+<line x1="0" y1="0" x2="0" y2="106.5"/>
+<line x1="0" y1="0" x2="403.5" y2="0"/>
+<line x1="0" y1="0" x2="215.16" y2="55.5"/>
+<line x1="215.16" y1="55.5" x2="403.5" y2="0"/>
+<text x="140.25" y="27" textLength="121.5" class="whiteShadow">A[j] &lt; A[ind]</text>
+<text x="140.25" y="27" textLength="121.5">A[j] &lt; A[ind]</text>
+<g class="then" transform="translate(1.5,55.5)">
+<text x="4.5" y="-6" textLength="31.5" class="blocktitle">true</text>
+<g class="sequence" transform="translate(0,0)">
+<line x1="-1.5" y1="0" x2="215.16" y2="0"/>
+<line x1="0" y1="51" x2="213.66" y2="51"/>
+<text x="6" y="33" textLength="72">ind := j</text>
+</g>
+</g>
+<g class="else" transform="translate(215.16,55.5)">
+<line x1="0" y1="0" x2="0" y2="51"/>
+<text x="144.28" y="-6" textLength="37.5" class="blocktitle">false</text>
+<g class="sequence" transform="translate(1.5,0)">
+<line x1="-1.5" y1="0" x2="188.32" y2="0"/>
+<line x1="0" y1="51" x2="186.82" y2="51"/>
+<text x="6" y="33" textLength="54">SKIP</text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g class="sequence" transform="translate(0,205.5)">
+<line x1="0" y1="0" x2="0" y2="49.5"/>
+<line x1="0" y1="0" x2="441" y2="0"/>
+<text x="6" y="33" textLength="187.5">Csere(A[j], A[ind])</text>
+</g>
+</g>
+</g>
+</g>
+</svg>
