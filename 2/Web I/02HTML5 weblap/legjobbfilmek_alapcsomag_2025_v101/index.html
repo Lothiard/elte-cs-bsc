@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A legjobb internetes/webes filmek - Kezdőlap</title>
+    <link rel="stylesheet" href="css/alap.css">
 <body>
     <header>
         <h1>A legjobb &lt;internetes/webes&gt; témájú filmek - Kezdőlap</h1>
         <p>Főmenü: Kezdőlap, Új film beküldése</p>
-        <h2>Bevezető</h2>
-        <p>Krasznahorkai László a következőt írta: Az internet (...) az eddigi legbiztosabb út az örökkévalóságba.<br>
-        Hogy ez igaz-e, mindenki döntse el maga, miután megnézte a listámban szereplő filmeket.</p>
-        <p>Figyelem! A lista nem átfogó, erősen szubjektív.</p>
-        <h2>Ugrás a filmekhez</h2>
-        <ol>
-            <li><a href="#kozossegihalo" accesskey="1">Social Network - A közösségi háló</a></li>
-            <li><a href="#ano" accesskey="2">A nő</a></li>
-            <li><a href="#temegen" accesskey="3">Te meg én és minden ismerősünk</a></li>
-            <li><a href="#deepweb" accesskey="4">Deep Web</a></li>
-        </ol>
+        <div id="bevezeto">
+            <h2>Bevezető</h2>
+            <p>Krasznahorkai László a következőt írta: <q>Az internet (...) az eddigi legbiztosabb út az örökkévalóságba.<br>
+            Hogy ez igaz-e, mindenki döntse el maga, miután megnézte a listámban szereplő filmeket.</q></p>
+            <p><strong>Figyelem!</strong> A lista nem átfogó, erősen <em>szubjektív</em>.</p>
+            <h2>Ugrás a filmekhez</h2>
+            <ol>
+                <li><a href="#kozossegihalo" accesskey="1">Social Network - A közösségi háló</a></li>
+                <li><a href="#ano" accesskey="2">A nő</a></li>
+                <li><a href="#temegen" accesskey="3">Te meg én és minden ismerősünk</a></li>
+                <li><a href="#deepweb" accesskey="4">Deep Web</a></li>
+            </ol>
+        </div>
     </header>
     <main>
-        <h2 id="kozossegihalo">Social Network - A közösségi háló</h2>
+        <h2 id="kozossegihalo"><cite>Social Network - A közösségi háló</cite></h2>
         <p>A film adatai</p>
-        <p>Bemutató	2010. október 1.</p>
+        <p>Bemutató	<time datetime="2010-10-01">2010. október 1.</time></p>
         <p>Angol cím	The Social Network</p>
-        <p>IMDb értékelés	 7.7/10</p>
-        <p>Mark Zuckerberg jobban ért a számítógépekhez, mint a csajozáshoz. A Harvard egyetem diákja ideje nagy részét a gépe előtt tölti. 2003-ban új ötlettel áll elő: egy olyan oldalt indít a világhálón, ahol a haverok közösségi életet élhetnek. A kollégiumi szobából indult Facebook valóságos kommunikációs forradalmat hozott, és alapjaiban változtatta meg a világot, az emberi kapcsolatokat - és megváltoztatta az alkotóját is. Hat esztendővel és ötszázmillió ismerőssel később Zuckerberg a világ legfiatalabb milliárdosa. Egykor békés, nyugodt életről álmodott, a siker azonban felkavarta mind a szakmai, mind a magánéletét.</p>
-        <p>A Social Network - A közösségi háló a korszellemet grabancon ragadó, aktuális, de időtálló munka, ami nem csak, hogy sokkal jobb móka, mint két óra facebookozás, de biztos, hogy évek-évtizedek távlatából is élvezhető lesz.</p>
+        <p><abbr title="Internet Movie Database">IMDb</abbr> értékelés	 7.7/10</p>
+        <p><b>Mark Zuckerberg</b> jobban ért a számítógépekhez, mint a csajozáshoz. A Harvard egyetem diákja ideje nagy részét a gépe előtt tölti. 2003-ban új ötlettel áll elő: egy olyan oldalt indít a világhálón, ahol a haverok közösségi életet élhetnek. A kollégiumi szobából indult Facebook valóságos kommunikációs forradalmat hozott, és alapjaiban változtatta meg a világot, az emberi kapcsolatokat - és megváltoztatta az alkotóját is. Hat esztendővel és ötszázmillió ismerőssel később Zuckerberg a világ legfiatalabb milliárdosa. Egykor békés, nyugodt életről álmodott, a siker azonban felkavarta mind a szakmai, mind a magánéletét.</p>
+        <p><i>A Social Network - A közösségi háló a korszellemet grabancon ragadó, aktuális, de időtálló munka, ami nem csak, hogy sokkal jobb móka, mint két óra facebookozás, de biztos, hogy évek-évtizedek távlatából is élvezhető lesz.</i></p>
         <figure>
             <img src="media/TheSocialNetwork.jpg" alt="Jelenet a Social Network - A közösségi háló című filmből">
-            <figcaption>Jelenet a Social Network - A közösségi háló című filmből</figcaption>
+            <figcaption>Jelenet a <span lang="en">Social Network</span> - A közösségi háló című filmből</figcaption>
         </figure>
         <h3>Forráskód a filmben</h3>
         <p>A filmben nagy figyelmet fordítottak arra is, hogy a megjelenő forráskódok a témához kapcsolódjanak. Íme egy példa:</p>
@@ -49,7 +52,8 @@ while ($page =~ m/compactshow\.php\?student_id=([0-9]+)/g) {
         </code></pre><figcaption>A filmben szereplő forráskód részlete</figcaption></figure>
         <h3>Filmzene</h3>
         <p>A filmzenéből Trent Reznor and Atticus Ross: A Familiar Taste című száma a kedvencem.</p>
-        <p>{hang beágyazása - socialnetwork.mp3}</p>
+        <audio src="media/socialnetwork.mp3" controls></audio>
+        <hr>
         <h2 id="ano">A nő</h2>
         <p>A film adatai</p>
         <p>Bemutató	2014. január 10.</p>
@@ -58,7 +62,8 @@ while ($page =~ m/compactshow\.php\?student_id=([0-9]+)/g) {
         <p>Los Angelesben, a közeli jövőben él Theodore Twombly író, aki abból él, hogy megható, személyes leveleket ír mások számára. A férfi rossz passzban van, próbálja kiheverni, hogy tönkrement egy hosszú kapcsolata. A számítógépein dolgozik és játszik. Egy nap unalmában letölt egy új, intelligens operációs programot. Így találkozik Samantha-val, pontosabban a hangjával, amely valósággal megigézi. Kiderül, hogy Samantha okos és éleslátó, érzékeny és meglepően vicces. A kezdeti barátságuk egyre jobban elmélyül.</p>
         <p>Spike Jonze A nővel gyakorlatilag megalkotta a tökéletes szerelmesfilmet, amelyből egyszerre derül ki, hogy ez az egész felhajtás mekkora baromság, és hogy nem érdemes élni nélküle.</p>
         <h2>A film előzetese</h2>
-        <p>{videó beágyazása - her_elozetes.mp4}</p>
+        <video src="media/her_elozetes.mp4" controls poster="media/her.jpg"></video>
+        <hr>
         <h2 id="temegen">Te meg én és minden ismerősünk</h2>
         <p>A film adatai</p>
         <p>Bemutató	2005. augusztus 5.</p>
@@ -67,6 +72,7 @@ while ($page =~ m/compactshow\.php\?student_id=([0-9]+)/g) {
         <p>Miranda July, multimédia-performer és zenész éleslátó és rendkívül szórakoztató filmet készített olyan magányos emberekről, akik megpróbálnak kapcsolatot teremteni környezetükkel. Azokat a külső és belső gátakat mutatja meg, amik magányos, modern világunkban gyakran meghiúsítják az egymással való kapcsolatteremtést. July szerint a történet elérhetetlen vágyakat tápláló gyerekekről és felnőttekről szól, akik olyan korban élnek, mikor a felnőtté válás digitális folyamat és a valóság esztétikai döntésünk függvénye.</p>
         <p>A Miranda July korábbi műveiben felvetett témák folytatásának tekinthető Te meg én és minden ismerősünk leleplezi az emberek titkolt érzéseit, vágyait és motivációit. Az eredmény egy gyönyörű, egyedi film, amely észrevétlenül ejti rabul az ember szívét.</p>
         <p>Jelenet a "Te meg én és minden ismerősünk" című filmből</p>
+        <hr>
         <h2 id="deepweb">Deep web</h2>
         <p>A film adatai</p>
         <p>Bemutató	2015. november 21.</p>
@@ -78,6 +84,7 @@ while ($page =~ m/compactshow\.php\?student_id=([0-9]+)/g) {
         <h2>Mi is az a deep web?</h2>
         <p>Az alábbi angol nyelvű prezentáció bemutatja, hogy mi is az a deep web.</p>
         <p>{slideshare prezentáció beágyazása - https://www.slideshare.net/asertseminar/the-deep-web-32353889}</p>
+        <hr>
         <h2>Források</h2>
         <ul>
             <li><a href="http://www.techtimes.com/articles/10259/20140711/the-best-movies-about-the-internet.htm" target="_blank">Techtimes.com</a></li>
