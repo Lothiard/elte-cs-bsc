@@ -32,7 +32,7 @@ namespace HF1 {
         }
 
         public Content LookAt(int x, int y, Direction dir) {
-            if (!(x + dir.x >= 1 && x + dir.x <= this._n && y + dir.y >= 1 && y + dir.y <= this._m)) {
+            if (x + dir.x < 0 || x + dir.x >= this._n || y + dir.y < 0 || y + dir.y >= this._m) {
                 throw new IllegalMoveException();   
             }
             return this._map[x + dir.x, y + dir.y];
