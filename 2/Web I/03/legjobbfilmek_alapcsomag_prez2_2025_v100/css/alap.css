@@ -179,6 +179,25 @@ hr {
     margin    : 20px 0 10px 0;
 }
 
+legend {
+    color: rgb(110, 54, 54);
+    font-weight: bold;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 120%;
+}
+
+fieldset {
+    background-color: #f8f8f2;
+}
+
+canvas {
+    float: right;
+}
+
+.kozep {
+    text-align: center;
+}
+
 /* Responsive Design */
 @media (min-width: 769px) {
     table {
@@ -207,5 +226,11 @@ hr {
 
     h1 {
         font-size: 1.3rem;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .hasab {
+        columns: 2;
     }
 }
