@@ -14,14 +14,14 @@ namespace HF3 {
     class Diag {
         private double[] _x;
         public Diag (int n) {
-            if (n < 1) { 
+            if (n < 0) { // 1 van a diagrammon
                 throw new IllegalSizeException();
             }
             _x = new double[n];
         }
 
         public double Get (int i, int j) {
-            if (i < 1 || i > _x.Length || j < 1 || j > _x.Length) {
+            if (i < 0 || i > _x.Length || j < 0 || j > _x.Length) { // 1 van a diagrammon
                 throw new IndexOutOfRangeException();
             }
             if (i == j) {
@@ -32,7 +32,7 @@ namespace HF3 {
         }
 
         public void Set (int i, int j, double e) {
-            if (i < 1 || i > _x.Length || j < 1 || j > _x.Length) {
+            if (i < 0 || i > _x.Length || j < 0 || j > _x.Length) { // 1 van a diagrammon
                 throw new IndexOutOfRangeException();
             }
             if (i == j) {
@@ -59,7 +59,7 @@ namespace HF3 {
             }
             Diag c = new Diag(a._x.Length);
             for (int i = 1; i <= c._x.Length; ++i) {
-                c._x[i] = a._x[i] * b._x[i];
+                c._x[i - 1] = a._x[i - 1] * b._x[i - 1];
             }
             return c;
         }
