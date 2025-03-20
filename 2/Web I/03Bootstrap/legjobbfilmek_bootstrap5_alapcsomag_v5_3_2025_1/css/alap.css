@@ -1,0 +1,9 @@
+/* Ezzel a stíluslappal felülbíráljuk a Bootstrap megjelenését, illetve egyéb beállításokat is elvégzünk*/
+
+.carousel-item img {
+    object-fit     : cover;
+    object-position: center;
+    height         : 40vh;
+    overflow       : hidden;
+  }
+  
