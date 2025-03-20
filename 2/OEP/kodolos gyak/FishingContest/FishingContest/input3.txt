@@ -1,0 +1,3 @@
+﻿Károly	10:33 keszeg 0.3 2.3	10:33 ponty 0.3 2.3
+János	11:04 ponty 1.0 3.4	11:45 ponty 0.5 2.0
+Levente	09:03 aranyhal 0.1 0.1	09:13 aranyhal 0.2 0.2
