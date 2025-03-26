@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="foods.txt" />
+    <None Remove="shoppinglist.txt" />
+    <None Remove="technical.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="foods.txt" />
+    <Page Include="shoppinglist.txt" />
+    <Page Include="technical.txt" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+﻿telefon 10000
+laptop 20000
+tablet 5000
+laptop 10000
+telefon 2000

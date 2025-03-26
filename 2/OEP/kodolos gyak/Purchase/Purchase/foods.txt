@@ -1,0 +1,6 @@
+﻿alma 100
+korte 200
+korte 100
+szilva 300
+alma 200
+ananasz 500
