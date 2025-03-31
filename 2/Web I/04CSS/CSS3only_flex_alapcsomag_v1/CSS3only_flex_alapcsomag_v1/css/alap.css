@@ -10,5 +10,6 @@
 /*  Reszponzív menü */
 @import url("nagybetus.css") screen;
 /* Nagy betűméret beállítása */
+@import url("sotet.css") screen;
 @import url("nyomtatas.css") print;
 /* Nyomtatási nézet */

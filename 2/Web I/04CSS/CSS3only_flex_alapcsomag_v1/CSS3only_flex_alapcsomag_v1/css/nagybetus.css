@@ -36,7 +36,7 @@ body.large fieldset {
 
 
 :is(body.large) :is(input[type="text"], input[type="url"], input[type="email"], textarea) {
-  width: 100%;
+  max-width: 100%;
   /* Elem szélességének beállítása */
   font-size: inherit;
   /* Betűméret beállítása */
@@ -47,10 +47,10 @@ body.large fieldset {
   
 
 
-.KITOLTENI { /* KITÖLTENI - jelölőnégyzet és rádiógomb beállítása */
-  
+:is(body.large) :is(input[type="checkbox"], input[type="radio"]) { /* KITÖLTENI - jelölőnégyzet és rádiógomb beállítása */
+  transform: scale(3);
   /* Az elem átalakításainak (nagyítás) beállítása */
-  
+  margin: 10px;
   /* Külső 10px-es margó beállítása */
 }
 
