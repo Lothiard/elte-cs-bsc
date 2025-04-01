@@ -14,9 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="foods.txt" />
-    <Page Include="shoppinglist.txt" />
-    <Page Include="technical.txt" />
+    <Content Include="foods.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shoppinglist.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="technical.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
