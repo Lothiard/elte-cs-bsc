@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Klubtag
+{
+    public string Nev { get; }
+    public string KedvezmenyTipus { get; }
+    public List<Foglalas> Foglalasok { get; }
+
+    public Klubtag(string nev, string kedvezmenyTipus = null)
+    {
+        Nev = nev;
+        KedvezmenyTipus = kedvezmenyTipus;
+        Foglalasok = new List<Foglalas>();
+    }
+
+    public Foglalas Foglal(Palya palya, DateTime datum, int ora)
+    {
+        if (palya.Elerheto(datum, ora))
+        {
+            var foglalas = new Foglalas(this, palya, datum, ora);
+            Foglalasok.Add(foglalas);
+            palya.Foglalasok.Add(foglalas);
+            return foglalas;
+        }
+        return null;
+    }
+
+    public void Visszamond(Foglalas foglalas)
+    {
+        if (Foglalasok.Contains(foglalas))
+        {
+            Foglalasok.Remove(foglalas);
+            foglalas.Palya.Foglalasok.Remove(foglalas);
+        }
+    }
+}
+
+class Palya
+{
+    public int Sorszam { get; }
+    public string Tipus { get; }
+    public bool Fedett { get; }
+    public List<Foglalas> Foglalasok { get; }
+    private Dictionary<string, int> Oradijak = new Dictionary<string, int> { {"fű", 5000}, {"salak", 3000}, {"műanyag", 2000} };
+
+    public Palya(int sorszam, string tipus, bool fedett = false)
+    {
+        Sorszam = sorszam;
+        Tipus = tipus;
+        Fedett = fedett;
+        Foglalasok = new List<Foglalas>();
+    }
+
+    public bool Elerheto(DateTime datum, int ora)
+    {
+        return !Foglalasok.Any(f => f.Datum == datum && f.Ora == ora);
+    }
+
+    public int SzamolDij(Klubtag klubtag)
+    {
+        var szorzok = new Dictionary<string, double> { {"igazolt", 0.8}, {"diak", 0.7}, {"nyugdijas", 0.6} };
+        double kedvezmeny = szorzok.ContainsKey(klubtag.KedvezmenyTipus) ? szorzok[klubtag.KedvezmenyTipus] : 1.0;
+        double dij = Oradijak[Tipus] * kedvezmeny;
+        if (Fedett) dij *= 1.2;
+        return (int)dij;
+    }
+}
+
+class Foglalas
+{
+    public Klubtag Klubtag { get; }
+    public Palya Palya { get; }
+    public DateTime Datum { get; }
+    public int Ora { get; }
+    public int Dij { get; }
+
+    public Foglalas(Klubtag klubtag, Palya palya, DateTime datum, int ora)
+    {
+        Klubtag = klubtag;
+        Palya = palya;
+        Datum = datum;
+        Ora = ora;
+        Dij = palya.SzamolDij(klubtag);
+    }
+}
+
+class Teniszklub
+{
+    public List<Palya> Palyak { get; }
+    public List<Klubtag> Klubtagok { get; }
+
+    public Teniszklub()
+    {
+        Palyak = new List<Palya>();
+        Klubtagok = new List<Klubtag>();
+    }
+
+    public void UjPalya(int sorszam, string tipus, bool fedett = false)
+    {
+        Palyak.Add(new Palya(sorszam, tipus, fedett));
+    }
+
+    public void TorolPalya(int sorszam)
+    {
+        Palyak.RemoveAll(p => p.Sorszam == sorszam);
+    }
+
+    public void UjKlubtag(string nev, string kedvezmenyTipus = null)
+    {
+        Klubtagok.Add(new Klubtag(nev, kedvezmenyTipus));
+    }
+
+    public List<Palya> KeresSzabadPalyakat(DateTime datum, int ora, string tipus)
+    {
+        return Palyak.Where(p => p.Tipus == tipus && p.Elerheto(datum, ora)).ToList();
+    }
+
+    public List<(int, int)> KlubtagFoglalasai(Klubtag klubtag, DateTime datum)
+    {
+        return klubtag.Foglalasok.Where(f => f.Datum == datum).Select(f => (f.Palya.Sorszam, f.Ora)).ToList();
+    }
+
+    public int NapiKoltseg(Klubtag klubtag, DateTime datum)
+    {
+        return klubtag.Foglalasok.Where(f => f.Datum == datum).Sum(f => f.Dij);
+    }
+
+    public int BevetelekIdoszakra(DateTime kezdet, DateTime veg)
+    {
+        return Palyak.SelectMany(p => p.Foglalasok).Where(f => f.Datum >= kezdet && f.Datum <= veg).Sum(f => f.Dij);
+    }
+}
+
+
+// Main
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TeniszKlub
+{
+    class Program
+    {
+        static void Main()
+        {
+            Teniszklub klub = new Teniszklub();
+            
+            // Pályák létrehozása
+            klub.UjPalya(1, "fű", false);
+            klub.UjPalya(2, "salak", false);
+            klub.UjPalya(3, "műanyag", true);
+            klub.UjPalya(4, "fű", true);
+            klub.UjPalya(5, "salak", false);
+            
+            // Klubtagok létrehozása
+            klub.UjKlubtag("Kovács Péter", "diak");
+            klub.UjKlubtag("Nagy Anna", "igazolt");
+            
+            // Foglalások
+            Klubtag peti = klub.Klubtagok[0];
+            Klubtag anna = klub.Klubtagok[1];
+            
+            peti.Foglal(klub.Palyak[0], DateTime.Today, 10);
+            peti.Foglal(klub.Palyak[2], DateTime.Today, 14);
+            anna.Foglal(klub.Palyak[1], DateTime.Today, 12);
+            anna.Foglal(klub.Palyak[3], DateTime.Today, 16);
+            
+            // Foglalás visszamondás
+            peti.Visszamond(peti.Foglalasok[0]);
+            
+            // Kérdések megválaszolása
+            Console.WriteLine("Szabad pályák salakos borítással 12 órakor:");
+            foreach (var palya in klub.KeresSzabadPalyakat(DateTime.Today, 12, "salak"))
+            {
+                Console.WriteLine($"Pálya sorszám: {palya.Sorszam}");
+            }
+            
+            Console.WriteLine($"Kovács Péter foglalásai: {string.Join(", ", klub.KlubtagFoglalasai(peti, DateTime.Today))}");
+            Console.WriteLine($"Napi költség Nagy Annának: {klub.NapiKoltseg(anna, DateTime.Today)} Ft");
+            Console.WriteLine($"Klub bevétele a mai napra: {klub.BevetelekIdoszakra(DateTime.Today, DateTime.Today)} Ft");
+        }
+    }
+}
