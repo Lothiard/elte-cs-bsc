@@ -10,6 +10,7 @@ import check.*;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import vehicle.Car;
 import vehicle.Size;
@@ -44,6 +45,13 @@ public class GateTest {
     }
 
     @ParameterizedTest
+    @CsvSource({
+        "A-1, SMALL, 1",
+        "B-2, LARGE, 1",
+        "C-3, SMALL, 2",
+        "D-4, LARGE, 2",
+        "E-5, SMALL, 0"
+    })
     public void testFindPreferredAvailableSpaceForCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
         Space space = gate.findPreferredAvailableSpaceForCar(car);
@@ -58,6 +66,13 @@ public class GateTest {
     }
     
     @ParameterizedTest
+    @CsvSource({
+        "A-1, SMALL, 1",
+        "B-2, LARGE, 1",
+        "C-3, SMALL, 2",
+        "D-4, LARGE, 2",
+        "E-5, SMALL, 0"
+    })
     public void testRegisterCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
         car.setTicketId("T-1");
@@ -74,6 +89,13 @@ public class GateTest {
     }
 
     @ParameterizedTest
+    @CsvSource({
+        "A-1, SMALL, 1",
+        "B-2, LARGE, 1",
+        "C-3, SMALL, 2",
+        "D-4, LARGE, 2",
+        "E-5, SMALL, 0"
+    })
     public void testDeRegisterCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
         car.setTicketId("T-1");
