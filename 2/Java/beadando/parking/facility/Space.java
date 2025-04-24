@@ -29,6 +29,9 @@ public class Space {
     }
 
     public String getCarLicensePlate() {
+        if(occupyingCar == null) {
+            return null;
+        }
         return occupyingCar.getLicensePlate();
     }
 

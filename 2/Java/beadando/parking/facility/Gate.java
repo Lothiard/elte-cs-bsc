@@ -17,7 +17,7 @@ public class Gate {
     private Space findTakenSpaceByCar(Car c) {
         for(Space[] floor : parkingLot.getFloorPlan()) {
             for (Space space : floor) {
-                if (space.getCarLicensePlate().equals(c.getLicensePlate())) {
+                if (space.isTaken() && space.getCarLicensePlate().equals(c.getLicensePlate())) {
                     return space;
                 }
             }
