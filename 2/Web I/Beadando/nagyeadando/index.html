@@ -6,43 +6,77 @@
     <title>Kezdőlap - Restye János Barnabás honlapja</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">Kezdőlap</a></li>
-                <li><a href="idok.html">Idők</a></li>
-                <li><a href="algoritmusok.html">Algoritmusok</a></li>
-            </ul>
-        </nav>
+    <header class="hero-header">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Kezdőlap</a></li>
+                    <li><a href="idok.html">Idők</a></li>
+                    <li><a href="algoritmusok.html">Algoritmusok</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
-        <section>
-            <h1>Köszöntelek a Rubik kockás oldalamon!</h1>
-            <p>Hello! Ez az oldal az egyik kedvenc hobbimról szól, a versenykockázásról. Itt látni fogod a személyes eredményeim, és részletes levezetéseket a megoldásaimról, amiből akár tanulhatsz is valamit.</p>
-        </section>
-        <section>
-            <h2>Videó</h2>
-            <div class="video-placeholder">Videó helyőrző</div>
-        </section>
-        <section>
-            <h2>Kapcsolatfelvétel</h2>
-            <form>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="email placeholder">
-                <label for="address">Cím:</label>
-                <input type="text" id="address" name="address" placeholder="full address placeholder">
-                <label><input type="checkbox" name="checkbox"> Jelölőnégyzet</label>
-                <label><input type="radio" name="radio"> Radio Button</label>
-                <label><input type="radio" name="radio"> Radio Button</label>
-                <button type="reset">Reset</button>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
+        <div class="container">
+            <section>
+                <h1>Köszöntelek a Rubik kockás oldalamon!</h1>
+                <p>Hello! Ez az oldal az egyik kedvenc hobbimról szól, a versenykockázásról. Itt látni fogod a személyes eredményeim, és részletes levezetéseket a megoldásaimról, amiből akár tanulhatsz is valamit.</p>
+            </section>
+            <section>
+                <h2>Videó</h2>
+                <figure class="video-container">
+                    <video controls poster="media/video-thumbnail.jpg">
+                        <source src="media/cube-solve.mp4" type="video/mp4">
+                        A böngésződ nem támogatja a videó lejátszását.
+                    </video>
+                    <figcaption>Egy Rubik kocka kirakási folyamat</figcaption>
+                </figure>
+                <p>Ha a videó nem játszható le, megtekintheted <a href="https://www.youtube.com/watch?v=PtgQ6hZNIIc" target="_blank">YouTube-on</a> keresztül is.</p>
+            </section>
+            <section class="contact-section">
+                <h2>Vedd meg az egyénileg finomhangolt GAN XS 356-et a legjobb eredményekért!</h2>
+                <div class="form-container">
+                    <div class="form-image">
+                    <img src="media/gan.jpg" alt="Rubik kocka" class="contact-image">
+                    </div>
+                    <div class="form-content">
+                        <p>A kocka amit használok és ajánlok mindenkinek.</p>
+                        <p>69.420 Ft</p>
+                        <form>
+                            <div class="form-row">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" placeholder="Email címed">
+                            </div>
+                            <div class="form-row">
+                                <label for="address">Cím:</label>
+                                <input type="text" id="address" name="address" placeholder="Teljes címed">
+                            </div>
+                            <div class="form-row checkbox-row">
+                                <label><input type="checkbox" name="checkbox"> Sérülésvédelem (+1500 Ft)</label>
+                            </div>
+                            <div class="form-row radio-row">
+                                <label><input type="radio" name="radio"> Matricás</label>
+                                <label><input type="radio" name="radio"> Matrica nélküli</label>
+                            </div>
+                            <div class="form-row">
+                                <textarea name="message" placeholder="Hagyj üzenetet"></textarea>
+                            </div>
+                            <div class="button-row">
+                                <button type="reset">Törlés</button>
+                                <button type="submit" class="submit-btn">Rendelés</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2025 Restye János Barnabás</p>
+        <div class="container">
+            <p>&copy; 2025 Restye János Barnabás</p>
+        </div>
     </footer>
 </body>
 </html>

@@ -7,39 +7,181 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Kezdőlap</a></li>
-                <li><a href="idok.html">Idők</a></li>
-                <li><a href="algoritmusok.html" class="active">Algoritmusok</a></li>
-            </ul>
-        </nav>
+    <header class="hero-header">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Kezdőlap</a></li>
+                    <li><a href="idok.html">Idők</a></li>
+                    <li><a href="algoritmusok.html" class="active">Algoritmusok</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
-        <section>
-            <h1>Algoritmusok</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-            <table>
-                <caption>Algoritmusok táblázata</caption>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Algoritmus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>-</td></tr>
-                    <tr><td>2</td><td>-</td></tr>
-                    <tr><td>3</td><td>-</td></tr>
-                    <tr><td>4</td><td>-</td></tr>
-                    <tr><td>5</td><td>-</td></tr>
-                </tbody>
-            </table>
-        </section>
+        <div class="container">
+            <section>
+                <h1>Algoritmusok</h1>
+                <p>Ez az oldal a leggyakrabban használt Rubik kocka algoritmusokat tartalmazza, amelyek segítenek a különböző mintázatok és helyzetek megoldásában.</p>
+                
+                <div class="algorithm-container">
+                    <table class="algorithms-table">
+                        <caption>
+                            <details>
+                                <summary>PLL Algoritmusok</summary>
+                                <p>PLL (Permutation of the Last Layer) algoritmusok a Rubik kocka utolsó rétegének megoldásához.</p>
+                            </details>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th>Név</th>
+                                <th>Eset</th>
+                                <th>Algoritmus</th>
+                                <th>Csoport</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- First table -->
+                            <tr>
+                                <td>V</td>
+                                <td><img src="media/V.png" alt="V algorithm case" class="algorithm-image"></td>
+                                <td>R' U R' U' y R' F' R2 U' R' U R' F R F</td>
+                                <td>Átlós Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Y</td>
+                                <td><img src="media/Y.png" alt="Y algorithm case" class="algorithm-image"></td>
+                                <td>F R U' R' U' R U R' F' R U R' U' R' F R F'</td>
+                                <td>Átlós Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>H</td>
+                                <td><img src="media/H.png" alt="H algorithm case" class="algorithm-image"></td>
+                                <td>M2 U M2 U2 M2 U M2</td>
+                                <td>Csak Oldalak</td>
+                            </tr>
+                            <tr>
+                                <td>Ua</td>
+                                <td><img src="media/Ua.png" alt="Ua algorithm case" class="algorithm-image"></td>
+                                <td>M2 U M U2 M' U M2</td>
+                                <td>Csak Oldalak</td>
+                            </tr>
+                            <tr>
+                                <td>Ub</td>
+                                <td><img src="media/Ub.png" alt="Ub algorithm case" class="algorithm-image"></td>
+                                <td>M2 U' M U2 M' U' M2</td>
+                                <td>Csak Oldalak</td>
+                            </tr>
+                            <tr>
+                                <td>Z</td>
+                                <td><img src="media/Z.png" alt="Z algorithm case" class="algorithm-image"></td>
+                                <td>M' U M2 U M2 U M' U2 M2</td>
+                                <td>Csak Oldalak</td>
+                            </tr>
+
+                            <!-- Second table -->
+                            <tr>
+                                <td>Ja</td>
+                                <td><img src="media/Ja.png" alt="Ja algorithm case" class="algorithm-image"></td>
+                                <td>x R2 F R F' R U2 r' U r U2</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Jb</td>
+                                <td><img src="media/Jb.png" alt="Jb algorithm case" class="algorithm-image"></td>
+                                <td>R U R' F' R U R' U' R' F R2 U' R'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Ra</td>
+                                <td><img src="media/Ra.png" alt="Ra algorithm case" class="algorithm-image"></td>
+                                <td>R U' R' U' R U R D R' U' R D' R' U2 R'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Rb</td>
+                                <td><img src="media/Rb.png" alt="Rb algorithm case" class="algorithm-image"></td>
+                                <td>R2 F R U R U' R' F' R U2 R' U2 R</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>T</td>
+                                <td><img src="media/T.png" alt="T algorithm case" class="algorithm-image"></td>
+                                <td>R U R' U' R' F R2 U' R' U' R U R' F'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>E</td>
+                                <td><img src="media/E.png" alt="E algorithm case" class="algorithm-image"></td>
+                                <td>x' L' U L D' L' U' L D L' U' L D' L' U L D</td>
+                                <td>Átlós Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Na</td>
+                                <td><img src="media/Na.png" alt="Na algorithm case" class="algorithm-image"></td>
+                                <td>R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'</td>
+                                <td>Átlós Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Nb</td>
+                                <td><img src="media/Nb.png" alt="Nb algorithm case" class="algorithm-image"></td>
+                                <td>R' U R U' R' F' U' F R U R' F R' F' R U' R</td>
+                                <td>Átlós Sarok Csere</td>
+                            </tr>
+
+                            <!-- Third table -->
+                            <tr>
+                                <td>Aa</td>
+                                <td><img src="media/Aa.png" alt="Aa algorithm case" class="algorithm-image"></td>
+                                <td>x L2 D2 L' U' L D2 L' U L'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Ab</td>
+                                <td><img src="media/Ab.png" alt="Ab algorithm case" class="algorithm-image"></td>
+                                <td>x' L2 D2 L U L' D2 L U' L</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td><img src="media/F.png" alt="F algorithm case" class="algorithm-image"></td>
+                                <td>R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Ga</td>
+                                <td><img src="media/Ga.png" alt="Ga algorithm case" class="algorithm-image"></td>
+                                <td>R2 U R' U R' U' R U' R2 U' D R' U R D'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Gb</td>
+                                <td><img src="media/Gb.png" alt="Gb algorithm case" class="algorithm-image"></td>
+                                <td>R' U' R U D' R2 U R' U R U' R U' R2 D</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Gc</td>
+                                <td><img src="media/Gc.png" alt="Gc algorithm case" class="algorithm-image"></td>
+                                <td>R2 U' R U' R U R' U R2 U D' R U' R' D</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                            <tr>
+                                <td>Gd</td>
+                                <td><img src="media/Gd.png" alt="Gd algorithm case" class="algorithm-image"></td>
+                                <td>R U R' U' D R2 U' R U' R' U R' U R2 D'</td>
+                                <td>Szomszédos Sarok Csere</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2025 Restye János Barnabás</p>
+        <div class="container">
+            <p>&copy; 2025 Restye János Barnabás</p>
+        </div>
     </footer>
 </body>
 </html>
