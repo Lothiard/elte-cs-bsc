@@ -1,16 +1,13 @@
 package parking.facility;
 
 import static check.CheckThat.*;
-import static check.CheckThat.Condition.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
-import org.junit.jupiter.api.MethodOrderer.*;
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import check.*;
-
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import vehicle.Car;
 import vehicle.Size;
@@ -20,11 +17,6 @@ public class GateTest {
     private Gate gate;
     private ParkingLot parkingLot;
     
-    public GateTest() {
-        parkingLot = new ParkingLot(3, 5);
-        gate = new Gate(parkingLot);
-    }
-
     @BeforeEach
     public void setUp() {
         parkingLot = new ParkingLot(3, 5);
@@ -33,15 +25,13 @@ public class GateTest {
 
     @Test
     public void testFindAnyAvailableSpaceForCar() {
-        // Test for small car
         Car smallCar = new Car("A-1", Size.SMALL, 1);
         Space smallCarSpace = gate.findAnyAvailableSpaceForCar(smallCar);
-        Assert.assertTrue(smallCarSpace != null);
+        assertTrue(smallCarSpace != null);
         
-        // Test for large car
         Car largeCar = new Car("B-2", Size.LARGE, 1);
         Space largeCarSpace = gate.findAnyAvailableSpaceForCar(largeCar);
-        Assert.assertTrue(largeCarSpace != null);
+        assertTrue(largeCarSpace != null);
     }
 
     @ParameterizedTest
@@ -55,14 +45,14 @@ public class GateTest {
     public void testFindPreferredAvailableSpaceForCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
         Space space = gate.findPreferredAvailableSpaceForCar(car);
-        Assert.assertTrue(space != null);
+        assertTrue(space != null);
     }
     
     @Test
     public void testFindPreferredAvailableSpaceForCar() {
         Car car = new Car("A-1", Size.SMALL, 1);
         Space space = gate.findPreferredAvailableSpaceForCar(car);
-        Assert.assertTrue(space != null);
+        assertTrue(space != null);
     }
     
     @ParameterizedTest
@@ -77,7 +67,7 @@ public class GateTest {
         Car car = new Car(plate, size, preferredFloor);
         car.setTicketId("T-1");
         boolean registered = gate.registerCar(car);
-        Assert.assertTrue(registered);
+        assertTrue(registered);
     }
 
     @Test
@@ -85,7 +75,7 @@ public class GateTest {
         Car car = new Car("A-1", Size.SMALL, 1);
         car.setTicketId("T-1");
         boolean registered = gate.registerCar(car);
-        Assert.assertTrue(registered);
+        assertTrue(registered);
     }
 
     @ParameterizedTest
@@ -103,7 +93,7 @@ public class GateTest {
         
         gate.deRegisterCar("T-1");
         
-        Assert.assertTrue(true);
+        assertTrue(true);
     }
     
     @Test
@@ -114,9 +104,9 @@ public class GateTest {
         
         if (registered) {
             gate.deRegisterCar("T-1");
-            Assert.assertTrue(true);
+            assertTrue(true);
         } else {
-            Assert.assertTrue(false);
+            assertTrue(false);
         }
     }
 }
