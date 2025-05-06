@@ -1,17 +1,21 @@
 package parking;
 
 import static check.CheckThat.*;
-import static check.CheckThat.Condition.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
-import org.junit.jupiter.api.MethodOrderer.*;
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import check.*;
 
-import org.junit.Test;
-import org.junit.Assert;
+import vehicle.Car;
+import vehicle.Size;
+import parking.facility.Gate;
 
 public class ParkingLotTest {
     private ParkingLot parkingLot;
+    private Gate gate = new Gate(parkingLot);
 
     @Test
     public void testConstructorWithInvalidValues() {
@@ -29,7 +33,13 @@ public class ParkingLotTest {
     @Test
     public void testTextualRepresentation() {
         parkingLot = new ParkingLot(3, 5);
-        String expectedRepresentation = "X X X X X \nX X X X X \nX X X X X \n";
+        Car car1 = new Car("ABC123", Size.SMALL, 1);
+        Car car2 = new Car("LMN456", Size.LARGE, 3);
+
+        gate.registerCar(car1);
+        gate.registerCar(car2);
+
+        String expectedRepresentation = "S X X X X \nX X X X X \nL L X X X \n";
         Assert.assertEquals(expectedRepresentation, parkingLot.toString());
     }    
 }

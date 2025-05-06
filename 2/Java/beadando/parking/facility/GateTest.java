@@ -19,7 +19,7 @@ public class GateTest {
     
     @BeforeEach
     public void setUp() {
-        parkingLot = new ParkingLot(3, 5);
+        parkingLot = new ParkingLot(5, 5);
         gate = new Gate(parkingLot);
     }
 
@@ -37,10 +37,10 @@ public class GateTest {
     @ParameterizedTest
     @CsvSource({
         "A-1, SMALL, 1",
-        "B-2, LARGE, 1",
-        "C-3, SMALL, 2",
-        "D-4, LARGE, 2",
-        "E-5, SMALL, 0"
+        "B-1, LARGE, 1",
+        "C-1, SMALL, 2",
+        "D-1, LARGE, 2",
+        "E-1, SMALL, 0"
     })
     public void testFindPreferredAvailableSpaceForCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
@@ -50,18 +50,22 @@ public class GateTest {
     
     @Test
     public void testFindPreferredAvailableSpaceForCar() {
-        Car car = new Car("A-1", Size.SMALL, 1);
-        Space space = gate.findPreferredAvailableSpaceForCar(car);
-        assertTrue(space != null);
+        Car smallCar = new Car("A-1", Size.SMALL, 1);
+        Space smallSpace = gate.findPreferredAvailableSpaceForCar(smallCar);
+        assertTrue(smallSpace != null);
+
+        Car largeCar = new Car("A-1", Size.LARGE, 3);
+        Space largeSpace = gate.findPreferredAvailableSpaceForCar(largeCar);
+        assertTrue(largeSpace != null);
     }
     
     @ParameterizedTest
     @CsvSource({
         "A-1, SMALL, 1",
-        "B-2, LARGE, 1",
-        "C-3, SMALL, 2",
-        "D-4, LARGE, 2",
-        "E-5, SMALL, 0"
+        "B-1, LARGE, 1",
+        "C-1, SMALL, 2",
+        "D-1, LARGE, 2",
+        "E-1, SMALL, 0"
     })
     public void testRegisterCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
@@ -72,30 +76,37 @@ public class GateTest {
 
     @Test
     public void testRegisterCar() {
-        Car car = new Car("A-1", Size.SMALL, 1);
-        car.setTicketId("T-1");
-        boolean registered = gate.registerCar(car);
-        assertTrue(registered);
+        Car smallCar = new Car("A-1", Size.SMALL, 1);
+        smallCar.setTicketId("T-1");
+        boolean smallRegistered = gate.registerCar(smallCar);
+        assertTrue(smallRegistered);
+
+        Car largeCar = new Car("A-2", Size.LARGE, 3);
+        largeCar.setTicketId("T-1");
+        boolean largeRegistered = gate.registerCar(largeCar);
+        assertTrue(largeRegistered);
     }
 
     @ParameterizedTest
     @CsvSource({
         "A-1, SMALL, 1",
-        "B-2, LARGE, 1",
-        "C-3, SMALL, 2",
-        "D-4, LARGE, 2",
-        "E-5, SMALL, 0"
+        "B-1, LARGE, 1",
+        "C-1, SMALL, 2",
+        "D-1, LARGE, 2",
+        "E-1, SMALL, 0"
     })
     public void testDeRegisterCar(String plate, Size size, int preferredFloor) {
         Car car = new Car(plate, size, preferredFloor);
         car.setTicketId("T-1");
         gate.registerCar(car);
-        
+
+        // todo
+
         gate.deRegisterCar("T-1");
-        
-        assertTrue(true);
+        // todo
     }
-    
+   
+    // todo
     @Test
     public void testDeRegisterCar() {
         Car car = new Car("A-1", Size.SMALL, 1);
