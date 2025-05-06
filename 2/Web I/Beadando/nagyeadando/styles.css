@@ -1,32 +1,17 @@
 body {
     font-family: Arial, sans-serif;
+    font-size: 1rem; /* Base font size (16px by default) */
     margin: 0;
     padding: 0;
     background-image: url('media/rubik-cube-background.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed; /* Keeps the background fixed while scrolling */
+    background-attachment: fixed;
 }
 
+/* Header and Navigation */
 .hero-header {
     padding: 20px 0;
-    /* Remove background-image property from here */
-}
-
-/* Add styles for main content area to ensure readability over the background */
-main .container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Add styles for footer to ensure readability */
-footer {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 15px 0;
-    margin-top: 20px;
 }
 
 .hero-header nav {
@@ -41,16 +26,19 @@ footer {
     justify-content: center;
     padding: 0;
     margin: 0;
+    flex-wrap: wrap;
 }
 
 .hero-header nav ul li {
-    margin: 0 15px;
+    margin: 5px 15px;
 }
 
 .hero-header nav ul li a {
-    text-decoration: none;
+    text-decoration: none; /* No underline for navigation menu links */
     color: black;
     padding: 5px 10px;
+    border-radius: 3px;
+    display: block;
 }
 
 .hero-header nav ul li a.active {
@@ -58,17 +46,57 @@ footer {
     color: white;
 }
 
-/* Center content layout */
+.hero-header nav ul li a:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Default link styling */
+a {
+    color: #007bff; /* Bright blue for unvisited links */
+    text-decoration: underline; /* Always underlined */
+}
+
+/* Visited link styling */
+a:visited {
+    color: #5a5a5a; /* Gray for visited links (lower contrast) */
+    text-decoration: underline; /* Always underlined */
+}
+
+/* Hover and focus states for better accessibility */
+a:hover, a:focus {
+    color: #0056b3; /* Darker blue for hover/focus */
+    text-decoration: underline; /* Underline remains */
+}
+
+/* Container and Main Content */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 main {
     padding: 20px 0;
 }
 
+main .container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 15px 0;
+    margin-top: 20px;
+}
+
+/* Placeholders and Common Elements */
 .video-placeholder, .image-placeholder {
     background-color: #ddd;
     text-align: center;
@@ -76,23 +104,26 @@ main {
     margin: 20px 0;
 }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 1.25rem 0; /* 20px converted to rem */
 }
 
 table th, table td {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 0.625rem; /* 10px converted to rem */
     text-align: left;
+    font-size: 0.9rem; /* Slightly smaller than the base font size */
 }
 
 table th {
     background-color: #f4f4f4;
+    font-size: 1rem; /* Same as the base font size */
 }
 
-/* Content container layout */
+/* Content Container Layout */
 .content-container {
     display: flex;
     flex-wrap: wrap;
@@ -103,9 +134,10 @@ table th {
 .table-container {
     flex: 1;
     min-width: 300px;
+    overflow-x: auto;
 }
 
-/* Details container specific styles */
+/* Details Container */
 .details-container {
     flex: 1;
     min-width: 300px;
@@ -115,32 +147,36 @@ table th {
     padding: 15px;
 }
 
-/* Hide all solve details by default */
+/* Solve Details JS */
 .solve-details {
     display: none;
 }
 
-/* Show selected solve details when targeted */
 .solve-details:target {
     display: block;
     animation: fadeIn 0.5s;
 }
 
-/* Hide default message when any solve is selected */
 .solve-details:target ~ .default-message {
     display: none;
 }
 
-/* Animation for smooth appearance */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
+.solve-details-js {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+/* Thumbnail Styling */
 .thumbnail {
     max-width: 100%;
     border: 1px solid #ccc;
     transition: transform 0.2s;
+    height: auto;
 }
 
 .thumbnail:hover {
@@ -151,7 +187,7 @@ table th {
     margin-top: 15px;
 }
 
-/* Details and Summary styles */
+/* Details and Summary */
 details {
     margin-bottom: 10px;
 }
@@ -168,18 +204,7 @@ details p {
     background-color: #f0f0f0;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .content-container {
-        flex-direction: column;
-    }
-    
-    .details-container {
-        margin-top: 20px;
-    }
-}
-
-/* Table styles */
+/* Table Row Styling */
 .clickable-row {
     cursor: pointer;
     transition: background-color 0.3s;
@@ -193,12 +218,7 @@ details p {
     background-color: #e0f0ff !important;
 }
 
-/* Remove the earlier target-based display rules if present */
-.solve-details-js {
-    animation: fadeIn 0.5s;
-}
-
-/* Form styling to match the wireframe */
+/* Form Styling */
 .contact-section {
     margin-top: 30px;
 }
@@ -211,19 +231,19 @@ details p {
 }
 
 .form-image {
-    flex: 0 0 auto; /* Don't grow, don't shrink, respect width */
-    width: 50%; /* Explicit width */
+    flex: 1 1 300px;
 }
 
 .contact-image {
-    width: 100%; /* Make image fill its container */
+    width: 100%;
     max-width: 100%;
-    display: block; /* Ensures proper display */
+    display: block;
     border: 1px solid #ddd;
+    height: auto;
 }
 
 .form-content {
-    flex: 1; /* Take remaining space */
+    flex: 1 1 300px;
 }
 
 .form-row {
@@ -238,19 +258,22 @@ details p {
 .form-row input[type="text"],
 .form-row input[type="email"],
 .form-row textarea {
-    width: 100%;
+    width: 100%; /* Ensure fields take up the full width of the container */
+    max-width: 600px; /* Limit the maximum width */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .form-row textarea {
-    height: 80px;
+    height: 63px;
     resize: vertical;
 }
 
 .checkbox-row, .radio-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
@@ -264,6 +287,7 @@ details p {
     display: flex;
     gap: 10px;
     margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 .button-row button {
@@ -283,73 +307,75 @@ button[type="reset"] {
     border: 1px solid #ddd;
 }
 
-/* Algorithm table styling */
+/* Algorithm Table Styling */
 .algorithms-table {
-    font-size: 0.9rem;
-    width: auto;
-    margin: 20px auto;
-    max-width: 100%;
-    table-layout: fixed; /* Use fixed layout for better control */
-}
+    font-size: 0.9rem; /* Slightly smaller than the base font size */
+    width: 100%;
+    margin: 1.25rem auto
 
 .algorithms-table td, .algorithms-table th {
-    text-align: center; /* Center all text in table cells */
-    vertical-align: middle; /* Vertically center content */
-    padding: 8px 5px; /* Reduce padding to make cells smaller */
-    white-space: nowrap; /* Prevent text from wrapping */
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.5rem; /* 8px converted to rem */
 }
 
 .algorithms-table td:nth-child(1) {
     font-weight: bold;
-    width: 40px; /* Set width for name column */
-}
-
-.algorithms-table td:nth-child(2) {
-    width: 120px; /* Changed from 70px to accommodate larger images */
 }
 
 .algorithms-table td:nth-child(3) {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
-    /* Algorithm column will take remaining width */
 }
 
-.algorithms-table td:nth-child(4) {
-    white-space: nowrap;
-    width: 160px; /* Set width for group column */
+/* Algorithm Container and Images */
+.algorithm-container {
+    width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
 }
 
-/* Algorithm image styling */
 .algorithm-image {
-    width: 100px; /* Changed from 50px to 100px (twice the size) */
+    width: 6.25rem; /* 100px converted to rem */
     height: auto;
     display: block;
     margin: 0 auto;
     border: 1px solid #ddd;
 }
 
-/* Algorithm container style */
-.algorithm-container {
-    width: fit-content;
-    margin: 0 auto;
-    overflow-x: auto; /* Add horizontal scroll if needed */
+/* Responsive Design - Medium Devices */
+@media (max-width: 900px) {
+    .algorithms-table {
+        font-size: 0.85rem; /* Slightly smaller for medium screens */
+    }
+    
+    .algorithm-image {
+        width: 5rem; /* 80px converted to rem */
+    }
 }
 
-/* Video styling */
-.video-container {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
+/* Responsive Design - Small Devices */
+@media (max-width: 768px) {
+    .algorithms-table {
+        font-size: 0.8rem; /* Smaller font size for small screens */
+    }
+    
+    .algorithms-table td, .algorithms-table th {
+        padding: 0.375rem; /* 6px converted to rem */
+    }
+    
+    .algorithm-image {
+        width: 4.375rem; /* 70px converted to rem */
+    }
 }
 
-.video-container video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.video-container figcaption {
-    margin-top: 8px;
-    text-align: center;
-    font-style: italic;
+/* Responsive Design - Extra Small Devices */
+@media (max-width: 480px) {
+    .algorithms-table {
+        font-size: 0.75rem; /* Even smaller font size for extra small screens */
+    }
+    
+    .algorithm-image {
+        width: 3.75rem; /* 60px converted to rem */
+    }
 }
