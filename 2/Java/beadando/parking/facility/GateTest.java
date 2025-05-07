@@ -99,25 +99,38 @@ public class GateTest {
         Car car = new Car(plate, size, preferredFloor);
         car.setTicketId("T-1");
         gate.registerCar(car);
-
-        // todo
+        
+        Space occupiedSpace = null;
+        for(Space[] floor : parkingLot.getFloorPlan()) {
+            for(Space space : floor) {
+                if(space.getCarLicensePlate() != null && space.getCarLicensePlate().equals(plate)) {
+                    occupiedSpace = space;
+                    break;
+                }
+            }
+        }
 
         gate.deRegisterCar("T-1");
-        // todo
+        assertTrue(occupiedSpace.isTaken() == false);
     }
    
-    // todo
     @Test
     public void testDeRegisterCar() {
         Car car = new Car("A-1", Size.SMALL, 1);
         car.setTicketId("T-1");
-        boolean registered = gate.registerCar(car);        
-        
-        if (registered) {
-            gate.deRegisterCar("T-1");
-            assertTrue(true);
-        } else {
-            assertTrue(false);
+        gate.registerCar(car);        
+
+        Space occupiedSpace = null;
+        for(Space[] floor : parkingLot.getFloorPlan()) {
+            for(Space space : floor) {
+                if(space.getCarLicensePlate() != null && space.getCarLicensePlate().equals("A-1")) {
+                    occupiedSpace = space;
+                    break;
+                }
+            }
         }
+
+        gate.deRegisterCar("T-1");
+        assertTrue(occupiedSpace.isTaken() == false);
     }
 }

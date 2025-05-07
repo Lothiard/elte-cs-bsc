@@ -15,12 +15,24 @@ public class Gate {
     }
 
     private Space findTakenSpaceByCar(Car c) {
-        for(Space[] floor : parkingLot.getFloorPlan()) {
-            for (Space space : floor) {
-                if (space.getCarLicensePlate().equals(c.getLicensePlate())) {
-                    return space;
+        Space[][] currentFloor = parkingLot.getFloorPlan();
+        if(c.getSpotOccupation() == Size.SMALL) {
+            for(Space[] floor : currentFloor) {
+                for (Space space : floor) {
+                    if (space.getCarLicensePlate() != null && space.getCarLicensePlate().equals(c.getLicensePlate())) {
+                        return space;
+                    }
                 }
             }
+        } else if (c.getSpotOccupation() == Size.LARGE) {
+            for(int i = 0; i < currentFloor.length; ++i) {
+                for(int j = 1; j < currentFloor[i].length; ++j) {
+                    if (currentFloor[i][j].getCarLicensePlate() != null && currentFloor[i][j].getCarLicensePlate().equals(c.getLicensePlate())) {
+                        return currentFloor[i][j];
+                    }
+                }
+            }
+            
         }
         return null;
     }
@@ -52,52 +64,36 @@ public class Gate {
         return null;
     }
 
-    // i apologize but if it ain't broke, don't fix it
+    private static boolean allVisited(boolean visited[]) {
+        for(int i = 0; i < visited.length; ++i) {
+            if(visited[i] == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Space findPreferredAvailableSpaceForCar(Car c) {
         int preferredFloor = c.getPreferredFloor();
-        if (findAvailableSpaceOnFloor(preferredFloor, c) != null) {
-            return findAvailableSpaceOnFloor(preferredFloor, c);
-        }
-
         Space[][] currentLot = parkingLot.getFloorPlan();
-        int index = 0;
-        int oneway = 0; // 0 = we have not yet reached either side of the lot,
-                        // 1 = we have reached the top therefore we can only go down,
-                        // -1 = we have reached the bottom therefore we can only go up 
+        boolean[] visited = {false, false, false, false, false};
 
-        for (int i = 1; i < currentLot.length; ++i) { // on n floors always check n-1 times since the preferred floor is checked right away
-            index = -1 * i;
+        int step = 0;
+        while(!allVisited(visited)) {
+            int index;
+            if (step % 2 == 0) {
+                index = preferredFloor - step / 2;
+            } else {
+                index = preferredFloor + (step + 1) / 2;
+            }
 
-            if(preferredFloor + index < 0) { // we have reached the bottom of the lot
-                oneway = -1;
-                index = Math.abs(index);
-                break;
-            } else if(preferredFloor + index > currentLot.length) { // we have reached the top of the lot
-                oneway = 1;
-                index = Math.abs(index);
-                break;
-            } else { // we are still in the lot
+            if (index >= 0 && index < parkingLot.getFloorPlan().length && !visited[index]) {
                 if(findAvailableSpaceOnFloor(index, c) != null) {
                     return findAvailableSpaceOnFloor(index, c);
                 }
+                visited[index] = true;
             }
-
-        }
-        switch (oneway) {
-            case 1:
-                for(int i = index; i > 0; --i) {
-                    if (findAvailableSpaceOnFloor(preferredFloor, c) != null) {
-                        return findAvailableSpaceOnFloor(preferredFloor, c);
-                    }
-                }
-                break;
-            case -1:
-                for(int i = index; i < currentLot.length; ++i) {
-                    if (findAvailableSpaceOnFloor(preferredFloor, c) != null) {
-                        return findAvailableSpaceOnFloor(preferredFloor, c);
-                    }
-                }
-                break;
+            step++;
         }
         return null;
     }
@@ -106,9 +102,17 @@ public class Gate {
         if (findPreferredAvailableSpaceForCar(c) == null) {
             return false;
         }
-        Space space = findPreferredAvailableSpaceForCar(c);
-        parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].addOccupyingCar(c);
-        cars.add(c);
+        if (c.getSpotOccupation() == Size.SMALL) {
+            Space space = findPreferredAvailableSpaceForCar(c);
+            parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].addOccupyingCar(c);
+            cars.add(c);
+            return true;
+        } else if (c.getSpotOccupation() == Size.LARGE) {
+            Space space = findPreferredAvailableSpaceForCar(c);
+            parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].addOccupyingCar(c);
+            parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber() - 1].addOccupyingCar(c);
+            cars.add(c);
+        }
         return true;
     }
 
@@ -118,20 +122,27 @@ public class Gate {
                 System.err.println("No available space for car: " + car.getLicensePlate());
                 continue;
             }
-            Space space = findAnyAvailableSpaceForCar(car);
-            parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].addOccupyingCar(car);
-            cars.add(car);
+            registerCar(car);
         }
     }
 
     public void deRegisterCar(String ticketId) {
+        Car carToDeRegister = null;
+
         for (Car car : cars) {
-            if (car.getTicketId().equals(ticketId)) {
-                Space space = findTakenSpaceByCar(car);
-                parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].removeOccupyingCar();
-                cars.remove(car);
-                break;
+            if(car.getTicketId().equals(ticketId)) {
+                carToDeRegister = car;
+                if(car.getSpotOccupation() == Size.SMALL) {
+                    Space space = findTakenSpaceByCar(car);
+                    parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].removeOccupyingCar();
+                } else if (car.getSpotOccupation() == Size.LARGE) { 
+                    Space space = findTakenSpaceByCar(car);
+                    parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber()].removeOccupyingCar();
+                    parkingLot.getFloorPlan()[space.getFloorNumber()][space.getSpaceNumber() - 1].removeOccupyingCar();
+                    break;
+                }
             }
         }
+        cars.remove(carToDeRegister);
     }
 }
