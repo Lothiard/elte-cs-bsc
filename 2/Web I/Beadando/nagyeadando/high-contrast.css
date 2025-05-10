@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    background-color: black; 
+    color: white; 
+    text-transform: uppercase; 
+}
+
+.hero-header nav {
+    background-color: white;
+    color: black;
+}
+
+.hero-header nav ul li a {
+    color: black;
+    font-weight: bold;
+}
+
+.hero-header nav ul li a.active {
+    background-color: yellow;
+    color: black;
+}
+
+.container {
+    background-color: black;
+    color: white;
+}
+
+.sidebar {
+    background-color: #333;
+    color: white;
+}
+
+.sidebar-content h3 {
+    color: yellow;
+}
+
+.contact-section .form-container {
+    background-color: #222;
+    color: white;
+}
+
+button, input, textarea {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+button:hover {
+    background-color: yellow;
+    color: black;
+}
+

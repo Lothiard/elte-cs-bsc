@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="print.css" media="print">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Ugrás a tartalomra</a>
     <header class="hero-header">
         <div class="container">
             <nav>
@@ -19,23 +20,41 @@
             </nav>
         </div>
     </header>
-    <main>
+    <main id="main-content">
         <div class="container">
-            <section>
-                <h1>Köszöntelek a Rubik kockás oldalamon!</h1>
-                <p>Hello! Ez az oldal az egyik kedvenc hobbimról szól, a versenykockázásról. Itt látni fogod a személyes eredményeim, és részletes levezetéseket a megoldásaimról, amiből akár tanulhatsz is valamit.</p>
-            </section>
-            <section>
-                <h2>Videó</h2>
-                <figure class="video-container">
-                    <video controls poster="media/video-thumbnail.jpg">
-                        <source src="media/cube-solve.mp4" type="video/mp4">
-                        A böngésződ nem támogatja a videó lejátszását.
-                    </video>
-                    <figcaption>Egy Rubik kocka kirakási folyamat</figcaption>
-                </figure>
-                <p>Ha a videó nem játszható le, megtekintheted <a href="https://www.youtube.com/watch?v=PtgQ6hZNIIc" target="_blank">YouTube-on</a> keresztül is.</p>
-            </section>
+            <article class="main-content">
+                <section>
+                    <h1>Köszöntelek a Rubik kockás oldalamon!</h1>
+                    <p>Hello! Ez az oldal az egyik kedvenc hobbimról szól, a versenykockázásról. Itt látni fogod a személyes eredményeim, és részletes levezetéseket a megoldásaimról, amiből akár tanulhatsz is valamit.</p>
+                </section>
+                <section>
+                    <h2>Egy Rubik kocka kirakási folyamat</h2>
+                    <figure class="video-container">
+                        <video width="100%" height="600" controls poster="media/vid-thumbnail.jpg">
+                            <source src="media/kockazas.mp4" type="video/mp4">
+                            Az Ön böngészője nem támogatja a videólejátszást.
+                        </video>
+                        <figcaption>Rubik kocka kirakási folyamat videó</figcaption>
+                    </figure>
+                    <p>Ha a videó nem játszható le, megtekintheted <a href="mhttps://youtu.be/3BFrQbn1smA" target="_blank">itt</a>.</p></section>
+            </article>
+            
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <h3>Kockázási tippek</h3>
+                    <ul>
+                        <li>Kezdőként ne az időre koncentrálj, hanem a helyes algoritmusokra</li>
+                        <li>Napi 15-20 perc gyakorlás sokat számít</li>
+                        <li>Érdemes különböző módszereket kipróbálni</li>
+                        <li>Rendszeresen tisztítsd és kend meg a kockádat</li>
+                    </ul>
+                    <h3>Közelgő versenyek</h3>
+                    <p>2025. Május - Budapest Open</p>
+                    <p>2025. Július - Szeged Cube Day</p>
+                    <p>2025. Augusztus - Debrecen Speed Challenge</p>
+                </div>
+            </aside>
+            
             <section class="contact-section">
                 <h2>Vedd meg az egyénileg finomhangolt GAN XS 356-et a legjobb eredményekért!</h2>
                 <div class="form-container">

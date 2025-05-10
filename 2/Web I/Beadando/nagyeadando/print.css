@@ -1,35 +1,30 @@
-/* General Reset for Print */
 body {
     font-family: Arial, sans-serif;
-    font-size: 12pt; /* Paper-friendly font size */
+    font-size: 12pt;
     color: black;
-    background: none; /* Remove background images/colors */
+    background: none;
     margin: 0;
     padding: 0;
 }
 
-/* Hide Repetitive Elements */
 .hero-header, nav, footer, .video-placeholder, .video-container {
-    display: none; /* Hide header, navigation, footer, and videos */
+    display: none;
 }
 
-/* Adjust Images */
 img {
-    max-width: 100%; /* Ensure images fit within the page */
+    max-width: 100%;
     height: auto;
 }
 
-/* Reduce Image Size */
 .thumbnail, .algorithm-image {
-    max-width: 50%; /* Shrink images for print */
+    max-width: 50%;
     height: auto;
 }
 
-/* Optimize Tables */
 table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 10pt; /* Smaller font size for tables */
+    font-size: 10pt;
 }
 
 table th, table td {
@@ -37,20 +32,18 @@ table th, table td {
     padding: 4px;
 }
 
-/* Remove Unnecessary Margins and Paddings */
 .container, .content-container, .details-container {
     margin: 0;
     padding: 0;
     width: 100%;
 }
 
-/* Ensure Text Fills the Page */
 p, h1, h2, h3, h4, h5, h6 {
     margin: 0.5em 0;
 }
 
-/* Remove Shadows and Borders */
 .container, .details-container {
     box-shadow: none;
     border: none;
 }
+
