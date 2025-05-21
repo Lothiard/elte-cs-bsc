@@ -1,5 +1,9 @@
 namespace Nagybead {
     public class Muanyag : IPalyaTipus {
-        public int PalyaAr() => 2000;
+        private static Muanyag instance = new Muanyag();
+        public static Muanyag Instance => instance;
+        public int PalyaAr() {
+            return 2000;
+        }
     }
 }

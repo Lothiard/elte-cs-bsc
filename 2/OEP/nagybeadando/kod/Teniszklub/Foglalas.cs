@@ -6,10 +6,10 @@ namespace Nagybead {
         public int Ora { get; }
 
         public Foglalas(Klubtag klubtag, Palya palya, int datum, int ora) {
-            Klubtag = klubtag;
-            Palya = palya;
-            Datum = datum;
-            Ora = ora;
+            this.Klubtag = klubtag;
+            this.Palya = palya;
+            this.Datum = datum;
+            this.Ora = ora;
         }
     }
 }

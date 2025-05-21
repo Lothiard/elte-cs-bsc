@@ -1,18 +1,30 @@
 namespace Nagybead {
     public class Teniszklub {
-        public List<Palya> Palyak { get; } = new();
-        public List<Klubtag> Klubtagok { get; } = new();
+        public List<Palya> Palyak { get; } 
+        public List<Klubtag> Klubtagok { get; } 
+
+        public Teniszklub() {
+            Palyak = new List<Palya>();
+            Klubtagok = new List<Klubtag>();
+        }
 
         public void UjPalya(int sorszam, IPalyaTipus tipus, bool fedett) {
-            if (Palyak.Any(p => p.Sorszam == sorszam))
-                throw new Exception("Már van ilyen sorszámú pálya.");
-            Palyak.Add(new Palya(sorszam, fedett, tipus));
+            foreach(Palya p in Palyak) {
+                if (p.Sorszam == sorszam) {
+                    throw new Exception("Már van ilyen sorszámú pálya.");
+                }
+            }
+            Palya ujPalya = new Palya(sorszam, fedett, tipus);
+            Palyak.Add(ujPalya);
         }
 
         public void TorolPalya(int sorszam) {
-            var p = Palyak.FirstOrDefault(x => x.Sorszam == sorszam);
-            if (p == null) throw new Exception("Nincs ilyen pálya.");
-            Palyak.Remove(p);
+            foreach (Palya p in Palyak) {
+                if (p.Sorszam == sorszam) {
+                    Palyak.Remove(p);
+                }
+            }
+            throw new Exception("Nincs ilyen pálya.");
         }
 
         public void UjKlubtag(string nev, Kedvezmeny kedvezmeny) {
@@ -20,20 +32,35 @@ namespace Nagybead {
         }
 
         public List<Palya> KeressSzabadPalyakat(int datum, int ora, IPalyaTipus tipus) {
-            return Palyak.Where(p => p.PalyaTipus == tipus && p.Elerheto(datum, ora)).ToList();
+            List<Palya> result = new List<Palya>();
+            foreach (Palya p in Palyak) {
+                if (p.PalyaTipus == tipus && p.Elerheto(datum, ora)) {
+                    result.Add(p);
+                }
+            }
+            return result;
         }
 
         public List<(int datum, int ora)> FoglalasLekerdezes(Klubtag klubtag, int datum) {
-            return klubtag.Foglalasok
-                .Where(f => f.Datum == datum)
-                .Select(f => (f.Datum, f.Ora))
-                .ToList();
+            List<(int datum, int ora)> result = new List<(int datum, int ora)>();
+            foreach (Foglalas f in klubtag.Foglalasok) {
+                if (f.Datum == datum) {
+                    result.Add((f.Datum, f.Ora));
+                }
+            }
+            return result;
         }
 
         public int NapiKoltseg(Klubtag klubtag, int datum) {
-            return klubtag.Foglalasok
-                .Where(f => f.Datum == datum)
-                .Sum(f => f.Palya.SzamolDij(klubtag));
+            int result = 0;
+            foreach (Palya p in Palyak) {
+                foreach (Foglalas f in p.Foglalasok) {
+                    if (f.Datum == datum && f.Klubtag == klubtag) {
+                        result += p.SzamolDij(klubtag);
+                    }
+                }
+            }
+            return result;
         }
 
         public int BevetelIdoszakra(int kezdet, int veg) {
