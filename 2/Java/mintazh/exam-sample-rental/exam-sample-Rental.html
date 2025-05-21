@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Basic Java sample exam</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style type="text/css">
+  pre > code
+  {
+      all: unset;
+  }
+
+  code
+  {
+      color: blue;
+      font-size: 14px;
+      white-space: pre;
+      border-radius: 3px;
+      font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+      padding: 2px 4px;
+
+      display: inline-block;
+
+      background-image: radial-gradient(ellipse farthest-corner at 50% 50%, #e4e4e4, #ffffff);
+  }
+
+
+  pre
+  {
+    	margin-left: 3em;
+    	padding: 0.5em;
+
+    	border: 0.1em green solid !important;
+
+      display: inline-block;
+  }
+
+  table {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 24px;
+      border-spacing: 0;
+      border-bottom: 2px solid black;
+      border-top: 2px solid black;
+      width: auto !important;
+  }
+
+  table th {
+      padding: 3px 10px;
+      background-color: white;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid black;
+  }
+
+  table td {
+      padding: 3px 10px;
+      border-top: none;
+      border-left: none;
+      border-bottom: none;
+      border-right: none;
+  }
+
+
+  h1 {
+      counter-reset: h2counter;
+      font-family: Lobster, Fallback, sans-serif;
+  }
+  h2 {
+      font-family: Alegreya, Fallback, sans-serif;
+      counter-increment: h2counter;
+      counter-reset: h3counter;
+  }
+  h2:before {
+      content: counter(h2counter) ".\0000a0\0000a0";
+  }
+  h3 {
+      counter-increment: h3counter;
+      font-family: Alegreya, Fallback, sans-serif;
+  }
+  h3:before {
+      content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+  }
+
+
+  nav#TOC:before {
+      content: "Table of contents";
+      background: lightgreen;
+      font-family: Fjalla One, Fallback, sans-serif;
+      padding: 0.2em;
+  }
+
+  nav#TOC {
+      float: right;
+      clear: both;
+      bottom: 0;
+      background-color:#FFF;
+      overflow: auto;
+      border: 1px solid green;
+
+      font-family: Alegreya, Fallback, sans-serif;
+  }
+
+  tr:nth-child(2n) {
+      background: #F0F0F0;
+  }
+  </style>
+
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Basic Java sample exam</h1>
+</header>
+<h2 id="testing">Testing</h2>
+<p>As usual, you’ll find structural JUnit 5 testers and a test suite
+bundled with the exercise. Here, functional testers are also given: one
+for <code>Car</code> and three for <code>CarRental</code>.</p>
+<p>Create your code based on them; each section of the exercise is not
+considered complete until all related tests go fully green.</p>
+<h1 id="synopsis">Synopsis</h1>
+<p>In this exercise we will implement a car rental service.</p>
+<p>You are provided with the four JUnit 5 test cases. You will have to
+appropriately place them folders. You are also give a sample input file
+(<code>cars.txt</code>).</p>
+<h1 id="detailed-description">Detailed description</h1>
+<h2 id="rental.car"><code>rental.Car</code></h2>
+<p>Create the <code>Car</code> class with the following details.</p>
+<ul>
+<li><p>Its constructor initializes all the fields.</p></li>
+<li><p>The <code>isValidLicensePlate</code> method returns whether the
+format of the license plate is acceptable.</p>
+<ul>
+<li>It is valid if it contains three upper case letters followed by a
+space followed by three digits.</li>
+<li><em>Hint</em>: use the <a
+href="https://docs.oracle.com/en/java/javase/21/docs/api/java/lang/Character.html#isUpperCase-char-"><code>isUpperCase()</code></a>
+and <a
+href="https://docs.oracle.com/en/java/javase/21/docs/api/java/lang/Character.html#isDigit-char-"><code>isDigit()</code></a>
+methods of class <code>Character</code>.</li>
+</ul></li>
+<li><p>The <code>make</code> method first validates its arguments, then
+creates a <code>Car</code>.</p>
+<ul>
+<li>Its <code>brand</code> must be at least two letters long and may
+only contain letters and spaces.</li>
+<li>It uses <code>isValidLicensePlate</code> to check the plate’s
+validity.</li>
+<li>The price must be nonnegative and it must not exceed the
+<code>MAX_PRICE</code>.</li>
+<li>If any of the conditions are invalid, the method returns
+<code>null</code>.
+<ul>
+<li>Remember that using <code>null</code> is considered very bad
+practice in more realistic programs.</li>
+</ul></li>
+</ul></li>
+<li><p>The <code>decreasePrice</code> method decreases the car’s price
+by <code>10</code> except in two cases.</p>
+<ul>
+<li>If the car is cheaper than that, it leaves the price alone.</li>
+<li>If the car costs <code>MAX_PRICE</code>, it leaves the price
+alone.</li>
+</ul></li>
+<li><p>The <code>isCheaperThan</code> method works as expected.</p></li>
+<li><p>Create the textual representation of the cars according to
+<code>CarTest</code>.</p>
+<ul>
+<li><em>Hint</em>: use
+<code>"format text goes here".</code>formatted<code>(...)</code>. See <a
+href="fmtstring">details about the format string</a>.
+<ul>
+<li>For the numbers, use a width of 5 and a precision of 1.</li>
+</ul></li>
+<li>.</li>
+<li>Pl. <code>Volvo (JSD 856) 500,0 EUR</code>,
+<code>BMW (ABC 123)  40,0 EUR</code>,
+<code>Alfa Romeo (DEF 234)   9,0 EUR</code>.</li>
+</ul></li>
+</ul>
+<h2 id="carrental-part-1"><code>CarRental</code>, part 1</h2>
+<p>Create the <code>rental.CarRental</code> class.</p>
+<ul>
+<li>The constructor loads cars from the file with the given name.
+<ul>
+<li>Each line of the input file contains data about a car in the format
+<code>brand:plate,price</code>.
+<ul>
+<li>As an example, see <code>cars.txt</code>. In it, the first three
+lines and the last one are valid.</li>
+<li>If a line does not match this format, ignore it and continue with
+the next line.</li>
+</ul></li>
+<li>If the file does not exist or isn’t accessible, leave the
+<code>cars</code> list empty.
+<ul>
+<li>Don’t let any exception escape from the constructor.</li>
+</ul></li>
+<li><em>Hint</em>: You may use <a
+href="https://docs.oracle.com/en/java/javase/21/docs/api/java/lang/Double.html#parseDouble-java.lang.String-"><code>Double.parseDouble()</code></a>
+to convert the price. If it’s not a real number, it throws a <a
+href="https://docs.oracle.com/en/java/javase/21/docs/api/java/lang/NumberFormatException.html"><code>java.lang.NumberFormatException</code></a>.</li>
+</ul></li>
+<li>The textual representation of the rental is a long text with each
+car’s own representation on a single line.
+<ul>
+<li>They will be in the order as they were read from the file.</li>
+<li>Let the last car also be followed by a newline.</li>
+</ul></li>
+</ul>
+<h2 id="carrental-part-2"><code>CarRental</code>, part 2</h2>
+<p>Define the following in the class:</p>
+<ul>
+<li>The <code>insertionSort</code> method reorders <code>cars</code>
+according to their rental price in increasing order.
+<ul>
+<li>After the sorting is done, the cheapest car will be at the front of
+the list, the most expensive at the back.</li>
+<li>Implementation details. We will do a “round” for each car in
+<code>cars</code> except for the first one. Let’s call it
+<code>pivot</code>.
+<ul>
+<li>Moving backwards from <code>pivot</code> in the list, we check
+whether <code>pivot</code> is cheaper than the current car.
+<ul>
+<li>If it is, we’ve found <code>pivot</code>’s new place. Let’s put it
+there and start a new round.
+<ul>
+<li>We also do this if we’ve reached the beginning of the list.</li>
+</ul></li>
+<li>If it isn’t, we move the current car up one index in the list and we
+continue our search.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>The <code>weightedAverage</code> method computes the following.
+<ul>
+<li>It returns <code>-1.0</code> if there are no <code>cars</code>.</li>
+<li>Otherwise, let’s multiply each car’s <code>price</code> with its
+weight which is its position in the list (starting with <code>1</code>).
+Return the sum of these divided by the sum of the weights.</li>
+</ul></li>
+</ul>
+<h2 id="carrental-part-3"><code>CarRental</code>, part 3</h2>
+<p>Define the following in the class:</p>
+<ul>
+<li>The <code>rentCheapest</code> method works as follows.
+<ul>
+<li>If there are no <code>cars</code>, return <code>null</code>.</li>
+<li>Otherwise, return the cheapest car by <code>insertionSort</code>.
+<ul>
+<li>Also remove this car from <code>cars</code>.</li>
+</ul></li>
+</ul></li>
+<li>The <code>sale</code> method randomly decides for all cars to
+decrease its cost or not.
+<ul>
+<li>Return all cars in a brand new list.</li>
+<li><em>Hint</em>: for the random decision, use <a
+href="https://docs.oracle.com/en/java/javase/21/docs/api/java/util/Random.html"><code>java.util.Random</code></a>.</li>
+</ul></li>
+</ul>
+</body>
+</html>
