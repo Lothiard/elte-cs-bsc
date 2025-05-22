@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import rental.Car;
 import rental.CarRental;
 
-public class CarRentalTest3 {
+public class CarRental3Test {
 	@BeforeAll
 	public static void set() {
 		CarRentalTestSuite.setHuLocale();

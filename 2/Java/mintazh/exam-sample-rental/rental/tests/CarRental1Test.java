@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import rental.CarRental;
 
-public class CarRentalTest1 {
+public class CarRental1Test {
 	@BeforeAll
 	public static void set() {
 		CarRentalTestSuite.setHuLocale();
@@ -39,8 +39,8 @@ public class CarRentalTest1 {
     public void test04() {
         CarRental cr = new CarRental("cars.txt");
         String expected = """
-			BMW (ABC 123)  50,0 EUR
-			Alfa Romeo (DEF 234)   9,0 EUR
+			BMW (ABC 123) 50,0 EUR
+			Alfa Romeo (DEF 234) 9,0 EUR
 			Toyota (GHI 456) 500,0 EUR
 			Volvo (JSD 856) 500,0 EUR
         	""";
