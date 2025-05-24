@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teniszklub", "Teniszklub\Teniszklub.csproj", "{F253B2EE-C0E1-426D-B362-6B41377976FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeniszklubTest", "TeniszklubTest\TeniszklubTest.csproj", "{2B1C8486-DE9A-4328-9095-DCC6021C5F70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F253B2EE-C0E1-426D-B362-6B41377976FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F253B2EE-C0E1-426D-B362-6B41377976FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F253B2EE-C0E1-426D-B362-6B41377976FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B1C8486-DE9A-4328-9095-DCC6021C5F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B1C8486-DE9A-4328-9095-DCC6021C5F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B1C8486-DE9A-4328-9095-DCC6021C5F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B1C8486-DE9A-4328-9095-DCC6021C5F70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
