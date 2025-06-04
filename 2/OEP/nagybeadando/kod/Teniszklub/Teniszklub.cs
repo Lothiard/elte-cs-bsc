@@ -22,6 +22,7 @@ namespace Nagybead {
             foreach (Palya p in Palyak) {
                 if (p.Sorszam == sorszam) {
                     Palyak.Remove(p);
+                    return;
                 }
             }
             throw new Exception("Nincs ilyen pálya.");

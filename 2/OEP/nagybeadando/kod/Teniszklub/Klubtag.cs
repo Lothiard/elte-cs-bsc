@@ -30,11 +30,12 @@ namespace Nagybead {
         public void Visszavon(Foglalas f) {
             foreach (Foglalas foglalas in Foglalasok) {
                 if (foglalas == f) {
-                    throw new Exception("Foglalás nem található.");
+                    Foglalasok.Remove(f);
+                    f.Palya.Foglalasok.Remove(f);
+                    return;
                 }
             }
-            Foglalasok.Remove(f);
-            f.Palya.Foglalasok.Remove(f);
+            throw new Exception("Foglalás nem található.");
         }
     }
 }

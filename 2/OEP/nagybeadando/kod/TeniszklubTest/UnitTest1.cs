@@ -90,5 +90,46 @@ namespace TeniszklubTest {
             List<(int, int)> result = klub!.FoglalasLekerdezes(anna, 20240520);
             Assert.AreEqual(1, result.Count);
         }
+
+        [TestMethod]
+        public void Test_Visszavon() {
+            Klubtag anna = klub!.Klubtagok[0];
+            Foglalas foglalas = anna.Foglalasok[0];
+            Palya palya = foglalas.Palya;
+
+            anna.Visszavon(foglalas);
+
+            Assert.IsFalse(anna.Foglalasok.Contains(foglalas));
+            Assert.IsFalse(palya.Foglalasok.Contains(foglalas));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void Test_Visszavon_Exception() {
+            Klubtag anna = klub!.Klubtagok[0];
+            Palya palya = klub!.Palyak[0];
+            Foglalas f = new Foglalas(anna, palya, 20250101, 12);
+
+            anna.Visszavon(f);
+        }
+
+        [TestMethod]
+        public void Test_TorolPalya() {
+            int sorszam = 3;
+            int beforeCount = klub!.Palyak.Count;
+
+            klub!.TorolPalya(sorszam);
+
+            Assert.AreEqual(beforeCount - 1, klub.Palyak.Count);
+            Assert.IsFalse(klub.Palyak.Any(p => p.Sorszam == sorszam));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void Test_TorolPalya_Exception() {
+            int sorszam = 999; // nem letezo
+
+            klub!.TorolPalya(sorszam);
+        }
     }
 }
