@@ -1,0 +1,27 @@
+2. óra szamrend gyak.
+
+->canvas.elte.hu
+
+hw
+mail jelenléti... 
+levelírás: maci@inf.elte.hu 
+tárgy: 22 csop. szamrend 2 óra neptunkódod
+
+bootolás
+mbr boot
+https://hu.wikipedia.org/wiki/Master_Boot_Record
+uefi boot
+uefi wiki
+https://hu.wikipedia.org/wiki/Boot_loader
+2. gyak
+ssh user_nev@szamrend.inf.elte.hu
+(putty, ssh kliens)
+másolás kliens és szamrend szerver között: winscp v. scp kliens
+szerveren: mkdir szamrend
+saját weboldal:
+.htaccess a ~/public/public_html mappában
+sajét weboldal elérése:
+https://people.inf.elte.hu/user_nev
+------------
+
+

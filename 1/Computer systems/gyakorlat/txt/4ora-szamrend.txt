@@ -1,0 +1,71 @@
+4. óra
+jelentkezz be szamrendre (ssh) és canvas.elte.hu 
+.....3Unix.pdf 5sh.pdf, 6sh.pdf
+
+******gyakorlas:
+szamrend.inf.elte.hu (ssh, putty, fájlokat másolok a helyi és a szamrend között:
+winscp, scp parancs (!!!!filezilla!!!!)
+https://iig.elte.hu/dstore/document/3513/AFS_elerese_MAC_OSX_FileZilla.pdf
+.......
+
+4Unix.pdf
+ps:
+ps axf v. ps -aux
+
+jobs, fg, bg, 
+kill, time
+átirányítás:
+
+0- stdin bill.
+1- stdout kep.
+2- stderr kep.
+
+pl. cat <enter>
+
+******
+változók, 
+a=1; echo $a
+a=a+1; echo $a
+?
+értékadás ( let, `` , $(), expr )
+...
+reguláris kif.-ek
+google ker: ELTE IK reguláris kif
+
+tr es a cut parancsok
+.........
+
+minta grep ^d
+who|grep user
+
+https://people.inf.elte.hu/csa/regkif.htm
+feladat:
+hanyan leptunk be szamrendre!?
+.....
+feladat: olvassunk be egy szamot fajlbol, adjunk hozza 1-et s irjuk vissza!
+pl. szam.txt
+echo 3 >szam.txt
+cat szam.txt
+...
+
+****************************************folyt. 24.10.09. 12h
+
+hazifel: 
+udv, script keszitese
+..............
+--- megb.********************
+fel.2:
+udv.sh
+napszak:
+6-9 jo reggelt
+10-17 jo napot
+18-21 jo estet
+22-05 jo ejt
+.....
+6sh: 2. elagazasok: test, man test
+------
+******** fel. 3.
+rendez.sh
+#fel: olvassunk be szavakat (read) míg a vege szót nem írjuk!
+#irassuk ki rendezve (sort)
+.......

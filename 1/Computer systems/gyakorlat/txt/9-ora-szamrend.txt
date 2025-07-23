@@ -1,0 +1,51 @@
+9. ora
+canvas.elte.hu
+-------------
+hasznos: https://www.tutorialspoint.com/index.htm
+--------------
+...
+Get-Command -Verb get
+
+
+feladatok:
+HF
+1. mentsd el a help-et egy pl. 1help.txt-be
+- vedd ki az ures sorokat
+- szamold meg a nagybetus sorokat, a kisbetuseket is, hany szazalek az
+osszesnek a nagy ill. kisbetus sorok
+(cat .\1help.txt|Select-String -pattern '^$' -Notmatch).count
+(cat .\1help.txt|Select-String -pattern '^$').count
+
+(cat .\1help.txt).count
+
+https://devblogs.microsoft.com/scripting/use-powershell-and-conditional-formatting-to-format-numbers/
+"{0:P}%" -f (42/110)
+v.
+"{0:N2}%" -f (42/110*100)
+
+
+MOST
+
+2. parameterkent megadott mappaban megszamolni a fajlokat es mappakat
+ha nincs param. akkor az akt. (.)
+pl. fajlok elerese-  ea-10_ps.pdf, 18 o.ls
+
+https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-wide?view=powershell-7.4
+Linux ls parancs: ls | Format-Wide -Column 9
+
+volt*********3. udv script
+switch ut. ea-10_ps.pdf, 21.o.
+
+volt*********4. olvass be szavakat bill-rol, mig a vege szot nem irjuk.
+irasd ki rendezve,
+irasd ki az a betuvel kezdodoeket.
+5. keszits tablazatot, 1-tol 1-vel 10-ig
+x	x*2	x*3
+3.b 0.1-1 int-ban 5 tiz.jegyre
+https://ss64.com/ps/syntax-f-operator.html
+https://stackoverflow.com/questions/9904352/how-to-create-printf-effect-in-powershell
+
+
+5. adott mappa fajlok osszmerete
+
+12ps.pdf -ből

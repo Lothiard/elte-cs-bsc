@@ -1,0 +1,47 @@
+10. ora
+canvas.elte.hu
+-------------
+hasznos: https://www.tutorialspoint.com/index.htm
+--------------
+...
+Get-Command -Verb get
+
+
+Feladatok:
+
+
+1f. udv script
+switch ut. ea-10_ps.pdf, 21.o.
+
+2f. olvass be szavakat bill-rol, mig a vege szot nem irjuk.
+irasd ki rendezve,
+irasd ki az a betuvel kezdodoeket.
+
+regi---3f. keszits tablazatot, 1-tol 1-vel 10-ig
+x	x*2	x*3
+3.b 0.1-1 int-ban 5 tiz.jegyre
+https://ss64.com/ps/syntax-f-operator.html
+https://stackoverflow.com/questions/9904352/how-to-create-printf-effect-in-powershell
+
+
+4f. adott mappa fajlok osszmerete
+
+12ps.pdf -ből
+
+5f.
+szam.txt-ben egy szam, adj hozza 1-et es ird vissza!
+.................
+
+https://practicalpowershell.com/powershelltemplates/
+
+https://practicalpowershell.com/wp-content/uploads/2021/07/PowerShellQuickReference-PowerShell7.0-v1.04.pdf
+.......
+Powershell 7.3
+https://learn.microsoft.com/hu-hu/powershell/scripting/learn/ps101/00-introduction?view=powershell-7.3
+..........
+Virtual Academy
+https://learn.microsoft.com/hu-hu/training/
+
+https://learn.microsoft.com/hu-hu/training/student-hub/
+
+

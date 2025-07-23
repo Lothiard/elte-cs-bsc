@@ -1,0 +1,78 @@
+8. ora
+Linux boot belepes email kuldes @inf.elte.hu mail cimrol...
+
+login szamrend-be s canvas.elte.hu
+-------------
+https://www.tutorialspoint.com/powershell/powershell_overview.htm
+--------------
+https://www.optimer.hu/leghasznosabb-windows-10-billentyuparancsok-es-programok/
+
+ALAPOK:
+https://irh.inf.unideb.hu/~kocsisg/wp-content/uploads/2015/02/PowerShell_alapok_2.pdf
+
+https://hu.wikipedia.org/wiki/K%C3%B6rnyezeti_v%C3%A1ltoz%C3%B3k#Programoz%C3%A1si_nyelvek_%C3%A9s_a_k%C3%B6rnyezeti_v%C3%A1ltoz%C3%B3k
+
+
+
+
+.................powershell
+10PS.pdf
+version: $PSVERSIONTABLE
+env (körny. vált-ók)
+https://learn.microsoft.com/hu-hu/powershell/module/microsoft.powershell.utility/get-variable?view=powershell-5.1&WT.mc_id=ps-gethelp
+<TAB> bill.!!!
+
+$PROFILE
+
+
+
+tankönyv, saját használatra:
+http://www.powershellkonyv.hu/
+(A könyv ismerteti a PowerShell 2.0, 3.0 és 4.0, 5.x, 7.x verziókat is)
+
+
+https://mek.oszk.hu/10400/10402/
+....
+(executionpolicy), Adminként:
+net user pl.
+https://superuser.com/questions/106360/how-to-enable-execution-of-powershell-scripts
+test: hello.ps1 script : echo hello vilag!
+...
+grafikus powershell ise
+get-variable
+$
+history -h, history file...
+get-alias - gal
+...
+get-command kérdés (hány) db? count példa
+Objektumok
+get-date|get-member
+pl. 365-(get-date).DayOfYear
+.....
+1. udv.ps1 mint udv.sh
+először bekérni órát és jó ....
+pl. $ora=Read-Host "ora="; $ora
+
+if:
+https://www.pdq.com/blog/how-to-use-if-statements-in-powershell/
+
+majd dátumból "kivenni" órát s futtatni, lásd dayofyear
+help:
+https://stackoverflow.com/questions/53226134/powershell-switch-and-regex
+
+https://www.pdq.com/blog/how-to-use-regular-expression-in-powershell/
+(Here's another example of the Select-String cmdlet in use. In this example, we have a text file containing random employee data, including the name, username, and employee ID of several employees. We want to extract the usernames contained in the file, but the file is not in a very functional format. We can use the Select-String command to retrieve only the data we’re looking for and export it to a CSV file.
+)
+
+https://learn.microsoft.com/hu-hu/powershell/module/microsoft.powershell.core/about/about_switch?view=powershell-7.3
+
+https://powershellexplained.com/2017-07-31-Powershell-regex-regular-expression/
+
+.........
+
+https://learn.microsoft.com/hu-hu/powershell/
+
+...
+további példák canvas, gyak.: 11PS.pdf
+11PS.pdf: 
+
