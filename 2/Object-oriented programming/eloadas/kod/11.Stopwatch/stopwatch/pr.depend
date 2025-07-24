@@ -1,0 +1,81 @@
+# depslib dependency file v1.0
+1525973318 source:c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\lcdnumber.cpp
+	"lcdnumber.h"
+
+1525973306 c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\lcdnumber.h
+	<iostream>
+	<string>
+	<sstream>
+
+1557414100 source:c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\main.cpp
+	<iostream>
+	"stopwatch.h"
+
+1557558467 c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\stopwatch.h
+	<thread>
+	<atomic>
+	"lcdnumber.h"
+	"event.h"
+	"timer.h"
+	"threadsafequeue.h"
+
+1555603226 c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\event.h
+
+1557558887 c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\timer.h
+	<chrono>
+	<thread>
+	"event.h"
+
+1557406472 c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\threadsafequeue.h
+	<queue>
+	<mutex>
+	<condition_variable>
+
+1577093057 source:c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\timer.cpp
+	"timer.h"
+	"stopwatch.h"
+	<condition_variable>
+	<mutex>
+
+1557743810 source:c:\users\tibi\documents\oktat\oep\eloadasok\programok\12.eseménykezelés\stopwatch\stopwatch.cpp
+
+1525976918 source:c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\lcdnumber.cpp
+	"lcdnumber.h"
+
+1525976906 c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\lcdnumber.h
+	<iostream>
+	<string>
+	<sstream>
+
+1557417700 source:c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\main.cpp
+	<iostream>
+	"stopwatch.h"
+
+1605709051 c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\stopwatch.h
+	<thread>
+	<atomic>
+	"lcdnumber.h"
+	"event.h"
+	"timer.h"
+	"threadsafequeue.h"
+
+1555606826 c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\event.h
+
+1557562487 c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\timer.h
+	<chrono>
+	<thread>
+	"event.h"
+
+1557410072 c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\threadsafequeue.h
+	<queue>
+	<mutex>
+	<condition_variable>
+
+1557743810 source:c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\stopwatch.cpp
+
+1577096657 source:c:\users\tibi\documents\oktat\oep\elõadasok\programok\12.eseménykezelés\stopwatch\timer.cpp
+	"timer.h"
+	"stopwatch.h"
+	<condition_variable>
+	<mutex>
+
