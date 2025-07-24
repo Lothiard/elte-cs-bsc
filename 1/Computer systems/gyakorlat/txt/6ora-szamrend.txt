@@ -1,0 +1,20 @@
+6.ora nov.6
+
+jövő héten zh: shell script, 2 fel. kb 45 perc
+....................
+8sh.pdf
+sed, awk
+awk magyarul- hasznos egysoros pro-ok
+https://hup.hu/old/gawk/tobb/gawk_4.html
+
+pl. 5 db 5-os lottoszam!
+**************mindig ua.!
+https://stackoverflow.com/questions/4048378/random-numbers-generation-with-awk-in-bash-shell
+
+https://www.gnu.org/software/gawk/manual/html_node/Numeric-Functions.html
+
+fel.: finger, majd rendezni név szerint, de 1. sor kimarad!!!
+
+...
+jövő héten 2zh: shell script, 2 feladat kb 45 perc!
+

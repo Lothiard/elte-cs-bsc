@@ -1,0 +1,39 @@
+3. óra
+1. fel.: Teams-en bejelentkezni, mint mentor oran!
+
+jelentkezz be szamrendre (ssh) és canvas.elte.hu 
+
+******************public/public_html kesobb!!!
+
+dos linux parancsok
+
+http://www.yolinux.com/TUTORIALS/unix_for_dos_users.html
+... unix (linux) architecture-of-unix-operating-system
+unix op. r. https://www.inf.u-szeged.hu/~kato/teaching/unix/unix1.html
+https://www.notesjam.com/2017/10/architecture-of-unix-operating-system.html
+
+cmd inditasa: cmd parancs
+környezeti változók set parancs
+feladatok
+5d
+5e. dos-ban.
+5f hard- soft link
+5g.
+...parancsok: p1;p2 v. p1|p2 v. p1&&p2
+man parancs
+pl. who|sort
+3Unix.pdf
+tömörítés: zip, tar+gzip (linux)
+tar cvzf 24251.tgz 204251/
+editorok, ed, vi, nano (pico), mcedit (mc)
+
+--------------------------------------------
+1. bead. hatarido: 24.11.05.
+
+6.-ora. -----1. zh 24.10.23. ~50 perc, Linux bash shell script 2 fel.
+
+2. bead. hatarido: 24.11.26.
+
+~10. ora ----2. zh 24.12.04. ~50 perc, Powershell script 2 fel.
+..................................................
+

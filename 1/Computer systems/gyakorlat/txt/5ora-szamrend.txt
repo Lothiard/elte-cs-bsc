@@ -1,0 +1,48 @@
+5.ora 
+-------------
+be szamrend, canvas-ba!!
+............................
+.....5sh, 6sh, 7sh.pdf
+ez volt: 5sh.pdf: 2 c.): parameterek: $0 $1 $2 $# $?
+
+4. ora feladatok: rendez, ill. udv.sh---> case ut
+google search: "bash case example"
+
+0[6-8]
+
+09|1[0-7]
+
+1[89]|2[01]
+
+2[23]|0[0-6]
+
+---------------------------------
+bash műveletek: osztás (egész!)
+bc parancs, man bc serach: pi !
+
+------------------------
+Fel.:
+
+7sh.pdf
+feladat:
+1. 7. a) -a, -d kapcsolo paraméter
+7a.sh -a Bence 06701234567
+       $1 $2   $3
+"$2" nézem : -a "Kis Bence" 0611111111
+echo "$2",$3 >>..
+
+telefon.txt - ben:
+Nev,telszam
+...
+7a.sh -d Bence
+(grep)
+
+7a.sh -l 
+ 1 param.: -l , akkor lista!
+..................
+
+kov. fel.
+a parameterben megadott mappaban szamoljuk a file-okat es mappakat!
+Ellenorizzuk, van-e parameter!!! ha nincs jelezzuk: pl hasznalat: nev mappa_neve
+.....
+(kesobb, ha nincs akkor legyen az aktulais mappa (konyvtar)!

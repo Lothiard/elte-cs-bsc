@@ -1,0 +1,91 @@
+1-2. ora, 22 csop. 2.124 mslab déli ép.
+.........................................
+1.ora
+
+bemutatkozas.......
+
+neptun.elte.hu
+canvas.elte.hu neptun kód
+https://canvas.elte.hu/
+
+https://canvas.elte.hu/courses/38585 - előadások!!!
+
+Csop. canvas köv. órára lesz!
+
+MS Teams
+------------
+...
+inf-es mail cím: usernev@inf.elte.hu
+mail.inf.elte.hu email cím
+...............vagy:
+portal.office.com
+inf.elte.hu vagy 
+
+student.elte.hu (ELTE, caesar, IIG azonosító)
+ssh login: ssh usernev@caesar.elte.hu - ehhez kell engedély
+weboldalon, user.web.elte.hu
+IIG (Informatikai Igazgatóság) infok,stb.: https://iig.elte.hu/
+IIG jelszóváltás: iig.elte.hu, ugykezelo, neptun kóddal is lehet!
+operator@elte.hu
+----------------------------------------------------...
+INF-es jelszóváltás, géptermek: w10 vagy.
+https://pandora.inf.elte.hu/passchg - neptun kód és jelszóval lehet.
+---------
+Laborok: dual boot: w10 v. Debian Linux inf-es acc-al.
+............
+szamrend.inf.elte.hu (Debian Linux, belépés ssh-val v. win: putty)
+
+operatorok@inf.elte.hu
+
+AFS (home mappa (~) ), NFS (~/public/public_html/szamrend)
+szamrend.inf.elte.hu login ()
+
+Saját weboldal:
+.htaccess kell, ebbe:
+Options +Indexes
+...
+
+https://people.inf.elte.hu/usernev (index.html)
+
+PC szerelése google-youtube
+https://www.google.com/search?q=youtube+pc+szerel%C3%A9s&rlz=1C1GCEU_huHU918HU918&oq=youtube+pc+szerel%C3%A9s&aqs=chrome..69i57j33i160l3.10246j0j7&sourceid=chrome&ie=UTF-8
+
+1.
+https://www.youtube.com/watch?v=1SS8X1BZvzk
+
+2.
+https://www.youtube.com/watch?v=muoR_qxmp-w
+
+
+------------------------2. óra
+neptun.elte.hu
+canvas.elte.hu
+ssh login szamrend.inf.elte.hu ra (ssh v. putty)
+...
+---------------------szgep felepitese
+https://slideplayer.hu/slide/1985647/
+video
+https://www.youtube.com/watch?v=L6lI-IAtHDk
+
+UEFI, MBR bootolas
+
+MBR boot: BIOS LEGACY mode
+ master boot record
+DOS
+particiok, fo part-boot 
+https://hu.wikipedia.org/wiki/Master_Boot_Record
+https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface
+....
+
+UEFI mode, diskpart (w10) fdisk (linux)
+Laborok: W10 es Debian Linux 10
+
+Multiboot pl. grub2
+http://ubuntu.hu/node/13573
+
+más: http://www.sze.hu/~benyo/edu/AR/2006Tavasz/slides/01_ch01_hun_v01.pdf
+
+dos unix compare
+http://www.yolinux.com/TUTORIALS/unix_for_dos_users.html
+
+kov oran: wsl w10 alatt<<<----
