@@ -1,0 +1,12 @@
+﻿using System.Collections.Generic;
+
+namespace ELTE.DocuStat.Model
+{
+    public interface IDocumentStatistics
+    {
+        string FileContent { get; }
+        IDictionary<string, int> DistinctWordCount { get; }
+
+        void Load();
+    }
+}
