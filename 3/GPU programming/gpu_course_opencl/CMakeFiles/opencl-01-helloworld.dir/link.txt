@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/opencl-01-helloworld.dir/src/main_01_helloworld.cpp.o -o opencl-01-helloworld  vcpkg_installed/x64-linux/debug/lib/libOpenCL.a -ldl 

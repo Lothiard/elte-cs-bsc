@@ -1,0 +1,23 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 1bac7bdcbca6e39c352656879989a2482af4a12fd5ea8604bdf4caa65c4eed97
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 8d6780339ddac8cc7bd143d23388b1988e8f4be4522a57c37df1dae57089e1ec
+Status: install ok installed
+
+Package: opencl
+Version: 2024.10.24
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: e29d579162dc22ea6f60c84d1e838e267b94b2f600f1c1b72006314f6ca957d4
+Description: OpenCL SDK
+Status: install ok installed
+

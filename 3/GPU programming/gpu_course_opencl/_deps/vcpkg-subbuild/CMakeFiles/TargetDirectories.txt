@@ -1,0 +1,3 @@
+/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate.dir
+/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/edit_cache.dir
+/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/rebuild_cache.dir
