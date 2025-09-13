@@ -46,3 +46,35 @@ TFH, $f, g in D{a}$ valamilyen $a in "int" (D_f inter D_g)$ pontban, es $g(a) !=
 $
   f / g in D{a} " es " (f / g)'(a) = (f'(a) dot g(a) - f(a) dot g'(a))/(g^2(a))
 $
+
+\ \
+- Milyen tetelt ismer ket fuggveny kompoziciojanak valamely pontbeli differencialhatosagarol es a derivaltjarol?
+
+TFH, $f, g in bb(R) -> bb(R), R_g subset D_f$ es egy $a in "int" D_g$ pontban $g in D{a}$, tovabba $f in D{g(a)}$. Ekkor $f circle.small g in D{a},$ es
+$
+  (f circle.small g)'(a) = f'(g(a)) dot g'(a)
+$
+
+\ \
+- Mi az exp, sin, cos fuggvenyek derivaltfuggvenye?
+
+  -- $exp'(x) = (e^x)' = e^x " " (x in bb(R))$
+
+  -- $sin'(x) = cos(x) " " (x in bb(R))$
+
+  -- $cos'(x) = sin(x) " " (x in bb(R))$
+
+\ \
+- Milyen tetelt ismer hatvanysor osszegfuggvenyenek differencialhatosagarol es a derivaltjarol?
+
+TFH, a $sum_(n = 0) alpha_n (x - a)^n " " (x in bb(R))$ hatvanysor R konvergenciasugara pozitiv, es legyen
+
+$
+  f(x) := sum^(+infinity)_(n = 0) alpha_n (x - a)^n "    " (x in K_R (a)).
+$
+
+Ekkor minden $x in K_R (a)$ pontban $f in D{x}$ es
+
+$
+  f(x) := sum^(+infinity)_(n = 1) n alpha_n (x - a)^(n - 1) "    " (forall x in K_R (a)).
+$
