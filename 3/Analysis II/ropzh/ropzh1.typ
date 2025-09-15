@@ -1,8 +1,8 @@
 - Mi a belso pont definicioja?
 
-Legyen $emptyset != A subset bb(R)$. Az a $a in A$ pont az $A$ halmaz belso pontja, ha
+Legyen $emptyset != A subset bb(R)$. Az $a in A$ pont az $A$ halmaz belso pontja, ha
 $
-  exists r > 0, #h(1cm) "hogy" K_r(a) = (a - r, a + r) subset A.
+  exists r > 0, #h(1cm) "hogy" K_r (a) = (a - r, a + r) subset A.
 $
 Jeloles: int $A := {a in A | "a belso pontja A-nak"}$.
 
@@ -58,11 +58,11 @@ $
 \ \
 - Mi az exp, sin, cos fuggvenyek derivaltfuggvenye?
 
-  -- $exp'(x) = (e^x)' = e^x " " (x in bb(R))$
+  - $exp'(x) = (e^x)' = e^x " " (x in bb(R))$
 
-  -- $sin'(x) = cos(x) " " (x in bb(R))$
+  - $sin'(x) = cos(x) " " (x in bb(R))$
 
-  -- $cos'(x) = sin(x) " " (x in bb(R))$
+  - $cos'(x) = -sin(x) " " (x in bb(R))$
 
 \ \
 - Milyen tetelt ismer hatvanysor osszegfuggvenyenek differencialhatosagarol es a derivaltjarol?
@@ -76,5 +76,5 @@ $
 Ekkor minden $x in K_R (a)$ pontban $f in D{x}$ es
 
 $
-  f(x) := sum^(+infinity)_(n = 1) n alpha_n (x - a)^(n - 1) "    " (forall x in K_R (a)).
+  f'(x) := sum^(+infinity)_(n = 1) n alpha_n (x - a)^(n - 1) "    " (forall x in K_R (a)).
 $
