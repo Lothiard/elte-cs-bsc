@@ -7,4 +7,5 @@ __kernel void vector_add(
     int i = get_global_id(0);
  
     // TODO
+    C[i] = A[i] + B[i];
 }
