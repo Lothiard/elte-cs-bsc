@@ -80,19 +80,100 @@ def degree_to_radian():
     degree = float(input("Enter degree: "))
     print(math.radians(degree))
 
+# 7
+def degree_adder():
+    total_degrees = 0
+    def add_and_print(degrees):
+        nonlocal total_degrees
+        total_degrees += degrees
+        radians = math.radians(total_degrees) % (2 * math.pi)
+        print(radians)
+    return add_and_print
+
+# 8
+def jaccard(A, B):
+    intersection = len(A & B)
+    union = len(A | B)
+    if union == 0:
+        return 1.0
+    return intersection / union
+
+# 9
+def fibonacci(n):
+    if n <= 0:
+        return []
+    fib = [0, 1]
+    while len(fib) < n:
+        fib.append(fib[-1] + fib[-2])
+    return fib[:n]
+
+# 10
+def matrix_elements():
+    matrix = [[1, 2, 3], [4, 5, 6,], [7, 8, 9]]
+    print([elem for row in matrix for elem in row])
 
 if __name__ == "__main__":
-    # print("#1")
-    # guess_the_number()
-    # print("#2")
-    # is_leap_year()
-    # print("#3")
-    # duplicates()
-    # print("#4")
-    # caesar()
-    # print("#5")
-    # get_extensions()
+    print("#1")
+    guess_the_number()
+
+    print("#2")
+    is_leap_year()
+
+    print("#3")
+    duplicates()
+
+    print("#4")
+    caesar()
+
+    print("#5")
+    get_extensions()
+
     print("#6")
     degree_to_radian()
+
+    print("#7")
+    adder = degree_adder()
+    adder(90)
+    adder(360)
+
+    print("#8")
+    a = {1, 2, 3}
+    b = {2, 3, 4}
+    print(jaccard(a, b))
+
+    print("#9")
+    n = int(input("Enter n: "))
+    print(f"Tthe first {n} fibonacci numbers are: {fibonacci(n)}")
+
+    print("#10")
+    matrix_elements()
+
+    print("#11")
+    quicksort = lambda lst: lst if len(lst) <= 1 else quicksort([x for x in lst[1:] if x < lst[0]]) + [lst[0]] + quicksort([x for x in lst[1:] if x >= lst[0]])
+    print(quicksort([3, 1, 4, 1, 5, 9, 2, 6]))
+
+    print("#12")
+    import sys
+    print(sys.getsizeof(range(10**10000)))
+    print(sys.getsizeof(list(range(10**7))))
+    print(sys.getsizeof(4))
+    print(sys.getsizeof(256))
+    print(sys.getsizeof(257))
+    print(sys.getsizeof(100000))
+    print(sys.getsizeof(2147483648))
+    print(sys.getsizeof(9999999999999))
+    print(sys.getsizeof(6.0))
+    print(sys.getsizeof(""))
+    print(sys.getsizeof("a"))
+    print(sys.getsizeof([]))
+    print(sys.getsizeof(["a"]))
+    print(sys.getsizeof([1, 2, 3]))
+    print(sys.getsizeof([1, 2, 3, 4]))
+    print(sys.getsizeof(set()))
+    print(sys.getsizeof(dict()))
+    print(sys.getsizeof(tuple()))
+    print(sys.getsizeof((1,)))
+    print(sys.getsizeof(True))
+    print(sys.getsizeof(None))
 
 
