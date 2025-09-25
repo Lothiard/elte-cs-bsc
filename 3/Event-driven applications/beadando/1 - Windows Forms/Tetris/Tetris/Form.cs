@@ -208,6 +208,41 @@ namespace Tetris
                 }
                 if (canMove) blockRow++;
             }
+            else if (e.KeyCode == Keys.Up) // Rotate on Up arrow
+            {
+                if (currentTetrominoIndex != 1) // O-block does not rotate
+                {
+                    var rotated = new (int row, int col)[currentBlock.Length];
+                    for (int i = 0; i < currentBlock.Length; i++)
+                    {
+                        // Rotate 90 degrees clockwise: (row, col) -> (col, -row)
+                        rotated[i] = (currentBlock[i].col, -currentBlock[i].row);
+                    }
+
+                    // Find min row and col to normalize to (0,0) origin
+                    int minRow = rotated.Min(x => x.row);
+                    int minCol = rotated.Min(x => x.col);
+                    for (int i = 0; i < rotated.Length; i++)
+                    {
+                        rotated[i] = (rotated[i].row - minRow, rotated[i].col - minCol);
+                    }
+
+                    // Check if the rotated block fits
+                    bool canRotate = true;
+                    foreach (var (dr, dc) in rotated)
+                    {
+                        int r = blockRow + dr;
+                        int c = blockCol + dc;
+                        if (r < 0 || r >= Rows || c < 0 || c >= Cols || board[r, c] != 0)
+                        {
+                            canRotate = false;
+                            break;
+                        }
+                    }
+                    if (canRotate)
+                        currentBlock = rotated;
+                }
+            }
             RefreshGrid();
         }
 
