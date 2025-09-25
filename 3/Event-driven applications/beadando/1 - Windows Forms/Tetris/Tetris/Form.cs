@@ -12,8 +12,30 @@ namespace Tetris
         private int fallingCol = 4; // Start in the middle
         private System.Windows.Forms.Timer timer;
 
-        // Tetromino definition: O-block (2x2)
-        private readonly (int row, int col)[] oBlock = new (int, int)[] { (0,0), (0,1), (1,0), (1,1) };
+        // Tetromino definitions (all 7 shapes, default orientation)
+        private readonly (int row, int col)[][] tetrominoes = new (int, int)[][]
+        {
+            // I
+            new (int, int)[] { (0,0), (0,1), (0,2), (0,3) },
+            // O
+            new (int, int)[] { (0,0), (0,1), (1,0), (1,1) },
+            // T
+            new (int, int)[] { (0,1), (1,0), (1,1), (1,2) },
+            // S
+            new (int, int)[] { (0,1), (0,2), (1,0), (1,1) },
+            // Z
+            new (int, int)[] { (0,0), (0,1), (1,1), (1,2) },
+            // J
+            new (int, int)[] { (0,0), (1,0), (1,1), (1,2) },
+            // L
+            new (int, int)[] { (0,2), (1,0), (1,1), (1,2) }
+        };
+        private readonly Color[] tetrominoColors = new Color[]
+        {
+            Color.Cyan, Color.Yellow, Color.Purple, Color.Green, Color.Red, Color.Blue, Color.Orange
+        };
+        private int currentTetrominoIndex;
+        private Random rng = new Random();
         private (int row, int col)[] currentBlock;
         private int blockRow, blockCol; // Top-left of the block
 
@@ -59,31 +81,33 @@ namespace Tetris
                 }
             }
 
-            foreach (var (dr, dc) in currentBlock)
+            // Draw the falling block at its actual position
+            if (currentBlock != null)
             {
-                int r = blockRow + dr;
-                int c = blockCol + dc;
-
-                if (r >= 0 && r < Rows && c >= 0 && c < Cols && board[r, c] == 0)
+                Color color = tetrominoColors[currentTetrominoIndex];
+                foreach (var (dr, dc) in currentBlock)
                 {
-                    gridButtons[r, c].BackColor = Color.Red;
+                    int r = blockRow + dr;
+                    int c = blockCol + dc;
+                    if (r >= 0 && r < Rows && c >= 0 && c < Cols && board[r, c] == 0)
+                    {
+                        gridButtons[r, c].BackColor = color;
+                    }
                 }
             }
-
         }
-
         private void StartFallingBlock()
         {
+            currentTetrominoIndex = rng.Next(tetrominoes.Length);
+            currentBlock = tetrominoes[currentTetrominoIndex];
             blockRow = 0;
-            blockCol = Cols / 2 - 1;
-            currentBlock = oBlock;
+            blockCol = Cols / 2 - 2; // Center for 4-wide blocks
             timer = new System.Windows.Forms.Timer();
             timer.Interval = 200; // ms
             timer.Tick += Timer_Tick;
             timer.Start();
             RefreshGrid();
         }
-
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Check if the block can move down
