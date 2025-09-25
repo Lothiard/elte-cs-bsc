@@ -12,6 +12,11 @@ namespace Tetris
         private int fallingCol = 4; // Start in the middle
         private System.Windows.Forms.Timer timer;
 
+        // Tetromino definition: O-block (2x2)
+        private readonly (int row, int col)[] oBlock = new (int, int)[] { (0,0), (0,1), (1,0), (1,1) };
+        private (int row, int col)[] currentBlock;
+        private int blockRow, blockCol; // Top-left of the block
+
         public Form()
         {
             InitializeComponent();
@@ -54,16 +59,24 @@ namespace Tetris
                 }
             }
 
-            if (fallingRow >= 0 && fallingRow < Rows && fallingCol >= 0 && fallingCol < Cols && board[fallingRow, fallingCol] == 0)
+            foreach (var (dr, dc) in currentBlock)
             {
-                gridButtons[fallingRow, fallingCol].BackColor = Color.Red;
+                int r = blockRow + dr;
+                int c = blockCol + dc;
+
+                if (r >= 0 && r < Rows && c >= 0 && c < Cols && board[r, c] == 0)
+                {
+                    gridButtons[r, c].BackColor = Color.Red;
+                }
             }
+
         }
 
         private void StartFallingBlock()
         {
-            fallingRow = 0;
-            fallingCol = Cols / 2;
+            blockRow = 0;
+            blockCol = Cols / 2 - 1;
+            currentBlock = oBlock;
             timer = new System.Windows.Forms.Timer();
             timer.Interval = 200; // ms
             timer.Tick += Timer_Tick;
@@ -74,26 +87,47 @@ namespace Tetris
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Check if the block can move down
-            if (fallingRow + 1 < Rows && board[fallingRow + 1, fallingCol] == 0)
+            bool canMove = true;
+            foreach (var (dr, dc) in currentBlock)
             {
-                fallingRow++;
+                int r = blockRow + dr + 1;
+                int c = blockCol + dc;
+                if (r >= Rows || board[r, c] != 0)
+                {
+                    canMove = false;
+                    break;
+                }
+            }
+
+            if (canMove)
+            {
+                blockRow++;
             }
             else
             {
                 // Land the block
-                board[fallingRow, fallingCol] = 1;
+                foreach (var (dr, dc) in currentBlock)
+                {
+                    int r = blockRow + dr;
+                    int c = blockCol + dc;
+                    board[r, c] = 1;
+                }
                 timer.Stop();
 
                 ClearFullLines();
 
                 // Check for game over (if spawn position is blocked)
-                if (board[0, Cols / 2] != 0)
+                foreach (var (dr, dc) in currentBlock)
                 {
-                    MessageBox.Show("Game Over!");
-                    return;
+                    int r = 0 + dr;
+                    int c = (Cols / 2 - 1) + dc;
+                    if (board[r, c] != 0)
+                    {
+                        MessageBox.Show("Game Over!");
+                        return;
+                    }
                 }
 
-                // Start a new falling block
                 StartFallingBlock();
                 return;
             }
@@ -104,19 +138,51 @@ namespace Tetris
         {
             if (timer == null || !timer.Enabled) return;
 
-            if (e.KeyCode == Keys.Left && fallingCol > 0 && board[fallingRow, fallingCol - 1] == 0)
+            if (e.KeyCode == Keys.Left)
             {
-                fallingCol--;
+                bool canMove = true;
+                foreach (var (dr, dc) in currentBlock)
+                {
+                    int r = blockRow + dr;
+                    int c = blockCol + dc - 1;
+                    if (c < 0 || board[r, c] != 0)
+                    {
+                        canMove = false;
+                        break;
+                    }
+                }
+                if (canMove) blockCol--;
             }
-            else if (e.KeyCode == Keys.Right && fallingCol < Cols - 1 && board[fallingRow, fallingCol + 1] == 0)
+            else if (e.KeyCode == Keys.Right)
             {
-                fallingCol++;
+                bool canMove = true;
+                foreach (var (dr, dc) in currentBlock)
+                {
+                    int r = blockRow + dr;
+                    int c = blockCol + dc + 1;
+                    if (c >= Cols || board[r, c] != 0)
+                    {
+                        canMove = false;
+                        break;
+                    }
+                }
+                if (canMove) blockCol++;
             }
             else if (e.KeyCode == Keys.Down)
             {
                 // Move down faster
-                if (fallingRow + 1 < Rows && board[fallingRow + 1, fallingCol] == 0)
-                    fallingRow++;
+                bool canMove = true;
+                foreach (var (dr, dc) in currentBlock)
+                {
+                    int r = blockRow + dr + 1;
+                    int c = blockCol + dc;
+                    if (r >= Rows || board[r, c] != 0)
+                    {
+                        canMove = false;
+                        break;
+                    }
+                }
+                if (canMove) blockRow++;
             }
             RefreshGrid();
         }
