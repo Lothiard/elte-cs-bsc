@@ -83,6 +83,17 @@ namespace Tetris
                 // Land the block
                 board[fallingRow, fallingCol] = 1;
                 timer.Stop();
+
+                // Check for game over (if spawn position is blocked)
+                if (board[0, Cols / 2] != 0)
+                {
+                    MessageBox.Show("Game Over!");
+                    return;
+                }
+
+                // Start a new falling block
+                StartFallingBlock();
+                return;
             }
             RefreshGrid();
         }
@@ -110,8 +121,6 @@ namespace Tetris
 
         private void Form_Load(object sender, EventArgs e)
         {
-            board[0, 0] = 1;
-            board[1, 1] = 1;
             RefreshGrid();
         }
     }
