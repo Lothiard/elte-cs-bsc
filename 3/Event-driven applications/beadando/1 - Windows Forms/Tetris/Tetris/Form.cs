@@ -6,11 +6,17 @@ namespace Tetris
         private const int Cols = 10;
         private const int CellSize = 30;
         private Button[,] gridButtons = new Button[Rows, Cols];
+        private int[,] board = new int[Rows, Cols]; // 0 = empty, >0 = filled
+
+        private int fallingRow = 0;
+        private int fallingCol = 4; // Start in the middle
+        private System.Windows.Forms.Timer timer;
 
         public Form()
         {
             InitializeComponent();
             InitializeGrid();
+            StartFallingBlock();
         }
 
         private void InitializeGrid()
@@ -35,9 +41,55 @@ namespace Tetris
             }
             this.ClientSize = new Size(Cols * CellSize, Rows * CellSize);
         }
+
+        private void RefreshGrid()
+        {
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int col = 0; col < Cols; col++)
+                {
+                    gridButtons[row, col].BackColor = board[row, col] == 0 ? Color.Black : Color.Cyan;
+                }
+            }
+
+            if (fallingRow >= 0 && fallingRow < Rows && fallingCol >= 0 && fallingCol < Cols && board[fallingRow, fallingCol] == 0)
+            {
+                gridButtons[fallingRow, fallingCol].BackColor = Color.Red;
+            }
+        }
+
+        private void StartFallingBlock()
+        {
+            fallingRow = 0;
+            fallingCol = Cols / 2;
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 200; // ms
+            timer.Tick += Timer_Tick;
+            timer.Start();
+            RefreshGrid();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Check if the block can move down
+            if (fallingRow + 1 < Rows && board[fallingRow + 1, fallingCol] == 0)
+            {
+                fallingRow++;
+            }
+            else
+            {
+                // Land the block
+                board[fallingRow, fallingCol] = 1;
+                timer.Stop();
+            }
+            RefreshGrid();
+        }
+
         private void Form_Load(object sender, EventArgs e)
         {
-
+            board[0, 0] = 1;
+            board[1, 1] = 1;
+            RefreshGrid();
         }
     }
 }
