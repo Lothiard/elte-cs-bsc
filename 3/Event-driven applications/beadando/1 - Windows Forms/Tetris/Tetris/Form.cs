@@ -84,6 +84,8 @@ namespace Tetris
                 board[fallingRow, fallingCol] = 1;
                 timer.Stop();
 
+                ClearFullLines();
+
                 // Check for game over (if spawn position is blocked)
                 if (board[0, Cols / 2] != 0)
                 {
@@ -117,6 +119,39 @@ namespace Tetris
                     fallingRow++;
             }
             RefreshGrid();
+        }
+
+        private void ClearFullLines()
+        {
+            for (int row = Rows - 1; row >= 0; row--)
+            {
+                bool full = true;
+                for (int col = 0; col < Cols; col++)
+                {
+                    if (board[row, col] == 0)
+                    {
+                        full = false;
+                        break;
+                    }
+                }
+                if (full)
+                {
+                    // Move all rows above down by one
+                    for (int r = row; r > 0; r--)
+                    {
+                        for (int c = 0; c < Cols; c++)
+                        {
+                            board[r, c] = board[r - 1, c];
+                        }
+                    }
+                    // Clear the top row
+                    for (int c = 0; c < Cols; c++)
+                    {
+                        board[0, c] = 0;
+                    }
+                    row++; // Check this row again after shifting
+                }
+            }
         }
 
         private void Form_Load(object sender, EventArgs e)
