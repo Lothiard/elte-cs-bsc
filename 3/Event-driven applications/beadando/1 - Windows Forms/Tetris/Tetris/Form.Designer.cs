@@ -1,6 +1,6 @@
 ﻿namespace Tetris
 {
-    partial class Form1
+    partial class Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,29 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
             SuspendLayout();
             // 
-            // panel1
-            // 
-            panel1.Location = new Point(285, 111);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(200, 100);
-            panel1.TabIndex = 0;
-            // 
-            // Form1
+            // Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(panel1);
-            Name = "Form1";
-            Text = "Form1";
+            ClientSize = new Size(284, 561);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MinimizeBox = false;
+            Name = "Form";
+            Text = "Tetris";
+            Load += Form_Load;
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Panel panel1;
     }
 }
