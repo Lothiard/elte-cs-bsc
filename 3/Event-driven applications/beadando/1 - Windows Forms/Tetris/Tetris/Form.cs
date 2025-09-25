@@ -16,6 +16,8 @@ namespace Tetris
         {
             InitializeComponent();
             InitializeGrid();
+            this.KeyPreview = true;
+            this.KeyDown += Form_KeyDown;
             StartFallingBlock();
         }
 
@@ -81,6 +83,27 @@ namespace Tetris
                 // Land the block
                 board[fallingRow, fallingCol] = 1;
                 timer.Stop();
+            }
+            RefreshGrid();
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (timer == null || !timer.Enabled) return;
+
+            if (e.KeyCode == Keys.Left && fallingCol > 0 && board[fallingRow, fallingCol - 1] == 0)
+            {
+                fallingCol--;
+            }
+            else if (e.KeyCode == Keys.Right && fallingCol < Cols - 1 && board[fallingRow, fallingCol + 1] == 0)
+            {
+                fallingCol++;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                // Move down faster
+                if (fallingRow + 1 < Rows && board[fallingRow + 1, fallingCol] == 0)
+                    fallingRow++;
             }
             RefreshGrid();
         }
