@@ -1,0 +1,9 @@
+{
+    "name": "gpu-course-opencl",
+    "version-string": "1.0",
+    "dependencies": [
+        {
+            "name": "opencl"
+        }
+    ]
+}
