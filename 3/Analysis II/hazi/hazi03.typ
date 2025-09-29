@@ -104,6 +104,48 @@ $
     y = -1/2 x + 3
 $
 
+== 6/a
+$
+  f(x) := cases(
+    a x + x^2\, & x < 0,
+    x - x^2\, & x >= 0,
+  )
+$
+=== 1. x < 0
+$
+  f'(x) = a + 2x
+$
+
+=== 2. x > 0
+$
+  f'(x) = 1 - 2x
+$
+
+=== 3. x = 0
+==== 1. folytonos
+#set math.cases(reverse: true)
+$
+  cases(
+    limits(lim)_(x arrow 0-0) a x + x^2 = 0,
+    limits(lim)_(x arrow 0+0) x - x^2 = 0
+  ) ==> f in C{0}
+$
+==== 2. derivalt egyezes
+$
+  f'_-(0) = a + 2 dot 0 = a\
+  f'_+(0) = 1 - 2 dot 0 = 1\
+$
+
+=== eredmeny
+#set math.cases(reverse: false)
+$
+  f'(x) = cases(
+    2x + 1\, & x < 0,
+    1\, & x = 0,
+    1 - 2x\, & x > 0,
+  )
+$
+
 == 6/d.
 $
     f(x) := cases(
