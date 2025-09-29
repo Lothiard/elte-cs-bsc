@@ -117,3 +117,35 @@ $
     f'(x) = -sin x
 $
 
+=== 1. x > 0:
+$
+    f'(x) = a cos x + 1
+$
+
+=== 1. x = 0
+#set math.cases(reverse: true)
+1. folytonossag
+$
+  cases(
+    limits(lim)_(x arrow 0-0) cos x = cos 0 = 1,
+    limits(lim)_(x arrow 0+0) a sin x + x + b = a sin 0 + 0 + b = b
+  ) ==> "akkor folytonos ha" b = 1
+$
+
+2. jobb-/bal oldali derivalt egyezes
+$
+  cases(
+    f'_-(0) = -sin 0 = 0,
+    f'_+(0) = a cos 0 + 1 = a + 1
+  ) ==> "akkor egyezik ha" a + 1 = 0 <==> a = -1
+$
+
+eredmeny:
+#set math.cases(reverse: false)
+$
+  f'(x) = cases(
+    - sin x\, & x < 0,
+    0\, & x = 0,
+    -cos + 1\, & x > 0,
+  )
+$
