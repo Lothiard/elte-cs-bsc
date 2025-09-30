@@ -1,16 +1,16 @@
 == 1. Mit ért azon, hogy az $f in RR arrow RR$ függvénynek valamely helyen lokális minimuma van?
-Az $f$ függvénynek $a in "int" D_f$ pontban lokális maximuma van, ha
+Az $f$ függvénynek $a in "int" D_f$ pontban lokális minimuma van, ha
 $
     exists K(a) subset D_f, "hogy" forall x in K(a) : f(x) >= f(a)
 $
-Az $a in "int" D_f$ pont $f$ lokális maximumhelye, $f(a)$ pedig $f$ lokális maximuma.
+Az $a in "int" D_f$ pont $f$ lokális minimumhelye, $f(a)$ pedig $f$ lokális minimuma.
 
 == 2. Mit ért azon, hogy az $f in RR arrow RR$ függvénynek valamely helyen lokális maximuma van?
-Az $f$ függvénynek $a in "int" D_f$ pontban lokális minimuma van, ha
+Az $f$ függvénynek $a in "int" D_f$ pontban lokális maximuma van, ha
 $
     exists K(a) subset D_f, "hogy" forall x in K(a) : f(x) <= f(a)
 $
-Az $a in "int" D_f$ pont $f$ lokális minimumhelye, $f(a)$ pedig $f$ lokális minimuma.
+Az $a in "int" D_f$ pont $f$ lokális maximumhelye, $f(a)$ pedig $f$ lokális maximuma.
 
 == 3. Hogyan szól a lokális szélsőértékre vonatkozó elsőrendű szükséges feltétel?
 TFH az $f$ függvénynek az $a in "int" cal(D)_f$ pontban lokális szélsőértéke van és $f in D{a}$. Ekkor
@@ -32,9 +32,9 @@ $
 
 == 6. Milyen elégséges feltételt ismer differenciálható függvény szigorú monoton növekedésével kapcsolatban?
 Legyen $f:(a,b) arrow RR$ differenciálható függvény.
-$f$ szigorú monoton növekedvő ha
+$f$ szigorú monoton növekvő ha
 $
-    f'(x) > 0 "  " (forall x in (a,b))
+    f'(x) > 0 "  " (forall x in (a,b)) " es nincs olyan intervallum amin " f'(x) = 0 " mindvégig"
 $
 
 
