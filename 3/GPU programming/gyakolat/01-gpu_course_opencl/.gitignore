@@ -41,3 +41,18 @@
 
 # clang-tidy output
 /clang-tidy-fixes.patch
+
+# CMake dependencies
+_deps/
+
+# vcpkg installed libraries
+vcpkg_installed/
+
+# Ignore CMake build output
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# CMake compilation database
+compile_commands.json

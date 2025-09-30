@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/opencl-02-vectoradd.dir/src/main_02_vectoradd.cpp.o -o opencl-02-vectoradd  vcpkg_installed/x64-linux/debug/lib/libOpenCL.a -ldl 
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/opencl-02-vectoradd.dir/link.d "CMakeFiles/opencl-02-vectoradd.dir/src/main_02_vectoradd.cpp.o" -o opencl-02-vectoradd  vcpkg_installed/x64-linux/debug/lib/libOpenCL.a -ldl

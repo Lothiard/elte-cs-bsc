@@ -1,14 +1,14 @@
 # Target labels
  vcpkg-populate
 # Source files and their labels
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate-complete.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-build.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-configure.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-download.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-install.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-mkdir.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-patch.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-test.rule
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-update.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate-complete.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-build.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-configure.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-download.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-install.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-mkdir.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-patch.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-test.rule
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/vcpkg-populate-prefix/src/vcpkg-populate-stamp/vcpkg-populate-update.rule

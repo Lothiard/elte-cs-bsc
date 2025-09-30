@@ -1,43 +1,63 @@
-# Help tools that honor '.gitignore' (redundant for Git itself).
-/.git
+# CUDA and CMake project .gitignore
 
-/CMakeUserPresets.json
+# Build directories
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
 
-# Common build directories
-/build*/
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.a
+*.la
+*.lib
 
-# Data directories
-/data*/
+# Compiled Dynamic libraries
+*.so
+*.so.*
+*.dylib
+*.dll
 
-# CI jobs that run in symlinked trees produce these artifacts.
-/real_work/
-/work
+# Compiled CUDA binaries
+*.cubin
+*.ptx
+*.fatbin
+*.elf
+*.cudafe*
+*.gpu
+*.linkinfo
 
-# MacOS Finder files.
+# CUDA profiling output files
+profile_*.log
+*.nvvp
+*.ncu-rep
+*.nsys-rep
+
+# Executables and binaries
+*.exe
+*.out
+*.app
+*.run
+
+# VS Code settings (if used)
+.vscode/
+
+# User-specific files
+*.swp
+*.swo
+*~
 .DS_Store
 
-# Python compile output.
-*.pyc
+# CMake generated files
+CMakeScripts/
+Testing/
+_deps/
 
-# See Utilities/Sphinx/tutorial_archive.cmake
-/Help/_generated
-
-# CLion work directory
-/.idea/
-# CLion build directories
-/cmake-build-*/
-
-# QtCreator files.
-/CMakeLists.txt.user*
-
-# Visual Studio Code
-/.vscode/
-/.cache/
-
-# Visual Studio work directory
-/.vs/
-# Visual Studio build directory
-/out/
-
-# clang-tidy output
-/clang-tidy-fixes.patch
+# CMake compilation database
+compile_commands.json

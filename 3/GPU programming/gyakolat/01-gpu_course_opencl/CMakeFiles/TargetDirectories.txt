@@ -1,4 +1,4 @@
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/CMakeFiles/opencl-01-helloworld.dir
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/CMakeFiles/opencl-02-vectoradd.dir
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/CMakeFiles/edit_cache.dir
-/home/lothiard/Elte/elte-cs-bsc/3/GPU programming/gpu_course_opencl/CMakeFiles/rebuild_cache.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/CMakeFiles/opencl-01-helloworld.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/CMakeFiles/opencl-02-vectoradd.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/CMakeFiles/edit_cache.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/CMakeFiles/rebuild_cache.dir

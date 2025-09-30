@@ -11,10 +11,10 @@ else()
 endif()
 
 #if(NOT CMAKE_TOOLCHAIN_FILE) # Optional: Only run if a toolchain isn't already specified externally
-  include(cmake/bootstrap_vcpkg.cmake)
-  #message(STATUS "Using cmake/bootstrap_vcpkg.cmake bootstrap script for locally installing vcpkg.")
+include(cmake/bootstrap_vcpkg.cmake)
+#message(STATUS "Using cmake/bootstrap_vcpkg.cmake bootstrap script for locally installing vcpkg.")
 #else()
-  #message(STATUS "CMAKE_TOOLCHAIN_FILE is already set to: ${CMAKE_TOOLCHAIN_FILE}. Skipping vcpkg bootstrap script.")
+#message(STATUS "CMAKE_TOOLCHAIN_FILE is already set to: ${CMAKE_TOOLCHAIN_FILE}. Skipping vcpkg bootstrap script.")
 #endif()
 
 # Define the project name, version, and language.
