@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>ELTE.TicTacToeGame.Persistence</RootNamespace>
+    <Copyright>Copyright © Eötvös Loránd University (ELTE) 2022</Copyright>
+    <Authors>Roberto Giachetta, Máté Cserép</Authors>
+    <Company>ELTE, Faculty of Informatics</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToeGame.Persistence\TicTacToeGame.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
