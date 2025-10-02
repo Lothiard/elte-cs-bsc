@@ -108,7 +108,7 @@ $
   )
 $
 
-szabaly szerint: $(a,n) | b$ es $2 !| 1$ tehat nincs megoldas
+szabaly szerint: $(a,n) divides b$ es $2 divides.not.rev 1$ tehat nincs megoldas
 
 == e
 $
@@ -180,7 +180,7 @@ $
 $
 
 $
-  n = p_1^(e_1) dot p_2^(e_2) dot dots dot p_k^(e_k) ==> phi(n) = n dot product^k_(i = 1)(1 - 1/p_i) "  (p az prim) es " phi(p) = p = 1
+  n = p_1^(e_1) dot p_2^(e_2) dot dots dot p_k^(e_k) ==> phi(n) = n dot product^k_(i = 1)(1 - 1/p_i) "  (p az prim) es " phi(p) = p - 1
 $
 
 Euler-Fernat
