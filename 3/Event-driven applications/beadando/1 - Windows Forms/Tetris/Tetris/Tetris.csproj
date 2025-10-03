@@ -8,9 +8,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Persistence\" />
-  </ItemGroup>
-
 </Project>
