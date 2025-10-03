@@ -4,12 +4,10 @@ namespace Tetris
 {
     public partial class Form : System.Windows.Forms.Form
     {
-        // Game board dimensions (will be set based on selection)
-        private int Rows = 16;
-        private int Cols = 4;
+        private int Rows;
+        private int Cols;
         private const int CellSize = 25;
         
-        // Game state
         private Button[,]? gridButtons;
         private int[,]? board;
         private bool isGameRunning = false;
@@ -19,23 +17,15 @@ namespace Tetris
         private System.Windows.Forms.Timer? gameTimer;
         private System.Windows.Forms.Timer? clockTimer;
 
-        // Tetromino system
         private readonly (int row, int col)[][] tetrominoes = new (int, int)[][]
         {
-            // I piece
-            new (int, int)[] { (0,0), (0,1), (0,2), (0,3) },
-            // O piece (square)
-            new (int, int)[] { (0,0), (0,1), (1,0), (1,1) },
-            // T piece
-            new (int, int)[] { (0,1), (1,0), (1,1), (1,2) },
-            // S piece
-            new (int, int)[] { (0,1), (0,2), (1,0), (1,1) },
-            // Z piece
-            new (int, int)[] { (0,0), (0,1), (1,1), (1,2) },
-            // J piece
-            new (int, int)[] { (0,0), (1,0), (1,1), (1,2) },
-            // L piece
-            new (int, int)[] { (0,2), (1,0), (1,1), (1,2) }
+            new (int, int)[] { (0,0), (0,1), (0,2), (0,3) }, // I
+            new (int, int)[] { (0,0), (0,1), (1,0), (1,1) }, // O
+            new (int, int)[] { (0,1), (1,0), (1,1), (1,2) }, // T
+            new (int, int)[] { (0,1), (0,2), (1,0), (1,1) }, // S
+            new (int, int)[] { (0,0), (0,1), (1,1), (1,2) }, // Z
+            new (int, int)[] { (0,0), (1,0), (1,1), (1,2) }, // J
+            new (int, int)[] { (0,2), (1,0), (1,1), (1,2) }  // L
         };
         
         private readonly Color[] tetrominoColors = new Color[]
@@ -54,19 +44,16 @@ namespace Tetris
             InitializeComponent();
             this.KeyPreview = true;
             this.KeyDown += Form_KeyDown;
+
+            cmbBoardSize.SelectedIndex = 1;
             
-            // Initialize board size combo box
-            cmbBoardSize.SelectedIndex = 1; // Default to 8×16
-            
-            // Initialize clock timer for time display
             clockTimer = new System.Windows.Forms.Timer();
-            clockTimer.Interval = 100; // Update every 100ms for smooth display
+            clockTimer.Interval = 100;
             clockTimer.Tick += ClockTimer_Tick;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            // Don't start the game automatically
             UpdateTimeDisplay();
         }
 
@@ -79,15 +66,13 @@ namespace Tetris
                 return;
             }
 
-            // Stop current game if running
             StopGame();
 
-            // Set board dimensions based on selection
             switch (cmbBoardSize.SelectedIndex)
             {
-                case 0: Cols = 4; Rows = 16; break;   // 4×16
-                case 1: Cols = 8; Rows = 16; break;   // 8×16
-                case 2: Cols = 12; Rows = 16; break;  // 12×16
+                case 0: Cols = 4; Rows = 16; break;
+                case 1: Cols = 8; Rows = 16; break;
+                case 2: Cols = 12; Rows = 16; break;
             }
 
             InitializeGame();
@@ -127,7 +112,6 @@ namespace Tetris
 
         private void InitializeGame()
         {
-            // Clear previous game board
             if (gridButtons != null)
             {
                 for (int row = 0; row < gridButtons.GetLength(0); row++)
@@ -140,11 +124,9 @@ namespace Tetris
                 }
             }
 
-            // Initialize new game board
             gridButtons = new Button[Rows, Cols];
             board = new int[Rows, Cols];
 
-            // Create grid buttons
             for (int row = 0; row < Rows; row++)
             {
                 for (int col = 0; col < Cols; col++)
@@ -160,18 +142,16 @@ namespace Tetris
                     btn.Margin = new Padding(0);
                     btn.Padding = new Padding(0);
                     btn.BackColor = Color.Black;
-                    btn.FlatAppearance.BorderColor = Color.Gray;
+                    btn.FlatAppearance.BorderColor = Color.Black;
                     btn.FlatAppearance.BorderSize = 1;
                     
                     gridButtons[row, col] = btn;
                     panelGame.Controls.Add(btn);
-                    
-                    // Clear board
+
                     board[row, col] = 0;
                 }
             }
 
-            // Resize game panel to fit the grid
             panelGame.Size = new Size(Cols * CellSize + 2, Rows * CellSize + 2);
         }
 
@@ -182,21 +162,20 @@ namespace Tetris
             gameStartTime = DateTime.Now;
             pausedTime = TimeSpan.Zero;
             
-            // Update UI
             btnNewGame.Text = "Új játék";
             btnPause.Text = "Szünet";
             btnPause.Enabled = true;
             btnSave.Enabled = false;
-            
-            // Start timers
+            // cmbBoardSize.Enabled = false;
+            // ts shi not working gang
+            btnLoad.Enabled = false;
+
             clockTimer?.Start();
             
-            // Spawn first tetromino
             SpawnNewTetromino();
-            
-            // Start game timer
+
             gameTimer = new System.Windows.Forms.Timer();
-            gameTimer.Interval = 500; // Pieces fall every 500ms
+            gameTimer.Interval = 500;
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
             
@@ -207,12 +186,10 @@ namespace Tetris
         {
             isGameRunning = false;
             isPaused = false;
-            
-            // Stop timers
+
             gameTimer?.Stop();
             clockTimer?.Stop();
-            
-            // Update UI
+
             btnPause.Text = "Szünet";
             btnPause.Enabled = false;
             btnSave.Enabled = false;
@@ -224,11 +201,9 @@ namespace Tetris
             
             isPaused = true;
             pausedTime += DateTime.Now - gameStartTime;
-            
-            // Stop game timer but keep clock timer for display
+
             gameTimer?.Stop();
-            
-            // Update UI
+
             btnPause.Text = "Folytatás";
             btnSave.Enabled = true;
         }
@@ -239,11 +214,9 @@ namespace Tetris
             
             isPaused = false;
             gameStartTime = DateTime.Now;
-            
-            // Restart game timer
+
             gameTimer?.Start();
-            
-            // Update UI
+
             btnPause.Text = "Szünet";
             btnSave.Enabled = false;
         }
@@ -255,7 +228,6 @@ namespace Tetris
             blockRow = 0;
             blockCol = Cols / 2 - 2;
 
-            // Check for game over
             if (!CanMoveTo(blockRow, blockCol, currentBlock))
             {
                 GameOver();
@@ -272,7 +244,6 @@ namespace Tetris
             }
             else
             {
-                // Land the piece
                 LandCurrentPiece();
                 ClearFullLines();
                 SpawnNewTetromino();
@@ -335,7 +306,7 @@ namespace Tetris
                 int c = blockCol + dc;
                 if (r >= 0 && r < Rows && c >= 0 && c < Cols)
                 {
-                    board[r, c] = currentTetrominoIndex + 1; // Store tetromino type
+                    board[r, c] = currentTetrominoIndex + 1;
                 }
             }
         }
@@ -358,7 +329,6 @@ namespace Tetris
                 
                 if (full)
                 {
-                    // Move all rows above down by one
                     for (int r = row; r > 0; r--)
                     {
                         for (int c = 0; c < Cols; c++)
@@ -366,14 +336,13 @@ namespace Tetris
                             board[r, c] = board[r - 1, c];
                         }
                     }
-                    
-                    // Clear the top row
+
                     for (int c = 0; c < Cols; c++)
                     {
                         board[0, c] = 0;
                     }
                     
-                    row++; // Check this row again after shifting
+                    row++;
                 }
             }
         }
@@ -382,7 +351,6 @@ namespace Tetris
         {
             if (gridButtons == null || board == null) return;
 
-            // Clear and redraw the grid
             for (int row = 0; row < Rows; row++)
             {
                 for (int col = 0; col < Cols; col++)
@@ -393,7 +361,6 @@ namespace Tetris
                     }
                     else
                     {
-                        // Show landed pieces with their original colors
                         int tetrominoType = board[row, col] - 1;
                         if (tetrominoType >= 0 && tetrominoType < tetrominoColors.Length)
                         {
@@ -403,7 +370,6 @@ namespace Tetris
                 }
             }
 
-            // Draw the falling piece
             if (currentBlock != null)
             {
                 Color color = tetrominoColors[currentTetrominoIndex];
@@ -425,22 +391,22 @@ namespace Tetris
 
             switch (e.KeyCode)
             {
-                case Keys.Left:
+                case Keys.A:
                     if (CanMoveTo(blockRow, blockCol - 1, currentBlock))
                         blockCol--;
                     break;
                     
-                case Keys.Right:
+                case Keys.D:
                     if (CanMoveTo(blockRow, blockCol + 1, currentBlock))
                         blockCol++;
                     break;
                     
-                case Keys.Down:
+                case Keys.S:
                     if (CanMoveTo(blockRow + 1, blockCol, currentBlock))
                         blockRow++;
                     break;
                     
-                case Keys.Up: // Rotate
+                case Keys.W:
                     RotateCurrentPiece();
                     break;
             }
@@ -450,16 +416,14 @@ namespace Tetris
 
         private void RotateCurrentPiece()
         {
-            if (currentBlock == null || currentTetrominoIndex == 1) return; // O-piece doesn't rotate
+            if (currentBlock == null) return;
 
-            // Rotate 90 degrees clockwise: (row, col) -> (col, -row)
             var rotated = new (int row, int col)[currentBlock.Length];
             for (int i = 0; i < currentBlock.Length; i++)
             {
                 rotated[i] = (currentBlock[i].col, -currentBlock[i].row);
             }
 
-            // Normalize to (0,0) origin
             int minRow = rotated.Min(x => x.row);
             int minCol = rotated.Min(x => x.col);
             for (int i = 0; i < rotated.Length; i++)
@@ -467,7 +431,6 @@ namespace Tetris
                 rotated[i] = (rotated[i].row - minRow, rotated[i].col - minCol);
             }
 
-            // Check if rotation is valid
             if (CanMoveTo(blockRow, blockCol, rotated))
             {
                 currentBlock = rotated;
@@ -485,7 +448,6 @@ namespace Tetris
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // Game state for saving/loading
         public class GameState
         {
             public int Rows { get; set; }
@@ -555,10 +517,8 @@ namespace Tetris
                         return;
                     }
 
-                    // Stop current game
                     StopGame();
 
-                    // Load game state
                     Rows = gameState.Rows;
                     Cols = gameState.Cols;
                     board = gameState.Board;
@@ -568,7 +528,6 @@ namespace Tetris
                     blockCol = gameState.BlockCol;
                     pausedTime = gameState.PausedTime;
 
-                    // Update board size combo box
                     switch (Cols)
                     {
                         case 4: cmbBoardSize.SelectedIndex = 0; break;
@@ -578,7 +537,7 @@ namespace Tetris
 
                     InitializeGame();
                     StartGame();
-                    PauseGame(); // Load in paused state
+                    PauseGame();
 
                     MessageBox.Show("Játék sikeresen betöltve!", "Betöltés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
