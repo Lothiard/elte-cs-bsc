@@ -6,6 +6,8 @@ namespace Tetris.Persistence
 {
     public static class TetrisPersistence
     {
+        #region Properties
+
         public class GameState
         {
             public int Rows { get; set; }
@@ -19,7 +21,15 @@ namespace Tetris.Persistence
             public DateTime SaveTime { get; set; }
         }
 
-        private static ITetrisDataAccess _dataAccess = new TetrisFileDataAccess();
+        #endregion
+
+        #region Fields
+
+        private static readonly ITetrisDataAccess _dataAccess = new TetrisFileDataAccess();
+
+        #endregion
+
+        #region Public Methods
 
         public static void Save(string filePath, GameState state)
         {
@@ -30,5 +40,7 @@ namespace Tetris.Persistence
         {
             return _dataAccess.Load(filePath);
         }
+
+        #endregion
     }
 }

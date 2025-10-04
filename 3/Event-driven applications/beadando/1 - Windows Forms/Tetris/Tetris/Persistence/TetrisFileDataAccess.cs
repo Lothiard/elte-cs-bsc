@@ -6,16 +6,38 @@ namespace Tetris.Persistence
 {
     public class TetrisFileDataAccess : ITetrisDataAccess
     {
+        #region Public Methods
+
         public void Save(string filePath, TetrisPersistence.GameState state)
         {
-            string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            try
+            {
+                string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, json);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error writing save file.", ex);
+            }
         }
 
         public TetrisPersistence.GameState? Load(string filePath)
         {
-            string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<TetrisPersistence.GameState>(json);
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                return JsonSerializer.Deserialize<TetrisPersistence.GameState>(json);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error reading save file.", ex);
+            }
+            catch (JsonException ex)
+            {
+                throw new JsonException("Invalid save file format.", ex);
+            }
         }
+
+        #endregion
     }
 }

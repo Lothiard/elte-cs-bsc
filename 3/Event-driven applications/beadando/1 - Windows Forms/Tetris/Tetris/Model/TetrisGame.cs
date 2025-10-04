@@ -7,6 +7,7 @@ namespace Tetris.Model
     public class TetrisGame : ITetrisGame
     {
         #region Properties
+
         public int Rows { get; private set; }
         public int Cols { get; private set; }
         public int[,] Board { get; set; }
@@ -32,18 +33,22 @@ namespace Tetris.Model
         };
         public Color[] TetrominoColors => tetrominoColors;
         private Random rng = new Random();
+
         #endregion
 
         #region Events
+
         public event EventHandler<TetrominoEventArgs> TetrominoMoved;
         public event EventHandler<TetrominoEventArgs> TetrominoRotated;
         public event EventHandler<TetrisGameEventArgs> GameStateChanged;
         public event EventHandler<TetrominoEventArgs> TetrominoSpawned;
         public event EventHandler<TetrisGameEventArgs> GameOver;
         public event EventHandler<TetrisGameEventArgs> LinesCleared;
+
         #endregion
 
         #region Constructor
+
         public TetrisGame(int rows, int cols)
         {
             Rows = rows;
@@ -51,9 +56,11 @@ namespace Tetris.Model
             Board = new int[Rows, Cols];
             IsGameOver = false;
         }
+
         #endregion
 
         #region Public Methods
+
         public void Reset()
         {
             Board = new int[Rows, Cols];
@@ -85,7 +92,7 @@ namespace Tetris.Model
             {
                 int r = newRow + dr;
                 int c = newCol + dc;
-                if (r < 0 || r >= Rows || c < 0 || c >= Cols || Board[r, c] != 0)
+                if (r < 0 || c < 0 || r >= Rows || c >= Cols || Board[r, c] != 0)
                 {
                     return false;
                 }
@@ -95,7 +102,7 @@ namespace Tetris.Model
 
         public bool MoveDown()
         {
-            if (CurrentBlock != null && CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
+            if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
             {
                 BlockRow++;
                 OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
@@ -106,7 +113,7 @@ namespace Tetris.Model
 
         public bool MoveLeft()
         {
-            if (CurrentBlock != null && CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
+            if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
             {
                 BlockCol--;
                 OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
@@ -117,7 +124,7 @@ namespace Tetris.Model
 
         public bool MoveRight()
         {
-            if (CurrentBlock != null && CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
+            if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
             {
                 BlockCol++;
                 OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
@@ -128,7 +135,6 @@ namespace Tetris.Model
 
         public void Rotate()
         {
-            if (CurrentBlock == null) return;
             var rotated = new (int row, int col)[CurrentBlock.Length];
             for (int i = 0; i < CurrentBlock.Length; i++)
             {
@@ -149,7 +155,6 @@ namespace Tetris.Model
 
         public void LandCurrentPiece()
         {
-            if (CurrentBlock == null) return;
             foreach (var (dr, dc) in CurrentBlock)
             {
                 int r = BlockRow + dr;
@@ -199,9 +204,11 @@ namespace Tetris.Model
                 OnLinesCleared(new TetrisGameEventArgs(linesCleared));
             }
         }
+
         #endregion
 
         #region Event Methods
+
         protected virtual void OnTetrominoMoved(TetrominoEventArgs e)
         {
             TetrominoMoved?.Invoke(this, e);
@@ -231,6 +238,7 @@ namespace Tetris.Model
         {
             LinesCleared?.Invoke(this, e);
         }
+
         #endregion
     }
 }

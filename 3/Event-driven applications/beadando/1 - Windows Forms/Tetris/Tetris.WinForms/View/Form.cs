@@ -130,13 +130,6 @@ namespace Tetris.WinForms.View
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
-            if (cmbBoardSize.SelectedIndex == -1)
-            {
-                MessageBox.Show("Kérjük, válasszon pályaméretet!", "Figyelmeztetés", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             StopGame();
 
             int rows = 16;
@@ -169,12 +162,6 @@ namespace Tetris.WinForms.View
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!isPaused)
-            {
-                MessageBox.Show("A játék mentése csak szünet alatt lehetséges!", "Figyelmeztetés", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
             SaveGame();
         }
 
@@ -191,7 +178,6 @@ namespace Tetris.WinForms.View
         {
             if (game == null) return;
             
-            // Subscribe to game events for proper MVC pattern implementation
             ((TetrisGame)game).TetrominoMoved += Game_TetrominoMoved;
             ((TetrisGame)game).TetrominoRotated += Game_TetrominoRotated;
             ((TetrisGame)game).GameStateChanged += Game_GameStateChanged;
@@ -204,7 +190,6 @@ namespace Tetris.WinForms.View
         {
             if (game == null) return;
             
-            // Unsubscribe from game events to prevent memory leaks
             ((TetrisGame)game).TetrominoMoved -= Game_TetrominoMoved;
             ((TetrisGame)game).TetrominoRotated -= Game_TetrominoRotated;
             ((TetrisGame)game).GameStateChanged -= Game_GameStateChanged;
