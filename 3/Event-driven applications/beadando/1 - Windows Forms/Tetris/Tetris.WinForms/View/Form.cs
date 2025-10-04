@@ -4,9 +4,9 @@ using System.IO;
 using Tetris.Persistence;
 using Tetris.Model;
 
-namespace Tetris
+namespace Tetris.WinForms.View
 {
-    public partial class Form : System.Windows.Forms.Form
+    public partial class GameForm : System.Windows.Forms.Form
     {
         private const int CellSize = 25;
         private Button[,]? gridButtons;
@@ -18,7 +18,7 @@ namespace Tetris
         private System.Windows.Forms.Timer? gameTimer;
         private System.Windows.Forms.Timer? clockTimer;
 
-        public Form()
+        public GameForm()
         {
             InitializeComponent();
             this.KeyPreview = true;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -9,10 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ELTE.FI.SARuleSet" Version="3.2.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <Compile Update="View\Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tetris\Tetris.csproj" />
   </ItemGroup>
 
 </Project>

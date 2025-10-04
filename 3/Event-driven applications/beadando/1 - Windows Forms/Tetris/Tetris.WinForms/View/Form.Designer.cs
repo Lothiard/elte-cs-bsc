@@ -1,6 +1,6 @@
-﻿namespace Tetris
+﻿namespace Tetris.WinForms.View
 {
-    partial class Form
+    partial class GameForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -141,7 +141,7 @@
             lblBoardSize.TabIndex = 7;
             lblBoardSize.Text = "Pályaméret:";
             // 
-            // Form
+            // GameForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -150,7 +150,7 @@
             Controls.Add(panelGame);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "Form";
+            Name = "GameForm";
             Text = "Tetris";
             Load += Form_Load;
             panelControls.ResumeLayout(false);
