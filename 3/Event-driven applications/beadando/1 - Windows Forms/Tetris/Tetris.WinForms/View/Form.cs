@@ -1,13 +1,15 @@
-﻿using System.Text.Json;
+﻿using System;
 using System.Drawing;
-using System.IO;
+using System.Windows.Forms;
 using Tetris.Persistence;
 using Tetris.Model;
 
-namespace Tetris.WinForms.View
+namespace Tetris.View
 {
-    public partial class GameForm : System.Windows.Forms.Form
+    public partial class GameForm : Form
     {
+        #region Fields
+
         private const int CellSize = 25;
         private Button[,]? gridButtons;
         private TetrisGame? game;
@@ -17,6 +19,10 @@ namespace Tetris.WinForms.View
         private TimeSpan pausedTime = TimeSpan.Zero;
         private System.Windows.Forms.Timer? gameTimer;
         private System.Windows.Forms.Timer? clockTimer;
+
+        #endregion
+
+        #region Constructors
 
         public GameForm()
         {
@@ -30,10 +36,65 @@ namespace Tetris.WinForms.View
             clockTimer.Tick += ClockTimer_Tick;
         }
 
+        #endregion
+
+        #region Game event handlers
+
         private void Form_Load(object sender, EventArgs e)
         {
             UpdateTimeDisplay();
         }
+
+        private void GameTimer_Tick(object? sender, EventArgs e)
+        {
+            if (isPaused || game == null) return;
+            if (!game.MoveDown())
+            {
+                game.LandCurrentPiece();
+                game.ClearFullLines();
+                game.SpawnNewTetromino();
+                if (game.IsGameOver)
+                {
+                    GameOver();
+                    return;
+                }
+            }
+            RefreshGrid();
+        }
+
+        private void ClockTimer_Tick(object? sender, EventArgs e)
+        {
+            UpdateTimeDisplay();
+        }
+
+        #endregion
+
+        #region Grid event handlers
+
+        private void Form_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (!isGameRunning || isPaused || game == null || game.CurrentBlock == null) return;
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    game.MoveLeft();
+                    break;
+                case Keys.D:
+                    game.MoveRight();
+                    break;
+                case Keys.S:
+                    game.MoveDown();
+                    break;
+                case Keys.W:
+                    game.Rotate();
+                    break;
+            }
+            RefreshGrid();
+        }
+
+        #endregion
+
+        #region Menu event handlers
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
@@ -88,6 +149,10 @@ namespace Tetris.WinForms.View
         {
             LoadGame();
         }
+
+        #endregion
+
+        #region Private methods
 
         private void InitializeGame()
         {
@@ -180,28 +245,6 @@ namespace Tetris.WinForms.View
             btnSave.Enabled = false;
         }
 
-        private void GameTimer_Tick(object? sender, EventArgs e)
-        {
-            if (isPaused || game == null) return;
-            if (!game.MoveDown())
-            {
-                game.LandCurrentPiece();
-                game.ClearFullLines();
-                game.SpawnNewTetromino();
-                if (game.IsGameOver)
-                {
-                    GameOver();
-                    return;
-                }
-            }
-            RefreshGrid();
-        }
-
-        private void ClockTimer_Tick(object? sender, EventArgs e)
-        {
-            UpdateTimeDisplay();
-        }
-
         private void UpdateTimeDisplay()
         {
             if (isGameRunning)
@@ -257,27 +300,6 @@ namespace Tetris.WinForms.View
                     }
                 }
             }
-        }
-
-        private void Form_KeyDown(object? sender, KeyEventArgs e)
-        {
-            if (!isGameRunning || isPaused || game == null || game.CurrentBlock == null) return;
-            switch (e.KeyCode)
-            {
-                case Keys.A:
-                    game.MoveLeft();
-                    break;
-                case Keys.D:
-                    game.MoveRight();
-                    break;
-                case Keys.S:
-                    game.MoveDown();
-                    break;
-                case Keys.W:
-                    game.Rotate();
-                    break;
-            }
-            RefreshGrid();
         }
 
         private void GameOver()
@@ -362,5 +384,7 @@ namespace Tetris.WinForms.View
                 MessageBox.Show($"Hiba a betöltés során: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        #endregion
     }
 }

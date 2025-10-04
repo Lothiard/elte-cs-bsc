@@ -1,8 +1,7 @@
 using System;
 using System.Windows.Forms;
-using Tetris.WinForms.View;
 
-namespace Tetris.WinForms
+namespace Tetris
 {
     static class Program
     {
@@ -15,7 +14,7 @@ namespace Tetris.WinForms
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new GameForm());
+            Application.Run(new View.GameForm());
         }
     }
 }
