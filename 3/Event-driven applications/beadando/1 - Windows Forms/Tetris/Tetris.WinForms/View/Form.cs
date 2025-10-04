@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Tetris.Persistence;
 using Tetris.Model;
 
-namespace Tetris.View
+namespace Tetris.WinForms.View
 {
     public partial class GameForm : Form
     {
@@ -12,12 +12,11 @@ namespace Tetris.View
 
         private const int CellSize = 25;
         private Button[,]? gridButtons;
-        private TetrisGame? game;
+        private ITetrisGame? game;
         private bool isGameRunning = false;
         private bool isPaused = false;
-        private DateTime gameStartTime;
-        private TimeSpan pausedTime = TimeSpan.Zero;
-        private System.Windows.Forms.Timer? gameTimer;
+        private TetrisTimerAggregation gameTimer;
+        private System.Windows.Forms.Timer? gameTickTimer;
         private System.Windows.Forms.Timer? clockTimer;
 
         #endregion
@@ -30,6 +29,7 @@ namespace Tetris.View
             this.KeyPreview = true;
             this.KeyDown += Form_KeyDown;
 
+            gameTimer = new TetrisTimerAggregation();
             cmbBoardSize.SelectedIndex = 1;
             clockTimer = new System.Windows.Forms.Timer();
             clockTimer.Interval = 100;
@@ -66,6 +66,39 @@ namespace Tetris.View
         {
             UpdateTimeDisplay();
         }
+        
+        private void Game_TetrominoMoved(object? sender, TetrominoEventArgs e)
+        {
+            RefreshGrid();
+        }
+        
+        private void Game_TetrominoRotated(object? sender, TetrominoEventArgs e)
+        {
+            RefreshGrid();
+        }
+        
+        private void Game_GameStateChanged(object? sender, TetrisGameEventArgs e)
+        {
+            RefreshGrid();
+        }
+        
+        private void Game_TetrominoSpawned(object? sender, TetrominoEventArgs e)
+        {
+            RefreshGrid();
+        }
+        
+        private void Game_GameOver(object? sender, TetrisGameEventArgs e)
+        {
+            if (e.IsGameOver)
+            {
+                GameOver();
+            }
+        }
+        
+        private void Game_LinesCleared(object? sender, TetrisGameEventArgs e)
+        {
+            RefreshGrid();
+        }
 
         #endregion
 
@@ -89,7 +122,6 @@ namespace Tetris.View
                     game.Rotate();
                     break;
             }
-            RefreshGrid();
         }
 
         #endregion
@@ -117,6 +149,7 @@ namespace Tetris.View
             }
 
             game = new TetrisGame(rows, cols);
+            SubscribeToGameEvents();
             InitializeGame();
             StartGame();
         }
@@ -153,6 +186,32 @@ namespace Tetris.View
         #endregion
 
         #region Private methods
+
+        private void SubscribeToGameEvents()
+        {
+            if (game == null) return;
+            
+            // Subscribe to game events for proper MVC pattern implementation
+            ((TetrisGame)game).TetrominoMoved += Game_TetrominoMoved;
+            ((TetrisGame)game).TetrominoRotated += Game_TetrominoRotated;
+            ((TetrisGame)game).GameStateChanged += Game_GameStateChanged;
+            ((TetrisGame)game).TetrominoSpawned += Game_TetrominoSpawned;
+            ((TetrisGame)game).GameOver += Game_GameOver;
+            ((TetrisGame)game).LinesCleared += Game_LinesCleared;
+        }
+        
+        private void UnsubscribeFromGameEvents()
+        {
+            if (game == null) return;
+            
+            // Unsubscribe from game events to prevent memory leaks
+            ((TetrisGame)game).TetrominoMoved -= Game_TetrominoMoved;
+            ((TetrisGame)game).TetrominoRotated -= Game_TetrominoRotated;
+            ((TetrisGame)game).GameStateChanged -= Game_GameStateChanged;
+            ((TetrisGame)game).TetrominoSpawned -= Game_TetrominoSpawned;
+            ((TetrisGame)game).GameOver -= Game_GameOver;
+            ((TetrisGame)game).LinesCleared -= Game_LinesCleared;
+        }
 
         private void InitializeGame()
         {
@@ -198,8 +257,7 @@ namespace Tetris.View
             if (game == null) return;
             isGameRunning = true;
             isPaused = false;
-            gameStartTime = DateTime.Now;
-            pausedTime = TimeSpan.Zero;
+            gameTimer.Start();
             btnNewGame.Text = "Új játék";
             btnPause.Text = "Szünet";
             btnPause.Enabled = true;
@@ -207,19 +265,24 @@ namespace Tetris.View
             btnLoad.Enabled = false;
             clockTimer?.Start();
             game.Reset();
-            gameTimer = new System.Windows.Forms.Timer();
-            gameTimer.Interval = 500;
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Start();
-            RefreshGrid();
+            gameTickTimer = new System.Windows.Forms.Timer();
+            gameTickTimer.Interval = 500;
+            gameTickTimer.Tick += GameTimer_Tick;
+            gameTickTimer.Start();
         }
 
         private void StopGame()
         {
+            if (game != null)
+            {
+                UnsubscribeFromGameEvents();
+            }
+            
             isGameRunning = false;
             isPaused = false;
-            gameTimer?.Stop();
+            gameTickTimer?.Stop();
             clockTimer?.Stop();
+            gameTimer.Stop();
             btnPause.Text = "Szünet";
             btnPause.Enabled = false;
             btnSave.Enabled = false;
@@ -229,8 +292,8 @@ namespace Tetris.View
         {
             if (!isGameRunning || isPaused) return;
             isPaused = true;
-            pausedTime += DateTime.Now - gameStartTime;
-            gameTimer?.Stop();
+            gameTimer.Pause();
+            gameTickTimer?.Stop();
             btnPause.Text = "Folytatás";
             btnSave.Enabled = true;
         }
@@ -239,8 +302,8 @@ namespace Tetris.View
         {
             if (!isGameRunning || !isPaused) return;
             isPaused = false;
-            gameStartTime = DateTime.Now;
-            gameTimer?.Start();
+            gameTimer.Resume();
+            gameTickTimer?.Start();
             btnPause.Text = "Szünet";
             btnSave.Enabled = false;
         }
@@ -249,15 +312,7 @@ namespace Tetris.View
         {
             if (isGameRunning)
             {
-                TimeSpan currentGameTime;
-                if (isPaused)
-                {
-                    currentGameTime = pausedTime;
-                }
-                else
-                {
-                    currentGameTime = pausedTime + (DateTime.Now - gameStartTime);
-                }
+                TimeSpan currentGameTime = gameTimer.ElapsedTime;
                 lblTimeValue.Text = currentGameTime.ToString(@"hh\:mm\:ss");
             }
             else
@@ -305,7 +360,7 @@ namespace Tetris.View
         private void GameOver()
         {
             StopGame();
-            TimeSpan totalTime = pausedTime + (DateTime.Now - gameStartTime);
+            TimeSpan totalTime = gameTimer.ElapsedTime;
             string timeString = totalTime.ToString(@"hh\:mm\:ss");
             MessageBox.Show($"Játék vége!\n\nJátékidő: {timeString}", "Tetris", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -325,7 +380,7 @@ namespace Tetris.View
                     CurrentBlock = game.CurrentBlock,
                     BlockRow = game.BlockRow,
                     BlockCol = game.BlockCol,
-                    PausedTime = pausedTime,
+                    PausedTime = gameTimer.ElapsedTime,
                     SaveTime = DateTime.Now
                 };
                 using var dialog = new SaveFileDialog();
@@ -361,12 +416,13 @@ namespace Tetris.View
                     }
                     StopGame();
                     game = new TetrisGame(gameState.Rows, gameState.Cols);
-                    game.Board = gameState.Board;
-                    game.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
-                    game.CurrentBlock = gameState.CurrentBlock;
-                    game.BlockRow = gameState.BlockRow;
-                    game.BlockCol = gameState.BlockCol;
-                    pausedTime = gameState.PausedTime;
+                    SubscribeToGameEvents();
+                    ((TetrisGame)game).Board = gameState.Board;
+                    ((TetrisGame)game).CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
+                    ((TetrisGame)game).CurrentBlock = gameState.CurrentBlock;
+                    ((TetrisGame)game).BlockRow = gameState.BlockRow;
+                    ((TetrisGame)game).BlockCol = gameState.BlockCol;
+                    gameTimer.SetPausedTime(gameState.PausedTime);
                     switch (gameState.Cols)
                     {
                         case 4: cmbBoardSize.SelectedIndex = 0; break;

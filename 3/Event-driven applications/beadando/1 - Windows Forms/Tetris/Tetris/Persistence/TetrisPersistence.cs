@@ -19,16 +19,16 @@ namespace Tetris.Persistence
             public DateTime SaveTime { get; set; }
         }
 
+        private static ITetrisDataAccess _dataAccess = new TetrisFileDataAccess();
+
         public static void Save(string filePath, GameState state)
         {
-            string json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            _dataAccess.Save(filePath, state);
         }
 
         public static GameState? Load(string filePath)
         {
-            string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<GameState>(json);
+            return _dataAccess.Load(filePath);
         }
     }
 }
