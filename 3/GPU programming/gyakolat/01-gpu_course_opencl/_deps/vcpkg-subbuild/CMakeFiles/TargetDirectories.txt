@@ -1,3 +1,0 @@
-/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/vcpkg-populate.dir
-/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/edit_cache.dir
-/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakolat/01-gpu_course_opencl/_deps/vcpkg-subbuild/CMakeFiles/rebuild_cache.dir

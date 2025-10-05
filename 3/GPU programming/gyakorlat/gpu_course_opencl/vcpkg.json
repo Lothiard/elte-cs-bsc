@@ -1,0 +1,17 @@
+{
+    "name": "gpu-course-opencl",
+    "version-string": "1.0",
+    "dependencies": [
+        "opencl"
+    ],
+    "features": {
+        "opengl": {
+            "description": "Enable OpenGL rendering support using SDL2 and GLEW",
+            "dependencies": [
+                "sdl2",
+                "glew",
+                "glm"
+            ]
+    }
+  }
+}

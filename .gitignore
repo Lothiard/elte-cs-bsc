@@ -401,3 +401,19 @@ FodyWeavers.xsd
 
 # sandbox
 /sandbox/
+
+3/GPU programming/gyakorlat/gpu_course_opencl/_deps/
+
+3/GPU programming/gyakorlat/gpu_course_opencl/CMakeFiles/
+
+3/GPU programming/gyakorlat/gpu_course_opencl/vcpkg_installed/
+
+3/GPU programming/gyakorlat/gpu_course_opencl/cmake_install.cmake
+
+3/GPU programming/gyakorlat/gpu_course_opencl/opencl-01-helloworld
+
+3/GPU programming/gyakorlat/gpu_course_opencl/opencl-02-vectoradd
+
+3/GPU programming/gyakorlat/gpu_course_opencl/opencl-03-reduce-global
+
+3/GPU programming/gyakorlat/gpu_course_opencl/opencl-04-reduce-local
