@@ -47,17 +47,13 @@ namespace Tetris.WinForms.View
 
         private void GameTimer_Tick(object? sender, EventArgs e)
         {
-            if (isPaused || game == null) return;
+            if (game == null || game.IsGameOver || isPaused) return;
+
             if (!game.MoveDown())
             {
                 game.LandCurrentPiece();
                 game.ClearFullLines();
                 game.SpawnNewTetromino();
-                if (game.IsGameOver)
-                {
-                    GameOver();
-                    return;
-                }
             }
             RefreshGrid();
         }
@@ -91,7 +87,7 @@ namespace Tetris.WinForms.View
         {
             if (e.IsGameOver)
             {
-                GameOver();
+                ShowGameOverMessage();
             }
         }
         
@@ -295,15 +291,8 @@ namespace Tetris.WinForms.View
 
         private void UpdateTimeDisplay()
         {
-            if (isGameRunning)
-            {
-                TimeSpan currentGameTime = gameTimer.ElapsedTime;
-                lblTimeValue.Text = currentGameTime.ToString(@"hh\:mm\:ss");
-            }
-            else
-            {
-                lblTimeValue.Text = "00:00:00";
-            }
+            TimeSpan currentGameTime = isGameRunning ? gameTimer.ElapsedTime : TimeSpan.Zero;
+            lblTimeValue.Text = currentGameTime.ToString(@"hh\:mm\:ss");
         }
 
         private void RefreshGrid()
@@ -342,10 +331,12 @@ namespace Tetris.WinForms.View
             }
         }
 
-        private void GameOver()
+        private void ShowGameOverMessage()
         {
-            StopGame();
             TimeSpan totalTime = gameTimer.ElapsedTime;
+            
+            StopGame();
+            
             string timeString = totalTime.ToString(@"hh\:mm\:ss");
             MessageBox.Show($"Játék vége!\n\nJátékidő: {timeString}", "Tetris", 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
