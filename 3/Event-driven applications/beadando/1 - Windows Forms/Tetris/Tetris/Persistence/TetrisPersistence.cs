@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Text.Json;
-
 namespace Tetris.Persistence
 {
     public static class TetrisPersistence
@@ -31,14 +27,13 @@ namespace Tetris.Persistence
 
         #region Public Methods
 
-        public static void Save(string filePath, GameState state)
+        public static Task SaveAsync(string filePath, GameState state)
         {
-            _dataAccess.Save(filePath, state);
+            return _dataAccess.SaveAsync(filePath, state);
         }
-
-        public static GameState? Load(string filePath)
+        public static Task<GameState?> LoadAsync(string filePath)
         {
-            return _dataAccess.Load(filePath);
+            return _dataAccess.LoadAsync(filePath);
         }
 
         #endregion
