@@ -55,7 +55,6 @@ namespace Tetris.WinForms.View
                 game.ClearFullLines();
                 game.SpawnNewTetromino();
             }
-            RefreshGrid();
         }
 
         private void ClockTimer_Tick(object? sender, EventArgs e)
@@ -63,22 +62,7 @@ namespace Tetris.WinForms.View
             UpdateTimeDisplay();
         }
         
-        private void Game_TetrominoMoved(object? sender, TetrominoEventArgs e)
-        {
-            RefreshGrid();
-        }
-        
-        private void Game_TetrominoRotated(object? sender, TetrominoEventArgs e)
-        {
-            RefreshGrid();
-        }
-        
         private void Game_GameStateChanged(object? sender, TetrisGameEventArgs e)
-        {
-            RefreshGrid();
-        }
-        
-        private void Game_TetrominoSpawned(object? sender, TetrominoEventArgs e)
         {
             RefreshGrid();
         }
@@ -89,11 +73,6 @@ namespace Tetris.WinForms.View
             {
                 ShowGameOverMessage();
             }
-        }
-        
-        private void Game_LinesCleared(object? sender, TetrisGameEventArgs e)
-        {
-            RefreshGrid();
         }
 
         #endregion
@@ -174,24 +153,16 @@ namespace Tetris.WinForms.View
         {
             if (game == null) return;
             
-            ((TetrisGame)game).TetrominoMoved += Game_TetrominoMoved;
-            ((TetrisGame)game).TetrominoRotated += Game_TetrominoRotated;
             ((TetrisGame)game).GameStateChanged += Game_GameStateChanged;
-            ((TetrisGame)game).TetrominoSpawned += Game_TetrominoSpawned;
             ((TetrisGame)game).GameOver += Game_GameOver;
-            ((TetrisGame)game).LinesCleared += Game_LinesCleared;
         }
         
         private void UnsubscribeFromGameEvents()
         {
             if (game == null) return;
             
-            ((TetrisGame)game).TetrominoMoved -= Game_TetrominoMoved;
-            ((TetrisGame)game).TetrominoRotated -= Game_TetrominoRotated;
             ((TetrisGame)game).GameStateChanged -= Game_GameStateChanged;
-            ((TetrisGame)game).TetrominoSpawned -= Game_TetrominoSpawned;
             ((TetrisGame)game).GameOver -= Game_GameOver;
-            ((TetrisGame)game).LinesCleared -= Game_LinesCleared;
         }
 
         private void InitializeGame()

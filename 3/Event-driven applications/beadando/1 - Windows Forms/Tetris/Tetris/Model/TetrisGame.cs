@@ -38,12 +38,8 @@ namespace Tetris.Model
 
         #region Events
 
-        public event EventHandler<TetrominoEventArgs> TetrominoMoved;
-        public event EventHandler<TetrominoEventArgs> TetrominoRotated;
         public event EventHandler<TetrisGameEventArgs> GameStateChanged;
-        public event EventHandler<TetrominoEventArgs> TetrominoSpawned;
         public event EventHandler<TetrisGameEventArgs> GameOver;
-        public event EventHandler<TetrisGameEventArgs> LinesCleared;
 
         #endregion
 
@@ -82,7 +78,7 @@ namespace Tetris.Model
             }
             else
             {
-                OnTetrominoSpawned(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
+                OnGameStateChanged(new TetrisGameEventArgs());
             }
         }
 
@@ -105,7 +101,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
             {
                 BlockRow++;
-                OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
+                OnGameStateChanged(new TetrisGameEventArgs());
                 return true;
             }
             return false;
@@ -116,7 +112,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
             {
                 BlockCol--;
-                OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
+                OnGameStateChanged(new TetrisGameEventArgs());
                 return true;
             }
             return false;
@@ -127,7 +123,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
             {
                 BlockCol++;
-                OnTetrominoMoved(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
+                OnGameStateChanged(new TetrisGameEventArgs());
                 return true;
             }
             return false;
@@ -149,7 +145,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol, rotated))
             {
                 CurrentBlock = rotated;
-                OnTetrominoRotated(new TetrominoEventArgs(CurrentTetrominoIndex, BlockRow, BlockCol, CurrentBlock));
+                OnGameStateChanged(new TetrisGameEventArgs());
             }
         }
 
@@ -201,7 +197,7 @@ namespace Tetris.Model
             
             if (linesCleared > 0)
             {
-                OnLinesCleared(new TetrisGameEventArgs(linesCleared));
+                OnGameStateChanged(new TetrisGameEventArgs(linesCleared));
             }
         }
 
@@ -209,34 +205,14 @@ namespace Tetris.Model
 
         #region Event Methods
 
-        protected virtual void OnTetrominoMoved(TetrominoEventArgs e)
-        {
-            TetrominoMoved?.Invoke(this, e);
-        }
-
-        protected virtual void OnTetrominoRotated(TetrominoEventArgs e)
-        {
-            TetrominoRotated?.Invoke(this, e);
-        }
-
         protected virtual void OnGameStateChanged(TetrisGameEventArgs e)
         {
             GameStateChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnTetrominoSpawned(TetrominoEventArgs e)
-        {
-            TetrominoSpawned?.Invoke(this, e);
-        }
-
         protected virtual void OnGameOver(TetrisGameEventArgs e)
         {
             GameOver?.Invoke(this, e);
-        }
-
-        protected virtual void OnLinesCleared(TetrisGameEventArgs e)
-        {
-            LinesCleared?.Invoke(this, e);
         }
 
         #endregion
