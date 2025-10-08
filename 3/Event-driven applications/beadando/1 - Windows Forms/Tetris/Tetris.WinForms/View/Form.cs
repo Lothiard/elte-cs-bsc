@@ -12,7 +12,7 @@ namespace Tetris.WinForms.View
 
         private const int CellSize = 25;
         private Button[,]? gridButtons;
-        private ITetrisGame? game;
+        private TetrisGame? game;
         private bool isGameRunning = false;
         private bool isPaused = false;
         private TetrisTimerAggregation gameTimer;
