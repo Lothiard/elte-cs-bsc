@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Tetris.Model
 {
-    public class TetrisGame
+    public class TetrisGameModel
     {
         #region Properties
 
@@ -45,7 +45,7 @@ namespace Tetris.Model
 
         #region Constructor
 
-        public TetrisGame(int rows, int cols)
+        public TetrisGameModel(int rows, int cols)
         {
             Rows = rows;
             Cols = cols;

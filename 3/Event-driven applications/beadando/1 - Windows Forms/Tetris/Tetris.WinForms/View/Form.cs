@@ -12,10 +12,8 @@ namespace Tetris.WinForms.View
 
         private const int CellSize = 25;
         private Button[,]? gridButtons;
-        private TetrisGame? game;
-        private bool isGameRunning = false;
-        private bool isPaused = false;
-        private TetrisTimerAggregation gameTimer;
+        private TetrisGameModel? game;
+        private TetrisTimer gameTimer;
         private System.Windows.Forms.Timer? gameTickTimer;
         private System.Windows.Forms.Timer? clockTimer;
 
@@ -29,7 +27,7 @@ namespace Tetris.WinForms.View
             this.KeyPreview = true;
             this.KeyDown += Form_KeyDown;
 
-            gameTimer = new TetrisTimerAggregation();
+            gameTimer = new TetrisTimer();
             cmbBoardSize.SelectedIndex = 1;
             clockTimer = new System.Windows.Forms.Timer();
             clockTimer.Interval = 100;
@@ -47,7 +45,7 @@ namespace Tetris.WinForms.View
 
         private void GameTimer_Tick(object? sender, EventArgs e)
         {
-            if (game == null || game.IsGameOver || isPaused) return;
+            if (game == null || game.IsGameOver || gameTimer.IsPaused) return;
 
             if (!game.MoveDown())
             {
@@ -81,7 +79,7 @@ namespace Tetris.WinForms.View
 
         private void Form_KeyDown(object? sender, KeyEventArgs e)
         {
-            if (!isGameRunning || isPaused || game == null || game.CurrentBlock == null) return;
+            if (!gameTimer.IsRunning || gameTimer.IsPaused || game == null || game.CurrentBlock == null) return;
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -116,7 +114,7 @@ namespace Tetris.WinForms.View
                 case 2: cols = 12; break;
             }
 
-            game = new TetrisGame(rows, cols);
+            game = new TetrisGameModel(rows, cols);
             SubscribeToGameEvents();
             InitializeGame();
             StartGame();
@@ -124,8 +122,8 @@ namespace Tetris.WinForms.View
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (!isGameRunning) return;
-            if (!isPaused)
+            if (!gameTimer.IsRunning) return;
+            if (!gameTimer.IsPaused)
             {
                 PauseGame();
             }
@@ -153,16 +151,16 @@ namespace Tetris.WinForms.View
         {
             if (game == null) return;
             
-            ((TetrisGame)game).GameStateChanged += Game_GameStateChanged;
-            ((TetrisGame)game).GameOver += Game_GameOver;
+            ((TetrisGameModel)game).GameStateChanged += Game_GameStateChanged;
+            ((TetrisGameModel)game).GameOver += Game_GameOver;
         }
         
         private void UnsubscribeFromGameEvents()
         {
             if (game == null) return;
             
-            ((TetrisGame)game).GameStateChanged -= Game_GameStateChanged;
-            ((TetrisGame)game).GameOver -= Game_GameOver;
+            ((TetrisGameModel)game).GameStateChanged -= Game_GameStateChanged;
+            ((TetrisGameModel)game).GameOver -= Game_GameOver;
         }
 
         private void InitializeGame()
@@ -207,8 +205,6 @@ namespace Tetris.WinForms.View
         private void StartGame()
         {
             if (game == null) return;
-            isGameRunning = true;
-            isPaused = false;
             gameTimer.Start();
             btnNewGame.Text = "Új játék";
             btnPause.Text = "Szünet";
@@ -230,8 +226,6 @@ namespace Tetris.WinForms.View
                 UnsubscribeFromGameEvents();
             }
             
-            isGameRunning = false;
-            isPaused = false;
             gameTickTimer?.Stop();
             clockTimer?.Stop();
             gameTimer.Stop();
@@ -242,8 +236,7 @@ namespace Tetris.WinForms.View
 
         private void PauseGame()
         {
-            if (!isGameRunning || isPaused) return;
-            isPaused = true;
+            if (!gameTimer.IsRunning || gameTimer.IsPaused) return;
             gameTimer.Pause();
             gameTickTimer?.Stop();
             btnPause.Text = "Folytatás";
@@ -252,8 +245,7 @@ namespace Tetris.WinForms.View
 
         private void ResumeGame()
         {
-            if (!isGameRunning || !isPaused) return;
-            isPaused = false;
+            if (!gameTimer.IsRunning || !gameTimer.IsPaused) return;
             gameTimer.Resume();
             gameTickTimer?.Start();
             btnPause.Text = "Szünet";
@@ -262,7 +254,7 @@ namespace Tetris.WinForms.View
 
         private void UpdateTimeDisplay()
         {
-            TimeSpan currentGameTime = isGameRunning ? gameTimer.ElapsedTime : TimeSpan.Zero;
+            TimeSpan currentGameTime = gameTimer.IsRunning ? gameTimer.ElapsedTime : TimeSpan.Zero;
             lblTimeValue.Text = currentGameTime.ToString(@"hh\:mm\:ss");
         }
 
@@ -315,7 +307,7 @@ namespace Tetris.WinForms.View
 
         private void SaveGame()
         {
-            if (!isPaused || game == null) return;
+            if (!gameTimer.IsPaused || game == null) return;
             try
             {
                 var gameState = new TetrisPersistence.GameState
@@ -362,13 +354,13 @@ namespace Tetris.WinForms.View
                         return;
                     }
                     StopGame();
-                    game = new TetrisGame(gameState.Rows, gameState.Cols);
+                    game = new TetrisGameModel(gameState.Rows, gameState.Cols);
                     SubscribeToGameEvents();
-                    ((TetrisGame)game).Board = gameState.Board;
-                    ((TetrisGame)game).CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
-                    ((TetrisGame)game).CurrentBlock = gameState.CurrentBlock;
-                    ((TetrisGame)game).BlockRow = gameState.BlockRow;
-                    ((TetrisGame)game).BlockCol = gameState.BlockCol;
+                    ((TetrisGameModel)game).Board = gameState.Board;
+                    ((TetrisGameModel)game).CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
+                    ((TetrisGameModel)game).CurrentBlock = gameState.CurrentBlock;
+                    ((TetrisGameModel)game).BlockRow = gameState.BlockRow;
+                    ((TetrisGameModel)game).BlockCol = gameState.BlockCol;
                     gameTimer.SetPausedTime(gameState.PausedTime);
                     switch (gameState.Cols)
                     {
