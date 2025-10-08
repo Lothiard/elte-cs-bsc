@@ -33,6 +33,8 @@ namespace Tetris.WinForms.View
             clockTimer = new System.Windows.Forms.Timer();
             clockTimer.Interval = 100;
             clockTimer.Tick += ClockTimer_Tick;
+            
+            btnPause.Enabled = false;
         }
 
         #endregion
@@ -123,7 +125,7 @@ namespace Tetris.WinForms.View
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (!gameTimer.IsRunning) return;
+            if (!gameTimer.IsRunning || game == null) return;
             if (!gameTimer.IsPaused)
             {
                 PauseGame();
@@ -211,7 +213,7 @@ namespace Tetris.WinForms.View
             btnPause.Text = "Szünet";
             btnPause.Enabled = true;
             btnSave.Enabled = false;
-            btnLoad.Enabled = false;
+            btnLoad.Enabled = true;
             clockTimer?.Start();
             game.Reset();
             gameTickTimer = new System.Windows.Forms.Timer();
@@ -233,6 +235,7 @@ namespace Tetris.WinForms.View
             btnPause.Text = "Szünet";
             btnPause.Enabled = false;
             btnSave.Enabled = false;
+            btnLoad.Enabled = true;
         }
 
         private void PauseGame()
@@ -242,6 +245,7 @@ namespace Tetris.WinForms.View
             gameTickTimer?.Stop();
             btnPause.Text = "Folytatás";
             btnSave.Enabled = true;
+            btnLoad.Enabled = true;
         }
 
         private void ResumeGame()
@@ -251,6 +255,7 @@ namespace Tetris.WinForms.View
             gameTickTimer?.Start();
             btnPause.Text = "Szünet";
             btnSave.Enabled = false;
+            btnLoad.Enabled = true;
         }
 
         private void UpdateTimeDisplay()
@@ -383,7 +388,7 @@ namespace Tetris.WinForms.View
                     btnPause.Text = "Szünet";
                     btnPause.Enabled = true;
                     btnSave.Enabled = false;
-                    btnLoad.Enabled = false;
+                    btnLoad.Enabled = true;
                     clockTimer?.Start();
                     
                     gameTickTimer = new System.Windows.Forms.Timer();
