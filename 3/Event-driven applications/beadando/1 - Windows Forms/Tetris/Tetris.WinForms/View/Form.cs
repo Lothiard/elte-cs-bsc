@@ -355,13 +355,10 @@ namespace Tetris.WinForms.View
                         return;
                     }
                     
-                    // Stop the current game
                     StopGame();
                     
-                    // Create a new game model with dimensions from saved state
                     game = new TetrisGameModel(gameState.Rows, gameState.Cols);
                     
-                    // Set the board size in the UI
                     switch (gameState.Cols)
                     {
                         case 4: cmbBoardSize.SelectedIndex = 0; break;
@@ -369,23 +366,18 @@ namespace Tetris.WinForms.View
                         case 12: cmbBoardSize.SelectedIndex = 2; break;
                     }
                     
-                    // Initialize the game UI
                     InitializeGame();
                     
-                    // Load the game state from saved file
                     ((TetrisGameModel)game).Board = gameState.Board;
                     ((TetrisGameModel)game).CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
                     ((TetrisGameModel)game).CurrentBlock = gameState.CurrentBlock;
                     ((TetrisGameModel)game).BlockRow = gameState.BlockRow;
                     ((TetrisGameModel)game).BlockCol = gameState.BlockCol;
                     
-                    // Subscribe to events
                     SubscribeToGameEvents();
                     
-                    // Set the timer's paused time
                     gameTimer.SetPausedTime(gameState.PausedTime);
                     
-                    // Start the game WITHOUT RESETTING
                     gameTimer.Start();
                     btnNewGame.Text = "Új játék";
                     btnPause.Text = "Szünet";
@@ -394,19 +386,15 @@ namespace Tetris.WinForms.View
                     btnLoad.Enabled = false;
                     clockTimer?.Start();
                     
-                    // Create and start the game tick timer
                     gameTickTimer = new System.Windows.Forms.Timer();
                     gameTickTimer.Interval = 500;
                     gameTickTimer.Tick += GameTimer_Tick;
                     gameTickTimer.Start();
                     
-                    // Pause the game immediately
                     PauseGame();
                     
-                    // Force refresh the grid to show the current state
                     RefreshGrid();
                     
-                    // Update the time display
                     UpdateTimeDisplay();
                     
                     MessageBox.Show("Játék sikeresen betöltve!", "Betöltés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -416,19 +404,6 @@ namespace Tetris.WinForms.View
             {
                 MessageBox.Show($"Hiba a betöltés során: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        // Keep legacy methods for backward compatibility
-        private void SaveGame()
-        {
-            // Just delegate to the async version
-            _ = SaveGameAsync();
-        }
-
-        private void LoadGame()
-        {
-            // Just delegate to the async version
-            _ = LoadGameAsync();
         }
 
         #endregion
