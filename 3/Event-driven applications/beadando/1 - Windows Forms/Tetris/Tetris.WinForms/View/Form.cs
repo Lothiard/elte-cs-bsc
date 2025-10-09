@@ -373,11 +373,11 @@ namespace Tetris.WinForms.View
                     
                     InitializeGame();
                     
-                    ((TetrisGameModel)game).Board = gameState.Board;
-                    ((TetrisGameModel)game).CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
-                    ((TetrisGameModel)game).CurrentBlock = gameState.CurrentBlock;
-                    ((TetrisGameModel)game).BlockRow = gameState.BlockRow;
-                    ((TetrisGameModel)game).BlockCol = gameState.BlockCol;
+                    game.Board = gameState.Board;
+                    game.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
+                    game.CurrentBlock = gameState.CurrentBlock;
+                    game.BlockRow = gameState.BlockRow;
+                    game.BlockCol = gameState.BlockCol;
                     
                     SubscribeToGameEvents();
                     
