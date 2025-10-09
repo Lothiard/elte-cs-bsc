@@ -6,16 +6,14 @@ namespace Tetris.Model
     {
         #region Properties
 
-        public int ClearedLines { get; private set; }
-        public bool IsGameOver { get; private set; }
+        public bool IsGameOver { get; }
 
         #endregion
 
         #region Constructor
 
-        public TetrisGameEventArgs(int clearedLines = 0, bool isGameOver = false)
+        public TetrisGameEventArgs(bool isGameOver = false)
         {
-            ClearedLines = clearedLines;
             IsGameOver = isGameOver;
         }
 

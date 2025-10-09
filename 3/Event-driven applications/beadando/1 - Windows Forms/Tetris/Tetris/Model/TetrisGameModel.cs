@@ -8,31 +8,30 @@ namespace Tetris.Model
     {
         #region Properties
 
-        public int Rows { get; private set; }
-        public int Cols { get; private set; }
+        public int Rows { get; set; }
+        public int Cols { get; set; }
         public int[,] Board { get; set; }
         public int CurrentTetrominoIndex { get; set; }
         public (int row, int col)[]? CurrentBlock { get; set; }
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
         public bool IsGameOver { get; private set; }
-        public readonly (int row, int col)[][] Tetrominoes = new (int, int)[][]
+        public readonly (int row, int col)[][] Tetrominoes = new[]
         {
-            new (int, int)[] { (0,0), (0,1), (0,2), (0,3) }, // I
-            new (int, int)[] { (0,0), (0,1), (1,0), (1,1) }, // O
-            new (int, int)[] { (0,1), (1,0), (1,1), (1,2) }, // T
-            new (int, int)[] { (0,1), (0,2), (1,0), (1,1) }, // S
-            new (int, int)[] { (0,0), (0,1), (1,1), (1,2) }, // Z
-            new (int, int)[] { (0,0), (1,0), (1,1), (1,2) }, // J
-            new (int, int)[] { (0,2), (1,0), (1,1), (1,2) }  // L
+            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3) }, // I
+            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1) }, // O
+            new[] { (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }, // T
+            new[] { (row: 0, col: 1), (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1) }, // S
+            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 1), (row: 1, col: 2) }, // Z
+            new[] { (row: 0, col: 0), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }, // J
+            new[] { (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }  // L
         };
-        private readonly Color[] tetrominoColors = new Color[]
+        private readonly Random rng = new Random();
+        public Color[] TetrominoColors { get; } = new[]
         {
             Color.Cyan, Color.Yellow, Color.Purple, Color.Green, 
             Color.Red, Color.Blue, Color.Orange
         };
-        public Color[] TetrominoColors => tetrominoColors;
-        private Random rng = new Random();
 
         #endregion
 
@@ -74,7 +73,7 @@ namespace Tetris.Model
             if (!CanMoveTo(BlockRow, BlockCol, CurrentBlock))
             {
                 IsGameOver = true;
-                OnGameOver(new TetrisGameEventArgs(0, true));
+                OnGameOver(new TetrisGameEventArgs(true));
             }
             else
             {
@@ -197,7 +196,7 @@ namespace Tetris.Model
             
             if (linesCleared > 0)
             {
-                OnGameStateChanged(new TetrisGameEventArgs(linesCleared));
+                OnGameStateChanged(new TetrisGameEventArgs());
             }
         }
 
