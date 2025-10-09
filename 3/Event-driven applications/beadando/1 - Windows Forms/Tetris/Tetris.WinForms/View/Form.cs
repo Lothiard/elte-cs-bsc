@@ -322,7 +322,7 @@ namespace Tetris.WinForms.View
                     Cols = game.Cols,
                     Board = game.Board,
                     CurrentTetrominoIndex = game.CurrentTetrominoIndex,
-                    CurrentBlock = game.CurrentBlock,
+                    CurrentBlock = game.CurrentBlock!,
                     BlockRow = game.BlockRow,
                     BlockCol = game.BlockCol,
                     PausedTime = gameTimer.ElapsedTime,

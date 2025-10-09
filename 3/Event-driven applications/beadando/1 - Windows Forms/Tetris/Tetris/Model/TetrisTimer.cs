@@ -124,7 +124,6 @@ namespace Tetris.Model
                 if (_timer != null)
                 {
                     _timer.Stop();
-                    _timer.Dispose();
                     _timer = null;
                 }
             }
@@ -176,7 +175,6 @@ namespace Tetris.Model
             if (_timer != null)
             {
                 _timer.Stop();
-                _timer.Dispose();
                 _timer = null;
             }
             

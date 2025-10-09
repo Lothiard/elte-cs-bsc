@@ -17,7 +17,7 @@ namespace Tetris.Persistence
                     
                     await writer.WriteLineAsync($"{state.CurrentTetrominoIndex} {state.BlockRow} {state.BlockCol}");
                     
-                    await writer.WriteAsync($"{state.CurrentBlock.Length}");
+                    await writer.WriteAsync($"{state.CurrentBlock!.Length}");
                     for (int i = 0; i < state.CurrentBlock.Length; i++)
                     {
                         await writer.WriteAsync($" {state.CurrentBlock[i].row} {state.CurrentBlock[i].col}");
@@ -32,7 +32,7 @@ namespace Tetris.Persistence
                     {
                         for (int j = 0; j < state.Cols; j++)
                         {
-                            await writer.WriteAsync($"{state.Board[i, j]} ");
+                            await writer.WriteAsync($"{state.Board![i, j]} ");
                         }
                         await writer.WriteLineAsync();
                     }

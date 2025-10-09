@@ -12,7 +12,7 @@ namespace Tetris.Model
         public int Cols { get; private set; }
         public int[,] Board { get; set; }
         public int CurrentTetrominoIndex { get; set; }
-        public (int row, int col)[] CurrentBlock { get; set; }
+        public (int row, int col)[]? CurrentBlock { get; set; }
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
         public bool IsGameOver { get; private set; }
@@ -38,8 +38,8 @@ namespace Tetris.Model
 
         #region Events
 
-        public event EventHandler<TetrisGameEventArgs> GameStateChanged;
-        public event EventHandler<TetrisGameEventArgs> GameOver;
+        public event EventHandler<TetrisGameEventArgs>? GameStateChanged;
+        public event EventHandler<TetrisGameEventArgs>? GameOver;
 
         #endregion
 
@@ -98,7 +98,7 @@ namespace Tetris.Model
 
         public bool MoveDown()
         {
-            if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
+            if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock!))
             {
                 BlockRow++;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -109,7 +109,7 @@ namespace Tetris.Model
 
         public bool MoveLeft()
         {
-            if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
+            if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock!))
             {
                 BlockCol--;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -120,7 +120,7 @@ namespace Tetris.Model
 
         public bool MoveRight()
         {
-            if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
+            if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock!))
             {
                 BlockCol++;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -131,7 +131,7 @@ namespace Tetris.Model
 
         public void Rotate()
         {
-            var rotated = new (int row, int col)[CurrentBlock.Length];
+            var rotated = new (int row, int col)[CurrentBlock!.Length];
             for (int i = 0; i < CurrentBlock.Length; i++)
             {
                 rotated[i] = (CurrentBlock[i].col, -CurrentBlock[i].row);
@@ -151,7 +151,7 @@ namespace Tetris.Model
 
         public void LandCurrentPiece()
         {
-            foreach (var (dr, dc) in CurrentBlock)
+            foreach (var (dr, dc) in CurrentBlock!)
             {
                 int r = BlockRow + dr;
                 int c = BlockCol + dc;

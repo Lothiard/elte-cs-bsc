@@ -20,15 +20,12 @@ namespace Tetris.Test
             _gameStateChangedCount = 0;
             _gameOverCount = 0;
             
-            if (_model != null)
-            {
-                _model.GameStateChanged += GameStateChanged;
-                _model.GameOver += GameOver;
+            _model.GameStateChanged += GameStateChanged;
+            _model.GameOver += GameOver;
                 
-                _model.Reset();
+            _model.Reset();
                 
-                _gameStateChangedCount = 0;
-            }
+            _gameStateChangedCount = 0;
         }
         
         [TestMethod]

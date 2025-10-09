@@ -3,10 +3,8 @@ using Tetris.Model;
 
 namespace Tetris.Test
 {
-    public class MockTimer : Tetris.Model.ITimer
+    public class MockTimer
     {
-        private bool _disposed = false;
-
         #region ITimer Properties
 
         public bool Enabled { get; set; }
@@ -18,12 +16,6 @@ namespace Tetris.Test
         public bool IsPaused { get; private set; }
 
         public TimeSpan ElapsedTime { get; private set; }
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler? Elapsed;
 
         #endregion
 
