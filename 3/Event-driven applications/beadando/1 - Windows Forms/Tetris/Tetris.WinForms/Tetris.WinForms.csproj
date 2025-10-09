@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\Form.cs">
+    <Compile Update="View\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

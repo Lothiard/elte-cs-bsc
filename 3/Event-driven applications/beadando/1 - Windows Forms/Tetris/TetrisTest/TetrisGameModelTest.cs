@@ -196,8 +196,7 @@ namespace Tetris.Test
         }
         
         [TestMethod]
-        [TestCategory("Rotation")]
-        public void Rotate_WithSpace_RotatesBlockCorrectly()
+        public void RotatesBlockCorrectly()
         {
             if (_model == null) return;
             
