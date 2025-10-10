@@ -7,15 +7,16 @@
 // Define this before including SDL.h to manage the main function yourself.
 #define SDL_MAIN_HANDLED
 
-#include <CL/opencl.hpp>
 #include <GL/glew.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 
+#include <CL/opencl.hpp>
 #include <oglutils.hpp>
 
 // Forward-declare our utility functions
-SharedShader createShaderProgram(const char *vertexSource,
-                                 const char *fragmentSource);
+UniqueGlProgram createShaderProgram(const char *vertexSource,
+                                    const char *fragmentSource);
 
 // GLSL Shader Sources
 const char *vertexShaderSource = R"GLSL(
@@ -74,12 +75,11 @@ void runApp() {
 
   // 1. Initialization
   SdlManager sdlManager(SDL_INIT_VIDEO);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-  UniqueWindow window(SDL_CreateWindow(
-      "Animated OpenCL + OpenGL", SDL_WINDOWPOS_CENTERED,
-      SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
+  UniqueWindow window(SDL_CreateWindow("Animated OpenCL + OpenGL", 800, 600,
+                                       SDL_WINDOW_OPENGL));
   if (!window)
     throw std::runtime_error(std::string("SDL_CreateWindow failed: ") +
                              SDL_GetError());
@@ -122,8 +122,8 @@ void runApp() {
                           1.0f,  -1.0f, 1.0f, 0.0f, -1.0f, 1.0f,  0.0f, 1.0f,
                           1.0f,  -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  1.0f, 1.0f};
 
-  auto quadVAO = makeVAO();
-  auto quadVBO = makeVBO();
+  auto quadVAO = createVertexArray();
+  auto quadVBO = createBuffer();
   glBindVertexArray(*quadVAO);
   glBindBuffer(GL_ARRAY_BUFFER, *quadVBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices,
@@ -135,7 +135,7 @@ void runApp() {
   glEnableVertexAttribArray(1);
 
   const int TEX_WIDTH = 1024, TEX_HEIGHT = 1024;
-  auto glTexture = makeTexture();
+  auto glTexture = createTexture<GL_TEXTURE_2D>();
   glBindTexture(GL_TEXTURE_2D, *glTexture);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, TEX_WIDTH, TEX_HEIGHT, 0, GL_RGBA,
                GL_FLOAT, nullptr);
@@ -148,14 +148,13 @@ void runApp() {
   // referencing it
   cl::ImageGL clImage(clContext, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0,
                       *glTexture);
-  // cl::BufferGL for VBO-s
 
   // 5. Main Loop
   bool running = true;
   while (running) {
     SDL_Event event;
     while (SDL_PollEvent(&event))
-      if (event.type == SDL_QUIT)
+      if (event.type == SDL_EVENT_QUIT)
         running = false;
 
     // Get elapsed time in seconds.
@@ -237,8 +236,8 @@ void checkCompileErrors(GLuint shader, const std::string &type) {
 
 // Function to create and link a shader program from vertex and fragment shader
 // sources
-SharedShader createShaderProgram(const char *vertexSource,
-                                 const char *fragmentSource) {
+UniqueGlProgram createShaderProgram(const char *vertexSource,
+                                    const char *fragmentSource) {
   // 1. Compile shaders
 
   // Vertex Shader
@@ -254,7 +253,7 @@ SharedShader createShaderProgram(const char *vertexSource,
   checkCompileErrors(fragmentShader, "FRAGMENT");
 
   // 2. Link shaders into a shader program
-  auto shaderProgram = makeShaderProgram();
+  auto shaderProgram = createProgram();
   glAttachShader(*shaderProgram, vertexShader);
   glAttachShader(*shaderProgram, fragmentShader);
   glLinkProgram(*shaderProgram);

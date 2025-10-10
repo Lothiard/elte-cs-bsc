@@ -7,23 +7,25 @@ __kernel void reduce_workgroup(
     int lid  = get_local_id(0);
     int gid  = get_global_id(0);
     int lsize = get_local_size(0);
+    // get_group_id(0)
+    // barrier(CLK_LOCAL_MEM_FENCE);
 
     // 1. Load data into local memory. Pad with zeroess that's over 'size'.
     scratch[lid] = (gid < length) ? input[gid] : 0;
     barrier(CLK_LOCAL_MEM_FENCE);
 
     // 2. Perform reduction in local memory
-    for (int offset = lsize >> 1; offset != 0; offset >>= 1) {
-        if (lid < offset) {
-            scratch[lid] += scratch[lid + offset];
-        }
-        barrier(CLK_LOCAL_MEM_FENCE);
+    // commut. reduce
+    for (int offset = lsize / 2; offset != 0; offset /= 2) {
+      if (lid < offset) {
+        scratch[lid] += scratch[lid + offset];
+      }
+      barrier(CLK_LOCAL_MEM_FENCE);
     }
 
     // 3. Write one result per work-group
-    if (!lid) {
-        output[get_group_id(0)] = scratch[0];
-    }
+    if (lid == 0)
+       output[get_group_id(0)] = scratch[0];
 }
 
 __kernel void hybrid_reduce(
@@ -34,14 +36,29 @@ __kernel void hybrid_reduce(
 {
     const int lid = get_local_id(0);
     const int gid = get_global_id(0);
-    const int gsize = get_global_size(0);
+    const int gsize = get_global_size(0); // |WI| == |WG|^2
+    const int lsize = get_local_size(0); // |WG|
 
     // 1. Each thread sums its strided chunk of the input
+    int sum = 0;
+    for (int i = gid; i < length; i += gsize) {
+      sum += input[i];
+    }
 
     // 2. Store partial sum into local memory
+    scratch[lid] = sum;
+    barrier(CLK_LOCAL_MEM_FENCE);
 
     // 3. Parallel reduction in local memory (tree style)
+    for (int offset = lsize >> 1; offset != 0; offset >>= 1) {
+      if (lid < offset) {
+        scratch[lid] += scratch[lid + offset];
+      }
+      barrier(CLK_LOCAL_MEM_FENCE);
+    }
 
     // 4. One thread per group writes result
+    if (lid == 0)
+       result[get_group_id(0)] = scratch[0];
 	
 }

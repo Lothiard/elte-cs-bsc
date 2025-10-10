@@ -30,7 +30,16 @@ inline std::string oclReadSourcesFromFile( const char *file_name )
 	std::string sourceCode(
 		std::istreambuf_iterator<char>(sourceFile),
 		(std::istreambuf_iterator<char>()));
+
+	if (sourceCode.empty())
+		throw std::runtime_error("Failed to read file: " + std::string(file_name));
+
 	return sourceCode;
+}
+
+inline std::string oclReadSourcesFromFile(const std::string& file_name)
+{
+	return oclReadSourcesFromFile(file_name.c_str());
 }
 
 #pragma endregion

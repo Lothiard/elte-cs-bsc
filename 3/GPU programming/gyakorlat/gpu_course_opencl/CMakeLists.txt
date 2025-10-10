@@ -10,12 +10,7 @@ else()
     message(STATUS "ENV{VCPKG_ROOT} is not defined. Skipping using ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 endif()
 
-#if(NOT CMAKE_TOOLCHAIN_FILE) # Optional: Only run if a toolchain isn't already specified externally
 include(cmake/bootstrap_vcpkg.cmake)
-#message(STATUS "Using cmake/bootstrap_vcpkg.cmake bootstrap script for locally installing vcpkg.")
-#else()
-#message(STATUS "CMAKE_TOOLCHAIN_FILE is already set to: ${CMAKE_TOOLCHAIN_FILE}. Skipping vcpkg bootstrap script.")
-#endif()
 
 #==============================================================================
 # USER-FACING OPTIONS
@@ -40,70 +35,61 @@ project(gpu_course_opencl VERSION 1.0 LANGUAGES CXX)
 # COMPILE OPTIONS
 #==============================================================================
 
-# CXX_STANDARD_REQUIRED ensures that if the compiler doesn't support C++17,
-# CMake will produce an error.
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF) # Discourage compiler-specific extensions
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 #==============================================================================
 # DEPENDENCIES
 #==============================================================================
-# Find required external libraries.
-
 find_package(OpenCL CONFIG REQUIRED)
 
 #==============================================================================
 # Interfaces, Common libraries, etc.
 #==============================================================================
-
-# Add the interface definition for OpenCL projects
 include(cmake/OpenCLConfig.cmake)
 
 if(BUILD_WITH_OPENGL)
     message(STATUS "OpenGL support is ENABLED.")
-
-    # Add the interface definition for OpenGL projects
     include(cmake/OpenGLConfig.cmake)
+    find_package(OpenGL REQUIRED)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(X11 REQUIRED x11)
 else()
     message(STATUS "OpenGL support is DISABLED.")
-    # No find_package calls = VCPKG doesn't install the feature.
 endif()
 
 #==============================================================================
 # opencl-01-helloworld
 #==============================================================================
-
 add_executable(opencl-01-helloworld src/main_01_helloworld.cpp)
 target_link_libraries(opencl-01-helloworld PRIVATE OpenCLConfig)
 
 #==============================================================================
 # opencl-02-vectoradd
 #==============================================================================
-
 add_executable(opencl-02-vectoradd
-  src/main_02_vectoradd.cpp # this is a compilation unit
-  kernels/krn_vectoradd.cl  # this is a mere text file, not to be compiled
+  src/main_02_vectoradd.cpp
+  kernels/krn_vectoradd.cl
 )
 target_link_libraries(opencl-02-vectoradd PRIVATE OpenCLConfig)
 
 #==============================================================================
 # opencl-03-reduce-global
 #==============================================================================
-
 add_executable(opencl-03-reduce-global
-  src/main_03_reduce_global.cpp # this is a compilation unit
-  kernels/krn_reduce_global.cl  # this is a mere text file, not to be compiled
+  src/main_03_reduce_global.cpp
+  kernels/krn_reduce_global.cl
 )
 target_link_libraries(opencl-03-reduce-global PRIVATE OpenCLConfig)
 
 #==============================================================================
 # opencl-04-reduce-local
 #==============================================================================
-
 add_executable(opencl-04-reduce-local
   src/main_04_reduce_local.cpp
   kernels/krn_reduce_local.cl
+  kernels/krn_reduce_global.cl
 )
 target_link_libraries(opencl-04-reduce-local PRIVATE OpenCLConfig)
 
@@ -115,22 +101,29 @@ if(BUILD_WITH_OPENGL)
     #============================================================================
     # opencl-05-hello-opengl
     #============================================================================
-
-    # Find OpenGL and X11 libraries
-    find_package(OpenGL REQUIRED)
-    find_package(X11 REQUIRED)
-
-    # If GLEW is used, find it too
-    find_package(GLEW REQUIRED)
-
     add_executable(opencl-05-hello-opengl src/main_05_hello_opengl.cpp)
+    target_include_directories(opencl-05-hello-opengl PRIVATE ${X11_INCLUDE_DIRS})
+    target_link_libraries(opencl-05-hello-opengl PRIVATE OpenCLConfig OpenGLConfig OpenGL::GL ${X11_LIBRARIES})
 
-    target_link_libraries(opencl-05-hello-opengl PRIVATE
-        OpenCLConfig
-        OpenGLConfig
-        OpenGL::GL
-        GLEW::GLEW
-        ${X11_LIBRARIES}
-    )
+    #============================================================================
+    # opencl_06_opengl_nbody
+    #============================================================================
+    add_subdirectory(src/opencl_06_opengl_nbody)
+
+    # Ensure opencl-06-opengl-nbody links OpenGL and X11 and finds headers
+    set_target_properties(opencl-06-opengl-nbody PROPERTIES
+    INCLUDE_DIRECTORIES "${X11_INCLUDE_DIRS}"
+  )
+    target_link_libraries(opencl-06-opengl-nbody PRIVATE OpenCLConfig OpenGL::GL ${X11_LIBRARIES})
+    target_include_directories(opencl-06-opengl-nbody PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/opencl_06_opengl_nbody/common)
 
 endif()
+
+#==============================================================================
+# opencl-07-scan
+#==============================================================================
+add_executable(opencl-07-scan
+  src/main_07_scan.cpp
+  kernels/krn_scan.cl
+)
+target_link_libraries(opencl-07-scan PRIVATE OpenCLConfig)

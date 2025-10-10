@@ -18,7 +18,7 @@ cmake .. -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -G "
 ```
 
 ### Option C
-In order to generate build scripts for OpenGL-based (CL-GL interoperation) projects, used the `BUILD_WITH_OPENGL=ON` option. E.g.:
+In order to generate build scripts for OpenGL-based (CL-GL interoperation) projects, use the `BUILD_WITH_OPENGL=ON` option. E.g.:
 ```bash
 cmake .. -DBUILD_WITH_OPENGL=ON
 ```

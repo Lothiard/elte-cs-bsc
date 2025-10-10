@@ -1,17 +1,19 @@
 {
-    "name": "gpu-course-opencl",
-    "version-string": "1.0",
-    "dependencies": [
-        "opencl"
-    ],
-    "features": {
-        "opengl": {
-            "description": "Enable OpenGL rendering support using SDL2 and GLEW",
-            "dependencies": [
-                "sdl2",
-                "glew",
-                "glm"
-            ]
-    }
+  "name": "gpu-course-opencl",
+  "version-string": "1.0",
+  "dependencies": [
+    "opencl"
+  ],
+  "features": {
+    "opengl": {
+      "description": "Enable OpenGL rendering support using SDL2 and GLEW",
+      "dependencies": [
+        {"name" : "sdl3"},
+        {"name" : "sdl3-image", "features": ["png"]},
+        {"name" : "glew"},
+        {"name" : "glm"},
+        {"name" : "imgui", "features": ["sdl3-binding","opengl3-binding"]}
+      ]
+  }
   }
 }

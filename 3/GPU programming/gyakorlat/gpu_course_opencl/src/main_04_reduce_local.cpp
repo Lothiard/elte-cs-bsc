@@ -21,7 +21,6 @@ struct IParallelPrimitive {
                            std::size_t size) = 0;
 };
 
-// Strategy pattern
 struct GlobalReduction : public IParallelPrimitive {
 
   cl::KernelFunctor<cl::Buffer, int32_t> kernel;
@@ -68,43 +67,35 @@ struct WorkGroupReduction : public IParallelPrimitive {
 
     uint64_t total_ns = 0;
 
-    std::size_t maxGroups = std::ceil(size / localSize);
+    std::size_t maxGroups = (size + localSize - 1) / localSize;
     cl::Buffer intermediate(context, CL_MEM_READ_WRITE,
                             sizeof(int32_t) * maxGroups);
 
-    std::size_t tree_level = 0;
-    cl::Buffer *buff_in = &inputBuffer;
-    cl::Buffer *buff_out = &intermediate;
+    cl::Buffer *src = &inputBuffer;
+    cl::Buffer *dst = &intermediate;
 
     std::size_t currentSize = size;
     while (currentSize > 1) {
-      std::size_t numGroups = std::ceil(currentSize / localSize);
-
-      if (tree_level % 2 == 0) {
-        buff_in = &inputBuffer;
-        buff_out = &intermediate;
-      } else {
-        buff_in = &intermediate;
-        buff_out = &inputBuffer;
-      }
+      std::size_t numGroups = (currentSize + localSize - 1) / localSize;
 
       cl::Event evt =
           kernel(cl::EnqueueArgs(queue, cl::NDRange(numGroups * localSize),
                                  cl::NDRange(localSize)),
-                 *buff_in, *buff_out, cl::Local(sizeof(int32_t) * localSize),
+                 *src, *dst, cl::Local(sizeof(int32_t) * localSize),
                  static_cast<uint32_t>(currentSize));
 
       evt.wait();
+
+      std::swap(src, dst);
 
       cl_ulong start = evt.getProfilingInfo<CL_PROFILING_COMMAND_START>();
       cl_ulong end = evt.getProfilingInfo<CL_PROFILING_COMMAND_END>();
       total_ns += (end - start);
 
       currentSize = numGroups;
-      ++tree_level;
     }
 
-    queue.enqueueCopyBuffer(*buff_out, outputBuffer, 0, 0, sizeof(int32_t));
+    queue.enqueueCopyBuffer(*src, outputBuffer, 0, 0, sizeof(int32_t));
     queue.finish();
 
     return total_ns;
@@ -113,46 +104,30 @@ struct WorkGroupReduction : public IParallelPrimitive {
 
 struct TwoStageReduction : public IParallelPrimitive {
   cl::KernelFunctor<cl::Buffer, cl::Buffer, cl::LocalSpaceArg, uint32_t>
-      kernel_hybrid;                   // kernel for the first stage
-  WorkGroupReduction reduce_workgroup; // second stage
+      kernel_hybrid;     // kernel for the first stage
+  WorkGroupReduction wg; // second stage
 
   std::size_t localSize;
-  cl::Buffer intermediate;
 
   explicit TwoStageReduction(cl::Program &program, std::size_t localSize_ = 256)
-      : kernel_hybrid(program, "hybrid_reduce"), reduce_workgroup(program),
-        localSize(localSize_) {}
+      : kernel_hybrid(program, "hybrid_reduce"), localSize(localSize_),
+        wg(program, localSize_) {}
 
   uint64_t execute(cl::CommandQueue &queue, cl::Context &context,
                    cl::Buffer &inputBuffer, cl::Buffer &outputBuffer,
                    std::size_t size) override {
     uint64_t total_ns = 0;
 
-    // // First stage: run hybrid_reduce across entire input, produce a single
-    // // workgroup worth of elements
-    // std::size_t numGroups = /*TODO*/;
-    // auto intermediate =
-    //     cl::Buffer(context, CL_MEM_READ_WRITE, sizeof(int32_t) * numGroups);
-    //
-    // cl::Event evt = kernel_hybrid(
-    //     cl::EnqueueArgs(queue, cl::NDRange(/*TODO*/),
-    //     cl::NDRange(localSize)), inputBuffer, intermediate,
-    //     cl::Local(sizeof(int32_t) * localSize), static_cast<uint32_t>(size));
-    //
-    // evt.wait();
-    //
-    // cl_ulong s = evt.getProfilingInfo<CL_PROFILING_COMMAND_START>();
-    // cl_ulong e = evt.getProfilingInfo<CL_PROFILING_COMMAND_END>();
-    // total_ns += (e - s);
-    //
-    // // Second stage: reduce the numGroups results with a single work-group
-    // // reduction
-    // if (numGroups > 1) {
-    //   total_ns += reduce_workgroup.execute(/*TODO*/);
-    // } else {
-    //   queue.enqueueCopyBuffer(intermediate, outputBuffer, 0, 0,
-    //                           sizeof(int32_t));
-    // }
+    // First stage: run hybrid_reduce across entire input, produce a single
+    // workgroup worth of elements
+    std::size_t numGroups = localSize;
+    auto intermediate =
+        cl::Buffer(context, CL_MEM_READ_WRITE, sizeof(int32_t) * numGroups);
+
+    // Second stage: reduce the numGroups results with a single work-group
+    // reduction
+    total_ns +=
+        wg.execute(queue, context, intermediate, outputBuffer, numGroups);
 
     queue.finish();
     return total_ns;
