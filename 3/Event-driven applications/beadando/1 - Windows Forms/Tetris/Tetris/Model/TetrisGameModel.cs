@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Tetris.Model
 {
-    public class TetrisGameModel
+    public class TetrisGameModel : IDisposable
     {
         #region Properties
 
@@ -44,6 +44,7 @@ namespace Tetris.Model
         private TimeSpan _pausedTime;
         private bool _isRunning;
         private bool _isPaused;
+        private bool _disposed;
         
         public Color[] TetrominoColors => (Color[])_tetrominoColors.Clone();
         public int TetrominoCount => _tetrominoes.Length;
@@ -85,6 +86,7 @@ namespace Tetris.Model
             _isRunning = false;
             _isPaused = false;
             _pausedTime = TimeSpan.Zero;
+            _disposed = false;
 
             _gameTickTimer = new System.Windows.Forms.Timer
             {
@@ -339,6 +341,32 @@ namespace Tetris.Model
         protected virtual void OnGameOver()
         {
             GameOver?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region IDisposable Implementation
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _gameTickTimer.Stop();
+                    _gameTickTimer.Tick -= OnGameTickTimer_Tick;
+                    _gameTickTimer.Dispose();
+                }
+
+
+                _disposed = true;
+            }
         }
 
         #endregion

@@ -5,12 +5,13 @@ using Tetris.Model;
 namespace Tetris.Test
 {
     [TestClass]
-    public sealed class TetrisGameModelTest
+    public sealed class TetrisGameModelTest : IDisposable
     {
         private TetrisGameModel? _model;
         private MockTimer? _mockTimer;
         private int _gameStateChangedCount;
         private int _gameOverCount;
+        private bool _disposed = false;
         
         [TestInitialize]
         public void Initialize()
@@ -27,18 +28,50 @@ namespace Tetris.Test
                 
             _gameStateChangedCount = 0;
         }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            Dispose(true);
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
+        private void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _model?.Dispose();
+                }
+                
+                _disposed = true;
+            }
+        }
         
         [TestMethod]
         public void InitializeTest()
         {
             var model = new TetrisGameModel(20, 10);
             
-            Assert.AreEqual(20, model.Rows);
-            Assert.AreEqual(10, model.Cols);
-            Assert.IsNotNull(model.Board);
-            Assert.AreEqual(20, model.Board.GetLength(0));
-            Assert.AreEqual(10, model.Board.GetLength(1));
-            Assert.IsFalse(model.IsGameOver);
+            try
+            {
+                Assert.AreEqual(20, model.Rows);
+                Assert.AreEqual(10, model.Cols);
+                Assert.IsNotNull(model.Board);
+                Assert.AreEqual(20, model.Board.GetLength(0));
+                Assert.AreEqual(10, model.Board.GetLength(1));
+                Assert.IsFalse(model.IsGameOver);
+            }
+            finally
+            {
+                model.Dispose();
+            }
         }
         
         [TestMethod]
@@ -183,12 +216,12 @@ namespace Tetris.Test
             
             _model.Board[10, 4] = 1;
             
-            Assert.IsTrue(_model.CanMoveTo(5, 5, _model.CurrentBlock ?? Array.Empty<(int row, int col)>()));
+            Assert.IsTrue(_model.CanMoveTo(5, 5, _model.CurrentBlock ?? []));
             
-            Assert.IsFalse(_model.CanMoveTo(-1, 0, _model.CurrentBlock ?? Array.Empty<(int row, int col)>()));
-            Assert.IsFalse(_model.CanMoveTo(0, -1, _model.CurrentBlock ?? Array.Empty<(int row, int col)>()));
-            Assert.IsFalse(_model.CanMoveTo(_model.Rows, 0, _model.CurrentBlock ?? Array.Empty<(int row, int col)>()));
-            Assert.IsFalse(_model.CanMoveTo(0, _model.Cols, _model.CurrentBlock ?? Array.Empty<(int row, int col)>()));
+            Assert.IsFalse(_model.CanMoveTo(-1, 0, _model.CurrentBlock ?? []));
+            Assert.IsFalse(_model.CanMoveTo(0, -1, _model.CurrentBlock ?? []));
+            Assert.IsFalse(_model.CanMoveTo(_model.Rows, 0, _model.CurrentBlock ?? []));
+            Assert.IsFalse(_model.CanMoveTo(0, _model.Cols, _model.CurrentBlock ?? []));
             
             var testBlock = new (int row, int col)[] { (1, 0) };
             
@@ -243,12 +276,12 @@ namespace Tetris.Test
             Assert.AreEqual(1, _gameStateChangedCount);
         }
         
-        private void GameStateChanged(object? sender, TetrisGameEventArgs e)
+        private void GameStateChanged(object? sender, EventArgs e)
         {
             _gameStateChangedCount++;
         }
         
-        private void GameOver(object? sender, TetrisGameEventArgs e)
+        private void GameOver(object? sender, EventArgs e)
         {
             _gameOverCount++;
         }
