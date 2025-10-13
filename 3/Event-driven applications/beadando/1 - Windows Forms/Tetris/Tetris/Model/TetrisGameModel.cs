@@ -16,7 +16,7 @@ namespace Tetris.Model
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
         public bool IsGameOver { get; private set; }
-        public readonly (int row, int col)[][] Tetrominoes = new[]
+        private readonly (int row, int col)[][] _tetrominoes = new[]
         {
             new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3) }, // I
             new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1) }, // O
@@ -32,6 +32,8 @@ namespace Tetris.Model
             Color.Cyan, Color.Yellow, Color.Purple, Color.Green, 
             Color.Red, Color.Blue, Color.Orange
         };
+
+        public int TetrominoCount => _tetrominoes.Length;
 
         #endregion
 
@@ -56,6 +58,14 @@ namespace Tetris.Model
 
         #region Public Methods
 
+        public (int row, int col)[] GetTetromino(int index)
+        {
+            if (index < 0 || index >= _tetrominoes.Length)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return (ValueTuple<int, int>[])_tetrominoes[index].Clone();
+        }
+
         public void Reset()
         {
             Board = new int[Rows, Cols];
@@ -66,8 +76,8 @@ namespace Tetris.Model
 
         public void SpawnNewTetromino()
         {
-            CurrentTetrominoIndex = rng.Next(Tetrominoes.Length);
-            CurrentBlock = (ValueTuple<int, int>[])Tetrominoes[CurrentTetrominoIndex].Clone();
+            CurrentTetrominoIndex = rng.Next(_tetrominoes.Length);
+            CurrentBlock = (ValueTuple<int, int>[])_tetrominoes[CurrentTetrominoIndex].Clone();
             BlockRow = 0;
             BlockCol = Cols / 2 - 2;
             if (!CanMoveTo(BlockRow, BlockCol, CurrentBlock))

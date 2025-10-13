@@ -201,9 +201,9 @@ namespace Tetris.Test
             if (_model == null) return;
             
             _model.CurrentTetrominoIndex = 2;
-            if (_model.Tetrominoes.Length > 2)
+            if (_model.TetrominoCount > 2)
             {
-                var sourceBlock = _model.Tetrominoes[2];
+                var sourceBlock = _model.GetTetromino(2);
                 if (sourceBlock != null)
                 {
                     _model.CurrentBlock = new (int row, int col)[sourceBlock.Length];

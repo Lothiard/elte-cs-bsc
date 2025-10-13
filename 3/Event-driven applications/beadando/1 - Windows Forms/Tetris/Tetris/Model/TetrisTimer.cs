@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Tetris.Model
 {
-    public class TetrisTimer : ITimer, IDisposable
+    public class TetrisTimer : IDisposable
     {
         #region Fields
 
@@ -15,7 +15,7 @@ namespace Tetris.Model
         private TimeSpan _pausedTime;
         private bool _isRunning;
         private bool _isPaused;
-        private double _interval;
+        private readonly double _interval;
         private System.Windows.Forms.Timer? _timer;
         private bool _disposed = false;
 
@@ -40,39 +40,6 @@ namespace Tetris.Model
         public bool IsRunning => _isRunning;
         public bool IsPaused => _isPaused;
 
-        public bool Enabled
-        {
-            get => _isRunning && !_isPaused;
-            set
-            {
-                if (value)
-                {
-                    if (!_isRunning)
-                        Start();
-                    else if (_isPaused)
-                        Resume();
-                }
-                else
-                {
-                    if (_isRunning && !_isPaused)
-                        Pause();
-                }
-            }
-        }
-
-        public double Interval
-        {
-            get => _interval;
-            set
-            {
-                _interval = value;
-                if (_timer != null)
-                {
-                    _timer.Interval = (int)_interval;
-                }
-            }
-        }
-
         #endregion
 
         #region Events
@@ -89,11 +56,6 @@ namespace Tetris.Model
             _isPaused = false;
             _pausedTime = TimeSpan.Zero;
             _interval = 1000;
-        }
-
-        public TetrisTimer(double interval) : this()
-        {
-            _interval = interval;
         }
 
         #endregion

@@ -12,8 +12,8 @@ namespace Tetris.WinForms.View
         #region Fields
 
         private const int _cellSize = 25;
-        private Button[,]? _gridButtons;
-        private TetrisGameModel? _model;
+        private Button[,] _gridButtons = null!;
+        private TetrisGameModel _model = null!;
         private TetrisTimer _gameTimer;
         private System.Windows.Forms.Timer? _gameTickTimer;
         private System.Windows.Forms.Timer? _clockTimer;
@@ -25,6 +25,7 @@ namespace Tetris.WinForms.View
         public GameForm()
         {
             InitializeComponent();
+
             this.KeyPreview = true;
             this.KeyDown += Form_KeyDown;
 
