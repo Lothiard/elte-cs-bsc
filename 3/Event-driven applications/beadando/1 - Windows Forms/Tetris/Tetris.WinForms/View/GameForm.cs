@@ -15,8 +15,6 @@ namespace Tetris.WinForms.View
         private Button[,] _gridButtons = null!;
         private TetrisGameModel _model = null!;
         private readonly System.Windows.Forms.Timer? _clockTimer;
-        private readonly System.ComponentModel.IContainer components = null!;
-        private TetrisGameModel? _oldModel;
 
         #endregion
 
@@ -35,34 +33,6 @@ namespace Tetris.WinForms.View
             _clockTimer.Tick += ClockTimer_Tick;
             
             btnPause.Enabled = false;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_model != null)
-                {
-                    _model.Dispose();
-                }
-                
-                if (_oldModel != null)
-                {
-                    _oldModel.Dispose();
-                    _oldModel = null;
-                }
-                
-                if (_clockTimer != null)
-                {
-                    _clockTimer.Stop();
-                    _clockTimer.Tick -= ClockTimer_Tick;
-                    _clockTimer.Dispose();
-                }
-                
-                components?.Dispose();
-            }
-            
-            base.Dispose(disposing);
         }
 
         #endregion
@@ -134,14 +104,8 @@ namespace Tetris.WinForms.View
                 case 1: cols = 8; break;
                 case 2: cols = 12; break;
             }
-
-            if (_model != null)
-            {
-                _oldModel = _model;
-            }
             
-            _model = new TetrisGameModel(rows, cols);
-            SubscribeToGameEvents();
+            ReplaceModel(new TetrisGameModel(rows, cols));
             InitializeGame();
             StartGame();
         }
@@ -173,6 +137,15 @@ namespace Tetris.WinForms.View
         #endregion
 
         #region Private methods
+
+        private void ReplaceModel(TetrisGameModel newModel)
+        {
+            UnsubscribeFromGameEvents();
+                        
+            _model = newModel;
+            
+            SubscribeToGameEvents();
+        }
 
         private void SubscribeToGameEvents()
         {
@@ -392,12 +365,8 @@ namespace Tetris.WinForms.View
                     
                     StopGame();
                     
-                    if (_model != null)
-                    {
-                        _oldModel = _model;
-                    }
-                    
-                    _model = new TetrisGameModel(gameState.Rows, gameState.Cols);
+                    var newModel = new TetrisGameModel(gameState.Rows, gameState.Cols);
+                    ReplaceModel(newModel);
                     
                     switch (gameState.Cols)
                     {
@@ -413,8 +382,6 @@ namespace Tetris.WinForms.View
                     _model.CurrentBlock = gameState.CurrentBlock;
                     _model.BlockRow = gameState.BlockRow;
                     _model.BlockCol = gameState.BlockCol;
-                    
-                    SubscribeToGameEvents();
                     
                     _model.SetTimerPausedTime(gameState.PausedTime);
                     _model.StartTimer();
