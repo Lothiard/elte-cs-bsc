@@ -14,8 +14,6 @@ namespace Tetris.WinForms.View
         private const int _cellSize = 25;
         private Button[,] _gridButtons = null!;
         private TetrisGameModel _model = null!;
-        private TetrisTimer _gameTimer;
-        private System.Windows.Forms.Timer? _gameTickTimer;
         private System.Windows.Forms.Timer? _clockTimer;
 
         #endregion
@@ -29,7 +27,6 @@ namespace Tetris.WinForms.View
             this.KeyPreview = true;
             this.KeyDown += Form_KeyDown;
 
-            _gameTimer = new TetrisTimer();
             cmbBoardSize.SelectedIndex = 1;
             _clockTimer = new System.Windows.Forms.Timer();
             _clockTimer.Interval = 100;
@@ -43,23 +40,6 @@ namespace Tetris.WinForms.View
         #region Game event handlers
 
         private void Form_Load(object sender, EventArgs e)
-        {
-            UpdateTimeDisplay();
-        }
-
-        private void GameTimer_Tick(object? sender, EventArgs e)
-        {
-            if (_model == null || _model.IsGameOver || _gameTimer.IsPaused) return;
-
-            if (!_model.MoveDown())
-            {
-                _model.LandCurrentPiece();
-                _model.ClearFullLines();
-                _model.SpawnNewTetromino();
-            }
-        }
-
-        private void ClockTimer_Tick(object? sender, EventArgs e)
         {
             UpdateTimeDisplay();
         }
@@ -77,13 +57,25 @@ namespace Tetris.WinForms.View
             }
         }
 
+        private void Game_TimerElapsed(object? sender, EventArgs e)
+        {
+            UpdateTimeDisplay();
+        }
+
+        private void ClockTimer_Tick(object? sender, EventArgs e)
+        {
+            UpdateTimeDisplay();
+        }
+
         #endregion
 
         #region Grid event handlers
 
         private void Form_KeyDown(object? sender, KeyEventArgs e)
         {
-            if (!_gameTimer.IsRunning || _gameTimer.IsPaused || _model == null || _model.CurrentBlock == null) return;
+            if (_model == null || !_model.IsTimerRunning || _model.IsTimerPaused || _model.CurrentBlock == null) 
+                return;
+            
             switch (e.KeyCode)
             {
                 case Keys.A:
@@ -126,8 +118,9 @@ namespace Tetris.WinForms.View
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (!_gameTimer.IsRunning || _model == null) return;
-            if (!_gameTimer.IsPaused)
+            if (_model == null || !_model.IsTimerRunning) return;
+            
+            if (!_model.IsTimerPaused)
             {
                 PauseGame();
             }
@@ -155,16 +148,18 @@ namespace Tetris.WinForms.View
         {
             if (_model == null) return;
             
-            ((TetrisGameModel)_model).GameStateChanged += Game_GameStateChanged;
-            ((TetrisGameModel)_model).GameOver += Game_GameOver;
+            _model.GameStateChanged += Game_GameStateChanged;
+            _model.GameOver += Game_GameOver;
+            _model.GameTimerElapsed += Game_TimerElapsed;
         }
         
         private void UnsubscribeFromGameEvents()
         {
             if (_model == null) return;
             
-            ((TetrisGameModel)_model).GameStateChanged -= Game_GameStateChanged;
-            ((TetrisGameModel)_model).GameOver -= Game_GameOver;
+            _model.GameStateChanged -= Game_GameStateChanged;
+            _model.GameOver -= Game_GameOver;
+            _model.GameTimerElapsed -= Game_TimerElapsed;
         }
 
         private void InitializeGame()
@@ -209,30 +204,28 @@ namespace Tetris.WinForms.View
         private void StartGame()
         {
             if (_model == null) return;
-            _gameTimer.Start();
+            
+            _model.Reset();
+            _model.StartTimer();
+            
             btnNewGame.Text = "Új játék";
             btnPause.Text = "Szünet";
             btnPause.Enabled = true;
             btnSave.Enabled = false;
             btnLoad.Enabled = true;
             _clockTimer?.Start();
-            _model.Reset();
-            _gameTickTimer = new System.Windows.Forms.Timer();
-            _gameTickTimer.Interval = 500;
-            _gameTickTimer.Tick += GameTimer_Tick;
-            _gameTickTimer.Start();
         }
 
         private void StopGame()
         {
             if (_model != null)
             {
+                _model.StopTimer();
                 UnsubscribeFromGameEvents();
             }
             
-            _gameTickTimer?.Stop();
             _clockTimer?.Stop();
-            _gameTimer.Stop();
+            
             btnPause.Text = "Szünet";
             btnPause.Enabled = false;
             btnSave.Enabled = false;
@@ -241,9 +234,10 @@ namespace Tetris.WinForms.View
 
         private void PauseGame()
         {
-            if (!_gameTimer.IsRunning || _gameTimer.IsPaused) return;
-            _gameTimer.Pause();
-            _gameTickTimer?.Stop();
+            if (_model == null || !_model.IsTimerRunning || _model.IsTimerPaused) return;
+            
+            _model.PauseTimer();
+            
             btnPause.Text = "Folytatás";
             btnSave.Enabled = true;
             btnLoad.Enabled = true;
@@ -251,9 +245,10 @@ namespace Tetris.WinForms.View
 
         private void ResumeGame()
         {
-            if (!_gameTimer.IsRunning || !_gameTimer.IsPaused) return;
-            _gameTimer.Resume();
-            _gameTickTimer?.Start();
+            if (_model == null || !_model.IsTimerRunning || !_model.IsTimerPaused) return;
+            
+            _model.ResumeTimer();
+            
             btnPause.Text = "Szünet";
             btnSave.Enabled = false;
             btnLoad.Enabled = true;
@@ -261,13 +256,21 @@ namespace Tetris.WinForms.View
 
         private void UpdateTimeDisplay()
         {
-            TimeSpan currentGameTime = _gameTimer.IsRunning ? _gameTimer.ElapsedTime : TimeSpan.Zero;
+            TimeSpan currentGameTime = (_model != null && _model.IsTimerRunning) ? _model.ElapsedTime : TimeSpan.Zero;
             lblTimeValue.Text = currentGameTime.ToString(@"hh\:mm\:ss");
         }
 
         private void RefreshGrid()
         {
             if (_gridButtons == null || _model == null) return;
+            
+            // Update the grid on the UI thread
+            if (InvokeRequired)
+            {
+                Invoke(new Action(RefreshGrid));
+                return;
+            }
+            
             for (int row = 0; row < _model.Rows; row++)
             {
                 for (int col = 0; col < _model.Cols; col++)
@@ -286,6 +289,7 @@ namespace Tetris.WinForms.View
                     }
                 }
             }
+            
             if (_model.CurrentBlock != null)
             {
                 Color color = _model.TetrominoColors[_model.CurrentTetrominoIndex];
@@ -303,7 +307,7 @@ namespace Tetris.WinForms.View
 
         private void ShowGameOverMessage()
         {
-            TimeSpan totalTime = _gameTimer.ElapsedTime;
+            TimeSpan totalTime = _model.ElapsedTime;
             
             StopGame();
             
@@ -314,7 +318,8 @@ namespace Tetris.WinForms.View
 
         private async Task SaveGameAsync()
         {
-            if (!_gameTimer.IsPaused || _model == null) return;
+            if (_model == null || !_model.IsTimerPaused) return;
+            
             try
             {
                 var gameState = new TetrisPersistence.GameState
@@ -326,13 +331,15 @@ namespace Tetris.WinForms.View
                     CurrentBlock = _model.CurrentBlock!,
                     BlockRow = _model.BlockRow,
                     BlockCol = _model.BlockCol,
-                    PausedTime = _gameTimer.ElapsedTime,
+                    PausedTime = _model.ElapsedTime,
                     SaveTime = DateTime.Now
                 };
+                
                 using var dialog = new SaveFileDialog();
                 dialog.Filter = "Tetris mentés (*.tetris)|*.tetris";
                 dialog.DefaultExt = "tetris";
                 dialog.Title = "Játék mentése";
+                
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     await TetrisPersistence.SaveAsync(dialog.FileName, gameState);
@@ -352,6 +359,7 @@ namespace Tetris.WinForms.View
                 using var dialog = new OpenFileDialog();
                 dialog.Filter = "Tetris mentés (*.tetris)|*.tetris";
                 dialog.Title = "Játék betöltése";
+                
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     var gameState = await TetrisPersistence.LoadAsync(dialog.FileName);
@@ -382,20 +390,15 @@ namespace Tetris.WinForms.View
                     
                     SubscribeToGameEvents();
                     
-                    _gameTimer.SetPausedTime(gameState.PausedTime);
+                    _model.SetTimerPausedTime(gameState.PausedTime);
+                    _model.StartTimer();
                     
-                    _gameTimer.Start();
                     btnNewGame.Text = "Új játék";
                     btnPause.Text = "Szünet";
                     btnPause.Enabled = true;
                     btnSave.Enabled = false;
                     btnLoad.Enabled = true;
                     _clockTimer?.Start();
-                    
-                    _gameTickTimer = new System.Windows.Forms.Timer();
-                    _gameTickTimer.Interval = 500;
-                    _gameTickTimer.Tick += GameTimer_Tick;
-                    _gameTickTimer.Start();
                     
                     PauseGame();
                     

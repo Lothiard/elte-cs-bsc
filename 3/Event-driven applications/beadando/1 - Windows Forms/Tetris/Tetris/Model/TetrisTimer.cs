@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Tetris.Model
 {
@@ -16,8 +15,9 @@ namespace Tetris.Model
         private bool _isRunning;
         private bool _isPaused;
         private readonly double _interval;
-        private System.Windows.Forms.Timer? _timer;
+        private System.Timers.Timer? _timer;
         private bool _disposed = false;
+        private readonly object _lockObject = new object();
 
         #endregion
 
@@ -27,18 +27,40 @@ namespace Tetris.Model
         {
             get
             {
-                if (!_isRunning)
-                    return TimeSpan.Zero;
+                lock (_lockObject)
+                {
+                    if (!_isRunning)
+                        return TimeSpan.Zero;
 
-                if (_isPaused)
-                    return _pausedTime;
+                    if (_isPaused)
+                        return _pausedTime;
 
-                return _pausedTime + (DateTime.Now - _startTime);
+                    return _pausedTime + (DateTime.Now - _startTime);
+                }
             }
         }
 
-        public bool IsRunning => _isRunning;
-        public bool IsPaused => _isPaused;
+        public bool IsRunning 
+        { 
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _isRunning;
+                }
+            }
+        }
+        
+        public bool IsPaused 
+        { 
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _isPaused;
+                }
+            }
+        }
 
         #endregion
 
@@ -64,8 +86,10 @@ namespace Tetris.Model
 
         public void Start()
         {
-            if (!_isRunning)
+            lock (_lockObject)
             {
+                if (_isRunning) return;
+                
                 _isRunning = true;
                 _isPaused = false;
                 _startTime = DateTime.Now;
@@ -77,24 +101,24 @@ namespace Tetris.Model
 
         public void Stop()
         {
-            if (_isRunning)
+            lock (_lockObject)
             {
+                if (!_isRunning) return;
+                
                 _isRunning = false;
                 _isPaused = false;
                 _pausedTime = TimeSpan.Zero;
                 
-                if (_timer != null)
-                {
-                    _timer.Stop();
-                    _timer = null;
-                }
+                DisposeTimer();
             }
         }
 
         public void Pause()
         {
-            if (_isRunning && !_isPaused)
+            lock (_lockObject)
             {
+                if (!_isRunning || _isPaused) return;
+                
                 _isPaused = true;
                 _pausedTime += DateTime.Now - _startTime;
                 
@@ -107,8 +131,10 @@ namespace Tetris.Model
 
         public void Resume()
         {
-            if (_isRunning && _isPaused)
+            lock (_lockObject)
             {
+                if (!_isRunning || !_isPaused) return;
+                
                 _isPaused = false;
                 _startTime = DateTime.Now;
                 
@@ -125,7 +151,10 @@ namespace Tetris.Model
 
         public void SetPausedTime(TimeSpan time)
         {
-            _pausedTime = time;
+            lock (_lockObject)
+            {
+                _pausedTime = time;
+            }
         }
 
         #endregion
@@ -134,21 +163,40 @@ namespace Tetris.Model
 
         private void CreateTimer()
         {
-            if (_timer != null)
-            {
-                _timer.Stop();
-                _timer = null;
-            }
+            DisposeTimer();
             
-            _timer = new System.Windows.Forms.Timer();
-            _timer.Interval = (int)_interval;
-            _timer.Tick += TimerTick;
+            _timer = new System.Timers.Timer(_interval);
+            _timer.Elapsed += TimerElapsed;
+            _timer.AutoReset = true;
             _timer.Start();
         }
 
-        private void TimerTick(object? sender, EventArgs e)
+        private void DisposeTimer()
         {
-            Elapsed?.Invoke(this, EventArgs.Empty);
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Elapsed -= TimerElapsed;
+                _timer.Dispose();
+                _timer = null;
+            }
+        }
+
+        private void TimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            bool shouldRaiseEvent = false;
+            
+            lock (_lockObject)
+            {
+                shouldRaiseEvent = _isRunning && !_isPaused;
+            }
+            
+            if (shouldRaiseEvent)
+            {
+                // Raise the event in a thread-safe way
+                EventHandler? handler = Elapsed;
+                handler?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         #endregion
@@ -167,12 +215,9 @@ namespace Tetris.Model
             {
                 if (disposing)
                 {
-                    if (_timer != null)
+                    lock (_lockObject)
                     {
-                        _timer.Stop();
-                        _timer.Tick -= TimerTick;
-                        _timer.Dispose();
-                        _timer = null;
+                        DisposeTimer();
                     }
                 }
 

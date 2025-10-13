@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Tetris.Model
 {
@@ -27,13 +28,22 @@ namespace Tetris.Model
             new[] { (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }  // L
         };
         private readonly Random rng = new Random();
-        public Color[] TetrominoColors { get; } = new[]
+        private readonly Color[] _tetrominoColors = new[]
         {
             Color.Cyan, Color.Yellow, Color.Purple, Color.Green, 
             Color.Red, Color.Blue, Color.Orange
         };
 
+        public Color[] TetrominoColors => (Color[])_tetrominoColors.Clone();
+
         public int TetrominoCount => _tetrominoes.Length;
+
+        private TetrisTimer _gameTimer;
+        private System.Windows.Forms.Timer _gameTickTimer;
+        
+        public TimeSpan ElapsedTime => _gameTimer.ElapsedTime;
+        public bool IsTimerRunning => _gameTimer.IsRunning;
+        public bool IsTimerPaused => _gameTimer.IsPaused;
 
         #endregion
 
@@ -41,6 +51,8 @@ namespace Tetris.Model
 
         public event EventHandler<TetrisGameEventArgs>? GameStateChanged;
         public event EventHandler<TetrisGameEventArgs>? GameOver;
+        public event EventHandler? GameTimerElapsed;
+        public event EventHandler? GameTick;
 
         #endregion
 
@@ -52,6 +64,69 @@ namespace Tetris.Model
             Cols = cols;
             Board = new int[Rows, Cols];
             IsGameOver = false;
+            
+            _gameTimer = new TetrisTimer();
+            _gameTimer.Elapsed += OnGameTimerElapsed;
+            
+            _gameTickTimer = new System.Windows.Forms.Timer();
+            _gameTickTimer.Interval = 500;
+            _gameTickTimer.Tick += OnGameTickTimer_Tick;
+        }
+
+        #endregion
+
+        #region Game Timing Methods
+
+        public void StartTimer()
+        {
+            _gameTimer.Start();
+            _gameTickTimer.Start();
+        }
+
+        public void StopTimer()
+        {
+            _gameTickTimer.Stop();
+            _gameTimer.Stop();
+        }
+
+        public void PauseTimer()
+        {
+            _gameTickTimer.Stop();
+            _gameTimer.Pause();
+        }
+
+        public void ResumeTimer()
+        {
+            _gameTimer.Resume();
+            _gameTickTimer.Start();
+        }
+
+        public void SetTimerPausedTime(TimeSpan time)
+        {
+            _gameTimer.SetPausedTime(time);
+        }
+
+        private void OnGameTimerElapsed(object? sender, EventArgs e)
+        {
+            GameTimerElapsed?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnGameTickTimer_Tick(object? sender, EventArgs e)
+        {
+            if (IsGameOver || IsTimerPaused) return;
+            
+            DoGameTick();
+            GameTick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void DoGameTick()
+        {
+            if (!MoveDown())
+            {
+                LandCurrentPiece();
+                ClearFullLines();
+                SpawnNewTetromino();
+            }
         }
 
         #endregion
@@ -107,7 +182,9 @@ namespace Tetris.Model
 
         public bool MoveDown()
         {
-            if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock!))
+            if (CurrentBlock == null) return false;
+            
+            if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
             {
                 BlockRow++;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -118,7 +195,9 @@ namespace Tetris.Model
 
         public bool MoveLeft()
         {
-            if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock!))
+            if (CurrentBlock == null) return false;
+            
+            if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
             {
                 BlockCol--;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -129,7 +208,9 @@ namespace Tetris.Model
 
         public bool MoveRight()
         {
-            if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock!))
+            if (CurrentBlock == null) return false;
+            
+            if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
             {
                 BlockCol++;
                 OnGameStateChanged(new TetrisGameEventArgs());
@@ -140,7 +221,9 @@ namespace Tetris.Model
 
         public void Rotate()
         {
-            var rotated = new (int row, int col)[CurrentBlock!.Length];
+            if (CurrentBlock == null) return;
+            
+            var rotated = new (int row, int col)[CurrentBlock.Length];
             for (int i = 0; i < CurrentBlock.Length; i++)
             {
                 rotated[i] = (CurrentBlock[i].col, -CurrentBlock[i].row);
@@ -160,7 +243,9 @@ namespace Tetris.Model
 
         public void LandCurrentPiece()
         {
-            foreach (var (dr, dc) in CurrentBlock!)
+            if (CurrentBlock == null) return;
+            
+            foreach (var (dr, dc) in CurrentBlock)
             {
                 int r = BlockRow + dr;
                 int c = BlockCol + dc;
