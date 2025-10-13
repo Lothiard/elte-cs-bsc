@@ -17,24 +17,29 @@ namespace Tetris.Model
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
         public bool IsGameOver { get; private set; }
-        private readonly (int row, int col)[][] _tetrominoes = new[]
-        {
-            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3) }, // I
-            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1) }, // O
-            new[] { (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }, // T
-            new[] { (row: 0, col: 1), (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1) }, // S
-            new[] { (row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 1), (row: 1, col: 2) }, // Z
-            new[] { (row: 0, col: 0), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }, // J
-            new[] { (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2) }  // L
-        };
-        private readonly Random rng = new Random();
-        private readonly Color[] _tetrominoColors = new[]
-        {
-            Color.Cyan, Color.Yellow, Color.Purple, Color.Green, 
-            Color.Red, Color.Blue, Color.Orange
-        };
+        private readonly (int row, int col)[][] _tetrominoes =
+        [
+            [(row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3)], // I
+            [(row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1)], // O
+            [(row: 0, col: 1), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2)], // T
+            [(row: 0, col: 1), (row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1)], // S
+            [(row: 0, col: 0), (row: 0, col: 1), (row: 1, col: 1), (row: 1, col: 2)], // Z
+            [(row: 0, col: 0), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2)], // J
+            [(row: 0, col: 2), (row: 1, col: 0), (row: 1, col: 1), (row: 1, col: 2)]  // L
+        ];
+        private readonly Random _rng = new();
+        private readonly Color[] _tetrominoColors =
+        [
+            Color.Cyan,   // I
+            Color.Yellow, // O
+            Color.Purple, // T
+            Color.Green,  // S
+            Color.Red,    // Z
+            Color.Blue,   // J
+            Color.Orange  // L
+        ];
 
-        private System.Windows.Forms.Timer _gameTickTimer;
+        private readonly System.Windows.Forms.Timer _gameTickTimer;
         private DateTime _startTime;
         private TimeSpan _pausedTime;
         private bool _isRunning;
@@ -80,9 +85,11 @@ namespace Tetris.Model
             _isRunning = false;
             _isPaused = false;
             _pausedTime = TimeSpan.Zero;
-            
-            _gameTickTimer = new System.Windows.Forms.Timer();
-            _gameTickTimer.Interval = 500;
+
+            _gameTickTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 500
+            };
             _gameTickTimer.Tick += OnGameTickTimer_Tick;
         }
 
@@ -176,7 +183,7 @@ namespace Tetris.Model
 
         public void SpawnNewTetromino()
         {
-            CurrentTetrominoIndex = rng.Next(_tetrominoes.Length);
+            CurrentTetrominoIndex = _rng.Next(_tetrominoes.Length);
             CurrentBlock = (ValueTuple<int, int>[])_tetrominoes[CurrentTetrominoIndex].Clone();
             BlockRow = 0;
             BlockCol = Cols / 2 - 2;

@@ -11,10 +11,11 @@ namespace Tetris.WinForms.View
     {
         #region Fields
 
-        private const int _cellSize = 25;
         private Button[,] _gridButtons = null!;
         private TetrisGameModel _model = null!;
         private readonly System.Windows.Forms.Timer? _clockTimer;
+
+        private const int CellSize = 25;
 
         #endregion
 
@@ -28,8 +29,10 @@ namespace Tetris.WinForms.View
             this.KeyDown += Form_KeyDown;
 
             cmbBoardSize.SelectedIndex = 1;
-            _clockTimer = new System.Windows.Forms.Timer();
-            _clockTimer.Interval = 100;
+            _clockTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 100
+            };
             _clockTimer.Tick += ClockTimer_Tick;
             
             btnPause.Enabled = false;
@@ -174,24 +177,26 @@ namespace Tetris.WinForms.View
             {
                 for (int col = 0; col < _model.Cols; col++)
                 {
-                    var btn = new Button();
-                    btn.Width = _cellSize;
-                    btn.Height = _cellSize;
-                    btn.Left = col * _cellSize;
-                    btn.Top = row * _cellSize;
-                    btn.Enabled = false;
-                    btn.TabStop = false;
-                    btn.FlatStyle = FlatStyle.Flat;
-                    btn.Margin = new Padding(0);
-                    btn.Padding = new Padding(0);
-                    btn.BackColor = Color.Black;
+                    var btn = new Button
+                    {
+                        Width = CellSize,
+                        Height = CellSize,
+                        Left = col * CellSize,
+                        Top = row * CellSize,
+                        Enabled = false,
+                        TabStop = false,
+                        FlatStyle = FlatStyle.Flat,
+                        Margin = new Padding(0),
+                        Padding = new Padding(0),
+                        BackColor = Color.Black
+                    };
                     btn.FlatAppearance.BorderColor = Color.Black;
                     btn.FlatAppearance.BorderSize = 1;
                     _gridButtons[row, col] = btn;
                     panelGame.Controls.Add(btn);
                 }
             }
-            panelGame.Size = new Size(_model.Cols * _cellSize + 2, _model.Rows * _cellSize + 2);
+            panelGame.Size = new Size(_model.Cols * CellSize + 2, _model.Rows * CellSize + 2);
         }
 
         private void StartGame()
@@ -256,13 +261,6 @@ namespace Tetris.WinForms.View
         private void RefreshGrid()
         {
             if (_gridButtons == null || _model == null) return;
-            
-            // Update the grid on the UI thread
-            if (InvokeRequired)
-            {
-                Invoke(new Action(RefreshGrid));
-                return;
-            }
             
             for (int row = 0; row < _model.Rows; row++)
             {

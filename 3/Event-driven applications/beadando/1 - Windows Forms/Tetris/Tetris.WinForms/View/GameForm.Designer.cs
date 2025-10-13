@@ -2,8 +2,6 @@
 {
     partial class GameForm
     {
-        private System.ComponentModel.IContainer components = null;
-
         #region Windows Form Designer generated code
 
         private void InitializeComponent()
