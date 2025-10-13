@@ -34,16 +34,32 @@ namespace Tetris.Model
             Color.Red, Color.Blue, Color.Orange
         };
 
-        public Color[] TetrominoColors => (Color[])_tetrominoColors.Clone();
-
-        public int TetrominoCount => _tetrominoes.Length;
-
-        private TetrisTimer _gameTimer;
         private System.Windows.Forms.Timer _gameTickTimer;
+        private System.Windows.Forms.Timer _elapsedTimer;
+        private DateTime _startTime;
+        private TimeSpan _pausedTime;
+        private bool _isRunning;
+        private bool _isPaused;
         
-        public TimeSpan ElapsedTime => _gameTimer.ElapsedTime;
-        public bool IsTimerRunning => _gameTimer.IsRunning;
-        public bool IsTimerPaused => _gameTimer.IsPaused;
+        public Color[] TetrominoColors => (Color[])_tetrominoColors.Clone();
+        public int TetrominoCount => _tetrominoes.Length;
+        
+        public TimeSpan ElapsedTime
+        {
+            get
+            {
+                if (!_isRunning)
+                    return TimeSpan.Zero;
+
+                if (_isPaused)
+                    return _pausedTime;
+
+                return _pausedTime + (DateTime.Now - _startTime);
+            }
+        }
+        
+        public bool IsTimerRunning => _isRunning;
+        public bool IsTimerPaused => _isPaused;
 
         #endregion
 
@@ -52,7 +68,6 @@ namespace Tetris.Model
         public event EventHandler<TetrisGameEventArgs>? GameStateChanged;
         public event EventHandler<TetrisGameEventArgs>? GameOver;
         public event EventHandler? GameTimerElapsed;
-        public event EventHandler? GameTick;
 
         #endregion
 
@@ -64,13 +79,17 @@ namespace Tetris.Model
             Cols = cols;
             Board = new int[Rows, Cols];
             IsGameOver = false;
-            
-            _gameTimer = new TetrisTimer();
-            _gameTimer.Elapsed += OnGameTimerElapsed;
+            _isRunning = false;
+            _isPaused = false;
+            _pausedTime = TimeSpan.Zero;
             
             _gameTickTimer = new System.Windows.Forms.Timer();
             _gameTickTimer.Interval = 500;
             _gameTickTimer.Tick += OnGameTickTimer_Tick;
+            
+            _elapsedTimer = new System.Windows.Forms.Timer();
+            _elapsedTimer.Interval = 1000;
+            _elapsedTimer.Tick += OnElapsedTimer_Tick;
         }
 
         #endregion
@@ -79,48 +98,69 @@ namespace Tetris.Model
 
         public void StartTimer()
         {
-            _gameTimer.Start();
-            _gameTickTimer.Start();
+            if (!_isRunning)
+            {
+                _isRunning = true;
+                _isPaused = false;
+                _startTime = DateTime.Now;
+                _pausedTime = TimeSpan.Zero;
+                
+                _gameTickTimer.Start();
+                _elapsedTimer.Start();
+            }
         }
 
         public void StopTimer()
         {
-            _gameTickTimer.Stop();
-            _gameTimer.Stop();
+            if (_isRunning)
+            {
+                _isRunning = false;
+                _isPaused = false;
+                _pausedTime = TimeSpan.Zero;
+                
+                _gameTickTimer.Stop();
+                _elapsedTimer.Stop();
+            }
         }
 
         public void PauseTimer()
         {
-            _gameTickTimer.Stop();
-            _gameTimer.Pause();
+            if (_isRunning && !_isPaused)
+            {
+                _isPaused = true;
+                _pausedTime += DateTime.Now - _startTime;
+                
+                _gameTickTimer.Stop();
+                _elapsedTimer.Stop();
+            }
         }
 
         public void ResumeTimer()
         {
-            _gameTimer.Resume();
-            _gameTickTimer.Start();
+            if (_isRunning && _isPaused)
+            {
+                _isPaused = false;
+                _startTime = DateTime.Now;
+                
+                _gameTickTimer.Start();
+                _elapsedTimer.Start();
+            }
         }
 
         public void SetTimerPausedTime(TimeSpan time)
         {
-            _gameTimer.SetPausedTime(time);
+            _pausedTime = time;
         }
 
-        private void OnGameTimerElapsed(object? sender, EventArgs e)
+        private void OnElapsedTimer_Tick(object? sender, EventArgs e)
         {
             GameTimerElapsed?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnGameTickTimer_Tick(object? sender, EventArgs e)
         {
-            if (IsGameOver || IsTimerPaused) return;
+            if (IsGameOver || _isPaused) return;
             
-            DoGameTick();
-            GameTick?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void DoGameTick()
-        {
             if (!MoveDown())
             {
                 LandCurrentPiece();
