@@ -14,7 +14,7 @@ namespace Tetris.WinForms.View
         private const int _cellSize = 25;
         private Button[,] _gridButtons = null!;
         private TetrisGameModel _model = null!;
-        private System.Windows.Forms.Timer? _clockTimer;
+        private readonly System.Windows.Forms.Timer? _clockTimer;
 
         #endregion
 
@@ -55,11 +55,6 @@ namespace Tetris.WinForms.View
             {
                 ShowGameOverMessage();
             }
-        }
-
-        private void Game_TimerElapsed(object? sender, EventArgs e)
-        {
-            UpdateTimeDisplay();
         }
 
         private void ClockTimer_Tick(object? sender, EventArgs e)
@@ -150,7 +145,6 @@ namespace Tetris.WinForms.View
             
             _model.GameStateChanged += Game_GameStateChanged;
             _model.GameOver += Game_GameOver;
-            _model.GameTimerElapsed += Game_TimerElapsed;
         }
         
         private void UnsubscribeFromGameEvents()
@@ -159,7 +153,6 @@ namespace Tetris.WinForms.View
             
             _model.GameStateChanged -= Game_GameStateChanged;
             _model.GameOver -= Game_GameOver;
-            _model.GameTimerElapsed -= Game_TimerElapsed;
         }
 
         private void InitializeGame()
