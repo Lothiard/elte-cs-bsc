@@ -44,14 +44,14 @@ namespace Tetris.WinForms.View
             UpdateTimeDisplay();
         }
         
-        private void Game_GameStateChanged(object? sender, TetrisGameEventArgs e)
+        private void Game_GameStateChanged(object? sender, EventArgs e)
         {
             RefreshGrid();
         }
         
-        private void Game_GameOver(object? sender, TetrisGameEventArgs e)
+        private void Game_GameOver(object? sender, EventArgs e)
         {
-            if (e.IsGameOver)
+            if (_model.IsGameOver)
             {
                 ShowGameOverMessage();
             }

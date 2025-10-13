@@ -35,7 +35,6 @@ namespace Tetris.Model
         };
 
         private System.Windows.Forms.Timer _gameTickTimer;
-        private System.Windows.Forms.Timer _elapsedTimer;
         private DateTime _startTime;
         private TimeSpan _pausedTime;
         private bool _isRunning;
@@ -65,9 +64,8 @@ namespace Tetris.Model
 
         #region Events
 
-        public event EventHandler<TetrisGameEventArgs>? GameStateChanged;
-        public event EventHandler<TetrisGameEventArgs>? GameOver;
-        public event EventHandler? GameTimerElapsed;
+        public event EventHandler? GameStateChanged;
+        public event EventHandler? GameOver;
 
         #endregion
 
@@ -86,10 +84,6 @@ namespace Tetris.Model
             _gameTickTimer = new System.Windows.Forms.Timer();
             _gameTickTimer.Interval = 500;
             _gameTickTimer.Tick += OnGameTickTimer_Tick;
-            
-            _elapsedTimer = new System.Windows.Forms.Timer();
-            _elapsedTimer.Interval = 1000;
-            _elapsedTimer.Tick += OnElapsedTimer_Tick;
         }
 
         #endregion
@@ -106,7 +100,6 @@ namespace Tetris.Model
                 _pausedTime = TimeSpan.Zero;
                 
                 _gameTickTimer.Start();
-                _elapsedTimer.Start();
             }
         }
 
@@ -119,7 +112,6 @@ namespace Tetris.Model
                 _pausedTime = TimeSpan.Zero;
                 
                 _gameTickTimer.Stop();
-                _elapsedTimer.Stop();
             }
         }
 
@@ -131,7 +123,6 @@ namespace Tetris.Model
                 _pausedTime += DateTime.Now - _startTime;
                 
                 _gameTickTimer.Stop();
-                _elapsedTimer.Stop();
             }
         }
 
@@ -143,18 +134,12 @@ namespace Tetris.Model
                 _startTime = DateTime.Now;
                 
                 _gameTickTimer.Start();
-                _elapsedTimer.Start();
             }
         }
 
         public void SetTimerPausedTime(TimeSpan time)
         {
             _pausedTime = time;
-        }
-
-        private void OnElapsedTimer_Tick(object? sender, EventArgs e)
-        {
-            GameTimerElapsed?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnGameTickTimer_Tick(object? sender, EventArgs e)
@@ -186,7 +171,7 @@ namespace Tetris.Model
             Board = new int[Rows, Cols];
             IsGameOver = false;
             SpawnNewTetromino();
-            OnGameStateChanged(new TetrisGameEventArgs());
+            OnGameStateChanged();
         }
 
         public void SpawnNewTetromino()
@@ -198,11 +183,11 @@ namespace Tetris.Model
             if (!CanMoveTo(BlockRow, BlockCol, CurrentBlock))
             {
                 IsGameOver = true;
-                OnGameOver(new TetrisGameEventArgs(true));
+                OnGameOver();
             }
             else
             {
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
             }
         }
 
@@ -227,7 +212,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow + 1, BlockCol, CurrentBlock))
             {
                 BlockRow++;
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
                 return true;
             }
             return false;
@@ -240,7 +225,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol - 1, CurrentBlock))
             {
                 BlockCol--;
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
                 return true;
             }
             return false;
@@ -253,7 +238,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol + 1, CurrentBlock))
             {
                 BlockCol++;
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
                 return true;
             }
             return false;
@@ -277,7 +262,7 @@ namespace Tetris.Model
             if (CanMoveTo(BlockRow, BlockCol, rotated))
             {
                 CurrentBlock = rotated;
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
             }
         }
 
@@ -294,7 +279,7 @@ namespace Tetris.Model
                     Board[r, c] = CurrentTetrominoIndex + 1;
                 }
             }
-            OnGameStateChanged(new TetrisGameEventArgs());
+            OnGameStateChanged();
         }
 
         public void ClearFullLines()
@@ -331,7 +316,7 @@ namespace Tetris.Model
             
             if (linesCleared > 0)
             {
-                OnGameStateChanged(new TetrisGameEventArgs());
+                OnGameStateChanged();
             }
         }
 
@@ -339,14 +324,14 @@ namespace Tetris.Model
 
         #region Event Methods
 
-        protected virtual void OnGameStateChanged(TetrisGameEventArgs e)
+        protected virtual void OnGameStateChanged()
         {
-            GameStateChanged?.Invoke(this, e);
+            GameStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnGameOver(TetrisGameEventArgs e)
+        protected virtual void OnGameOver()
         {
-            GameOver?.Invoke(this, e);
+            GameOver?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
