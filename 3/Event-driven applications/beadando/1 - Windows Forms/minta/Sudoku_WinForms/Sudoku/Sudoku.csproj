@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>ELTE.Sudoku</RootNamespace>
+    <Company>Eötvös Loránd University (ELTE), Faculty of Informatics</Company>
+    <Authors>Máté Cserép, Roberto Giachetta</Authors>
+    <Copyright>Copyright © Máté Cserép, Roberto Giachetta 2022</Copyright>
+  </PropertyGroup>
+
+</Project>
