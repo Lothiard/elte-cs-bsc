@@ -1,0 +1,8 @@
+﻿<Window x:Class="ELTE.SimpleWindowByDesign.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Egyszerű ablak" Height="200" Width="300" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Button Content="Kilépés" Height="25" HorizontalAlignment="Center" Name="_ExitButton" VerticalAlignment="Center" Width="100" Click="ExitButton_Click" />
+    </Grid>
+</Window>

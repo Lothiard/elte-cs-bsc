@@ -1,0 +1,36 @@
+﻿<Window x:Class="ELTE.TicTacToeGame.View.TicTacToeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tic-Tac-Toe" Height="550" Width="525" MinHeight="300" MinWidth="300"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="Játék">
+                <MenuItem Header="Új" Click="MenuGameNew_Click" />
+                <Separator />
+                <MenuItem Header="Játék betöltése..." Click="MenuGameLoad_Click" />
+                <MenuItem Header="Játék mentése..." Click="MenuGameSave_Click" />
+                <Separator />
+                <MenuItem Header="Kilépés" Click="MenuGameExit_Click" />
+            </MenuItem>
+        </Menu>
+
+        <Grid x:Name="_gameGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </Grid>
+</Window>
