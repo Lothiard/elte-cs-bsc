@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <SDL3_image/SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 /* 
 
@@ -200,7 +200,7 @@ GLsizei NumberOfMIPLevels( const ImageRGBA& image )
 	ImageRGBA img;
 
 	//:H: Kép betöltése :E: Loading the image
-	std::unique_ptr<SDL_Surface, decltype( &SDL_DestroySurface )> loaded_img( IMG_Load( fileName.string().c_str() ), SDL_DestroySurface );
+	std::unique_ptr<SDL_Surface, decltype( &SDL_FreeSurface )> loaded_img( IMG_Load( fileName.string().c_str() ), SDL_FreeSurface );
 #ifdef ELTE_DEV_ONLY
 	if (!loaded_img) loaded_img.reset( IMG_Load(FindCommonFile_ELTE_DEV_ONLY(fileName).string().c_str() ));
 #endif
@@ -214,13 +214,15 @@ GLsizei NumberOfMIPLevels( const ImageRGBA& image )
 
 	//:H: Uint32-ben tárolja az SDL a színeket, ezért számít a bájtsorrend :E: SDL stores colors in Uint32, so the byte order matters here
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-	SDL_PixelFormat format = SDL_PIXELFORMAT_ABGR8888;
+	Uint32 pixel_format = SDL_PIXELFORMAT_ABGR8888;
 #else
-	SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA8888;
+	Uint32 pixel_format = SDL_PIXELFORMAT_RGBA8888;
 #endif
 
 	//:H: Átalakítás 32bit RGBA formátumra, ha nem abban volt :E: Conversion to 32bit RGBA format, if it wasn't already in it
-	std::unique_ptr<SDL_Surface, decltype( &SDL_DestroySurface )> formattedSurf( SDL_ConvertSurface( loaded_img.get(), format ), SDL_DestroySurface );
+	SDL_PixelFormat* format = SDL_AllocFormat(pixel_format);
+	std::unique_ptr<SDL_Surface, decltype( &SDL_FreeSurface )> formattedSurf( SDL_ConvertSurface( loaded_img.get(), format, 0 ), SDL_FreeSurface );
+	SDL_FreeFormat(format);
 
 	if (!formattedSurf)
 	{

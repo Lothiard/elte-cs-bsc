@@ -10,8 +10,8 @@
 #include <GL/glew.h>
 
 // SDL
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 // Utils
 #include "gShaderProgram.h"
@@ -71,15 +71,19 @@ private:
   cl::CommandQueue  queue;
   cl::Program       program;
   cl::Kernel        kernelUpdate;
-  cl::BufferGL      clVboBuffer;
+  
+  // We need to handle both interop and non-interop cases
+  cl::BufferGL      clVboBufferGL;  // Used for OpenGL interop
+  cl::Buffer        clVboBuffer;    // Used when OpenGL interop is not available
   cl::Buffer        clVelocities;
   cl::Buffer        clMasses;
+  bool              useOpenGLInterop = true;
 
   // Simulation parameters
   static constexpr int   numParticles = 15000;
   static constexpr float particleSize = 0.01f;
-  static constexpr bool  useRingInit = false;
-  static constexpr bool  useRandomVelocities = false;
+  static constexpr bool  useRingInit = true;
+  static constexpr bool  useRandomVelocities = true;
   static constexpr float massiveObjectMass = 1.0f;
 
   // Application state

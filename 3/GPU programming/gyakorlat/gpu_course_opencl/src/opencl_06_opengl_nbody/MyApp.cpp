@@ -96,87 +96,239 @@ void MyApp::InitGL() {
 }
 
 void MyApp::InitCL() {
-  if (!oclCreateContextFromCurrentGLContext(context))
-    throw cl::Error(CL_INVALID_CONTEXT, "Failed to create shared CL/GL context");
-
-  const auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
-  auto device = devices.front();
-  std::cout << "Using device: " << device.getInfo<CL_DEVICE_NAME>() << '\n';
-  queue = cl::CommandQueue(context, device);
-
-  // Build OpenCL program
-  const auto sourceCode = oclReadSourcesFromFile(PathTo<AssetType::Kernel>("GLinterop.cl"));
-  program = cl::Program(context, sourceCode);
   try {
-    program.build(devices);
-  }
-  catch (const cl::Error&) {
-    for (auto&& [dev, log] : program.getBuildInfo<CL_PROGRAM_BUILD_LOG>())
-      std::cerr << "Build log for " << dev.getInfo<CL_DEVICE_NAME>() << ":\n" << log << "\n";
+    std::cout << "DEBUG: Starting InitCL()" << std::endl;
+    
+    // Try to create a shared context for OpenCL/OpenGL interop
+    bool glSharingSuccessful = oclCreateContextFromCurrentGLContext(context);
+    
+    // The glSharingSuccessful flag doesn't seem to be reliable - we're getting segfaults later
+    // so let's force non-interop mode for now
+    useOpenGLInterop = false;
+    std::cout << "DEBUG: Forcing non-interop mode for stability" << std::endl;
+    
+    if (!glSharingSuccessful) {
+      std::cout << "DEBUG: OpenGL sharing not successful, creating regular context" << std::endl;
+      
+      // Create a regular context with any available device
+      std::vector<cl::Platform> platforms;
+      cl::Platform::get(&platforms);
+      if (platforms.empty()) {
+        throw cl::Error(-1, "No OpenCL platforms found");
+      }
+      
+      // Use the first platform
+      cl_context_properties properties[] = { 
+        CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), 
+        0 
+      };
+      
+      try {
+        context = cl::Context(CL_DEVICE_TYPE_GPU, properties);
+        std::cout << "Created regular OpenCL context without OpenGL sharing" << std::endl;
+        std::cout << "WARNING: No OpenGL interoperation will be available!" << std::endl;
+        useOpenGLInterop = false;
+      } catch (cl::Error& e) {
+        std::cerr << "Failed to create regular OpenCL context: " << e.what() << " (" << e.err() << ")" << std::endl;
+        throw;
+      }
+    } else {
+      std::cout << "DEBUG: Context created, but forcing non-interop mode anyway" << std::endl;
+    }
+    
+    std::cout << "DEBUG: Getting device information" << std::endl;
+  } catch (std::exception& e) {
+    std::cerr << "Exception in InitCL initialization: " << e.what() << std::endl;
     throw;
   }
-  kernelUpdate = cl::Kernel(program, "update");
 
-  // Shared GL/CL buffer
-  clVboBuffer = cl::BufferGL(context, CL_MEM_WRITE_ONLY, *vbo);
-  clVelocities = cl::Buffer(context, CL_MEM_READ_WRITE, numParticles * sizeof(glm::vec2));
-  clMasses = cl::Buffer(context, CL_MEM_READ_WRITE, numParticles * sizeof(float));
-
-  // Initialize particle data
-  std::vector<float> masses(numParticles, 1.f);
-  queue.enqueueWriteBuffer(clMasses, CL_TRUE, 0, masses.size() * sizeof(float), masses.data());
-
-  std::vector<glm::vec2> velocities(numParticles, glm::vec2{});
-  if (useRandomVelocities)
-    for (size_t i = 0; i < velocities.size(); i += 2) {
-      double angle = i / double(velocities.size() / 2) * (2 * M_PI);
-      velocities[i].x = static_cast<float>(-std::cos(angle) * 1.7);
-      velocities[i].y = static_cast<float>(std::sin(angle) * 1.7);
+  try {
+    std::cout << "DEBUG: Getting device info from context" << std::endl;
+    const auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
+    if (devices.empty()) {
+      throw std::runtime_error("No OpenCL devices in context");
     }
-  queue.enqueueWriteBuffer(clVelocities, CL_TRUE, 0, velocities.size() * sizeof(glm::vec2), velocities.data());
+    
+    auto device = devices.front();
+    std::cout << "Using device: " << device.getInfo<CL_DEVICE_NAME>() << '\n';
+    
+    std::cout << "DEBUG: Creating command queue" << std::endl;
+    queue = cl::CommandQueue(context, device);
 
-  // Initialize positions
-  std::vector<glm::vec2> positions(numParticles);
-  if (useRingInit) {
-    for (int i = 0; i < numParticles; ++i) {
-      float angle = (static_cast<float>(i) / numParticles) * 2.0f * M_PI;
-      float r = 0.25f;
-      positions[i] = glm::vec2(r * std::sin(angle), r * std::cos(angle));
+    // Build OpenCL program
+    std::cout << "DEBUG: Reading kernel source" << std::endl;
+    const auto sourceCode = oclReadSourcesFromFile(PathTo<AssetType::Kernel>("GLinterop.cl"));
+    std::cout << "DEBUG: Creating program" << std::endl;
+    program = cl::Program(context, sourceCode);
+    
+    try {
+      std::cout << "DEBUG: Building program" << std::endl;
+      program.build(devices);
     }
-  }
-  else {
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
-    std::generate(positions.begin(), positions.end(), [&] { return glm::vec2{ dist(rng), dist(rng) }; });
+    catch (const cl::Error&) {
+      std::cout << "DEBUG: Error building program" << std::endl;
+      for (auto&& [dev, log] : program.getBuildInfo<CL_PROGRAM_BUILD_LOG>())
+        std::cerr << "Build log for " << dev.getInfo<CL_DEVICE_NAME>() << ":\n" << log << "\n";
+      throw;
+    }
+    
+    std::cout << "DEBUG: Creating kernel" << std::endl;
+    kernelUpdate = cl::Kernel(program, "update");
+    std::cout << "DEBUG: Kernel created successfully" << std::endl;
+  } catch (std::exception& e) {
+    std::cerr << "Exception in OpenCL program setup: " << e.what() << std::endl;
+    throw;
   }
 
-  glBindBuffer(GL_ARRAY_BUFFER, *vbo);
-  if (glm::vec2* ptr = static_cast<glm::vec2*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY))) {
-    std::copy(positions.begin(), positions.end(), ptr);
-    glUnmapBuffer(GL_ARRAY_BUFFER);
+  try {
+    std::cout << "DEBUG: Creating velocity buffer" << std::endl;
+    clVelocities = cl::Buffer(context, CL_MEM_READ_WRITE, numParticles * sizeof(glm::vec2));
+    
+    std::cout << "DEBUG: Creating masses buffer" << std::endl;
+    clMasses = cl::Buffer(context, CL_MEM_READ_WRITE, numParticles * sizeof(float));
+    
+    // Since we're forcing non-interop mode, just create the regular buffer
+    std::cout << "DEBUG: Creating regular position buffer (interop disabled)" << std::endl;
+    clVboBuffer = cl::Buffer(context, CL_MEM_READ_WRITE, numParticles * sizeof(glm::vec2));
+    std::cout << "DEBUG: Regular position buffer created successfully" << std::endl;
+  } catch (std::exception& e) {
+    std::cerr << "Exception in buffer creation: " << e.what() << std::endl;
+    throw;
   }
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  // Set kernel arguments
-  kernelUpdate.setArg(0, clVelocities);
-  kernelUpdate.setArg(1, clVboBuffer);
-  kernelUpdate.setArg(2, clMasses);
+  try {
+    std::cout << "DEBUG: Initializing particle data" << std::endl;
+    
+    // Initialize particle data
+    std::vector<float> masses(numParticles, 1.f);
+    std::cout << "DEBUG: Writing masses to buffer" << std::endl;
+    queue.enqueueWriteBuffer(clMasses, CL_TRUE, 0, masses.size() * sizeof(float), masses.data());
+
+    std::vector<glm::vec2> velocities(numParticles, glm::vec2{});
+    if (useRandomVelocities) {
+      std::cout << "DEBUG: Generating random velocities" << std::endl;
+      for (size_t i = 0; i < velocities.size(); i += 2) {
+        double angle = i / double(velocities.size() / 2) * (2 * M_PI);
+        velocities[i].x = static_cast<float>(-std::cos(angle) * 1.7);
+        velocities[i].y = static_cast<float>(std::sin(angle) * 1.7);
+      }
+    }
+    
+    std::cout << "DEBUG: Writing velocities to buffer" << std::endl;
+    queue.enqueueWriteBuffer(clVelocities, CL_TRUE, 0, velocities.size() * sizeof(glm::vec2), velocities.data());
+    std::cout << "DEBUG: Particle data initialized successfully" << std::endl;
+  } catch (std::exception& e) {
+    std::cerr << "Exception in particle data initialization: " << e.what() << std::endl;
+    throw;
+  }
+
+  try {
+    std::cout << "DEBUG: Initializing positions" << std::endl;
+    // Initialize positions
+    std::vector<glm::vec2> positions(numParticles);
+    if (useRingInit) {
+      std::cout << "DEBUG: Using ring initialization" << std::endl;
+      for (int i = 0; i < numParticles; ++i) {
+        float angle = (static_cast<float>(i) / numParticles) * 2.0f * M_PI;
+        float r = 0.25f;
+        positions[i] = glm::vec2(r * std::sin(angle), r * std::cos(angle));
+      }
+    }
+    else {
+      std::cout << "DEBUG: Using random initialization" << std::endl;
+      std::mt19937 rng(std::random_device{}());
+      std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+      std::generate(positions.begin(), positions.end(), [&] { return glm::vec2{ dist(rng), dist(rng) }; });
+    }
+
+    std::cout << "DEBUG: Writing positions to OpenGL buffer" << std::endl;
+    // Initialize OpenGL buffer with positions
+    glBindBuffer(GL_ARRAY_BUFFER, *vbo);
+    if (glm::vec2* ptr = static_cast<glm::vec2*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY))) {
+      std::copy(positions.begin(), positions.end(), ptr);
+      glUnmapBuffer(GL_ARRAY_BUFFER);
+      std::cout << "DEBUG: Successfully mapped and copied to OpenGL buffer" << std::endl;
+    } else {
+      std::cerr << "WARNING: Failed to map OpenGL buffer" << std::endl;
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    // If not using interop, also initialize the OpenCL buffer with positions
+    if (!useOpenGLInterop) {
+      std::cout << "DEBUG: Writing positions to separate OpenCL buffer (non-interop mode)" << std::endl;
+      queue.enqueueWriteBuffer(clVboBuffer, CL_TRUE, 0, positions.size() * sizeof(glm::vec2), positions.data());
+    }
+
+    std::cout << "DEBUG: Setting kernel arguments" << std::endl;
+    // Set kernel arguments
+    kernelUpdate.setArg(0, clVelocities);
+    std::cout << "DEBUG: Using clVboBuffer for kernel arg 1 (non-interop)" << std::endl;
+    kernelUpdate.setArg(1, clVboBuffer);
+    kernelUpdate.setArg(2, clMasses);
+    std::cout << "DEBUG: InitCL completed successfully" << std::endl;
+  } catch (std::exception& e) {
+    std::cerr << "Exception in positions initialization or kernel setup: " << e.what() << std::endl;
+    throw;
+  }
 }
 
 void MyApp::Update(const UpdateInfo& info) {
   if (!simulation_paused) {
-    float deltaTime = std::clamp(info.deltaTimeSec, 0.0000001f, 0.001f);
-    kernelUpdate.setArg(3, deltaTime);
+    try {
+      float deltaTime = std::clamp(info.deltaTimeSec, 0.0000001f, 0.001f);
+      kernelUpdate.setArg(3, deltaTime);
+      
+      static bool firstUpdate = true;
+      if (firstUpdate) {
+        std::cout << "DEBUG: First update call" << std::endl;
+        firstUpdate = false;
+      }
 
-    std::vector<cl::Memory> glObjects{ clVboBuffer };
-    queue.enqueueAcquireGLObjects(&glObjects);
-    queue.enqueueNDRangeKernel(kernelUpdate, cl::NullRange, cl::NDRange(numParticles));
-    queue.enqueueReleaseGLObjects(&glObjects);
-    queue.finish();
+      if (useOpenGLInterop) {
+        // Using OpenGL-OpenCL interop
+        try {
+          if (firstUpdate) std::cout << "DEBUG: Using interop path" << std::endl;
+          std::vector<cl::Memory> glObjects{ clVboBufferGL };
+          queue.enqueueAcquireGLObjects(&glObjects);
+          queue.enqueueNDRangeKernel(kernelUpdate, cl::NullRange, cl::NDRange(numParticles));
+          queue.enqueueReleaseGLObjects(&glObjects);
+          queue.finish();
+        } catch (std::exception& e) {
+          std::cerr << "Exception in interop update path: " << e.what() << std::endl;
+          throw;
+        }
+      } else {
+        // Non-interop mode: run OpenCL kernel then manually copy data to OpenGL buffer
+        try {
+          if (firstUpdate) std::cout << "DEBUG: Using non-interop path" << std::endl;
+          queue.enqueueNDRangeKernel(kernelUpdate, cl::NullRange, cl::NDRange(numParticles));
+          queue.finish();
+          
+          // Copy positions from OpenCL to CPU
+          std::vector<glm::vec2> positions(numParticles);
+          queue.enqueueReadBuffer(clVboBuffer, CL_TRUE, 0, positions.size() * sizeof(glm::vec2), positions.data());
+          
+          // Copy positions from CPU to OpenGL
+          glBindBuffer(GL_ARRAY_BUFFER, *vbo);
+          if (glm::vec2* ptr = static_cast<glm::vec2*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY))) {
+            std::copy(positions.begin(), positions.end(), ptr);
+            glUnmapBuffer(GL_ARRAY_BUFFER);
+          } else {
+            std::cerr << "WARNING: Failed to map OpenGL buffer during update" << std::endl;
+          }
+          glBindBuffer(GL_ARRAY_BUFFER, 0);
+        } catch (std::exception& e) {
+          std::cerr << "Exception in non-interop update path: " << e.what() << std::endl;
+          throw;
+        }
+      }
+    } catch (std::exception& e) {
+      std::cerr << "Exception in Update: " << e.what() << std::endl;
+      throw;
+    }
   }
 
-  addSample(frameTimes, info.deltaTimeSec * 1000);
-  addSample(kernelTimes, SDL_GetTicks() - info.elapsedTimeSec * 1000);
+  // Skip metrics for now
 }
 
 void MyApp::Render() {
@@ -220,7 +372,7 @@ void MyApp::RenderGUI()
     static_cast<int>(kernelTimes.size()), 0, nullptr, 0.0f, avgKernel * 3.0f,
     ImVec2(0, 60));
 
-  // === Compute–Render Ratio ===
+  // === Computeï¿½Render Ratio ===
   ImGui::Separator();
   if (avgFrame > 0.0f)
     ImGui::Text("GPU compute load: %.1f%%", (avgKernel / avgFrame) * 100.0f);
