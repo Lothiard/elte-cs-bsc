@@ -8,11 +8,11 @@
     "opengl": {
       "description": "Enable OpenGL rendering support using SDL2 and GLEW",
       "dependencies": [
-        {"name" : "sdl3"},
-        {"name" : "sdl3-image", "features": ["png"]},
+        {"name" : "sdl2"},
+        {"name" : "sdl2-image"},
         {"name" : "glew"},
         {"name" : "glm"},
-        {"name" : "imgui", "features": ["sdl3-binding","opengl3-binding"]}
+        {"name" : "imgui", "features": ["opengl3-binding"]}
       ]
   }
   }

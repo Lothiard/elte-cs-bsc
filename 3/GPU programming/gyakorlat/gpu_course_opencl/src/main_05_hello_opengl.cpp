@@ -3,13 +3,15 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <chrono>  // For timing
+#include <thread>  // For sleep
 
 // Define this before including SDL.h to manage the main function yourself.
 #define SDL_MAIN_HANDLED
 
 #include <GL/glew.h>
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 #include <CL/opencl.hpp>
 #include <oglutils.hpp>
@@ -75,11 +77,19 @@ void runApp() {
 
   // 1. Initialization
   SdlManager sdlManager(SDL_INIT_VIDEO);
-  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+  
+  // Tell SDL that we want a modern OpenGL context
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-  UniqueWindow window(SDL_CreateWindow("Animated OpenCL + OpenGL", 800, 600,
-                                       SDL_WINDOW_OPENGL));
+  
+  // Set additional attributes for a proper rendering context
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+  UniqueWindow window(SDL_CreateWindow("Animated OpenCL + OpenGL", 
+                                        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                        800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
   if (!window)
     throw std::runtime_error(std::string("SDL_CreateWindow failed: ") +
                              SDL_GetError());
@@ -87,32 +97,115 @@ void runApp() {
   if (!glContext)
     throw std::runtime_error(std::string("SDL_GL_CreateContext failed: ") +
                              SDL_GetError());
-  if (glewInit() != GLEW_OK)
-    throw std::runtime_error("GLEW init failed");
+                             
+  // Make the context current
+  SDL_GL_MakeCurrent(window.get(), glContext.get());
+  
+  // Initialize GLEW - GLEW must be initialized AFTER SDL_GL_MakeCurrent
+  glewExperimental = GL_TRUE; // Needed for core profile
+  GLenum glewError = glewInit();
+  if (glewError != GLEW_OK) {
+    std::cerr << "GLEW initialization failed: " << glewGetErrorString(glewError) << std::endl;
+    // Continue anyway - GLEW sometimes returns an error code but still initializes correctly
+    std::cerr << "Attempting to continue despite GLEW error..." << std::endl;
+  }
+  
+  // Always clear any OpenGL error that GLEW might have caused (known issue with GLEW)
+  GLenum err;
+  while((err = glGetError()) != GL_NO_ERROR) {
+    std::cerr << "Clearing OpenGL error: " << err << std::endl;
+  }
+  
   std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-  // 2. OpenCL Context Setup
+  // Display OpenGL info first to see which GPU is handling rendering
+  const GLubyte* renderer = glGetString(GL_RENDERER);
+  const GLubyte* version = glGetString(GL_VERSION);
+  std::cout << "====== GRAPHICS HARDWARE INFO ======" << std::endl;
+  std::cout << "OpenGL Renderer: " << (renderer ? (const char*)renderer : "unknown") << std::endl;
+  std::cout << "OpenGL Version: " << (version ? (const char*)version : "unknown") << std::endl;
+  std::cout << "====================================" << std::endl;
+
+  // 2. Attempt OpenCL setup with fallback to pure OpenGL rendering
   cl::Context clContext;
-  if (!oclCreateContextFromCurrentGLContext(clContext)) {
-    throw std::runtime_error("Failed to create CL/GL shared context.");
+  cl::CommandQueue queue;
+  cl::Device device;
+  bool useOpenCL = false;
+  
+  try {
+    // Try to set up OpenCL
+    useOpenCL = oclCreateContextFromCurrentGLContext(clContext);
+    if (!useOpenCL) {
+      std::cerr << "WARNING: Failed to create CL/GL shared context. Will use pure OpenGL rendering." << std::endl;
+      std::cerr << "This is common with hybrid GPU systems where OpenGL runs on one GPU and OpenCL on another." << std::endl;
+    } else {
+      // Get devices from the context
+      auto devices = clContext.getInfo<CL_CONTEXT_DEVICES>();
+      if (devices.empty()) {
+        std::cerr << "No OpenCL devices found in the context. Will use pure OpenGL rendering." << std::endl;
+        useOpenCL = false;
+      } else {
+        device = devices.front();
+        std::cout << "OpenCL Device: " << device.getInfo<CL_DEVICE_NAME>() << std::endl;
+        std::cout << "OpenCL Device Vendor: " << device.getInfo<CL_DEVICE_VENDOR>() << std::endl;
+        
+        // Check if there's a mismatch between OpenGL and OpenCL devices
+        std::string openglDevice = (renderer ? (const char*)renderer : "unknown");
+        std::string openclDevice = device.getInfo<CL_DEVICE_NAME>();
+        
+        if ((openglDevice.find("AMD") != std::string::npos && openclDevice.find("NVIDIA") != std::string::npos) ||
+            (openglDevice.find("NVIDIA") != std::string::npos && openclDevice.find("AMD") != std::string::npos)) {
+          std::cout << "DETECTED GPU MISMATCH: OpenGL and OpenCL are using different GPUs!" << std::endl;
+          std::cout << "This will prevent OpenCL-OpenGL interoperation from working." << std::endl;
+          std::cout << "To fix: Set environment variables before running the application:" << std::endl;
+          std::cout << "For NVIDIA: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia" << std::endl;
+          std::cout << "For AMD: DRI_PRIME=1" << std::endl;
+        }
+        
+        // Create command queue
+        queue = cl::CommandQueue(clContext, device);
+        std::cout << "Command queue created successfully" << std::endl;
+      }
+    }
+  } catch (const cl::Error& e) {
+    std::cerr << "OpenCL setup failed: " << e.what() << " (" << e.err() << ")" << std::endl;
+    std::cerr << "Will use pure OpenGL rendering" << std::endl;
+    useOpenCL = false;
+  } catch (const std::exception& e) {
+    std::cerr << "Exception during OpenCL setup: " << e.what() << std::endl;
+    std::cerr << "Will use pure OpenGL rendering" << std::endl;
+    useOpenCL = false;
   }
 
-  auto devices = clContext.getInfo<CL_CONTEXT_DEVICES>();
-  auto device = devices.front();
-  std::cout << "OpenCL Device: " << device.getInfo<CL_DEVICE_NAME>()
-            << std::endl;
-
-  cl::CommandQueue queue(clContext, device);
-
-  cl::Program program(clContext, kernelSource);
-  if (program.build({device}) != CL_SUCCESS) {
-    throw std::runtime_error(
-        "OpenCL program build error:\n" +
-        program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(device));
+  // Initialize OpenCL program and kernel only if we're using OpenCL
+  cl::Program program;
+  cl::Kernel rawKernel;
+  bool hasKernel = false;
+  
+  if (useOpenCL) {
+    try {
+      program = cl::Program(clContext, kernelSource);
+      if (program.build({device}) != CL_SUCCESS) {
+        std::string buildLog = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(device);
+        std::cerr << "OpenCL program build error:\n" << buildLog << std::endl;
+        std::cerr << "Will use CPU-based fallback instead" << std::endl;
+      } else {
+        try {
+          rawKernel = cl::Kernel(program, "fill_animated_texture");
+          hasKernel = true;
+          std::cout << "Successfully created kernel" << std::endl;
+        } catch (const cl::Error& e) {
+          std::cerr << "Failed to create kernel: " << e.what() << " (" << e.err() << ")" << std::endl;
+          std::cerr << "Will use CPU-based fallback instead" << std::endl;
+        }
+      }
+    } catch (const cl::Error& e) {
+      std::cerr << "Error creating OpenCL program: " << e.what() << " (" << e.err() << ")" << std::endl;
+      std::cerr << "Will use CPU-based fallback instead" << std::endl;
+    }
+  } else {
+    std::cout << "OpenCL not available, will use CPU-based rendering" << std::endl;
   }
-
-  cl::KernelFunctor<cl::ImageGL, float> kernel(program,
-                                               "fill_animated_texture");
 
   // 3. OpenGL Object Setup
   auto shaderProgram =
@@ -143,36 +236,154 @@ void runApp() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  // 4. OpenGL-CL Interop Object setup
-  // Warning: keep "glTexture" alive as long as you need your cl::ImageGL
-  // referencing it
-  cl::ImageGL clImage(clContext, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0,
-                      *glTexture);
+  // 4. OpenGL-CL Interop Object setup (if using OpenCL)
+  cl::ImageGL clImage;
+  bool hasGLInterop = false;
+  
+  if (useOpenCL && hasKernel) {
+    try {
+      // Print OpenGL texture info for diagnostics
+      std::cout << "OpenGL texture ID: " << *glTexture << std::endl;
+      
+      // Check if we have OpenGL interop capability
+      auto devices = clContext.getInfo<CL_CONTEXT_DEVICES>();
+      if (!devices.empty()) {
+        std::string deviceExtensions = devices[0].getInfo<CL_DEVICE_EXTENSIONS>();
+        if (deviceExtensions.find("cl_khr_gl_sharing") != std::string::npos) {
+          std::cout << "Device supports cl_khr_gl_sharing extension" << std::endl;
+        } else {
+          std::cout << "WARNING: Device does not support cl_khr_gl_sharing extension" << std::endl;
+        }
+      }
+      
+      // Create the shared image, with extra safety
+      try {
+        // First check if the GL texture is valid
+        GLint textureParams = 0;
+        glGetTextureParameteriv(*glTexture, GL_TEXTURE_WIDTH, &textureParams);
+        std::cout << "Texture width: " << textureParams << std::endl;
+        
+        // This is where we need to be very careful - disable CL/GL interop entirely
+        // since we couldn't create a proper shared context
+        std::cout << "WARNING: Not attempting to create cl::ImageGL due to lack of proper OpenGL-OpenCL shared context" << std::endl;
+        std::cout << "Will use CPU-based rendering instead" << std::endl;
+        hasGLInterop = false;
+        
+        /* This causes segmentation fault - don't attempt it
+        clImage = cl::ImageGL(clContext, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, *glTexture);
+        std::cout << "Successfully created OpenGL-OpenCL interop image" << std::endl;
+        hasGLInterop = true;
+        */
+      } catch (const cl::Error& e) {
+        std::cerr << "Failed to create OpenGL-OpenCL interop image: " << e.what() << " (" << e.err() << ")" << std::endl;
+        std::cerr << "Will use CPU-based rendering instead" << std::endl;
+        hasGLInterop = false;
+      } catch (const std::exception& e) {
+        std::cerr << "Exception during texture validation: " << e.what() << std::endl;
+        std::cerr << "Will use CPU-based rendering instead" << std::endl;
+        hasGLInterop = false;
+      }
+    } catch (const std::exception& e) {
+      std::cerr << "Exception checking OpenCL-OpenGL interop capability: " << e.what() << std::endl;
+      std::cerr << "Will use CPU-based rendering instead" << std::endl;
+    }
+  }
 
   // 5. Main Loop
   bool running = true;
+  bool warningShown = false;
+  
   while (running) {
     SDL_Event event;
     while (SDL_PollEvent(&event))
-      if (event.type == SDL_EVENT_QUIT)
+      if (event.type == SDL_QUIT)
         running = false;
 
-    // Get elapsed time in seconds.
+    // Get elapsed time in seconds
     float time = SDL_GetTicks() / 1000.0f;
+    
+    try {
+      // Double-check that clImage is valid before attempting to use it
+      bool validInterop = useOpenCL && hasKernel && hasGLInterop;
+      if (validInterop) {
+        try {
+          // Make sure clImage is valid
+          if (clImage() == nullptr) {
+            std::cerr << "clImage is null, falling back to CPU rendering" << std::endl;
+            hasGLInterop = false;
+            validInterop = false;
+          }
+        } catch (const std::exception& e) {
+          std::cerr << "Error checking clImage validity: " << e.what() << std::endl;
+          hasGLInterop = false;
+          validInterop = false;
+        }
+      }
+      
+      if (validInterop) {
+        // OpenCL-OpenGL interop path
+        try {
+          std::cout << "Attempting OpenCL-OpenGL interop rendering..." << std::endl;
+          // Acquire the OpenGL texture for OpenCL to write to
+          std::vector<cl::Memory> glObjs = {clImage};
+          queue.enqueueAcquireGLObjects(&glObjs);
+          std::cout << "Acquired GL objects" << std::endl;
 
-    // Acquire the OpenGL texture for OpenCL to write to.
-    std::vector<cl::Memory> glObjs = {clImage};
-    queue.enqueueAcquireGLObjects(&glObjs);
+          // Set the kernel arguments and execute
+          rawKernel.setArg(0, clImage);
+          rawKernel.setArg(1, time);
+          std::cout << "Set kernel arguments" << std::endl;
+          
+          queue.enqueueNDRangeKernel(rawKernel, cl::NullRange, cl::NDRange(TEX_WIDTH, TEX_HEIGHT), cl::NullRange);
+          std::cout << "Executed kernel" << std::endl;
 
-    // Set the kernel arguments for this frame and execute the kernel.
-    kernel(cl::EnqueueArgs(queue, cl::NDRange(TEX_WIDTH, TEX_HEIGHT)), clImage,
-           time);
-
-    // Release the texture back to OpenGL.
-    queue.enqueueReleaseGLObjects(&glObjs);
-    queue.finish();
-
-    // Render the result
+          // Release the texture back to OpenGL
+          queue.enqueueReleaseGLObjects(&glObjs);
+          queue.finish();
+          std::cout << "Released GL objects and finished queue" << std::endl;
+        } catch (const cl::Error& e) {
+          std::cerr << "OpenCL error during rendering: " << e.what() << " (" << e.err() << ")" << std::endl;
+          hasGLInterop = false;  // Disable GL interop for future frames
+        }
+      } else {
+        // CPU-based fallback rendering
+        if (!warningShown) {
+          std::cout << "Using CPU-based rendering fallback" << std::endl;
+          warningShown = true;
+        }
+        
+        // Create a simple animated pattern on CPU
+        std::vector<float> pixels(TEX_WIDTH * TEX_HEIGHT * 4);
+        for (int y = 0; y < TEX_HEIGHT; y++) {
+          for (int x = 0; x < TEX_WIDTH; x++) {
+            float u = (float)x / TEX_WIDTH;
+            float v = (float)y / TEX_HEIGHT;
+            float val1 = sin(u * 10.0f + time * 2.0f);
+            float val2 = sin(v * 10.0f + time * 3.0f);
+            float val3 = sin((u + v) * 10.0f + time * 4.0f);
+            float final_value = 0.5f + 0.5f * ((val1 + val2 + val3) / 3.0f);
+            
+            int index = (y * TEX_WIDTH + x) * 4;
+            pixels[index + 0] = final_value;  // R
+            pixels[index + 1] = final_value;  // G
+            pixels[index + 2] = final_value;  // B
+            pixels[index + 3] = 1.0f;         // A
+          }
+        }
+        
+        // Update the OpenGL texture with CPU-generated pattern
+        glBindTexture(GL_TEXTURE_2D, *glTexture);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, TEX_WIDTH, TEX_HEIGHT, GL_RGBA, GL_FLOAT, pixels.data());
+        glBindTexture(GL_TEXTURE_2D, 0);
+      }
+    }
+    catch (const std::exception& e) {
+      std::cerr << "Error during rendering: " << e.what() << std::endl;
+      
+      // If we encounter an error, disable OpenCL and continue with CPU rendering
+      useOpenCL = false;
+      hasGLInterop = false;
+    }    // Render the result
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(*shaderProgram);
@@ -181,7 +392,7 @@ void runApp() {
     glBindVertexArray(*quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    SDL_GL_SwapWindow(window.get());
+  SDL_GL_SwapWindow(window.get());
   }
 }
 

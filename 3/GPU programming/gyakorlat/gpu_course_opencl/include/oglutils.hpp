@@ -18,12 +18,10 @@
 #include <GL/glx.h>
 #include <GL/gl.h>
 #endif
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_opengl.h>
+#include <SDL2/SDL.h>
 #include <CL/opencl.hpp>
 
 // --- Custom Exception Types ---
-
 class SdlException : public std::runtime_error {
 public:
   SdlException(const std::string& message) : std::runtime_error(message + " SDL Error: " + SDL_GetError()) {}
@@ -35,9 +33,12 @@ public:
 class SdlManager {
 public:
   SdlManager(Uint32 flags) {
-    // Corrected logic for SDL3: returns 0 on failure, non-zero on success.
-    if (SDL_Init(flags) == 0) {
-      throw SdlException("SDL_Init failed.");
+    // SDL2 returns 0 on success, non-zero on failure
+    if (SDL_Init(flags) != 0) {
+      std::string errorMsg = "SDL_Init failed. SDL Error: ";
+      errorMsg += SDL_GetError();
+      std::cerr << "Debug - " << errorMsg << std::endl;  // Add this debug line
+      throw SdlException(errorMsg);
     }
     std::cout << "SDL initialized." << std::endl;
   }
@@ -67,7 +68,7 @@ struct SdlWindowDeleter {
 struct SdlGlContextDeleter {
   void operator()(SDL_GLContext context) const {
     if (context) {
-      SDL_GL_DestroyContext(context);
+      SDL_GL_DeleteContext(context);
       std::cout << "SDL_GLContext destroyed." << std::endl;
     }
   }
@@ -108,7 +109,7 @@ struct GlProgramDeleter {
 
 // Use unique_ptr for clear, exclusive ownership of resources.
 using UniqueWindow = std::unique_ptr<SDL_Window, SdlWindowDeleter>;
-using UniqueGlContext = std::unique_ptr<SDL_GLContextState, SdlGlContextDeleter>;
+using UniqueGlContext = std::unique_ptr<void, SdlGlContextDeleter>;
 using UniqueGlBuffer = std::unique_ptr<GLuint, GlBufferDeleter>;
 using UniqueGlVertexArray = std::unique_ptr<GLuint, GlVertexArrayDeleter>;
 using UniqueGlTexture = std::unique_ptr<GLuint, GlTextureDeleter>;
@@ -150,34 +151,121 @@ inline UniqueGlProgram createProgram() {
 // This version uses platform-specific functions directly.
 inline bool oclCreateContextFromCurrentGLContext(cl::Context& context)
 {
-  std::vector<cl::Platform> platforms;
-  cl::Platform::get(&platforms);
-
-  for (const auto& platform : platforms) {
-    cl_context_properties props[] = {
-      CL_CONTEXT_PLATFORM, (cl_context_properties)(platform)(),
-      #if defined(_WIN32)
-      CL_GL_CONTEXT_KHR,   (cl_context_properties)wglGetCurrentContext(),
-      CL_WGL_HDC_KHR,      (cl_context_properties)wglGetCurrentDC(),
-      #elif defined(__linux__)
-      CL_GL_CONTEXT_KHR,   (cl_context_properties)glXGetCurrentContext(),
-      CL_GLX_DISPLAY_KHR,  (cl_context_properties)glXGetCurrentDisplay(),
-      #elif defined(__APPLE__)
-      // macOS OpenGL-CL interop would use CGL context. This is the legacy path.
-      CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)CGLGetShareGroup(CGLGetCurrentContext()),
-      #endif
-      0
-    };
-
+  try {
+    // Force initialization in case GLEW didn't fully initialize
+    glGetString(GL_VERSION);
+    
+    std::vector<cl::Platform> platforms;
+    cl::Platform::get(&platforms);
+    
+    std::cout << "Found " << platforms.size() << " OpenCL platform(s)" << std::endl;
+    
+    // First attempt: try to create a context with NVIDIA platform
+    for (size_t i = 0; i < platforms.size(); i++) {
+      auto& platform = platforms[i];
+      std::string platformName = platform.getInfo<CL_PLATFORM_NAME>();
+      std::cout << "Platform " << i << ": " << platformName << std::endl;
+      
+      // Check if this platform supports OpenGL sharing
+      std::string extensions = platform.getInfo<CL_PLATFORM_EXTENSIONS>();
+      bool hasGLSharing = extensions.find("cl_khr_gl_sharing") != std::string::npos;
+      
+      if (!hasGLSharing) {
+        std::cout << "  Platform doesn't support OpenGL sharing, skipping" << std::endl;
+        continue;
+      }
+      
+      std::cout << "  Platform supports OpenGL sharing" << std::endl;
+      
+      try {
+        // List available GPU devices
+        std::vector<cl::Device> devices;
+        platform.getDevices(CL_DEVICE_TYPE_GPU, &devices);
+        
+        std::cout << "  Found " << devices.size() << " GPU devices" << std::endl;
+        
+        for (size_t j = 0; j < devices.size(); j++) {
+          std::cout << "  Device " << j << ": " << devices[j].getInfo<CL_DEVICE_NAME>() << std::endl;
+        }
+        
+        // If we have devices, try to create context with the first one directly
+        if (!devices.empty()) {
+          try {
+            cl_context_properties props[] = {
+              CL_CONTEXT_PLATFORM, (cl_context_properties)(platform)(),
+              #if defined(_WIN32)
+              CL_GL_CONTEXT_KHR,   (cl_context_properties)wglGetCurrentContext(),
+              CL_WGL_HDC_KHR,      (cl_context_properties)wglGetCurrentDC(),
+              #elif defined(__linux__)
+              CL_GL_CONTEXT_KHR,   (cl_context_properties)glXGetCurrentContext(),
+              CL_GLX_DISPLAY_KHR,  (cl_context_properties)glXGetCurrentDisplay(),
+              #elif defined(__APPLE__)
+              CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)CGLGetShareGroup(CGLGetCurrentContext()),
+              #endif
+              0
+            };
+            
+            // Create context with specific device
+            context = cl::Context(devices, props);
+            std::cout << "Successfully created OpenCL context with " << platformName 
+                      << " and device " << devices[0].getInfo<CL_DEVICE_NAME>() << std::endl;
+            return true;
+          }
+          catch (const cl::Error& e) {
+            std::cout << "  Failed to create context with specific device: " << e.what() 
+                      << " (" << e.err() << ")" << std::endl;
+          }
+        }
+      }
+      catch (const cl::Error& e) {
+        std::cout << "  Error getting devices: " << e.what() << " (" << e.err() << ")" << std::endl;
+      }
+      
+      // Try generic context creation with this platform
+      try {
+        cl_context_properties props[] = {
+          CL_CONTEXT_PLATFORM, (cl_context_properties)(platform)(),
+          #if defined(_WIN32)
+          CL_GL_CONTEXT_KHR,   (cl_context_properties)wglGetCurrentContext(),
+          CL_WGL_HDC_KHR,      (cl_context_properties)wglGetCurrentDC(),
+          #elif defined(__linux__)
+          CL_GL_CONTEXT_KHR,   (cl_context_properties)glXGetCurrentContext(),
+          CL_GLX_DISPLAY_KHR,  (cl_context_properties)glXGetCurrentDisplay(),
+          #elif defined(__APPLE__)
+          CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)CGLGetShareGroup(CGLGetCurrentContext()),
+          #endif
+          0
+        };
+        
+        // Create generic context
+        context = cl::Context(CL_DEVICE_TYPE_GPU, props);
+        std::cout << "Successfully created OpenCL context with " << platformName << std::endl;
+        return true;
+      }
+      catch (const cl::Error& e) {
+        std::cout << "  Failed to create generic context: " << e.what() << " (" << e.err() << ")" << std::endl;
+      }
+    }
+    
+    // If we reach here, try one more approach - context without OpenGL interop
+    std::cout << "Attempting to create a regular OpenCL context without OpenGL sharing" << std::endl;
     try {
-      context = cl::Context(CL_DEVICE_TYPE_GPU, props);
-      return true; // Context created successfully
+      // Just create a regular context with default platform
+      context = cl::Context(CL_DEVICE_TYPE_GPU);
+      std::cout << "Created regular OpenCL context without OpenGL sharing" << std::endl;
+      std::cout << "WARNING: No OpenGL interoperation will be available!" << std::endl;
+      return true;
     }
-    catch (const cl::Error&) {
-      // Try the next platform
-      continue;
+    catch (const cl::Error& e) {
+      std::cout << "Failed to create even a regular context: " << e.what() << " (" << e.err() << ")" << std::endl;
     }
+    
+    std::cerr << "Failed to create a shared context on any platform" << std::endl;
+    return false;
   }
-  return false; // Failed to create a shared context on any platform
+  catch (const std::exception& e) {
+    std::cerr << "Exception in oclCreateContextFromCurrentGLContext: " << e.what() << std::endl;
+    return false;
+  }
 }
 

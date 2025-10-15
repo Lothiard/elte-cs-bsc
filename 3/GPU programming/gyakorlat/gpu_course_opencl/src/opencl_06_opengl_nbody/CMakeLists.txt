@@ -1,7 +1,9 @@
+cmake_minimum_required(VERSION 3.16)
 # src/opencl-06-opengl-nbody/CMakeLists.txt
 
 find_package(glm REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(SDL3 CONFIG REQUIRED)
 find_package(SDL3_image CONFIG REQUIRED)
 
 # Collect sources for this subproject
@@ -39,8 +41,8 @@ target_link_libraries(opencl-06-opengl-nbody
         OpenCLConfig
         OpenGLConfig
         imgui::imgui
-		$<IF:$<TARGET_EXISTS:SDL3_image::SDL3_image-shared>,SDL3_image::SDL3_image-shared,SDL3_image::SDL3_image-static>
-		glm::glm
+  $<IF:$<TARGET_EXISTS:SDL3_image::SDL3_image-shared>,SDL3_image::SDL3_image-shared,SDL3_image::SDL3_image-static>
+  glm::glm
 )
 
 target_compile_definitions(opencl-06-opengl-nbody
