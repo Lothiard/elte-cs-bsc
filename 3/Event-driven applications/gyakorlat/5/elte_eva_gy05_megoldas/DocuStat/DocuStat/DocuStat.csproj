@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Copyright>Copyright © Eötvös Loránd University (ELTE) 2022</Copyright>
+    <Company>ELTE, Faculty of Informatics</Company>
+    <Authors>Máté Cserép, Csaba Ömböli, Anett Fekete</Authors>
+    <RootNamespace>ELTE.DocuStat</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="itext7" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Input\TheBoyWhoLived.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

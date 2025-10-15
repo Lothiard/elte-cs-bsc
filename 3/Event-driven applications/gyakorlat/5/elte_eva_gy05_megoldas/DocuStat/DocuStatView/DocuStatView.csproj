@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Copyright>Copyright © Eötvös Loránd University (ELTE) 2022</Copyright>
+    <Company>ELTE, Faculty of Informatics</Company>
+    <Authors>Péter Kaszab, Dávid Magyar, Anett Fekete</Authors>
+    <RootNamespace>ELTE.DocuStat.View</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DocuStat\DocuStat.csproj" />
+  </ItemGroup>
+
+</Project>
