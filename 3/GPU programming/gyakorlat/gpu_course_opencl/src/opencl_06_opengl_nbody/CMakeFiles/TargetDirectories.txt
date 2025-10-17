@@ -1,0 +1,3 @@
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakorlat/gpu_course_opencl/src/opencl_06_opengl_nbody/CMakeFiles/opencl-06-opengl-nbody.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakorlat/gpu_course_opencl/src/opencl_06_opengl_nbody/CMakeFiles/edit_cache.dir
+/home/lothiard/ELTE/elte-cs-bsc/3/GPU programming/gyakorlat/gpu_course_opencl/src/opencl_06_opengl_nbody/CMakeFiles/rebuild_cache.dir
