@@ -1,6 +1,6 @@
 Kredit: 3\
-Előadó: ?\
-Gyakorlatvezető: Eichhardt Iván
+Előadó: Valasek Gábor\
+Gyakorlatvezető: Eichhardt Iván, Szigeti Balázs Endre
 
 ## Vélemény
 
