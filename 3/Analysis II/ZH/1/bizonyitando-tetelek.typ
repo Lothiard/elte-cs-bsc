@@ -224,7 +224,7 @@ TFH $f in D(a,b)$. Ekkor
 
 === Bizonyítás:
 1.
-$==>$\
+$==>:$\
 Ha $f arrow.tr (a,b)$-n és $t in (a,b)$ egy tetszőleges pont, akkor
 $
   (f(x) - f(t))/(x-t) >= 0 "  " (t < x < b),
@@ -234,7 +234,7 @@ $
   f'(t) = f'_+(t) = limits(lim)_(x arrow t+0)(f(x) - f(t))/(x-t) >= 0.
 $
 
-$<==$\
+$<==:$\
 Ha $forall x in (a,b): f'(x) >= 0$, akkor legyen $x,y in (a,b), x < y$ két tetszőleges pont.\
 Ekkor $f in C[x,y], f in D(x,y),$ és így a Lagrange-féle középértéktétel szerint
 $
@@ -246,5 +246,164 @@ Ezért $f arrow.tr (a,b)$-n.
 Az állítás hasonlóan igazolható monoton csökkenő függvények esetén is.
 
 2.
-Alkalmazzunk "éles" egyenlőtlenségeket 1.-ben a $<==$ irányban.
+Alkalmazzunk "éles" egyenlőtlenségeket 1.-ben a $<==$ irányban.\
+$square$
+
+#pagebreak()
+== 9. A lokális szélsőértékre vonatkozó elsőrendű elégséges feltétel.
+=== Tétel:
+Legyen $- infinity < a < b < + infinity$ és $f: (a, b) arrow RR$\
+TFH
+- $f in D(a, b)$
+- egy $c in (a,b)$ pontban $f'(c) = 0$
+- az $f'$ deriváltfüggvény előjelet vált $c$-ben.
+
+Ekkor
+1. ha az $f$ függvénynek $c$-ben $(-, +)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális minimumhelye.
+2. ha az $f$ függvénynek $c$-ben $(+, -)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális maximumhelye.
+
+=== Bizonyítás:
+Az állítás azonnal következik a monotonitás és a derivált kapcsolatáról szóló tételből, hiszen ha az $f$ függvénynek $c$-ben $(-, +)$ előjelváltása van, akkor\ $exists delta > 0$ úgy hogy\ $f' < 0 " " (c - delta, c)$-n és\ $f' > 0 " " (c, c + delta)$-n
+
+Ezért\ $f arrow.b (c - delta, c]$-n, és\ $f arrow.t [c, c + delta)$-n.
+
+Emiatt $forall x in (c - delta, c + delta): f(x) > f(c)$, tehát $c$ az $f$ függvénynek szigorú lokális minimumhelye.
+
+Az állítás hasonlóan igazolható $(+, -)$ előjelváltás esetén.\
+$square$
+
+#pagebreak()
+== 10. A konvexitás jellemzése a deriváltfüggvénnyel.
+=== Tétel:
+TFH $I subset RR$ nyílt intervallum és $f in D(I)$. Ekkor
+$
+  f "konvex" I"-n  " <==> "  " f' arrow.tr I"-n".
+$
+
+=== Bizonyítás:
+$==>:$\
+Legyen\ $u, v in I$\ $u < v$ tetszőleges\ $x in (u, v)$ is tetszőleges\
+TFH $f$ konvex $I$-n. Ekkor
+$
+  f(x) <= (f(v) - f(u))/(v - u)(x - u) + f(u) "  és  " f(x) <= (f(v) - f(u))/(v - u)(x - v) + f(v)
+$
+$
+  (f(x) - f(u))/(x - u) <= (f(v) - f(u))/(v - u) <= (f(x) - f(v))/(x - v)
+$
+
+Vegyük itt az $x arrow u$ ill. az $x arrow v$ határátmenetet:
+$
+  f'(u) <= (f(v) - f(u))/(v - u) <= f'(v)
+$
+
+Tehát $f' arrow.tr I$-n.\
+
+$<==:$\
+TFH $f' arrow.tr I$-n.\
+Legyen\ $u, v in I$\ $u < v$ tetszőleges\ $x in (u, v)$ is tetszőleges\
+Ekkor a Lagrange-féle középértéktétel szerint\ $exists xi_1 in (u, x)$ és $exists xi_2 in (x, v)$
+
+$
+  f'(xi_1) = (f(x) - f(u))/(x - u) "  és  " f'(xi_2) = (f(v) - f(x))/(v - x)
+$
+Mivel $f' arrow.tr I$-n, ezért $f'(xi_1) <= f'(xi_2)$ vagyis
+$
+  (f(x) - f(u))/(x - u) <= (f(v) - f(x))/(v - x) <==> f(x) <= (f(v) - f(u))/(v - u)(x - u) + f(u)
+$
+Tehát $f$ konvex $I$-n.\
+$square$
+
+#pagebreak()
+== 11. A véges pontbeli $0/0$ határérték esetre vonatkozó L’Hospital-szabály.
+=== Tétel:
+Legyen $-infinity <= a < b < +infinity$ és $f, g in D(a, b)$.\
+TFH
+- $ exists lim_(a + 0) f = lim_(a + 0) g = 0 $
+- $ g(x) != 0 " és " g'(x) != 0 "  " forall x in (a, b) $
+- $ exists lim_(a + 0) (f')/(g') in overline(RR) $
+
+Ekkor
+$
+  exists lim_(a + 0) f/g in overline(RR) "  és  " lim_(a + 0) f/g = lim_(a + 0) (f')/(g') in overline(RR)
+$
+
+=== Bizonyítás:
+/ 1. eset: $a > -infinity$ (véges)
+Legyen $A := lim_(a + 0) f'/g' in overline(RR)$, azaz\
+$
+  forall epsilon > 0, exists delta > 0: forall y in (a, a + delta) subset (a, b): (f'(y))/(g'(y)) in K_epsilon (A)\
+$
+Igazoljuk hogy:
+$
+  forall epsilon > 0, exists delta > 0: forall x in (a, a + delta) subset (a, b): (f(x))/(g(x)) in K_epsilon (A)\
+$
+Legyen
+$
+  f(a) := 0 "  és  " g(a) := 0
+$
+Ekkor a $lim_(a+0) f = lim_(a+0) g = 0$ feltételből következik, hogy $f, g in C[a, a + delta)$
+
+Legyen most $x in (a, a + delta)$ tetszőleges pont. A Cauchy-féle középértéktétel feltételei az $f$ és a $g$ függvényre az $[a, x]$ intervallumon teljesülnek. Így $exists epsilon_x in (a, x)$, amelyre
+$
+  (f(x))/(g(x)) = (f(x) - f(a))/(g(x) - g(a)) = (f'(epsilon_x))/(g'(epsilon_x)) in K_epsilon (A)
+$
+Tehát $exists lim_(a + 0) f/g$ és $lim_(a + 0) f/g = A$
+
+/ 2. eset: $a = -infinity$
+nem bizonyítjuk.\
+$square$
+
+#pagebreak()
+== 12. A Taylor-formula a Lagrange-féle maradéktaggal.
+=== Tétel:
+Legyen $n in NN$\
+TFH $f in D^(n + 1)(K(a))$\
+Ekkor $forall x in K(a)$ ponthoz $exists$ olyan $a$ és $x$ közé eső $xi$ szám, hogy
+$
+  f(x) - T_(a, n)f(x) = (f^((n + 1))(xi))/((n + 1)!) (x - a)^(n + 1)
+$
+
+=== Bizonyítás:
+Cauchy-féle középértéktétellel.\
+Legyen
+$
+  F(x) := f(x) - T_(a, n)f(x) "  " (x in K(a))
+$
+A $T_(a, n)f$ polinom definíciójából következik, hogy
+$
+  F^((i))(a) = f^((i))(a) - (T_(a, n)f)^((i))(a) = 0 "  " (i = 0, 1, dots, n).
+$
+Továbbá, $F^((n + 1))(x) = f^((n + 1))(x)$, hiszen $(T_(n, a)f)^((n + 1)) equiv 0$, mert $T_(a ,n)f$ egy legfeljebb $n$-edfokú polinom.\
+Másrészt, legyen $G(x) := (x - a)^(n + 1) "  " (x in K(a))$.\
+Ekkor
+$
+  forall x in K(a):\ G'(x) = (n + 1)(x - a)^n,\ " " G''(x) = n(n + 1)(x - a)^(n - 1),\ dots,\ G^((n))(x) = (n + 1)!(x - a),
+$
+amiből következik, hogy
+$
+  G^((i))(a) = 0 "  " (i = 0, 1, dots, n), "  és  " G^((n + 1))(x) = (n + 1)!
+$
+
+TFH $x in K(a)$ és például $x > 0$.\
+Az $F$ és $G$ függvényekre az $[a, x]$ intervallumon alkalmazható a Cauchy-féle középértéktétel:
+$
+  exists xi_1 in (a, x): (F'(xi_1))/(G'(xi_1)) = (F(x) - F(a))/(G(x) - G(a)) = (F(x))/(G(x)) = (f(x) - T_(a, n)f(x))/((x - a)^(n + 1))
+$
+
+A Cauchy-féle középértéktételt most az $F'$ és a $G'$ függvényekre az $[a, xi_1]$ intervallumon alkalmazzuk:
+$
+  exists xi_2 in (a, xi_1) subset (a, x): (F''(xi_2))/(G''(xi_2)) = (F'(xi_1) - F'(a))/(G'(xi_1) - G'(a)) = (F'(xi_1))/(G'(xi_1))
+$
+Ha a fenti gondolatmenetet $n$-szer megismételjük, akkor a $k$-dik lépésben $(k = 1, 2, dots, n):$
+$
+  exists xi_(k + 1) in (a, xi_k) subset (a, x):\
+  (F^((k + 1)) (xi_(k + 1)))/(G^((k + 1))(xi_(k + 1))) = (F^((k))(xi_k) - F^((k))(a))/(G^((k))(xi_k) - G^((k))(a)) = (F^((k))(xi_k))/(G^((k))(xi_k)).
+$
+#pagebreak()
+az $n$ számú lépés után kapott egyenlőségeket egybevetve azt kapjuk, hogy
+$
+  (f(x) - T_(a, n)(f, x))/((x - a)^(n + 1)) = (F(x))/(G(x)) = (F'(xi_1))/(G'(xi_1)) = dots = (F^((n))(xi_n))/(G^((n))(xi_n)) = (F^((n + 1))(xi_(n + 1)))/(G^((n + 1))(xi_(n + 1))) = (f^((n + 1))(xi_(n + 1)))/((n + 1)!),
+$
+hiszen $forall x in K(a): F^((n + 1))(x) = f^((n + 1))$ és $G^((n + 1))(x) = (n + 1)!$.\
+A konstrukcióból látható, hogy $xi_(n + 1)$ az $a$ pont és $x$ között van, ezért a $xi := xi_(n + 1)$ választással a bizonyítandó állítást kapjuk.\
 $square$
