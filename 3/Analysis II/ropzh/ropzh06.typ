@@ -1,7 +1,7 @@
 
 == Definiálja a primitív függvényt!
 Legyen $I in RR$ nyílt intervallum és $f: I arrow RR$ egy adott függvény.\
-AMH a $F: a arrow RR$ függvény $f$ primitív függvénye, ha
+AMH a $F: I arrow RR$ függvény $f$ primitív függvénye, ha
 $
   F in D(I) "  és  " F'(x) = f(x) "  " (forall x in I)
 $

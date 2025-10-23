@@ -26,7 +26,7 @@ $<==$ :\
 TFH $exists A in bb(R)$ és $exists epsilon : D_f arrow bb(R), limits(lim)_a epsilon = 0$, hogy
 $ f(x) - f(a) = A(x - a) + epsilon (x)(x - a) #h(1cm) (x in D_f). $
 Ebből
-$ (f(x) - f(a))/(x - a) = A + epsilon(x) arrow A, #h(1cm) "ha" x arrow x $
+$ (f(x) - f(a))/(x - a) = A + epsilon(x) arrow A, #h(1cm) "ha" x arrow a $
 adódik, ami azt jelenti, hogy $f in D{a}$ és $f'(a) = A$.\
 $square$
 #pagebreak()
@@ -49,13 +49,14 @@ $
 Mivel $g in D{a}$, ezért $g in C{a}$, tehát $limits(lim)_(x arrow a) g(x) = g(a)$. Így
 $
   limits(lim)_(x arrow a) ((f g)(x) - (f g)(a))/(x - a) =\
-  = limits(lim)_(x arrow a) (f(x) - f(a))/(x - a) dot limits(lim)_(x arrow a) g(x) + limits(lim)_(x arrow a) f(a) dot limits(lim)_(x arrow a) (g(x) - g(a))/(x - a) =\
+  = limits(lim)_(x arrow a) (f(x) - f(a))/(x - a) dot limits(lim)_(x arrow a) g(x) + f(a) dot limits(lim)_(x arrow a) (g(x) - g(a))/(x - a) =\
   = f'(a) dot g(a) + f(a) dot g'(a).
 $
-Ez azt jelenti, hogy $f, g in D{a}$ és
+Ez azt jelenti, hogy $f dot g in D{a}$ és
 $
   (f dot g)'(a) = f'(a) dot g(a) + f(a) dot g'(a).
 $
+$square$
 
 #pagebreak()
 == 3. A hányadosfüggvény deriválása
@@ -86,6 +87,12 @@ $
   = 1/(g(a) limits(lim)_(x arrow a) g(x))(limits(lim)_(x-a)(f(x) - f(a))/(x-a) dot g(a) - f(a) dot limits(lim)_(x arrow a)(g(x) - g(a))/(x-a)) =\
   = 1/(g^2(a))(f'(a)g(a) - f(a)g'(a)).
 $
+
+Ez azt jelenti, hogy $f/g in D{a}$, és
+$
+    (f/g)'(a) = (f'(a)g(a) - f(a)g'(a))/(g^2(a))
+$
+
 $square$
 
 #pagebreak()
@@ -139,6 +146,7 @@ $
 
 - 1. eset: $m = M$.
   Ekkor $f$ állandó, így $forall xi in (a,b): f'(xi) = 0$.
+\
 - 2. eset: $m != M$.
   Mivel $f(a) = f(b)$, ezért $alpha$ és $beta$ közül legalább az egyik (pl. $alpha$) ($a,b$)-be esik.\ Ekkor $xi := alpha in "int" cal(D)_f = (a,b)$, és $f$-nek $xi$-ben lokális minimuma van.\ Mivel $f in D{xi} ==> ("az elsőrendű szükséges feltétel") f'(xi) = 0.$
 $square$
@@ -208,7 +216,7 @@ Az $F$ függvény folytonos $[a,b]$-n, deriválható $(a,b)$-n és $F(a) = F(b) 
 $
   0 = F'(xi) = f'(xi) - (f(b) - f(a))/(g(b) - g(a))g'(xi).
 $
-Mivel a feltételeink szerint $g(xi) != 0$, ezért azt kapjuk, hogy
+Mivel a feltételeink szerint $g'(xi) != 0$, ezért azt kapjuk, hogy
 $
   (f'(xi))/(g'(xi)) = (f(b) - f(a))/(g(b) - g(a))
 $
@@ -223,7 +231,7 @@ TFH $f in D(a,b)$. Ekkor
 2. $"ha" f' > 0 " " [f' < 0] " " (a,b)"-n" ==> f arrow.t [arrow.b] (a,b)"-n" $.
 
 === Bizonyítás:
-1.
+/ 1.:
 $==>:$\
 Ha $f arrow.tr (a,b)$-n és $t in (a,b)$ egy tetszőleges pont, akkor
 $
@@ -245,7 +253,8 @@ Ezért $f arrow.tr (a,b)$-n.
 
 Az állítás hasonlóan igazolható monoton csökkenő függvények esetén is.
 
-2.
+\
+/ 2.:
 Alkalmazzunk "éles" egyenlőtlenségeket 1.-ben a $<==$ irányban.\
 $square$
 
@@ -286,6 +295,9 @@ Legyen\ $u, v in I$\ $u < v$ tetszőleges\ $x in (u, v)$ is tetszőleges\
 TFH $f$ konvex $I$-n. Ekkor
 $
   f(x) <= (f(v) - f(u))/(v - u)(x - u) + f(u) "  és  " f(x) <= (f(v) - f(u))/(v - u)(x - v) + f(v)
+$
+$
+    <==>
 $
 $
   (f(x) - f(u))/(x - u) <= (f(v) - f(u))/(v - u) <= (f(x) - f(v))/(x - v)
@@ -343,9 +355,9 @@ $
 $
 Ekkor a $lim_(a+0) f = lim_(a+0) g = 0$ feltételből következik, hogy $f, g in C[a, a + delta)$
 
-Legyen most $x in (a, a + delta)$ tetszőleges pont. A Cauchy-féle középértéktétel feltételei az $f$ és a $g$ függvényre az $[a, x]$ intervallumon teljesülnek. Így $exists epsilon_x in (a, x)$, amelyre
+Legyen most $x in (a, a + delta)$ tetszőleges pont. A Cauchy-féle középértéktétel feltételei az $f$ és a $g$ függvényre az $[a, x]$ intervallumon teljesülnek. Így $exists xi_x in (a, x)$, amelyre
 $
-  (f(x))/(g(x)) = (f(x) - f(a))/(g(x) - g(a)) = (f'(epsilon_x))/(g'(epsilon_x)) in K_epsilon (A)
+  (f(x))/(g(x)) = (f(x) - f(a))/(g(x) - g(a)) = (f'(xi_x))/(g'(xi_x)) in K_epsilon (A)
 $
 Tehát $exists lim_(a + 0) f/g$ és $lim_(a + 0) f/g = A$
 
@@ -384,7 +396,7 @@ $
   G^((i))(a) = 0 "  " (i = 0, 1, dots, n), "  és  " G^((n + 1))(x) = (n + 1)!
 $
 
-TFH $x in K(a)$ és például $x > 0$.\
+TFH $x in K(a)$ és például $x > a$.\
 Az $F$ és $G$ függvényekre az $[a, x]$ intervallumon alkalmazható a Cauchy-féle középértéktétel:
 $
   exists xi_1 in (a, x): (F'(xi_1))/(G'(xi_1)) = (F(x) - F(a))/(G(x) - G(a)) = (F(x))/(G(x)) = (f(x) - T_(a, n)f(x))/((x - a)^(n + 1))
