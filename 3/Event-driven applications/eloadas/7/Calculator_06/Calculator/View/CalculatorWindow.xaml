@@ -1,0 +1,28 @@
+﻿<Window x:Class="ELTE.Calculator.View.CalculatorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:ELTE.Calculator.View"
+        Title="Calculator" Height="280" Width="275" MinWidth="275" MinHeight="280">
+    <Window.InputBindings>
+        <!-- billentyűparancsok megfelelő paraméterrel -->
+        <KeyBinding Key="Enter" Command="{Binding CalculateCommand}" CommandParameter="=" />
+        <KeyBinding Key="Add" Command="{Binding CalculateCommand}" CommandParameter="+" />
+        <KeyBinding Key="Subtract" Command="{Binding CalculateCommand}" CommandParameter="-" />
+        <KeyBinding Key="Multiply" Command="{Binding CalculateCommand}" CommandParameter="*" />
+        <KeyBinding Key="Divide" Command="{Binding CalculateCommand}" CommandParameter="/" />
+    </Window.InputBindings>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=_textNumber}">
+        <!-- a fókuszt is köthetünk egy elemhez -->
+        <view:SelectedTextBox x:Name="_textNumber" Height="42" VerticalAlignment="Top" FontSize="28" Text="{Binding NumberFieldValue, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right" FontWeight="Bold" />
+        <!-- a szövegdobozhoz úgy kötjük a tartalmat, hogy minden módosításra mentsen -->
+        <Button Command="{Binding CalculateCommand}" CommandParameter="+" FocusManager.FocusedElement="{Binding ElementName=_textNumber}" Content="+" Height="60" HorizontalAlignment="Left" Margin="0,48,0,0" VerticalAlignment="Top" Width="60" FontSize="32" FontWeight="Bold" />
+        <!-- a gomb után visszaváltjuk a fókuszt a szövegmezőre -->
+        <Button Command="{Binding CalculateCommand}" CommandParameter="-" FocusManager.FocusedElement="{Binding ElementName=_textNumber}" Content="-" Height="60" HorizontalAlignment="Left" Margin="66,48,0,0" VerticalAlignment="Top" Width="60" FontSize="32" FontWeight="Bold" />
+        <Button Command="{Binding CalculateCommand}" CommandParameter="*" FocusManager.FocusedElement="{Binding ElementName=_textNumber}" Content="*" Height="60" HorizontalAlignment="Left" Margin="0,114,0,0" VerticalAlignment="Top" Width="60" FontSize="32" FontWeight="Bold" />
+        <Button Command="{Binding CalculateCommand}" CommandParameter="/" FocusManager.FocusedElement="{Binding ElementName=_textNumber}" Content="/" Height="60" HorizontalAlignment="Left" Margin="66,114,0,0" VerticalAlignment="Top" Width="60" FontSize="32" FontWeight="Bold" />
+        <Button Command="{Binding CalculateCommand}" CommandParameter="=" FocusManager.FocusedElement="{Binding ElementName=_textNumber}" Content="=" Height="60" HorizontalAlignment="Left" Margin="0,180,0,0" VerticalAlignment="Top" Width="126" FontSize="32" FontWeight="Bold" />
+        <ListBox ItemsSource="{Binding Calculations}" Margin="132,48,0,1" />
+    </Grid>
+</Window>
+
+    

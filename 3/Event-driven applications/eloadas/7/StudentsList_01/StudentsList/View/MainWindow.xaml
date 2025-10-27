@@ -1,0 +1,22 @@
+﻿<Window x:Class="ELTE.StudentsList.View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Students List" Height="300" Width="500">
+    <Grid>
+        <ListBox ItemsSource="{Binding Students}">
+            <!-- megadjuk az adatforrást -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!-- megadjuk az adatok reprezentációját -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding FirstName}" Width="100" Margin="5"/>
+                        <!-- kétirányú adatkötés a tartalomhoz -->
+                        <TextBox Text="{Binding LastName}" Width="100" Margin="5"/>
+                        <TextBox Text="{Binding StudentCode}" Width="100" Margin="5"/>
+                        <TextBlock Text="{Binding FullName}" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
