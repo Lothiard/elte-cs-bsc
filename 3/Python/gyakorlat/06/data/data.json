@@ -1,0 +1,69 @@
+{
+    "users": [
+        {
+            "user_id": 1,
+            "user_name": "Anna",
+            "user_email": "anna1@gmail.com"
+        },
+        {
+            "user_id": 2,
+            "user_name": "Bela",
+            "user_email": "bela2@gmail.com"
+        },
+        {
+            "user_id": 3,
+            "user_name": "Csaba",
+            "user_email": "csaba3@gmail.com"
+        }
+    ],
+    "todo_list": [
+        {
+            "id": 101,
+            "user_id": 1,
+            "todos": [
+                {
+                    "todo_id": 1,
+                    "todo_name": "Sports",
+                    "todo_description": "Run 10 km",
+                    "todo_priority": 3
+                },
+                {
+                    "todo_id": 3,
+                    "todo_name": "Read",
+                    "todo_description": "Read 10 pages",
+                    "todo_priority": 3
+                }
+            ]
+        },
+        {
+            "id": 102,
+            "user_id": 2,
+            "todos": [
+                {
+                    "todo_id": 2,
+                    "todo_name": "Study",
+                    "todo_description": "Study for exam",
+                    "todo_priority": 3
+                },
+                {
+                    "todo_id": 4,
+                    "todo_name": "Meditate",
+                    "todo_description": "Meditate 10 minutes",
+                    "todo_priority": 3
+                }
+            ]
+        },
+        {
+            "id": 103,
+            "user_id": 3,
+            "todos": [
+                {
+                    "todo_id": 5,
+                    "todo_name": "Sleep",
+                    "todo_description": "Sleep 8 hours",
+                    "todo_priority": 3
+                }
+            ]
+        }
+    ]
+}
