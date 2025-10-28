@@ -1,7 +1,7 @@
 import json
 from typing import Dict, Any, List
 
-'''
+"""
 Útmutató a féjl használatához:
 
 Felhasználó adatainak lekérdezése:
@@ -41,22 +41,46 @@ from filereader import (
  - Hiba esetén ValuErrort kell dobni, lehetőség szerint ezt a 
    kliens oldalon is jelezni kell.
 
-'''
+"""
 
 # A JSON fájl elérési útja
-JSON_FILE_PATH = ""
+JSON_FILE_PATH = "data/data.json"
+
 
 def load_json() -> Dict[str, Any]:
-    pass
+    with open(JSON_FILE_PATH, "r", encoding="utf-8") as file:
+        data = json.load(file)
+        return data
+
 
 def get_user_by_id(user_id: int) -> Dict[str, Any]:
-    pass
+    data = load_json()
+
+    for user in data["Users"]:
+        if user["id"] == user_id:
+            return user
+
+    raise ValueError(f"User not found with given id. ID: {user_id}")
+
 
 def get_basket_by_user_id(user_id: int) -> List[Dict[str, Any]]:
-    pass
+    data = load_json()
+
+    for basket in data["Baskets"]:
+        if basket["user_id"] == user_id:
+            return basket
+
+    raise ValueError(f"Basket not found with given user id. ID: {user_id}")
+
 
 def get_all_users() -> List[Dict[str, Any]]:
-    pass
+    return load_json()["Users"]
+
 
 def get_total_price_of_basket(user_id: int) -> float:
-    pass
+    basket = get_basket_by_user_id(user_id)
+
+    sum = 0.0
+    for item in basket["items"]:
+        sum = sum + (item["quantity"] * item["price"])
+    return sum

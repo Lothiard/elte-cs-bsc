@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr
 
-'''
+"""
 
 Útmutató a fájl használatához:
 
@@ -13,15 +13,25 @@ Az osztályokban az adatok legyenek validálva.
  - Hiba esetén ValuErrort kell dobni, lehetőség szerint ezt a 
    kliens oldalon is jelezni kell.
 
-'''
+"""
 
-ShopName='Bolt'
+ShopName = "Bolt"
+
 
 class User(BaseModel):
-    pass
+    id: int = Field(..., gt=0)
+    name: str = Field(..., min_length=3, max_length=512)
+    email: EmailStr = Field(...)
+
 
 class Basket(BaseModel):
-    pass
+    id: int = Field(..., gt=0)
+    user_id: int = Field(..., gt=0)
+
 
 class Item(BaseModel):
-    pass
+    item_id: int = Field(..., gt=0)
+    name: str = Field(..., min_length=3, max_length=512)
+    brand: str = Field(..., min_length=3, max_length=512)
+    price: float = Field(...)
+    quantity: int = Field(..., gt=0)

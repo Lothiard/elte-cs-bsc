@@ -1,8 +1,13 @@
 import json
 from typing import Dict, Any
+from data.filereader import (
+    get_user_by_id,
+    get_basket_by_user_id,
+    get_all_users,
+    get_total_price_of_basket,
+)
 
-
-'''
+"""
 Útmutató a fájl függvényeinek a használatához
 
 Új felhasználó hozzáadása:
@@ -55,23 +60,58 @@ from filehandler import (
  - Hiba esetén ValuErrort kell dobni, lehetőség szerint ezt a 
    kliens oldalon is jelezni kell.
 
-'''
+"""
 
 # A JSON fájl elérési útja
-JSON_FILE_PATH = ""
+JSON_FILE_PATH = "data/data.json"
+
 
 def load_json() -> Dict[str, Any]:
     with open(JSON_FILE_PATH, "r", encoding="utf-8") as file:
-        pass
+        data = json.load(file)
+        return data
+
 
 def save_json(data: Dict[str, Any]) -> None:
-    pass
+    with open(JSON_FILE_PATH, "w") as file:
+        json.dump(data, file, indent=4)
+
 
 def add_user(user: Dict[str, Any]) -> None:
-    pass
+    data = load_json()
+
+    for existing_user in data["Users"]:
+        if existing_user["id"] == user["id"]:
+            raise ValueError(f"User id already exists. ID: {user['id']}")
+
+    data["Users"].append(user)
+    save_json(data)
+
 
 def add_basket(basket: Dict[str, Any]) -> None:
-    pass
+    data = load_json()
+
+    get_user_by_id(basket["user_id"])
+
+    for existing_basket in data["Baskets"]:
+        if existing_basket["user_id"] == basket["user_id"]:
+            raise ValueError(f"User already has a basket. User ID: {basket['user_id']}")
+
+    data["Baskets"].append(basket)
+    save_json(data)
+
 
 def add_item_to_basket(user_id: int, item: Dict[str, Any]) -> None:
-    pass
+    data = load_json()
+    basket = get_basket_by_user_id(user_id)
+
+    for existing_item in basket["items"]:
+        if existing_item["item_id"] == item["item_id"]:
+            existing_item["quantity"] += 1
+            found = True
+            break
+
+    if not found:
+        basket["items"].append(item)
+
+    save_json(data)
