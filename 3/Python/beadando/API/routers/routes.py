@@ -1,6 +1,6 @@
 from schemas.schema import User, Basket, Item
-from fastapi.responses import JSONResponse, RedirectResponse
-from fastapi import FastAPI, HTTPException, Request, Response, Cookie
+from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from fastapi import APIRouter
 from data.filereader import (
     get_user_by_id,
@@ -55,25 +55,92 @@ def addshoppingbag(userid: int) -> str:
 def additem(userid: int, item: Item) -> Basket:
     try:
         get_user_by_id(userid)
-        basket = get_basket_by_user_id(userid)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"{str(e)}")
 
-    add_item_to_basket(userid, item)
-    basket = get_basket_by_user_id(userid)
-    return JSONResponse(content=basket)
+        item_data = item.model_dump()
+        add_item_to_basket(userid, item_data)
+
+        basket = get_basket_by_user_id(userid)
+        return JSONResponse(content=basket)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @routers.put("/updateitem")
 def updateitem(userid: int, itemid: int, updateItem: Item) -> Basket:
-    # TODO:
-    pass
+    try:
+        get_user_by_id(userid)
+
+        basket = get_basket_by_user_id(userid)
+
+        item_found = False
+        for item in basket["items"]:
+            if item["item_id"] == itemid:
+                item_data = updateItem.model_dump()
+                item["name"] = item_data["name"]
+                item["brand"] = item_data["brand"]
+                item["price"] = item_data["price"]
+                item["quantity"] = item_data["quantity"]
+                item_found = True
+                break
+
+        if not item_found:
+            raise ValueError(
+                f"Item with id {itemid} not found in basket for user {userid}"
+            )
+
+        from data.filehandler import load_json, save_json
+
+        data = load_json()
+
+        for basket_data in data["Baskets"]:
+            if basket_data["user_id"] == userid:
+                basket_data["items"] = basket["items"]
+                break
+
+        save_json(data)
+
+        updated_basket = get_basket_by_user_id(userid)
+        return JSONResponse(content=updated_basket)
+
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @routers.delete("/deleteitem")
 def deleteitem(userid: int, itemid: int) -> Basket:
-    # TODO:
-    pass
+    try:
+        get_user_by_id(userid)
+
+        basket = get_basket_by_user_id(userid)
+
+        item_found = False
+        for i, item in enumerate(basket["items"]):
+            if item["item_id"] == itemid:
+                basket["items"].pop(i)
+                item_found = True
+                break
+
+        if not item_found:
+            raise ValueError(
+                f"Item with id {itemid} not found in basket for user {userid}"
+            )
+
+        from data.filehandler import load_json, save_json
+
+        data = load_json()
+
+        for basket_data in data["Baskets"]:
+            if basket_data["user_id"] == userid:
+                basket_data["items"] = basket["items"]
+                break
+
+        save_json(data)
+
+        updated_basket = get_basket_by_user_id(userid)
+        return JSONResponse(content=updated_basket)
+
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @routers.get("/user")

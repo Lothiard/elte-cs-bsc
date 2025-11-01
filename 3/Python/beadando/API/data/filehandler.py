@@ -1,13 +1,9 @@
 import json
 from typing import Dict, Any
-from data.filereader import (
-    get_user_by_id,
-    get_basket_by_user_id,
-    get_all_users,
-    get_total_price_of_basket,
-)
+from data.filereader import get_user_by_id
 
 """
+
 Útmutató a fájl függvényeinek a használatához
 
 Új felhasználó hozzáadása:
@@ -103,15 +99,26 @@ def add_basket(basket: Dict[str, Any]) -> None:
 
 def add_item_to_basket(user_id: int, item: Dict[str, Any]) -> None:
     data = load_json()
-    basket = get_basket_by_user_id(user_id)
 
-    for existing_item in basket["items"]:
-        if existing_item["item_id"] == item["item_id"]:
-            existing_item["quantity"] += 1
-            found = True
+    basket_found = False
+    for basket in data["Baskets"]:
+        if basket["user_id"] == user_id:
+            basket_found = True
+
+            item_found = False
+            for existing_item in basket["items"]:
+                if existing_item["item_id"] == item["item_id"]:
+                    existing_item["quantity"] += item.get("quantity", 1)
+                    item_found = True
+                    break
+
+            if not item_found:
+                basket["items"].append(item)
+
             break
 
-    if not found:
-        basket["items"].append(item)
+    if not basket_found:
+        raise ValueError(f"No basket found for user_id: {user_id}")
 
     save_json(data)
+

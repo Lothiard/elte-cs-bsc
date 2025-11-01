@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from schemas.schema import ShopName
 from routers.routes import routers as routes_router
 
-'''
+"""
+
 Útmutató a fájl használatához:
 
 Ez a fájl a REST API main modulja. A futtatásához telepíteni kell a pip
@@ -32,11 +33,12 @@ A dokumentáció pedig itt:
 
    127.0.0.1:9000/redoc
 
-'''
+"""
 
 app = FastAPI()
 app.include_router(routes_router)
 
-@app.get('/')
+
+@app.get("/")
 def route():
-    return {'Wellcome in ': ShopName}    
+    return {"Wellcome in ": ShopName}

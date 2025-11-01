@@ -2,6 +2,7 @@ import json
 from typing import Dict, Any, List
 
 """
+
 Útmutató a féjl használatához:
 
 Felhasználó adatainak lekérdezése:
