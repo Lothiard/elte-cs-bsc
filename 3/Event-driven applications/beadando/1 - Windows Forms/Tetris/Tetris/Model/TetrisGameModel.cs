@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
+using ELTE.Sudoku.Model;
 
 namespace Tetris.Model
 {
@@ -39,7 +39,7 @@ namespace Tetris.Model
             Color.Orange  // L
         ];
 
-        private readonly System.Windows.Forms.Timer _gameTickTimer;
+        private readonly ELTE.Sudoku.Model.ITimer _gameTickTimer;
         private DateTime _startTime;
         private TimeSpan _pausedTime;
         private bool _isRunning;
@@ -88,11 +88,9 @@ namespace Tetris.Model
             _pausedTime = TimeSpan.Zero;
             _disposed = false;
 
-            _gameTickTimer = new System.Windows.Forms.Timer
-            {
-                Interval = 500
-            };
-            _gameTickTimer.Tick += OnGameTickTimer_Tick;
+            _gameTickTimer = new SudokuTimerAggregation();
+            _gameTickTimer.Interval = 500;
+            _gameTickTimer.Elapsed += OnGameTickTimer_Elapsed;
         }
 
         #endregion
@@ -151,7 +149,7 @@ namespace Tetris.Model
             _pausedTime = time;
         }
 
-        private void OnGameTickTimer_Tick(object? sender, EventArgs e)
+        private void OnGameTickTimer_Elapsed(object? sender, EventArgs e)
         {
             if (IsGameOver || _isPaused) return;
             
@@ -360,10 +358,13 @@ namespace Tetris.Model
                 if (disposing)
                 {
                     _gameTickTimer.Stop();
-                    _gameTickTimer.Tick -= OnGameTickTimer_Tick;
-                    _gameTickTimer.Dispose();
+                    _gameTickTimer.Elapsed -= OnGameTickTimer_Elapsed;
+                    
+                    if (_gameTickTimer is IDisposable disposableTimer)
+                    {
+                        disposableTimer.Dispose();
+                    }
                 }
-
 
                 _disposed = true;
             }

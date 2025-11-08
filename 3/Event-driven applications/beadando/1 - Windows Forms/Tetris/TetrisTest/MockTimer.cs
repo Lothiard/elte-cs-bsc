@@ -1,15 +1,24 @@
 using System;
-using Tetris.Model;
 
 namespace Tetris.Test
 {
-    public class MockTimer
+    public class MockTimer : ELTE.Sudoku.Model.ITimer
     {
         #region ITimer Properties
 
         public bool Enabled { get; set; }
 
         public double Interval { get; set; }
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler? Elapsed;
+
+        #endregion
+
+        #region Additional Test Properties
 
         public bool IsRunning { get; private set; }
 
@@ -45,6 +54,18 @@ namespace Tetris.Test
             IsPaused = false;
             Enabled = false;
             ElapsedTime = TimeSpan.Zero;
+        }
+
+        #endregion
+
+        #region Test Helper Methods
+
+        /// <summary>
+        /// Manually trigger the Elapsed event for testing purposes.
+        /// </summary>
+        public void Tick()
+        {
+            Elapsed?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
