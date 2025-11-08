@@ -276,6 +276,72 @@ namespace Tetris.Test
             Assert.AreEqual(1, _gameStateChangedCount);
         }
         
+        [TestMethod]
+        public void GameStateChangedEventTest()
+        {
+            if (_model == null) return;
+            
+            _gameStateChangedCount = 0;
+            
+            _model.MoveDown();
+            
+            Assert.AreEqual(1, _gameStateChangedCount, "GameStateChanged eseménynek ki kellett volna váltódnia MoveDown után");
+            
+            _model.MoveLeft();
+            Assert.AreEqual(2, _gameStateChangedCount, "GameStateChanged eseménynek ki kellett volna váltódnia MoveLeft után");
+            
+            _model.MoveRight();
+            Assert.AreEqual(3, _gameStateChangedCount, "GameStateChanged eseménynek ki kellett volna váltódnia MoveRight után");
+            
+            _model.Rotate();
+            Assert.AreEqual(4, _gameStateChangedCount, "GameStateChanged eseménynek ki kellett volna váltódnia Rotate után");
+        }
+        
+        [TestMethod]
+        public void GameOverEventTest()
+        {
+            if (_model == null) return;
+            
+            _gameOverCount = 0;
+            
+            for (int col = 0; col < _model.Cols; col++)
+            {
+                _model.Board[0, col] = 1;
+            }
+            
+            _model.SpawnNewTetromino();
+            
+            Assert.AreEqual(1, _gameOverCount, "GameOver eseménynek ki kellett volna váltódnia amikor nincs hely új tetrominónak");
+            Assert.IsTrue(_model.IsGameOver, "IsGameOver tulajdonságnak igaznak kell lennie");
+        }
+        
+        [TestMethod]
+        public void LoadGameTest()
+        {
+            if (_model == null) return;
+            
+            _model.Board[5, 3] = 2;
+            _model.Board[10, 4] = 3;
+            _model.CurrentTetrominoIndex = 4;
+            _model.BlockRow = 7;
+            _model.BlockCol = 2;
+            var savedBlock = _model.GetTetromino(4);
+            _model.CurrentBlock = savedBlock;
+            
+            var savedTime = TimeSpan.FromMinutes(5);
+            _model.SetTimerPausedTime(savedTime);
+            _model.StartTimer();
+            _model.PauseTimer();
+            
+            Assert.AreEqual(2, _model.Board[5, 3], "A betöltött tábla celláját meg kell őrizni");
+            Assert.AreEqual(3, _model.Board[10, 4], "A betöltött tábla celláját meg kell őrizni");
+            Assert.AreEqual(4, _model.CurrentTetrominoIndex, "A betöltött tetromino indexet meg kell őrizni");
+            Assert.AreEqual(7, _model.BlockRow, "A betöltött BlockRow-t meg kell őrizni");
+            Assert.AreEqual(2, _model.BlockCol, "A betöltött BlockCol-t meg kell őrizni");
+            Assert.IsNotNull(_model.CurrentBlock, "A betöltött CurrentBlock nem lehet null");
+            Assert.AreEqual(savedBlock.Length, _model.CurrentBlock.Length, "A betöltött CurrentBlock hosszának meg kell egyeznie");
+        }
+        
         private void GameStateChanged(object? sender, EventArgs e)
         {
             _gameStateChangedCount++;
