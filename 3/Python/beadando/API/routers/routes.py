@@ -41,7 +41,7 @@ def adduser(user: User) -> User:
         raise HTTPException(status_code=409, detail=f"{str(e)}")
 
 
-@routers.post("/addshoppingbag")
+@routers.post("/addshoppingbag", response_model=str)
 def addshoppingbag(userid: int) -> str:
     try:
         basket = {"id": userid + 100, "user_id": userid, "items": []}
@@ -65,7 +65,7 @@ def additem(userid: int, item: Item) -> Basket:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@routers.put("/updateitem")
+@routers.put("/updateitem", response_model=Basket)
 def updateitem(userid: int, itemid: int, updateItem: Item) -> Basket:
     try:
         get_user_by_id(userid)
@@ -106,7 +106,7 @@ def updateitem(userid: int, itemid: int, updateItem: Item) -> Basket:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@routers.delete("/deleteitem")
+@routers.delete("/deleteitem", response_model=Basket)
 def deleteitem(userid: int, itemid: int) -> Basket:
     try:
         get_user_by_id(userid)
@@ -143,7 +143,7 @@ def deleteitem(userid: int, itemid: int) -> Basket:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@routers.get("/user")
+@routers.get("/user", response_model=User)
 def user(userid: int) -> User:
     try:
         user = get_user_by_id(userid)
@@ -157,7 +157,7 @@ def users() -> list[User]:
     return JSONResponse(content=get_all_users())
 
 
-@routers.get("/shoppingbag")
+@routers.get("/shoppingbag", response_model=list[Item])
 def shoppingbag(userid: int) -> list[Item]:
     try:
         return JSONResponse(content=get_basket_by_user_id(userid)["items"])
@@ -165,7 +165,7 @@ def shoppingbag(userid: int) -> list[Item]:
         raise HTTPException(status_code=404, detail=f"{str(e)}")
 
 
-@routers.get("/getusertotal")
+@routers.get("/getusertotal", response_model=float)
 def getusertotal(userid: int) -> float:
     try:
         return JSONResponse(content=get_total_price_of_basket(userid))
