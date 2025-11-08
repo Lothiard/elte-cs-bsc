@@ -268,8 +268,8 @@ TFH
 - az $f'$ deriváltfüggvény előjelet vált $c$-ben.
 
 Ekkor
-1. ha az $f$ függvénynek $c$-ben $(-, +)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális minimumhelye.
-2. ha az $f$ függvénynek $c$-ben $(+, -)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális maximumhelye.
+1. ha az $f'$ függvénynek $c$-ben $(-, +)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális minimumhelye.
+2. ha az $f'$ függvénynek $c$-ben $(+, -)$ előjelváltása van, akkor $c$ az $f$ függvénynek szigorú lokális maximumhelye.
 
 === Bizonyítás:
 Az állítás azonnal következik a monotonitás és a derivált kapcsolatáról szóló tételből, hiszen ha az $f$ függvénynek $c$-ben $(-, +)$ előjelváltása van, akkor\ $exists delta > 0$ úgy hogy\ $f' < 0 " " (c - delta, c)$-n és\ $f' > 0 " " (c, c + delta)$-n
