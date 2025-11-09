@@ -1,0 +1,72 @@
+﻿<Window x:Class="ELTE.ColorGrid.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Színrács" Height="350" Width="525" MinHeight="300" MinWidth="400">
+    <Window.Resources>
+        <!-- erőforrások az ablakhoz -->
+        <Storyboard x:Key="fieldSizeStoryboard" Duration="0:0:2" AutoReverse="True">
+            <!-- animáció a mezőkre -->
+            <DoubleAnimation Storyboard.TargetProperty="(Control.RenderTransform).(ScaleTransform.ScaleX)" From="1" To="0.5" />
+            <DoubleAnimation Storyboard.TargetProperty="(Control.RenderTransform).(ScaleTransform.ScaleY)" From="1" To="0.5" />
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0"/>
+        </Storyboard>
+        <!-- a stílust most itt adjuk meg, de ugyanúgy a gombra használjuk -->
+        <Style x:Key="buttonStyle" TargetType="Button">
+            <Style.Triggers>
+                <!-- a színezés a nézetmodellben lévő adat függvényében fog változni -->
+                <DataTrigger Binding="{Binding ColorNumber}" Value="0">
+                    <Setter Property="Background" Value="White" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ColorNumber}" Value="1">
+                    <Setter Property="Background" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ColorNumber}" Value="2">
+                    <Setter Property="Background" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>                
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Margin="2" Header="Méret:" Grid.Column="0" Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Sorok:" Margin="5" />
+                <TextBox Text="{Binding RowCount}" InputScope="" Width="80" Margin="0,5,5,10" Height="22" />
+                <TextBlock Text="Oszlopok:" Margin="5" />
+                <TextBox Text="{Binding ColumnCount}" Width="80" Margin="0,5,5,10" Height="22" />
+                <Button Name="_ChangeSizeButton" Command="{Binding ChangeSizeCommand}" Content="Méretváltás" Width="80" Margin="10,5,5,5" />
+            </StackPanel>
+        </GroupBox>
+        <ItemsControl ItemsSource="{Binding Fields}" Grid.Row="1">
+            <!-- elemek gyűtő vezérlője -->
+            <ItemsControl.ItemsPanel>
+                <!-- megadjuk, mi vegye körül az elemeket -->
+                <ItemsPanelTemplate>
+                    <!-- az elemek egy egységes rácsban fognak elhelyezkedni -->
+                    <UniformGrid Rows="{Binding RowCount}" Columns="{Binding ColumnCount}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <!-- megadjuk, mik legyenek az elemek -->
+                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding}" RenderTransformOrigin="0.5,0.5" Style="{StaticResource buttonStyle}">
+                        <!-- már nem adjuk meg a háttérszín adatkötését -->
+                        <Button.RenderTransform>
+                            <!-- gomb pozícionálása, az animációhoz kell -->
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <!-- eseményre történő animálás -->
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard Storyboard="{StaticResource fieldSizeStoryboard}" />
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</Window>

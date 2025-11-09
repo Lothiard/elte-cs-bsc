@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>ELTE.TicTacToeGame.ViewModel</RootNamespace>
+    <Copyright>Copyright © Eötvös Loránd University (ELTE) 2022</Copyright>
+    <Authors>Roberto Giachetta, Máté Cserép</Authors>
+    <Company>ELTE, Faculty of Informatics</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToeGame.Model\TicTacToeGame.Model.csproj" />
+  </ItemGroup>
+
+</Project>
