@@ -1,4 +1,4 @@
-= Analízis II. bizonyítandó tételek
+= Analízis II., ZH I. bizonyítandó tételek
 
 == 1. A deriválhatóság ekvivalens átfogalmazása lineáris megközelítéssel
 === Tétel:
