@@ -1,0 +1,114 @@
+﻿<Window x:Class="Tetris.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tetris" Height="650" Width="550" MinHeight="650" MinWidth="550"
+        ResizeMode="NoResize"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Game Panel (Left side) -->
+        <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="12">
+            <ItemsControl ItemsSource="{Binding Fields}" 
+                         Width="300" 
+                         Height="600" 
+                         Background="White">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!-- Dynamic grid based on the model's row/column count -->
+                        <UniformGrid Rows="16" Columns="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" BorderThickness="0.5">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="White" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text}" Value="">
+                                            <Setter Property="Background" Value="White" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Text}" Value="■">
+                                            <Setter Property="Background" Value="SteelBlue" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+
+        <!-- Controls Panel (Right side) -->
+        <StackPanel Grid.Column="1" Margin="12" VerticalAlignment="Top">
+            <!-- Board Size Selection -->
+            <TextBlock Text="Pályaméret:" Margin="0,0,0,5" FontWeight="SemiBold" />
+            <ComboBox x:Name="cmbBoardSize" 
+                     Margin="0,0,0,20" 
+                     SelectedIndex="1"
+                     Height="25">
+                <ComboBoxItem Content="4×16" Tag="4,16" />
+                <ComboBoxItem Content="8×16" Tag="8,16" />
+                <ComboBoxItem Content="12×16" Tag="12,16" />
+            </ComboBox>
+
+            <!-- New Game Button -->
+            <Button Content="Új játék" 
+                    Command="{Binding NewGameCommand}" 
+                    Height="30" 
+                    Margin="0,0,0,10"
+                    FontSize="13" />
+
+            <!-- Pause Button -->
+            <Button x:Name="btnPause" 
+                    Content="Szünet" 
+                    Height="30" 
+                    Margin="0,0,0,10"
+                    FontSize="13"
+                    IsEnabled="False" />
+
+            <!-- Save Button -->
+            <Button x:Name="btnSave"
+                    Content="Mentés" 
+                    Command="{Binding SaveGameCommand}" 
+                    Height="30" 
+                    Margin="0,0,0,10"
+                    FontSize="13"
+                    IsEnabled="False" />
+
+            <!-- Load Button -->
+            <Button Content="Betöltés" 
+                    Command="{Binding LoadGameCommand}" 
+                    Height="30" 
+                    Margin="0,0,0,30"
+                    FontSize="13" />
+
+            <!-- Game Time Display -->
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="Játékidő: " 
+                          VerticalAlignment="Center" 
+                          FontWeight="SemiBold" />
+                <TextBlock Text="{Binding GameTime}" 
+                          VerticalAlignment="Center" 
+                          FontWeight="Bold" 
+                          Margin="5,0,0,0"
+                          FontFamily="Consolas" />
+            </StackPanel>
+
+            <!-- Game Over Message -->
+            <TextBlock x:Name="txtGameOver"
+                      Text="GAME OVER"
+                      FontSize="20"
+                      FontWeight="Bold"
+                      Foreground="Red"
+                      HorizontalAlignment="Center"
+                      Margin="0,30,0,0"
+                      Visibility="Collapsed" />
+        </StackPanel>
+    </Grid>
+</Window>

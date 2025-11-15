@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Tetris
+namespace Tetris.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml
