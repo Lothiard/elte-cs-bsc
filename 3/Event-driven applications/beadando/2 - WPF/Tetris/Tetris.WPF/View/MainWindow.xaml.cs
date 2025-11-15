@@ -62,13 +62,14 @@ namespace Tetris.View
 
         private void UpdateGameBoard(int cols, int rows)
         {
-            var itemsControl = (System.Windows.Controls.ItemsControl)((System.Windows.Controls.Border)
-                ((System.Windows.Controls.Grid)Content).Children[0]).Child;
+            // Each cell is 30x30 pixels
+            const int cellSize = 30;
             
-            var panel = (System.Windows.Controls.Primitives.UniformGrid)itemsControl.ItemsPanel.LoadContent();
-            panel.Rows = rows;
-            panel.Columns = cols;
+            GameBoard.Width = cols * cellSize;
+            GameBoard.Height = rows * cellSize;
             
+            // Update the ItemsPanel template
+            var itemsControl = GameBoard;
             itemsControl.ItemsPanel = new System.Windows.Controls.ItemsPanelTemplate();
             var factory = new System.Windows.FrameworkElementFactory(typeof(System.Windows.Controls.Primitives.UniformGrid));
             factory.SetValue(System.Windows.Controls.Primitives.UniformGrid.RowsProperty, rows);

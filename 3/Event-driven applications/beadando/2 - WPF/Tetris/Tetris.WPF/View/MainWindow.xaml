@@ -1,30 +1,35 @@
 ﻿<Window x:Class="Tetris.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Tetris" Height="650" Width="550" MinHeight="650" MinWidth="550"
+        Title="Tetris" Height="560" Width="550" MinHeight="560" MinWidth="550"
         ResizeMode="NoResize"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- Game Panel (Left side) -->
-        <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="12">
-            <ItemsControl ItemsSource="{Binding Fields}" 
-                         Width="300" 
-                         Height="600" 
+        <Border Grid.Column="0" 
+                BorderBrush="Black" 
+                BorderThickness="2" 
+                Margin="12,12,0,12"
+                Padding="0">
+            <ItemsControl x:Name="GameBoard"
+                         ItemsSource="{Binding Fields}" 
+                         Width="240" 
+                         Height="480" 
                          Background="White">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!-- Dynamic grid based on the model's row/column count -->
+                        <!-- 8 columns x 30px = 240px, 16 rows x 30px = 480px -->
                         <UniformGrid Rows="16" Columns="8" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="LightGray" BorderThickness="0.5">
+                        <Border BorderBrush="#E0E0E0" BorderThickness="1">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="White" />
