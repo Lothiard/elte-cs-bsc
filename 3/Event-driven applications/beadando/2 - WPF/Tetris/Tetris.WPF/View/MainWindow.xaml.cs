@@ -202,19 +202,36 @@ namespace Tetris.View
                     
                     if (gameState != null)
                     {
-                        // Reinitialize with loaded board size
-                        InitializeGame(gameState.Cols, gameState.Rows);
+                        // Check if board size changed
+                        bool sizeChanged = gameState.Cols != _model.Cols || gameState.Rows != _model.Rows;
+                        
+                        if (sizeChanged)
+                        {
+                            // Reinitialize with loaded board size
+                            InitializeGame(gameState.Cols, gameState.Rows);
+                        }
                         
                         // Restore game state
-                        _model.Board = gameState.Board;
+                        Array.Copy(gameState.Board, _model.Board, gameState.Board.Length);
                         _model.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
                         _model.CurrentBlock = gameState.CurrentBlock;
                         _model.BlockRow = gameState.BlockRow;
                         _model.BlockCol = gameState.BlockCol;
                         _model.SetTimerPausedTime(gameState.PausedTime);
                         
-                        // Update UI
-                        _viewModel.OnPropertyChanged(string.Empty);
+                        // Manually trigger GameStateChanged to refresh the UI
+                        _model.OnGameStateChanged();
+                        
+                        // Update UI controls
+                        btnPause.IsEnabled = true;
+                        btnSave.IsEnabled = true;
+                        btnPause.Content = "Szünet";
+                        
+                        // Update combobox selection
+                        UpdateBoardSizeComboBox(gameState.Cols, gameState.Rows);
+                        
+                        // Focus window for keyboard input
+                        Focus();
                         
                         MessageBox.Show("Játék sikeresen betöltve!", "Tetris", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -223,6 +240,26 @@ namespace Tetris.View
             catch (Exception ex)
             {
                 MessageBox.Show($"A betöltés sikertelen!\n{ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateBoardSizeComboBox(int cols, int rows)
+        {
+            // Update combobox to match loaded board size
+            for (int i = 0; i < cmbBoardSize.Items.Count; i++)
+            {
+                var item = (System.Windows.Controls.ComboBoxItem)cmbBoardSize.Items[i];
+                var tag = item.Tag.ToString();
+                var parts = tag.Split(',');
+                
+                if (parts.Length == 2 && 
+                    int.TryParse(parts[0], out int itemCols) && 
+                    int.TryParse(parts[1], out int itemRows) &&
+                    itemCols == cols && itemRows == rows)
+                {
+                    cmbBoardSize.SelectedIndex = i;
+                    break;
+                }
             }
         }
 

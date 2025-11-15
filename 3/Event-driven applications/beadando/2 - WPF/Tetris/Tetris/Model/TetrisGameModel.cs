@@ -329,7 +329,7 @@ namespace Tetris.Model
 
         #region Event Methods
 
-        protected virtual void OnGameStateChanged()
+        public virtual void OnGameStateChanged()
         {
             GameStateChanged?.Invoke(this, EventArgs.Empty);
         }
