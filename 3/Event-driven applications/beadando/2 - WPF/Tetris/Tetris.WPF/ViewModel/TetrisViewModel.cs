@@ -132,20 +132,53 @@ namespace Tetris.ViewModel
         /// </summary>
         private void RefreshTable()
         {
+            // Safety check: ensure Fields collection is properly sized
+            if (Fields == null || Fields.Count != _model.Rows * _model.Cols)
+                return;
+                
+            var colors = _model.TetrominoColors;
+            if (colors == null || colors.Length == 0)
+                return;
+            
             // Tábla celláinak frissítése
             for (int row = 0; row < _model.Rows; row++)
             {
                 for (int col = 0; col < _model.Cols; col++)
                 {
                     int index = row * _model.Cols + col;
+                    
+                    // Bounds check
+                    if (index >= Fields.Count)
+                        continue;
+                        
                     int cellValue = _model.Board[row, col];
-                    Fields[index].Text = cellValue > 0 ? "■" : String.Empty;
+                    
+                    if (cellValue > 0 && cellValue <= colors.Length)
+                    {
+                        Fields[index].Text = "■";
+                        // cellValue is 1-indexed (1-7), array is 0-indexed (0-6)
+                        var color = colors[cellValue - 1];
+                        var brush = new System.Windows.Media.SolidColorBrush(
+                            System.Windows.Media.Color.FromArgb(255, color.R, color.G, color.B));
+                        brush.Freeze(); // Freeze the brush to make it thread-safe
+                        Fields[index].Background = brush;
+                    }
+                    else
+                    {
+                        Fields[index].Text = String.Empty;
+                        Fields[index].Background = System.Windows.Media.Brushes.White;
+                    }
                 }
             }
 
             // Aktuális tetromino megjelenítése
-            if (_model.CurrentBlock != null)
+            if (_model.CurrentBlock != null && _model.CurrentTetrominoIndex >= 0 && _model.CurrentTetrominoIndex < colors.Length)
             {
+                var currentColor = colors[_model.CurrentTetrominoIndex];
+                var currentBrush = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromArgb(255, currentColor.R, currentColor.G, currentColor.B));
+                currentBrush.Freeze(); // Freeze the brush to make it thread-safe
+                
                 foreach (var (dr, dc) in _model.CurrentBlock)
                 {
                     int r = _model.BlockRow + dr;
@@ -153,7 +186,13 @@ namespace Tetris.ViewModel
                     if (r >= 0 && r < _model.Rows && c >= 0 && c < _model.Cols)
                     {
                         int index = r * _model.Cols + c;
-                        Fields[index].Text = "■";
+                        
+                        // Bounds check
+                        if (index < Fields.Count)
+                        {
+                            Fields[index].Text = "■";
+                            Fields[index].Background = currentBrush;
+                        }
                     }
                 }
             }

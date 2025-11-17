@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Windows.Media;
 
 namespace Tetris.ViewModel
 {
     /// <summary>
-    /// Sudoku játékmező típusa.
+    /// Tetris játékmező típusa.
     /// </summary>
     public class TetrisField : ViewModelBase
     {
         private Boolean _isLocked;
         private String _text = String.Empty;
+        private Brush _background = Brushes.White;
 
         /// <summary>
         /// Zároltság lekérdezése, vagy beállítása.
@@ -40,6 +42,22 @@ namespace Tetris.ViewModel
                     OnPropertyChanged();
                 }
             } 
+        }
+
+        /// <summary>
+        /// Háttérszín lekérdezése, vagy beállítása.
+        /// </summary>
+        public Brush Background
+        {
+            get { return _background; }
+            set
+            {
+                if (_background != value)
+                {
+                    _background = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         /// <summary>

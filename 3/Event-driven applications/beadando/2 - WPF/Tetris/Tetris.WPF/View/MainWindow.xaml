@@ -29,20 +29,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="#E0E0E0" BorderThickness="1">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Background" Value="White" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text}" Value="">
-                                            <Setter Property="Background" Value="White" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Text}" Value="■">
-                                            <Setter Property="Background" Value="SteelBlue" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
+                        <Border BorderBrush="#E0E0E0" 
+                                BorderThickness="1"
+                                Background="{Binding Background}">
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
