@@ -171,6 +171,16 @@ namespace Tetris.View
 
         private void ViewModel_GameOver(object? sender, EventArgs e)
         {
+            // Ensure we're on the UI thread
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(() => ViewModel_GameOver(sender, e)));
+                return;
+            }
+
+            // Capture the elapsed time BEFORE stopping the timer
+            var finalTime = _model.ElapsedTime;
+            
             _model.StopTimer();
             _uiTimer.Stop();
             btnPause.IsEnabled = false;
@@ -180,7 +190,7 @@ namespace Tetris.View
             Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
             
             MessageBox.Show(
-                $"Játék vége!\nJátékidő: {_model.ElapsedTime:hh\\:mm\\:ss}",
+                $"Játék vége!\nJátékidő: {finalTime:hh\\:mm\\:ss}",
                 "Tetris",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

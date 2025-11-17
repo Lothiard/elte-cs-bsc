@@ -230,6 +230,7 @@ namespace Tetris.ViewModel
                 return;
             }
 
+            RefreshTable(); // Refresh the table to show final state
             OnPropertyChanged(nameof(IsGameOver));
         }
 
