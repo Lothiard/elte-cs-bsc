@@ -252,12 +252,21 @@ namespace Tetris.View
                         
                         if (sizeChanged)
                         {
-                            // Reinitialize with loaded board size
+                            // Reinitialize with loaded board size - this creates new model and viewmodel
                             InitializeGame(gameState.Cols, gameState.Rows);
                         }
                         
-                        // Restore game state
-                        Array.Copy(gameState.Board, _model.Board, gameState.Board.Length);
+                        // Restore game state to the model
+                        // Copy board data
+                        for (int row = 0; row < gameState.Rows; row++)
+                        {
+                            for (int col = 0; col < gameState.Cols; col++)
+                            {
+                                _model.Board[row, col] = gameState.Board![row, col];
+                            }
+                        }
+                        
+                        // Restore tetromino state
                         _model.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
                         _model.CurrentBlock = gameState.CurrentBlock;
                         _model.BlockRow = gameState.BlockRow;
@@ -269,8 +278,12 @@ namespace Tetris.View
                         _model.SetTimerPausedTime(gameState.PausedTime);
                         _model.PauseTimer();
                         
-                        // Manually trigger GameStateChanged to refresh the UI
-                        _model.OnGameStateChanged();
+                        // Force UI update on the dispatcher to ensure everything is rendered
+                        await Dispatcher.InvokeAsync(() => 
+                        {
+                            // Manually trigger GameStateChanged to refresh the UI
+                            _model.OnGameStateChanged();
+                        }, System.Windows.Threading.DispatcherPriority.Render);
                         
                         // Update UI controls - loaded game is PAUSED
                         btnPause.IsEnabled = true;
@@ -299,6 +312,9 @@ namespace Tetris.View
 
         private void UpdateBoardSizeComboBox(int cols, int rows)
         {
+            // Temporarily unsubscribe from SelectionChanged to prevent triggering InitializeGame
+            cmbBoardSize.SelectionChanged -= CmbBoardSize_SelectionChanged;
+            
             // Update combobox to match loaded board size
             for (int i = 0; i < cmbBoardSize.Items.Count; i++)
             {
@@ -315,6 +331,9 @@ namespace Tetris.View
                     break;
                 }
             }
+            
+            // Re-subscribe to SelectionChanged
+            cmbBoardSize.SelectionChanged += CmbBoardSize_SelectionChanged;
         }
 
         private async void ViewModel_SaveGame(object? sender, EventArgs e)
