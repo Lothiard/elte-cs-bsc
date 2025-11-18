@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -12,11 +13,13 @@ namespace Tetris.View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
-        private TetrisGameModel _model;
-        private TetrisViewModel _viewModel;
+        private TetrisGameModel _model = null!;
+        private TetrisViewModel _viewModel = null!;
         private DispatcherTimer _uiTimer;
+        private bool _disposed;
+        private readonly List<TetrisGameModel> _modelInstances = new List<TetrisGameModel>();
 
         public MainWindow()
         {
@@ -34,10 +37,10 @@ namespace Tetris.View
             if (_model != null)
             {
                 _model.GameOver -= ViewModel_GameOver;
-                _model.Dispose();
             }
 
             _model = new TetrisGameModel(rows, cols);
+            _modelInstances.Add(_model);
             _viewModel = new TetrisViewModel(_model);
 
             _viewModel.NewGame += ViewModel_NewGame;
@@ -104,7 +107,10 @@ namespace Tetris.View
                 return;
 
             var item = (System.Windows.Controls.ComboBoxItem)cmbBoardSize.SelectedItem;
-            var tag = item.Tag.ToString();
+            var tag = item.Tag?.ToString();
+            if (tag == null)
+                return;
+            
             var parts = tag.Split(',');
             
             if (parts.Length == 2 && int.TryParse(parts[0], out int cols) && int.TryParse(parts[1], out int rows))
@@ -125,7 +131,6 @@ namespace Tetris.View
             }
             else if (_model.IsTimerRunning)
             {
-                // Pause game
                 _model.PauseTimer();
                 _uiTimer.Stop();
                 btnPause.Content = "Folytatás";
@@ -134,7 +139,7 @@ namespace Tetris.View
             }
         }
 
-        private void UiTimer_Tick(object sender, EventArgs e)
+        private void UiTimer_Tick(object? sender, EventArgs e)
         {
             _viewModel.OnPropertyChanged(nameof(_viewModel.GameTime));
         }
@@ -275,7 +280,10 @@ namespace Tetris.View
             for (int i = 0; i < cmbBoardSize.Items.Count; i++)
             {
                 var item = (System.Windows.Controls.ComboBoxItem)cmbBoardSize.Items[i];
-                var tag = item.Tag.ToString();
+                var tag = item.Tag?.ToString();
+                if (tag == null)
+                    continue;
+                
                 var parts = tag.Split(',');
                 
                 if (parts.Length == 2 && 
@@ -353,8 +361,30 @@ namespace Tetris.View
                 }
             }
 
-            _uiTimer.Stop();
-            _model?.Dispose();
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _uiTimer?.Stop();
+                    foreach (var model in _modelInstances)
+                    {
+                        model?.Dispose();
+                    }
+                    _modelInstances.Clear();
+                }
+                _disposed = true;
+            }
         }
     }
 }
