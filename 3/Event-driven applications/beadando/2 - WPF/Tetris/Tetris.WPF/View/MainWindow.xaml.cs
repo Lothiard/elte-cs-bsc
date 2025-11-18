@@ -131,15 +131,21 @@ namespace Tetris.View
         {
             if (_model.IsTimerPaused)
             {
+                // Resume game
                 _model.ResumeTimer();
                 _uiTimer.Start();
                 btnPause.Content = "Szünet";
+                btnSave.IsEnabled = false;  // Can't save while running
+                btnLoad.IsEnabled = false;  // Can't load while running
             }
             else if (_model.IsTimerRunning)
             {
+                // Pause game
                 _model.PauseTimer();
                 _uiTimer.Stop();
-                btnPause.Content = "Folytat";
+                btnPause.Content = "Folytatás";
+                btnSave.IsEnabled = true;   // Can save when paused
+                btnLoad.IsEnabled = true;   // Can load when paused
             }
         }
 
@@ -153,12 +159,22 @@ namespace Tetris.View
 
         private void ViewModel_NewGame(object? sender, EventArgs e)
         {
+            // Stop any running timers completely
+            _model.StopTimer();
+            _uiTimer.Stop();
+            
+            // Reset the game (this also spawns first tetromino)
             _model.Reset();
+            
+            // Start fresh timer
             _model.StartTimer();
             _uiTimer.Start();
+            
+            // Update button states for running game
             btnPause.Content = "Szünet";
             btnPause.IsEnabled = true;
-            btnSave.IsEnabled = true;
+            btnSave.IsEnabled = false;  // Can't save while running
+            btnLoad.IsEnabled = false;  // Can't load while running
             
             // Enable focus for keyboard input
             Focus();
@@ -185,6 +201,7 @@ namespace Tetris.View
             _uiTimer.Stop();
             btnPause.IsEnabled = false;
             btnSave.IsEnabled = false;
+            btnLoad.IsEnabled = true;  // Can load after game over
             
             // Update UI before showing message
             Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
@@ -200,6 +217,17 @@ namespace Tetris.View
         {
             try
             {
+                // Check if game is currently running (not paused)
+                if (_model.IsTimerRunning && !_model.IsTimerPaused)
+                {
+                    MessageBox.Show(
+                        "Szüneteltesse a játékot a betöltéshez!",
+                        "Játék fut",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+                
                 var dialog = new OpenFileDialog
                 {
                     Title = "Tetris játék betöltése",
@@ -212,6 +240,13 @@ namespace Tetris.View
                     
                     if (gameState != null)
                     {
+                        // Stop any running timers
+                        if (_model.IsTimerRunning)
+                        {
+                            _model.StopTimer();
+                        }
+                        _uiTimer.Stop();
+                        
                         // Check if board size changed
                         bool sizeChanged = gameState.Cols != _model.Cols || gameState.Rows != _model.Rows;
                         
@@ -232,10 +267,11 @@ namespace Tetris.View
                         // Manually trigger GameStateChanged to refresh the UI
                         _model.OnGameStateChanged();
                         
-                        // Update UI controls
+                        // Update UI controls - loaded game is PAUSED
                         btnPause.IsEnabled = true;
-                        btnSave.IsEnabled = true;
-                        btnPause.Content = "Szünet";
+                        btnPause.Content = "Folytatás";  // Show continue button
+                        btnSave.IsEnabled = true;        // Can save when paused
+                        btnLoad.IsEnabled = true;        // Can load when paused
                         
                         // Update combobox selection
                         UpdateBoardSizeComboBox(gameState.Cols, gameState.Rows);
@@ -243,7 +279,10 @@ namespace Tetris.View
                         // Focus window for keyboard input
                         Focus();
                         
-                        MessageBox.Show("Játék sikeresen betöltve!", "Tetris", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Játék sikeresen betöltve!\nNyomja meg a 'Folytatás' gombot a játék folytatásához.", 
+                            "Tetris", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
                     }
                 }
             }
