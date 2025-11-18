@@ -262,7 +262,12 @@ namespace Tetris.View
                         _model.CurrentBlock = gameState.CurrentBlock;
                         _model.BlockRow = gameState.BlockRow;
                         _model.BlockCol = gameState.BlockCol;
+                        _model.IsGameOver = false;  // Ensure game is not in game over state
+                        
+                        // Start the timer and then pause it to set up proper state
+                        _model.StartTimer();
                         _model.SetTimerPausedTime(gameState.PausedTime);
+                        _model.PauseTimer();
                         
                         // Manually trigger GameStateChanged to refresh the UI
                         _model.OnGameStateChanged();

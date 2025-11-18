@@ -14,7 +14,7 @@ namespace Tetris.Model
         public (int row, int col)[]? CurrentBlock { get; set; }
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
-        public bool IsGameOver { get; private set; }
+        public bool IsGameOver { get; set; }
         private readonly (int row, int col)[][] _tetrominoes =
         [
             [(row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3)], // I
