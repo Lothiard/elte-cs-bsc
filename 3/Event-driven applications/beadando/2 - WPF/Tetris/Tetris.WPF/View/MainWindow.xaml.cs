@@ -33,7 +33,6 @@ namespace Tetris.View
         {
             if (_model != null)
             {
-                _model.GameStateChanged -= ViewModel_GameStateChanged;
                 _model.GameOver -= ViewModel_GameOver;
                 _model.Dispose();
             }
@@ -45,7 +44,6 @@ namespace Tetris.View
             _viewModel.LoadGame += ViewModel_LoadGame;
             _viewModel.SaveGame += ViewModel_SaveGame;
             _viewModel.ExitGame += ViewModel_ExitGame;
-            _model.GameStateChanged += ViewModel_GameStateChanged;
             _model.GameOver += ViewModel_GameOver;
 
             DataContext = _viewModel;
@@ -159,12 +157,6 @@ namespace Tetris.View
             btnLoad.IsEnabled = false;
             
             Focus();
-        }
-
-        private void ViewModel_GameStateChanged(object? sender, EventArgs e)
-        {
-            // ViewModel will handle the refresh
-            // TODO: remove
         }
 
         private void ViewModel_GameOver(object? sender, EventArgs e)
