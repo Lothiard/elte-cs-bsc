@@ -22,18 +22,15 @@ namespace Tetris.View
         {
             InitializeComponent();
             
-            // Initialize UI timer for updating display
             _uiTimer = new DispatcherTimer();
             _uiTimer.Interval = TimeSpan.FromMilliseconds(100);
             _uiTimer.Tick += UiTimer_Tick;
             
-            // Initialize game with default size (8x16)
             InitializeGame(8, 16);
         }
 
         private void InitializeGame(int cols, int rows)
         {
-            // Clean up old model if exists
             if (_model != null)
             {
                 _model.GameStateChanged -= ViewModel_GameStateChanged;
@@ -41,11 +38,9 @@ namespace Tetris.View
                 _model.Dispose();
             }
 
-            // Create new model and viewmodel
             _model = new TetrisGameModel(rows, cols);
             _viewModel = new TetrisViewModel(_model);
 
-            // Wire up events
             _viewModel.NewGame += ViewModel_NewGame;
             _viewModel.LoadGame += ViewModel_LoadGame;
             _viewModel.SaveGame += ViewModel_SaveGame;
@@ -53,22 +48,18 @@ namespace Tetris.View
             _model.GameStateChanged += ViewModel_GameStateChanged;
             _model.GameOver += ViewModel_GameOver;
 
-            // Set DataContext
             DataContext = _viewModel;
 
-            // Update the UniformGrid rows and columns
             UpdateGameBoard(cols, rows);
         }
 
         private void UpdateGameBoard(int cols, int rows)
         {
-            // Each cell is 30x30 pixels
             const int cellSize = 30;
             
             GameBoard.Width = cols * cellSize;
             GameBoard.Height = rows * cellSize;
             
-            // Update the ItemsPanel template
             var itemsControl = GameBoard;
             itemsControl.ItemsPanel = new System.Windows.Controls.ItemsPanelTemplate();
             var factory = new System.Windows.FrameworkElementFactory(typeof(System.Windows.Controls.Primitives.UniformGrid));
@@ -79,13 +70,10 @@ namespace Tetris.View
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Wire up keyboard controls
             KeyDown += MainWindow_KeyDown;
             
-            // Wire up board size combo box
             cmbBoardSize.SelectionChanged += CmbBoardSize_SelectionChanged;
             
-            // Wire up pause button
             btnPause.Click += BtnPause_Click;
         }
 
@@ -131,12 +119,11 @@ namespace Tetris.View
         {
             if (_model.IsTimerPaused)
             {
-                // Resume game
                 _model.ResumeTimer();
                 _uiTimer.Start();
                 btnPause.Content = "Szünet";
-                btnSave.IsEnabled = false;  // Can't save while running
-                btnLoad.IsEnabled = false;  // Can't load while running
+                btnSave.IsEnabled = false;
+                btnLoad.IsEnabled = false;
             }
             else if (_model.IsTimerRunning)
             {
@@ -144,14 +131,13 @@ namespace Tetris.View
                 _model.PauseTimer();
                 _uiTimer.Stop();
                 btnPause.Content = "Folytatás";
-                btnSave.IsEnabled = true;   // Can save when paused
-                btnLoad.IsEnabled = true;   // Can load when paused
+                btnSave.IsEnabled = true;
+                btnLoad.IsEnabled = true;
             }
         }
 
         private void UiTimer_Tick(object sender, EventArgs e)
         {
-            // Force update of time display
             _viewModel.OnPropertyChanged(nameof(_viewModel.GameTime));
         }
 
@@ -159,51 +145,44 @@ namespace Tetris.View
 
         private void ViewModel_NewGame(object? sender, EventArgs e)
         {
-            // Stop any running timers completely
             _model.StopTimer();
             _uiTimer.Stop();
             
-            // Reset the game (this also spawns first tetromino)
             _model.Reset();
             
-            // Start fresh timer
             _model.StartTimer();
             _uiTimer.Start();
             
-            // Update button states for running game
             btnPause.Content = "Szünet";
             btnPause.IsEnabled = true;
-            btnSave.IsEnabled = false;  // Can't save while running
-            btnLoad.IsEnabled = false;  // Can't load while running
+            btnSave.IsEnabled = false;
+            btnLoad.IsEnabled = false;
             
-            // Enable focus for keyboard input
             Focus();
         }
 
         private void ViewModel_GameStateChanged(object? sender, EventArgs e)
         {
             // ViewModel will handle the refresh
+            // TODO: remove
         }
 
         private void ViewModel_GameOver(object? sender, EventArgs e)
         {
-            // Ensure we're on the UI thread
             if (!Dispatcher.CheckAccess())
             {
                 Dispatcher.BeginInvoke(new Action(() => ViewModel_GameOver(sender, e)));
                 return;
             }
 
-            // Capture the elapsed time BEFORE stopping the timer
             var finalTime = _model.ElapsedTime;
             
             _model.StopTimer();
             _uiTimer.Stop();
             btnPause.IsEnabled = false;
             btnSave.IsEnabled = false;
-            btnLoad.IsEnabled = true;  // Can load after game over
+            btnLoad.IsEnabled = true;
             
-            // Update UI before showing message
             Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
             
             MessageBox.Show(
@@ -217,7 +196,6 @@ namespace Tetris.View
         {
             try
             {
-                // Check if game is currently running (not paused)
                 if (_model.IsTimerRunning && !_model.IsTimerPaused)
                 {
                     MessageBox.Show(
@@ -240,24 +218,19 @@ namespace Tetris.View
                     
                     if (gameState != null)
                     {
-                        // Stop any running timers
                         if (_model.IsTimerRunning)
                         {
                             _model.StopTimer();
                         }
                         _uiTimer.Stop();
                         
-                        // Check if board size changed
                         bool sizeChanged = gameState.Cols != _model.Cols || gameState.Rows != _model.Rows;
                         
                         if (sizeChanged)
                         {
-                            // Reinitialize with loaded board size - this creates new model and viewmodel
                             InitializeGame(gameState.Cols, gameState.Rows);
                         }
                         
-                        // Restore game state to the model
-                        // Copy board data
                         for (int row = 0; row < gameState.Rows; row++)
                         {
                             for (int col = 0; col < gameState.Cols; col++)
@@ -266,35 +239,28 @@ namespace Tetris.View
                             }
                         }
                         
-                        // Restore tetromino state
                         _model.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
                         _model.CurrentBlock = gameState.CurrentBlock;
                         _model.BlockRow = gameState.BlockRow;
                         _model.BlockCol = gameState.BlockCol;
-                        _model.IsGameOver = false;  // Ensure game is not in game over state
+                        _model.IsGameOver = false;
                         
-                        // Start the timer and then pause it to set up proper state
                         _model.StartTimer();
                         _model.SetTimerPausedTime(gameState.PausedTime);
                         _model.PauseTimer();
                         
-                        // Force UI update on the dispatcher to ensure everything is rendered
                         await Dispatcher.InvokeAsync(() => 
                         {
-                            // Manually trigger GameStateChanged to refresh the UI
                             _model.OnGameStateChanged();
                         }, System.Windows.Threading.DispatcherPriority.Render);
                         
-                        // Update UI controls - loaded game is PAUSED
                         btnPause.IsEnabled = true;
-                        btnPause.Content = "Folytatás";  // Show continue button
-                        btnSave.IsEnabled = true;        // Can save when paused
-                        btnLoad.IsEnabled = true;        // Can load when paused
+                        btnPause.Content = "Folytatás";
+                        btnSave.IsEnabled = true;
+                        btnLoad.IsEnabled = true;
                         
-                        // Update combobox selection
                         UpdateBoardSizeComboBox(gameState.Cols, gameState.Rows);
                         
-                        // Focus window for keyboard input
                         Focus();
                         
                         MessageBox.Show("Játék sikeresen betöltve!\nNyomja meg a 'Folytatás' gombot a játék folytatásához.", 
@@ -312,10 +278,8 @@ namespace Tetris.View
 
         private void UpdateBoardSizeComboBox(int cols, int rows)
         {
-            // Temporarily unsubscribe from SelectionChanged to prevent triggering InitializeGame
             cmbBoardSize.SelectionChanged -= CmbBoardSize_SelectionChanged;
             
-            // Update combobox to match loaded board size
             for (int i = 0; i < cmbBoardSize.Items.Count; i++)
             {
                 var item = (System.Windows.Controls.ComboBoxItem)cmbBoardSize.Items[i];
@@ -332,7 +296,6 @@ namespace Tetris.View
                 }
             }
             
-            // Re-subscribe to SelectionChanged
             cmbBoardSize.SelectionChanged += CmbBoardSize_SelectionChanged;
         }
 

@@ -40,7 +40,6 @@
 
         <!-- Controls Panel (Right side) -->
         <StackPanel Grid.Column="1" Margin="12" VerticalAlignment="Top">
-            <!-- Board Size Selection -->
             <TextBlock Text="Pályaméret:" Margin="0,0,0,5" FontWeight="SemiBold" />
             <ComboBox x:Name="cmbBoardSize" 
                      Margin="0,0,0,20" 
@@ -51,14 +50,12 @@
                 <ComboBoxItem Content="12×16" Tag="12,16" />
             </ComboBox>
 
-            <!-- New Game Button -->
             <Button Content="Új játék" 
                     Command="{Binding NewGameCommand}" 
                     Height="30" 
                     Margin="0,0,0,10"
                     FontSize="13" />
 
-            <!-- Pause Button -->
             <Button x:Name="btnPause" 
                     Content="Szünet" 
                     Height="30" 
@@ -66,7 +63,6 @@
                     FontSize="13"
                     IsEnabled="False" />
 
-            <!-- Save Button -->
             <Button x:Name="btnSave"
                     Content="Mentés" 
                     Command="{Binding SaveGameCommand}" 
@@ -75,7 +71,6 @@
                     FontSize="13"
                     IsEnabled="False" />
 
-            <!-- Load Button -->
             <Button x:Name="btnLoad"
                     Content="Betöltés" 
                     Command="{Binding LoadGameCommand}" 
@@ -83,7 +78,6 @@
                     Margin="0,0,0,30"
                     FontSize="13" />
 
-            <!-- Game Time Display -->
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Text="Játékidő: " 
                           VerticalAlignment="Center" 
@@ -95,7 +89,6 @@
                           FontFamily="Consolas" />
             </StackPanel>
 
-            <!-- Game Over Message -->
             <TextBlock x:Name="txtGameOver"
                       Text="GAME OVER"
                       FontSize="20"

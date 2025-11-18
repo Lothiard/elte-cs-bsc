@@ -132,7 +132,6 @@ namespace Tetris.ViewModel
         /// </summary>
         private void RefreshTable()
         {
-            // Safety check: ensure Fields collection is properly sized
             if (Fields == null || Fields.Count != _model.Rows * _model.Cols)
                 return;
                 
@@ -156,11 +155,10 @@ namespace Tetris.ViewModel
                     if (cellValue > 0 && cellValue <= colors.Length)
                     {
                         Fields[index].Text = "■";
-                        // cellValue is 1-indexed (1-7), array is 0-indexed (0-6)
                         var color = colors[cellValue - 1];
                         var brush = new System.Windows.Media.SolidColorBrush(
                             System.Windows.Media.Color.FromArgb(255, color.R, color.G, color.B));
-                        brush.Freeze(); // Freeze the brush to make it thread-safe
+                        brush.Freeze();
                         Fields[index].Background = brush;
                     }
                     else
@@ -171,13 +169,12 @@ namespace Tetris.ViewModel
                 }
             }
 
-            // Aktuális tetromino megjelenítése
             if (_model.CurrentBlock != null && _model.CurrentTetrominoIndex >= 0 && _model.CurrentTetrominoIndex < colors.Length)
             {
                 var currentColor = colors[_model.CurrentTetrominoIndex];
                 var currentBrush = new System.Windows.Media.SolidColorBrush(
                     System.Windows.Media.Color.FromArgb(255, currentColor.R, currentColor.G, currentColor.B));
-                currentBrush.Freeze(); // Freeze the brush to make it thread-safe
+                currentBrush.Freeze();
                 
                 foreach (var (dr, dc) in _model.CurrentBlock)
                 {
@@ -187,7 +184,6 @@ namespace Tetris.ViewModel
                     {
                         int index = r * _model.Cols + c;
                         
-                        // Bounds check
                         if (index < Fields.Count)
                         {
                             Fields[index].Text = "■";
@@ -230,7 +226,7 @@ namespace Tetris.ViewModel
                 return;
             }
 
-            RefreshTable(); // Refresh the table to show final state
+            RefreshTable();
             OnPropertyChanged(nameof(IsGameOver));
         }
 

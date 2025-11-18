@@ -69,18 +69,5 @@ namespace Tetris.ViewModel
         /// Függőleges koordináta lekérdezése, vagy beállítása.
         /// </summary>
         public Int32 Y { get; set; }
-
-        /// <summary>
-        /// Koordináta lekérdezése.
-        /// </summary>
-        public Tuple<Int32, Int32> XY
-        {
-            get { return new(X, Y); }
-        }
-
-        /// <summary>
-        /// Lépés parancs lekérdezése, vagy beállítása.
-        /// </summary>
-        public DelegateCommand? StepCommand { get; set; }
     }
 }
