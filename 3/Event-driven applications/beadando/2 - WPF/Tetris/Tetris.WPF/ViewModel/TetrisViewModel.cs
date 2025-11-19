@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Threading;
 using Tetris.Model;
 
@@ -40,16 +38,11 @@ namespace Tetris.ViewModel
         public DelegateCommand ExitCommand { get; private set; }
 
         /// <summary>
-        /// Játékmező gyűjtemény lekérdezése.
+        /// Játéktábla lekérdezése.
         /// </summary>
-        public ObservableCollection<TetrisField> Fields { get; set; }
-
-        /// <summary>
-        /// Lépések számának lekérdezése.
-        /// </summary>
-        public Int32 GameStepCount
+        public Int32[,] Board
         {
-            get { return _model.GameStepCount; }
+            get { return _model.Board; }
         }
 
         /// <summary>
@@ -57,61 +50,63 @@ namespace Tetris.ViewModel
         /// </summary>
         public String GameTime
         {
-            get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); }
+            get { return _model.ElapsedTime.ToString("mm\\:ss"); }
         }
 
         /// <summary>
-        /// Alacsony nehézségi szint állapotának lekérdezése.
+        /// Játék vége állapot lekérdezése.
         /// </summary>
-        public Boolean IsGameEasy
+        public Boolean IsGameOver
         {
-            get { return _model.GameDifficulty == GameDifficulty.Easy; }
-            set
-            {
-                if (_model.GameDifficulty == GameDifficulty.Easy)
-                    return;
-
-                _model.GameDifficulty = GameDifficulty.Easy;
-                OnPropertyChanged(nameof(IsGameEasy));
-                OnPropertyChanged(nameof(IsGameMedium));
-                OnPropertyChanged(nameof(IsGameHard));
-            }
+            get { return _model.IsGameOver; }
         }
 
         /// <summary>
-        /// Közepes nehézségi szint állapotának lekérdezése.
+        /// Sorok számának lekérdezése.
         /// </summary>
-        public Boolean IsGameMedium
+        public Int32 Rows
         {
-            get { return _model.GameDifficulty == GameDifficulty.Medium; }
-            set
-            {
-                if (_model.GameDifficulty == GameDifficulty.Medium)
-                    return;
-
-                _model.GameDifficulty = GameDifficulty.Medium;
-                OnPropertyChanged(nameof(IsGameEasy));
-                OnPropertyChanged(nameof(IsGameMedium));
-                OnPropertyChanged(nameof(IsGameHard));
-            }
+            get { return _model.Rows; }
         }
 
         /// <summary>
-        /// Magas nehézségi szint állapotának lekérdezése.
+        /// Oszlopok számának lekérdezése.
         /// </summary>
-        public Boolean IsGameHard
+        public Int32 Cols
         {
-            get { return _model.GameDifficulty == GameDifficulty.Hard; }
-            set
-            {
-                if (_model.GameDifficulty == GameDifficulty.Hard)
-                    return;
+            get { return _model.Cols; }
+        }
 
-                _model.GameDifficulty = GameDifficulty.Hard;
-                OnPropertyChanged(nameof(IsGameEasy));
-                OnPropertyChanged(nameof(IsGameMedium));
-                OnPropertyChanged(nameof(IsGameHard));
-            }
+        /// <summary>
+        /// Aktuális blokk lekérdezése.
+        /// </summary>
+        public (int row, int col)[]? CurrentBlock
+        {
+            get { return _model.CurrentBlock; }
+        }
+
+        /// <summary>
+        /// Aktuális blokk sor pozíciójának lekérdezése.
+        /// </summary>
+        public Int32 BlockRow
+        {
+            get { return _model.BlockRow; }
+        }
+
+        /// <summary>
+        /// Aktuális blokk oszlop pozíciójának lekérdezése.
+        /// </summary>
+        public Int32 BlockCol
+        {
+            get { return _model.BlockCol; }
+        }
+
+        /// <summary>
+        /// Aktuális tetromino index lekérdezése.
+        /// </summary>
+        public Int32 CurrentTetrominoIndex
+        {
+            get { return _model.CurrentTetrominoIndex; }
         }
 
         #endregion
@@ -150,69 +145,14 @@ namespace Tetris.ViewModel
         {
             // játék csatlakoztatása
             _model = model;
-            _model.FieldChanged += new EventHandler<TetrisFieldEventArgs>(Model_FieldChanged);
-            _model.GameAdvanced += new EventHandler<TetrisEventArgs>(Model_GameAdvanced);
-            _model.GameOver += new EventHandler<TetrisEventArgs>(Model_GameOver);
-            _model.GameCreated += new EventHandler<TetrisEventArgs>(Model_GameCreated);
+            _model.GameStateChanged += new EventHandler(Model_GameStateChanged);
+            _model.GameOver += new EventHandler(Model_GameOver);
 
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => OnNewGame());
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
             ExitCommand = new DelegateCommand(param => OnExitGame());
-
-            // játéktábla létrehozása
-            Fields = new ObservableCollection<TetrisField>();
-            for (Int32 i = 0; i < _model.TableSize; i++) // inicializáljuk a mezőket
-            {
-                for (Int32 j = 0; j < _model.TableSize; j++)
-                {
-                    Fields.Add(new TetrisField
-                    {
-                        IsLocked = true,
-                        Text = String.Empty,
-                        X = i,
-                        Y = j,
-                        StepCommand = new DelegateCommand(param =>
-                        {
-                            if (param is Tuple<Int32, Int32> position)
-                                StepGame(position.Item1, position.Item2);
-                        })
-                        // ha egy mezőre léptek, akkor jelezzük a léptetést, változtatjuk a lépésszámot
-                    });
-                }
-            }
-
-            RefreshTable();
-        }
-
-        #endregion
-
-        #region Private methods
-
-        /// <summary>
-        /// Tábla frissítése.
-        /// </summary>
-        private void RefreshTable()
-        {
-            foreach (TetrisField field in Fields) // inicializálni kell a mezőket is
-            {
-                field.Text = !_model.IsEmpty(field.X, field.Y) ? _model[field.X, field.Y].ToString() : String.Empty;
-                field.IsLocked = _model.IsLocked(field.X, field.Y);
-            }
-
-            OnPropertyChanged(nameof(GameTime));
-            OnPropertyChanged(nameof(GameStepCount));
-        }
-
-        /// <summary>
-        /// Játék léptetése eseménykiváltása.
-        /// </summary>
-        /// <param name="x">A lépett mező X koordinátája.</param>
-        /// <param name="y">A lépett mező Y koordinátája.</param>
-        private void StepGame(Int32 x, Int32 y)
-        {
-            _model.Step(x, y);
         }
 
         #endregion
@@ -220,51 +160,37 @@ namespace Tetris.ViewModel
         #region Game event handlers
 
         /// <summary>
-        /// Játékmodell mező megváltozásának eseménykezelője.
+        /// Játékmodell állapot megváltozásának eseménykezelője.
         /// </summary>
-        private void Model_FieldChanged(object? sender, TetrisFieldEventArgs e)
+        private void Model_GameStateChanged(object? sender, EventArgs e)
         {
-            // mező frissítése
-            TetrisField field = Fields.Single(f => f.X == e.X && f.Y == e.Y);
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
+            {
+                Dispatcher.CurrentDispatcher.BeginInvoke(() => { Model_GameStateChanged(sender, e); });
+                return;
+            }
 
-            field.Text =
-                !_model.IsEmpty(field.X, field.Y)
-                    ? _model[field.X, field.Y].ToString()
-                    : String.Empty; // visszaírjuk a szöveget
-            OnPropertyChanged(nameof(GameStepCount)); // jelezzük a lépésszám változást
+            // Értesítjük a view-t, hogy frissítse magát
+            OnPropertyChanged(nameof(Board));
+            OnPropertyChanged(nameof(CurrentBlock));
+            OnPropertyChanged(nameof(BlockRow));
+            OnPropertyChanged(nameof(BlockCol));
+            OnPropertyChanged(nameof(CurrentTetrominoIndex));
+            OnPropertyChanged(nameof(GameTime));
         }
 
         /// <summary>
         /// Játék végének eseménykezelője.
         /// </summary>
-        private void Model_GameOver(object? sender, TetrisEventArgs e)
+        private void Model_GameOver(object? sender, EventArgs e)
         {
-            foreach (TetrisField field in Fields)
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {
-                field.IsLocked = true; // minden mezőt lezárunk
-            }
-        }
-
-        /// <summary>
-        /// Játék előrehaladásának eseménykezelője.
-        /// </summary>
-        private void Model_GameAdvanced(object? sender, TetrisEventArgs e)
-        {
-            if (!Dispatcher.CurrentDispatcher.CheckAccess()) // hamisat ad vissza, ha nem a dispatcher thread-en vagyunk
-            {
-                Dispatcher.CurrentDispatcher.BeginInvoke(() => { Model_GameAdvanced(sender, e); });
+                Dispatcher.CurrentDispatcher.BeginInvoke(() => { Model_GameOver(sender, e); });
                 return;
             }
 
-            OnPropertyChanged(nameof(GameTime));
-        }
-
-        /// <summary>
-        /// Játék létrehozásának eseménykezelője.
-        /// </summary>
-        private void Model_GameCreated(object? sender, TetrisEventArgs e)
-        {
-            RefreshTable();
+            OnPropertyChanged(nameof(IsGameOver));
         }
 
         #endregion
@@ -278,8 +204,6 @@ namespace Tetris.ViewModel
         {
             NewGame?.Invoke(this, EventArgs.Empty);
         }
-
-
 
         /// <summary>
         /// Játék betöltése eseménykiváltása.
