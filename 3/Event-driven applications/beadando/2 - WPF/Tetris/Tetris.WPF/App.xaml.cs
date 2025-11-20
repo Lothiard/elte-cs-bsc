@@ -212,7 +212,6 @@ namespace Tetris.WPF
                             _model.CurrentBlock = gameState.CurrentBlock;
                             _model.BlockRow = gameState.BlockRow;
                             _model.BlockCol = gameState.BlockCol;
-                            _model.SetTimerPausedTime(gameState.PausedTime);
 
                             _viewModel.UpdateModel(_model);
 
@@ -227,6 +226,7 @@ namespace Tetris.WPF
 
                             _model.StartTimer();
                             _model.PauseTimer();
+                            _model.SetTimerPausedTime(gameState.PausedTime);
                             _timer.Start();
 
                             _view.btnPause.Content = "Folytatás";
