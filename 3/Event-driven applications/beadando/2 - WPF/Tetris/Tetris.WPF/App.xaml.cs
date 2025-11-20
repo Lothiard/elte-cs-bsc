@@ -64,6 +64,9 @@ namespace Tetris.WPF
             _view.DataContext = _viewModel;
             _view.Closing += new CancelEventHandler(View_Closing);
             _view.KeyDown += new KeyEventHandler(View_KeyDown);
+
+            UpdateCanvasSize(8, 16);
+            
             _view.Show();
         }
 
@@ -159,8 +162,7 @@ namespace Tetris.WPF
             _model.StartTimer();
             _timer.Start();
 
-            _view.GameCanvas.Width = cols * CellSize;
-            _view.GameCanvas.Height = 16 * CellSize;
+            UpdateCanvasSize(cols, 16);
 
             _view.btnSave.IsEnabled = false;
             _view.btnPause.Content = "Szünet";
@@ -212,8 +214,7 @@ namespace Tetris.WPF
 
                             _viewModel.UpdateModel(_model);
 
-                            _view.GameCanvas.Width = gameState.Cols * CellSize;
-                            _view.GameCanvas.Height = gameState.Rows * CellSize;
+                            UpdateCanvasSize(gameState.Cols, gameState.Rows);
 
                             if (gameState.Cols == 4)
                                 _view.cmbBoardSize.SelectedIndex = 0;
@@ -372,6 +373,21 @@ namespace Tetris.WPF
         #region Private methods
 
         /// <summary>
+        /// Canvas és border méretének frissítése.
+        /// </summary>
+        private void UpdateCanvasSize(int cols, int rows)
+        {
+            double canvasWidth = cols * CellSize;
+            double canvasHeight = rows * CellSize;
+            
+            _view.GameCanvas.Width = canvasWidth;
+            _view.GameCanvas.Height = canvasHeight;
+            
+            _view.GameBorder.Width = canvasWidth;
+            _view.GameBorder.Height = canvasHeight;
+        }
+
+        /// <summary>
         /// Játéktábla kirajzolása.
         /// </summary>
         private void DrawGame()
@@ -384,7 +400,8 @@ namespace Tetris.WPF
 
             _view.GameCanvas.Children.Clear();
 
-            // tábla kirajzolása
+            DrawGrid();
+
             for (int row = 0; row < _model.Rows; row++)
             {
                 for (int col = 0; col < _model.Cols; col++)
@@ -432,6 +449,42 @@ namespace Tetris.WPF
                         _view.GameCanvas.Children.Add(rect);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Háttérrács kirajzolása.
+        /// </summary>
+        private void DrawGrid()
+        {
+            var gridBrush = new SolidColorBrush(Color.FromRgb(220, 220, 220));
+            
+            for (int col = 0; col <= _model.Cols; col++)
+            {
+                Line line = new Line
+                {
+                    X1 = col * CellSize,
+                    Y1 = 0,
+                    X2 = col * CellSize,
+                    Y2 = _model.Rows * CellSize,
+                    Stroke = gridBrush,
+                    StrokeThickness = 1
+                };
+                _view.GameCanvas.Children.Add(line);
+            }
+
+            for (int row = 0; row <= _model.Rows; row++)
+            {
+                Line line = new Line
+                {
+                    X1 = 0,
+                    Y1 = row * CellSize,
+                    X2 = _model.Cols * CellSize,
+                    Y2 = row * CellSize,
+                    Stroke = gridBrush,
+                    StrokeThickness = 1
+                };
+                _view.GameCanvas.Children.Add(line);
             }
         }
 

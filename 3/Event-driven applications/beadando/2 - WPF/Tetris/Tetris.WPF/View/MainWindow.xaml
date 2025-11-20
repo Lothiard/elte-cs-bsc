@@ -6,23 +6,22 @@
         xmlns:local="clr-namespace:Tetris.WPF"
         mc:Ignorable="d"
         Title="Tetris" 
-        Height="675" 
-        Width="575"
+        Height="575" 
+        Width="650"
         ResizeMode="NoResize">
     
     <Grid Margin="12">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="18"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="25"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Game Board Panel -->
-        <Border Grid.Column="0" 
+        <Border x:Name="GameBorder"
+                Grid.Column="0" 
                 BorderBrush="Black" 
                 BorderThickness="1"
                 Background="White"
-                Height="600"
                 VerticalAlignment="Top">
             <Canvas x:Name="GameCanvas" 
                     Width="240" 
@@ -30,12 +29,10 @@
                     ClipToBounds="True"/>
         </Border>
 
-        <!-- Control Panel -->
         <StackPanel Grid.Column="2" 
                     Width="200"
                     VerticalAlignment="Top">
             
-            <!-- Board Size Selection -->
             <Label Content="Pályaméret:" 
                    Margin="0,0,0,5"/>
             <ComboBox x:Name="cmbBoardSize"
@@ -46,21 +43,18 @@
                 <ComboBoxItem Content="12×16"/>
             </ComboBox>
 
-            <!-- New Game Button -->
             <Button x:Name="btnNewGame"
                     Content="Új játék"
                     Height="30"
                     Margin="0,0,0,20"
                     Command="{Binding NewGameCommand}"/>
 
-            <!-- Pause Button -->
             <Button x:Name="btnPause"
                     Content="Szünet"
                     Height="30"
                     Margin="0,0,0,20"
                     Command="{Binding PauseGameCommand}"/>
 
-            <!-- Save Button -->
             <Button x:Name="btnSave"
                     Content="Mentés"
                     Height="30"
@@ -68,14 +62,12 @@
                     IsEnabled="False"
                     Command="{Binding SaveGameCommand}"/>
 
-            <!-- Load Button -->
             <Button x:Name="btnLoad"
                     Content="Betöltés"
                     Height="30"
                     Margin="0,0,0,50"
                     Command="{Binding LoadGameCommand}"/>
 
-            <!-- Game Time Display -->
             <StackPanel Orientation="Horizontal" 
                         Margin="0,0,0,10">
                 <Label Content="Játékidő:" 
