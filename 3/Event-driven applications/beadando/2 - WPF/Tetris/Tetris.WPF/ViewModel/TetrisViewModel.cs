@@ -33,6 +33,11 @@ namespace Tetris.ViewModel
         public DelegateCommand SaveGameCommand { get; private set; }
 
         /// <summary>
+        /// Szüneteltetés parancs lekérdezése.
+        /// </summary>
+        public DelegateCommand PauseGameCommand { get; private set; }
+
+        /// <summary>
         /// Kilépés parancs lekérdezése.
         /// </summary>
         public DelegateCommand ExitCommand { get; private set; }
@@ -129,6 +134,11 @@ namespace Tetris.ViewModel
         public event EventHandler? SaveGame;
 
         /// <summary>
+        /// Játék szüneteltetésének eseménye.
+        /// </summary>
+        public event EventHandler? PauseGame;
+
+        /// <summary>
         /// Játékból való kilépés eseménye.
         /// </summary>
         public event EventHandler? ExitGame;
@@ -152,7 +162,47 @@ namespace Tetris.ViewModel
             NewGameCommand = new DelegateCommand(param => OnNewGame());
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
+            PauseGameCommand = new DelegateCommand(param => OnPauseGame());
             ExitCommand = new DelegateCommand(param => OnExitGame());
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Modell frissítése új modellel.
+        /// </summary>
+        /// <param name="model">Az új modell.</param>
+        public void UpdateModel(TetrisGameModel model)
+        {
+            if (_model != null)
+            {
+                _model.GameStateChanged -= Model_GameStateChanged;
+                _model.GameOver -= Model_GameOver;
+            }
+
+            _model = model;
+            _model.GameStateChanged += Model_GameStateChanged;
+            _model.GameOver += Model_GameOver;
+
+            OnPropertyChanged(nameof(Board));
+            OnPropertyChanged(nameof(Rows));
+            OnPropertyChanged(nameof(Cols));
+            OnPropertyChanged(nameof(CurrentBlock));
+            OnPropertyChanged(nameof(BlockRow));
+            OnPropertyChanged(nameof(BlockCol));
+            OnPropertyChanged(nameof(CurrentTetrominoIndex));
+            OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(IsGameOver));
+        }
+
+        /// <summary>
+        /// Játékidő frissítése.
+        /// </summary>
+        public void RefreshGameTime()
+        {
+            OnPropertyChanged(nameof(GameTime));
         }
 
         #endregion
@@ -219,6 +269,14 @@ namespace Tetris.ViewModel
         private void OnSaveGame()
         {
             SaveGame?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Játék szüneteltetése eseménykiváltása.
+        /// </summary>
+        private void OnPauseGame()
+        {
+            PauseGame?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

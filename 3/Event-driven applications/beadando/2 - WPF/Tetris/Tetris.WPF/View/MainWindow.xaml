@@ -25,8 +25,8 @@
                 Height="600"
                 VerticalAlignment="Top">
             <Canvas x:Name="GameCanvas" 
-                    Width="300" 
-                    Height="600"
+                    Width="240" 
+                    Height="480"
                     ClipToBounds="True"/>
         </Border>
 
@@ -50,26 +50,30 @@
             <Button x:Name="btnNewGame"
                     Content="Új játék"
                     Height="30"
-                    Margin="0,0,0,20"/>
+                    Margin="0,0,0,20"
+                    Command="{Binding NewGameCommand}"/>
 
             <!-- Pause Button -->
             <Button x:Name="btnPause"
                     Content="Szünet"
                     Height="30"
-                    Margin="0,0,0,20"/>
+                    Margin="0,0,0,20"
+                    Command="{Binding PauseGameCommand}"/>
 
             <!-- Save Button -->
             <Button x:Name="btnSave"
                     Content="Mentés"
                     Height="30"
                     Margin="0,0,0,20"
-                    IsEnabled="False"/>
+                    IsEnabled="False"
+                    Command="{Binding SaveGameCommand}"/>
 
             <!-- Load Button -->
             <Button x:Name="btnLoad"
                     Content="Betöltés"
                     Height="30"
-                    Margin="0,0,0,50"/>
+                    Margin="0,0,0,50"
+                    Command="{Binding LoadGameCommand}"/>
 
             <!-- Game Time Display -->
             <StackPanel Orientation="Horizontal" 
@@ -77,7 +81,7 @@
                 <Label Content="Játékidő:" 
                        Width="70"/>
                 <Label x:Name="lblTimeValue" 
-                       Content="00:00"/>
+                       Content="{Binding GameTime}"/>
             </StackPanel>
 
         </StackPanel>
