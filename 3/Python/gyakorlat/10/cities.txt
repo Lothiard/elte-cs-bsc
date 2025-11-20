@@ -1,0 +1,35 @@
+data = {
+    "city": [
+        "Budapest", "Debrecen", "Szeged", "Pécs", "Győr", 
+        "Miskolc", "Nyíregyháza", "Kecskemét", "Székesfehérvár", 
+        "Eger", "Veszprém", "Tatabánya", "Salgótarján", "Kaposvár"
+    ],
+    "latitude": [
+        47.4979, 47.5316, 46.253, 46.0727, 47.6875, 
+        48.1031, 47.9495, 46.8964, 47.186, 
+        47.9025, 47.0928, 47.5883, 48.1042, 46.3597
+    ],
+    "longitude": [
+        19.0402, 21.6273, 20.1414, 18.2323, 17.6504, 
+        20.7784, 21.7247, 19.6897, 18.4221, 
+        20.3772, 17.9093, 18.3973, 19.8033, 17.7952
+    ],
+    "population": [
+        1752286, 202402, 160766, 145347, 131267, 
+        151025, 119746, 110687, 96170, 
+        53696, 58763, 66124, 32133, 60300
+    ],
+    "area": [
+        525, 461, 280, 162, 174, 
+        236, 274, 321, 170, 
+        92, 126, 91, 102, 113
+    ]
+}
+
+# DataFrame létrehozása
+df = pd.DataFrame(data)
+
+# CSV mentése
+df.to_csv("cities.csv", index=False)
+
+print("Az adatfájl létrejött: 'cities.csv'")
