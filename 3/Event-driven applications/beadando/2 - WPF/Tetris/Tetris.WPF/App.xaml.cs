@@ -168,6 +168,7 @@ namespace Tetris.WPF
             _view.btnSave.IsEnabled = false;
             _view.btnPause.Content = "Szünet";
             _view.btnPause.IsEnabled = true;
+            _view.btnLoad.IsEnabled = false;
 
             DrawGame();
         }
@@ -318,12 +319,14 @@ namespace Tetris.WPF
                 _model.ResumeTimer();
                 _view.btnPause.Content = "Szünet";
                 _view.btnSave.IsEnabled = false;
+                _view.btnLoad.IsEnabled = false;
             }
             else
             {
                 _model.PauseTimer();
                 _view.btnPause.Content = "Folytatás";
                 _view.btnSave.IsEnabled = true;
+                _view.btnLoad.IsEnabled = true;
             }
         }
 
@@ -357,6 +360,7 @@ namespace Tetris.WPF
             
             _view.btnSave.IsEnabled = false;
             _view.btnPause.IsEnabled = false;
+            _view.btnLoad.IsEnabled = true;
 
             MessageBox.Show("Vége a játéknak!" + Environment.NewLine +
                           "Játékidő: " + finalGameTime.ToString("mm\\:ss"),

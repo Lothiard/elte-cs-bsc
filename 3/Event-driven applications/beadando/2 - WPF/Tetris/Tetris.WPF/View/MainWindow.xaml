@@ -53,6 +53,7 @@
                     Content="Szünet"
                     Height="30"
                     Margin="0,0,0,20"
+                    IsEnabled="False"
                     Command="{Binding PauseGameCommand}"/>
 
             <Button x:Name="btnSave"
