@@ -47,7 +47,7 @@ namespace Tetris.Model
 
         public void Dispose()
         {
-            // Mivel IDisposable adattagot aggregáltunk, a <see cref="SudokuTimerAggregation"/> típusnak is disposable-nek kell lennie.
+            // Mivel IDisposable adattagot aggregáltunk, a <see cref="TetrisTimerAggregation"/> típusnak is disposable-nek kell lennie.
             _timer.Dispose();
         }
     }

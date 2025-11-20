@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 
 namespace Tetris.Model
 {
@@ -14,7 +15,7 @@ namespace Tetris.Model
         public (int row, int col)[]? CurrentBlock { get; set; }
         public int BlockRow { get; set; }
         public int BlockCol { get; set; }
-        public bool IsGameOver { get; set; }
+        public bool IsGameOver { get; private set; }
         private readonly (int row, int col)[][] _tetrominoes =
         [
             [(row: 0, col: 0), (row: 0, col: 1), (row: 0, col: 2), (row: 0, col: 3)], // I
@@ -329,7 +330,7 @@ namespace Tetris.Model
 
         #region Event Methods
 
-        public virtual void OnGameStateChanged()
+        protected virtual void OnGameStateChanged()
         {
             GameStateChanged?.Invoke(this, EventArgs.Empty);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Tetris.Model;
 
@@ -34,29 +33,85 @@ namespace Tetris.ViewModel
         public DelegateCommand SaveGameCommand { get; private set; }
 
         /// <summary>
+        /// Szüneteltetés parancs lekérdezése.
+        /// </summary>
+        public DelegateCommand PauseGameCommand { get; private set; }
+
+        /// <summary>
         /// Kilépés parancs lekérdezése.
         /// </summary>
         public DelegateCommand ExitCommand { get; private set; }
 
         /// <summary>
-        /// Játékmező gyűjtemény lekérdezése.
+        /// Játéktábla lekérdezése.
         /// </summary>
-        public ObservableCollection<TetrisField> Fields { get; set; }
-
-        /// <summary>
-        /// Játékidő lekérdezése.
-        /// </summary>
-        public String GameTime
+        public Int32[,] Board
         {
-            get { return _model.ElapsedTime.ToString(@"hh\:mm\:ss"); }
+            get { return _model.Board; }
         }
 
         /// <summary>
-        /// Játék vége állapotának lekérdezése.
+        /// Fennmaradt játékidő lekérdezése.
+        /// </summary>
+        public String GameTime
+        {
+            get { return _model.ElapsedTime.ToString("mm\\:ss"); }
+        }
+
+        /// <summary>
+        /// Játék vége állapot lekérdezése.
         /// </summary>
         public Boolean IsGameOver
         {
             get { return _model.IsGameOver; }
+        }
+
+        /// <summary>
+        /// Sorok számának lekérdezése.
+        /// </summary>
+        public Int32 Rows
+        {
+            get { return _model.Rows; }
+        }
+
+        /// <summary>
+        /// Oszlopok számának lekérdezése.
+        /// </summary>
+        public Int32 Cols
+        {
+            get { return _model.Cols; }
+        }
+
+        /// <summary>
+        /// Aktuális blokk lekérdezése.
+        /// </summary>
+        public (int row, int col)[]? CurrentBlock
+        {
+            get { return _model.CurrentBlock; }
+        }
+
+        /// <summary>
+        /// Aktuális blokk sor pozíciójának lekérdezése.
+        /// </summary>
+        public Int32 BlockRow
+        {
+            get { return _model.BlockRow; }
+        }
+
+        /// <summary>
+        /// Aktuális blokk oszlop pozíciójának lekérdezése.
+        /// </summary>
+        public Int32 BlockCol
+        {
+            get { return _model.BlockCol; }
+        }
+
+        /// <summary>
+        /// Aktuális tetromino index lekérdezése.
+        /// </summary>
+        public Int32 CurrentTetrominoIndex
+        {
+            get { return _model.CurrentTetrominoIndex; }
         }
 
         #endregion
@@ -79,6 +134,11 @@ namespace Tetris.ViewModel
         public event EventHandler? SaveGame;
 
         /// <summary>
+        /// Játék szüneteltetésének eseménye.
+        /// </summary>
+        public event EventHandler? PauseGame;
+
+        /// <summary>
         /// Játékból való kilépés eseménye.
         /// </summary>
         public event EventHandler? ExitGame;
@@ -95,106 +155,54 @@ namespace Tetris.ViewModel
         {
             // játék csatlakoztatása
             _model = model;
-            _model.GameStateChanged += Model_GameStateChanged;
-            _model.GameOver += Model_GameOver;
+            _model.GameStateChanged += new EventHandler(Model_GameStateChanged);
+            _model.GameOver += new EventHandler(Model_GameOver);
 
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => OnNewGame());
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
+            PauseGameCommand = new DelegateCommand(param => OnPauseGame());
             ExitCommand = new DelegateCommand(param => OnExitGame());
-
-            // játéktábla létrehozása
-            Fields = new ObservableCollection<TetrisField>();
-            for (Int32 row = 0; row < _model.Rows; row++)
-            {
-                for (Int32 col = 0; col < _model.Cols; col++)
-                {
-                    Fields.Add(new TetrisField
-                    {
-                        IsLocked = false,
-                        Text = String.Empty,
-                        X = row,
-                        Y = col
-                    });
-                }
-            }
-
-            RefreshTable();
         }
 
         #endregion
 
-        #region Private methods
+        #region Public methods
 
         /// <summary>
-        /// Tábla frissítése.
+        /// Modell frissítése új modellel.
         /// </summary>
-        private void RefreshTable()
+        /// <param name="model">Az új modell.</param>
+        public void UpdateModel(TetrisGameModel model)
         {
-            if (Fields == null || Fields.Count != _model.Rows * _model.Cols)
-                return;
-                
-            var colors = _model.TetrominoColors;
-            if (colors == null || colors.Length == 0)
-                return;
-            
-            // Tábla celláinak frissítése
-            for (int row = 0; row < _model.Rows; row++)
+            if (_model != null)
             {
-                for (int col = 0; col < _model.Cols; col++)
-                {
-                    int index = row * _model.Cols + col;
-                    
-                    // Bounds check
-                    if (index >= Fields.Count)
-                        continue;
-                        
-                    int cellValue = _model.Board[row, col];
-                    
-                    if (cellValue > 0 && cellValue <= colors.Length)
-                    {
-                        Fields[index].Text = "■";
-                        var color = colors[cellValue - 1];
-                        var brush = new System.Windows.Media.SolidColorBrush(
-                            System.Windows.Media.Color.FromArgb(255, color.R, color.G, color.B));
-                        brush.Freeze();
-                        Fields[index].Background = brush;
-                    }
-                    else
-                    {
-                        Fields[index].Text = String.Empty;
-                        Fields[index].Background = System.Windows.Media.Brushes.White;
-                    }
-                }
+                _model.GameStateChanged -= Model_GameStateChanged;
+                _model.GameOver -= Model_GameOver;
             }
 
-            if (_model.CurrentBlock != null && _model.CurrentTetrominoIndex >= 0 && _model.CurrentTetrominoIndex < colors.Length)
-            {
-                var currentColor = colors[_model.CurrentTetrominoIndex];
-                var currentBrush = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromArgb(255, currentColor.R, currentColor.G, currentColor.B));
-                currentBrush.Freeze();
-                
-                foreach (var (dr, dc) in _model.CurrentBlock)
-                {
-                    int r = _model.BlockRow + dr;
-                    int c = _model.BlockCol + dc;
-                    if (r >= 0 && r < _model.Rows && c >= 0 && c < _model.Cols)
-                    {
-                        int index = r * _model.Cols + c;
-                        
-                        if (index < Fields.Count)
-                        {
-                            Fields[index].Text = "■";
-                            Fields[index].Background = currentBrush;
-                        }
-                    }
-                }
-            }
+            _model = model;
+            _model.GameStateChanged += Model_GameStateChanged;
+            _model.GameOver += Model_GameOver;
 
+            OnPropertyChanged(nameof(Board));
+            OnPropertyChanged(nameof(Rows));
+            OnPropertyChanged(nameof(Cols));
+            OnPropertyChanged(nameof(CurrentBlock));
+            OnPropertyChanged(nameof(BlockRow));
+            OnPropertyChanged(nameof(BlockCol));
+            OnPropertyChanged(nameof(CurrentTetrominoIndex));
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(IsGameOver));
+        }
+
+        /// <summary>
+        /// Játékidő frissítése.
+        /// </summary>
+        public void RefreshGameTime()
+        {
+            OnPropertyChanged(nameof(GameTime));
         }
 
         #endregion
@@ -212,7 +220,13 @@ namespace Tetris.ViewModel
                 return;
             }
 
-            RefreshTable();
+            // Értesítjük a view-t, hogy frissítse magát
+            OnPropertyChanged(nameof(Board));
+            OnPropertyChanged(nameof(CurrentBlock));
+            OnPropertyChanged(nameof(BlockRow));
+            OnPropertyChanged(nameof(BlockCol));
+            OnPropertyChanged(nameof(CurrentTetrominoIndex));
+            OnPropertyChanged(nameof(GameTime));
         }
 
         /// <summary>
@@ -226,7 +240,6 @@ namespace Tetris.ViewModel
                 return;
             }
 
-            RefreshTable();
             OnPropertyChanged(nameof(IsGameOver));
         }
 
@@ -256,6 +269,14 @@ namespace Tetris.ViewModel
         private void OnSaveGame()
         {
             SaveGame?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Játék szüneteltetése eseménykiváltása.
+        /// </summary>
+        private void OnPauseGame()
+        {
+            PauseGame?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
