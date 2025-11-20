@@ -66,6 +66,7 @@ namespace Tetris.WPF
             _view.KeyDown += new KeyEventHandler(View_KeyDown);
 
             UpdateCanvasSize(8, 16);
+            DrawGame();
             
             _view.Show();
         }
@@ -343,6 +344,14 @@ namespace Tetris.WPF
         /// </summary>
         private void Model_GameOver(object? sender, EventArgs e)
         {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action<object?, EventArgs>(Model_GameOver), sender, e);
+                return;
+            }
+
+            TimeSpan finalGameTime = _model.ElapsedTime;
+            
             _timer.Stop();
             _model.StopTimer();
             
@@ -350,7 +359,7 @@ namespace Tetris.WPF
             _view.btnPause.IsEnabled = false;
 
             MessageBox.Show("Vége a játéknak!" + Environment.NewLine +
-                          "Játékidő: " + _model.ElapsedTime.ToString("mm\\:ss"),
+                          "Játékidő: " + finalGameTime.ToString("mm\\:ss"),
                           "Tetris",
                           MessageBoxButton.OK,
                           MessageBoxImage.Information);
