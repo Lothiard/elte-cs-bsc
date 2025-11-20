@@ -15,7 +15,7 @@ namespace Tetris.WPF
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, IDisposable
     {
         #region Fields
 
@@ -507,6 +507,40 @@ namespace Tetris.WPF
         private System.Windows.Media.Color ConvertColor(System.Drawing.Color color)
         {
             return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        /// <summary>
+        /// Erőforrások felszabadítása.
+        /// </summary>
+        public void Dispose()
+        {
+            _timer?.Stop();
+            
+            if (_model != null)
+            {
+                _model.GameStateChanged -= Model_GameStateChanged;
+                _model.GameOver -= Model_GameOver;
+                _model.Dispose();
+            }
+            
+            if (_viewModel != null)
+            {
+                _viewModel.NewGame -= ViewModel_NewGame;
+                _viewModel.LoadGame -= ViewModel_LoadGame;
+                _viewModel.SaveGame -= ViewModel_SaveGame;
+                _viewModel.ExitGame -= ViewModel_ExitGame;
+                _viewModel.PauseGame -= ViewModel_PauseGame;
+            }
+            
+            if (_view != null)
+            {
+                _view.Closing -= View_Closing;
+                _view.KeyDown -= View_KeyDown;
+            }
         }
 
         #endregion
