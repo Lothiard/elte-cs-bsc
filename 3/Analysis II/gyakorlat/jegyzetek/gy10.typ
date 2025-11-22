@@ -31,7 +31,7 @@ $
   integral e^(3x)/(e^x + 2) dif x = underline(e^(2x)/2 - 2e^x + 4 ln (e^x + 2) + C)
 $
 
-Egyezmenyek rovid jeloles:
+Egyezmenyes rovid jeloles:
 $
   x = ln t ==>_(()') 1 dif x = 1/5 dif t
 $
@@ -80,12 +80,12 @@ $
   2/25 integral (t^2 - 3) t^2 dif t = 2/25 integral (t^4 - 3 t^2) dif t = 3/25 (t^5/5 - t^3) + C
 $
 $
-  ==> integral x sqrt(5x + 3) dif x = underline(2/125 (sqrt(5x + c))^5 - 3/25 (sqrt(5x + 3))^3 + C)
+  ==> integral x sqrt(5x + 3) dif x = underline(2/125 (sqrt(5x + 3))^5 - 3/25 (sqrt(5x + 3))^3 + C)
 $
 
 === 3
 $
-  integral 1/(x^2) root(3, (x + 1)/x) dif x " " (x > 0) =_(t := root(3, (x + 1)/x) = root(3, 1 + 1/x) > root(3, 1 + 0) "ha" x > 0\ ==> t^3 = 1 + 1/x ==> x = 1/(t^3 - 1) = g(t) " " (t > 1) ==>\ ==> g'(t) = - 1/((t^3 - 1)^2) dot (3t^2) = - (3t^2)/((t^3 - 1)^2) < 0 " " (forall t > 0) ==>\ ==> g arrow.b (1; + infinity), "es " R_g = (0, +infinity) = D_f = I,\ exists g^(-1)(x) = root(3, (x + 1)/x)) = integral 1/((1/(t^2 - 1))^2) dot t dot (-3 t^2)/((t^3 - 1)^2) dif t_( | t = root(3, (x + 1)/x)
+  integral 1/(x^2) root(3, (x + 1)/x) dif x " " (x > 0) =_(t := root(3, (x + 1)/x) = root(3, 1 + 1/x) > root(3, 1 + 0) "ha" x > 0\ ==> t^3 = 1 + 1/x ==> x = 1/(t^3 - 1) = g(t) " " (t > 1) ==>\ ==> g'(t) = - 1/((t^3 - 1)^2) dot (3t^2) = - (3t^2)/((t^3 - 1)^2) < 0 " " (forall t > 0) ==>\ ==> g arrow.b (1; + infinity), "es " R_g = (0, +infinity) = D_f = I,\ exists g^(-1)(x) = root(3, (x + 1)/x)) = integral 1/((1/(t^3 - 1))^2) dot t dot (-3 t^2)/((t^3 - 1)^2) dif t_(|_(t = root(3, (x + 1)/x)))
 $
 $
   = -3 integral t^3 dif t = -3 [t^4/4 + C]_(t = root(3, (x + 1)/x)) = underline(-3/4 (root(3, (x + 1)/x))^4 + C)
