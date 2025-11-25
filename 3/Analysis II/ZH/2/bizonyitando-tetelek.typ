@@ -23,7 +23,7 @@ $
 Legyen $epsilon > 0$ tetszőleges és $tau in cal(F)[a, b]: Omega(f, tau) < epsilon.$\
 Mivel $s(f, tau) <= I_*(f) <= I^*(f) <= S(f, tau),$ ezért
 $
-  0 <= I^*(f) - I_*(f) <= S(f, tau) - s(f, tau) = Omega(f, tau) < epsilon ==>\ ==> 0 <= I^*(f) - I_*(f) < epsilon " " forall epsilon > 0 ==>\ ==> I^*(f) - I_*(f) = 0 ==>\ ==> I^*(f) = I_*(f) ==> f in R[a, b].
+  0 <= I^*(f) - I_*(f) <= S(f, tau) - s(f, tau) = Omega(f, tau) < epsilon ==>\ ==> 0 <= I^*(f) - I_*(f) < epsilon " " (forall epsilon) > 0 ==>\ ==> I^*(f) - I_*(f) = 0 ==>\ ==> I^*(f) = I_*(f) ==> f in R[a, b].
 $
 $square$
 
@@ -39,7 +39,7 @@ $
 Legyen $tau = {x_0 = a < x_1 < dots < x_n = b} in cal(F)[a, b]$ és
 $
   f_i = inf_([x_(i-1), x_i]) f, "    " F_i = sup_([x_(i-1), x_i]) f,\
-  g_i = inf_([x_(i-1), x_i]) g, "    " G_i = sup_([x_(i-1), x_i]) f,
+  g_i = inf_([x_(i-1), x_i]) g, "    " G_i = sup_([x_(i-1), x_i]) g,
 $
 Mivel
 $
@@ -75,7 +75,7 @@ $
   f, g in R[a, b], " ezért " I_*(f) = I^*(f) = integral_a^b f
 $ és
 $
-  I_*(g) = I^*(g) = integral_a^b g, " ezért " I_*(f + g) = I^*(f + g), " tehát " f + g in R[a, b] " és " integral_a^b (f + g) = integral_a^b f + integral_a^b 
+  I_*(g) = I^*(g) = integral_a^b g, " ezért " I_*(f + g) = I^*(f + g), " tehát " f + g in R[a, b] " és " integral_a^b (f + g) = integral_a^b f + integral_a^b g
 $
 
 #pagebreak()
