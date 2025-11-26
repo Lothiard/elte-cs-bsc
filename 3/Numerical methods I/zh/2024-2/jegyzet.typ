@@ -46,12 +46,22 @@ $
 
 == Jacobi
 $
-    x^((k + 1)) = underbrace(-D^(-1)(L + U), B_J) x^((k)) + underbrace(D^(-1), c_J)
+    x^((k + 1)) = underbrace(-D^(-1)(L + U), B_J) x^((k)) + underbrace(D^(-1) b, c_J)
+$
+
+=== koordinátás
+$
+  x_i^((k + 1)) = - 1/(a_(i i)) dot (sum^n_(j = 1 " " j != i) a_(i j) x_j^((k)) - b_i)
 $
 
 == csillapított Jacobi
 $
-    x^((k + 1)) = underbrace([(1 - omega)I - omega D^(-1)(L + U)], B_J(omega)) x^((k)) + underbrace(omega D^(-1), c_J(omega))
+    x^((k + 1)) = underbrace([(1 - omega)I - omega D^(-1)(L + U)], B_J(omega)) x^((k)) + underbrace(omega D^(-1) b, c_J(omega))
+$
+
+=== koordinátás
+$
+  x_i^((k + 1)) = (1 - omega)x_i^((k)) - omega/(a_(i i)) dot (sum^n_(j = 1 " " j != i) a_(i j) x_j^((k)) - b_i)
 $
 
 == Gauss-Seidel
@@ -59,9 +69,19 @@ $
     x^((k + 1)) = underbrace(-(L + D)^(-1)U, B_S) x^((k)) + underbrace((L + D)^(-1) b, c_S)
 $
 
+=== paraméteres
+$
+  x_i^((k + 1)) = - 1/(a_(i i)) (sum^(i - 1)_(j = 1) a_(i j) x_j^((k + 1)) + sum^(n)_(j = i + 1) a_(i j) x_j^((k)) - b_i)
+$
+
 == Richardson
 $
     x^((k + 1)) = underbrace((I - p A), B_R(p)) x^((k)) + underbrace(p b, c_R(p))
+$
+
+=== paraméteres
+$
+  x_i^((k + 1)) = (1 - omega) x_i^((k)) - omega/(a_(i i)) (sum^(i - 1)_(j = 1) a_(i j) x_j^((k + 1)) + sum^(n)_(j = i + 1) a_(i j) x_j^((k)) - b_i)
 $
 
 == $I L U$
