@@ -121,7 +121,7 @@ $square$
 #pagebreak()
 == 4. Függvények hányadosának integrálhatóságára vonatkozó tétel.
 === Tétel:
-Ha $abs(g(x)) >= m > 0 " " (forall x in [a, b])$, akkor
+TFH $f,g in R[a,b]$. Ha $abs(g(x)) >= m > 0 " " (forall x in [a, b])$, akkor
 $
     f/g in R[a, b]
 $
