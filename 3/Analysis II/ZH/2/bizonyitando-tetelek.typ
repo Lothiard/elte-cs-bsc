@@ -129,7 +129,11 @@ $
 === Bizonyítás:
 Elég igazolni hogy $1/g in R[a, b]$
 
-Legyen $tau = {a = x_0 < x_1 < dots < x_n = b} in cal(F)[a, b]$ tetszőleges.\
+Legyen
+$
+    g_i = inf_([x_(i-1), x_i]) g, "    " G_i = sup_([x_(i-1), x_i]) f,
+$
+és $tau = {a = x_0 < x_1 < dots < x_n = b} in cal(F)[a, b]$ tetszőleges.\
 Ekkor $forall x, y in [x_(i - 1), x_i]$ pontban
 $
     1/(g(x)) - 1/(g(y)) = (g(y) - g(x))/(g(x) dot g(y)) <= (abs(g(y) - g(x)))/(abs(g(x) dot g(y))) <= (G_i - g_i)/(m^2)
@@ -209,7 +213,7 @@ Elég:
 $
     forall f in C[a, b]: forall epsilon > 0, exists tau in cal(F)[a, b]: Omega(f, tau) < epsilon.
 $
-Mivel $f in C[a, b] ==>$ (l. Heine-tételét) $f$ egyenletesen folytonos az $[a, b]$ intervallumon,\ ezért $forall epsilon > 0, exists > 0$, hogy
+Mivel $f in C[a, b] ==>$ (l. Heine-tételét) $f$ egyenletesen folytonos az $[a, b]$ intervallumon,\ ezért $forall epsilon > 0, exists delta > 0$, hogy
 $
     forall x, y in [a, b], abs(x - y) < delta: abs(f(x) - f(y)) < epsilon/(b - a)
 $
@@ -247,7 +251,7 @@ $
 $
 ahol $xi := (xi_1, dots, xi_n)$. Mivel $inf_([x_(i - 1), x_i]) f <= f(xi_i) <= sup_([x_(i - 1), x_i]) f$, ezért
 $
-    s(f, tau) < sigma(f, tau, xi) = F(b) - F(a) <= S(f, tau, xi)
+    s(f, tau) <= sigma(f, tau, xi) = F(b) - F(a) <= S(f, tau, xi)
 $
 Következésképpen
 $
