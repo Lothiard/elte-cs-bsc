@@ -131,7 +131,7 @@ Elég igazolni hogy $1/g in R[a, b]$
 
 Legyen
 $
-    g_i = inf_([x_(i-1), x_i]) g, "    " G_i = sup_([x_(i-1), x_i]) f,
+    g_i = inf_([x_(i-1), x_i]) g, "    " G_i = sup_([x_(i-1), x_i]) g,
 $
 és $tau = {a = x_0 < x_1 < dots < x_n = b} in cal(F)[a, b]$ tetszőleges.\
 Ekkor $forall x, y in [x_(i - 1), x_i]$ pontban
