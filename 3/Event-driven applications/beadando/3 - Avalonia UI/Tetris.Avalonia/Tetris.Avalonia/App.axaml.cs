@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -25,6 +26,7 @@ public partial class App : Application, IDisposable
     private DispatcherTimer? _timer;
     private Canvas? _gameCanvas;
     private Control? _gameBorder;
+    private MainView? _mainView;
 
     #endregion
 
@@ -78,20 +80,97 @@ public partial class App : Application, IDisposable
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            var mainWindow = new MainWindow
             {
                 DataContext = _viewModel
             };
+            
+            desktop.MainWindow = mainWindow;
+            
+            // Set up canvas and keyboard after window is opened
+            mainWindow.Opened += (s, e) => SetupMainView(mainWindow);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView
+            var mainView = new MainView
             {
                 DataContext = _viewModel
             };
+            
+            singleViewPlatform.MainView = mainView;
+            
+            // Set up canvas and keyboard after view is attached
+            mainView.AttachedToVisualTree += (s, e) => SetupMainView(mainView);
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    /// <summary>
+    /// MainView beállítása - canvas referenciák és billentyűzet kezelés.
+    /// </summary>
+    private void SetupMainView(Control control)
+    {
+        // Find MainView in the visual tree
+        MainView? mainView = control is MainView mv ? mv : FindMainView(control);
+        
+        if (mainView != null)
+        {
+            _mainView = mainView;
+            
+            // Get canvas and border references
+            var gameCanvas = mainView.FindControl<Canvas>("GameCanvas");
+            var gameBorder = mainView.FindControl<Control>("GameBorder");
+            
+            if (gameCanvas != null && gameBorder != null)
+            {
+                SetCanvasReferences(gameCanvas, gameBorder);
+            }
+            
+            // Set up keyboard handling
+            mainView.KeyDown += MainView_KeyDown;
+            mainView.Focus();
+        }
+    }
+
+    /// <summary>
+    /// MainView keresése a vizuális fában.
+    /// </summary>
+    private MainView? FindMainView(Control control)
+    {
+        if (control is MainView mainView)
+            return mainView;
+            
+        if (control is ContentControl contentControl && contentControl.Content is Control content)
+            return FindMainView(content);
+            
+        return null;
+    }
+
+    /// <summary>
+    /// Billentyűzet események kezelése.
+    /// </summary>
+    private void MainView_KeyDown(object? sender, KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.A:
+                _viewModel.MoveLeftCommand.Execute(null);
+                e.Handled = true;
+                break;
+            case Key.D:
+                _viewModel.MoveRightCommand.Execute(null);
+                e.Handled = true;
+                break;
+            case Key.W:
+                _viewModel.RotateCommand.Execute(null);
+                e.Handled = true;
+                break;
+            case Key.S:
+                _viewModel.MoveDownCommand.Execute(null);
+                e.Handled = true;
+                break;
+        }
     }
 
     #endregion
@@ -140,6 +219,18 @@ public partial class App : Application, IDisposable
             _timer?.Stop();
             _model.StopTimer();
 
+            // Update button states
+            if (_mainView != null)
+            {
+                var btnSave = _mainView.FindControl<Button>("btnSave");
+                var btnPause = _mainView.FindControl<Button>("btnPause");
+                var btnLoad = _mainView.FindControl<Button>("btnLoad");
+                
+                if (btnSave != null) btnSave.IsEnabled = false;
+                if (btnPause != null) btnPause.IsEnabled = false;
+                if (btnLoad != null) btnLoad.IsEnabled = true;
+            }
+
             await MessageBoxManager.GetMessageBoxStandard(
                     "Tetris",
                     $"Vége a játéknak!{Environment.NewLine}Játékidő: {finalGameTime:mm\\:ss}",
@@ -158,7 +249,23 @@ public partial class App : Application, IDisposable
     /// </summary>
     private void ViewModel_NewGame(object? sender, EventArgs e)
     {
-        int cols = 8; // Default value, can be changed based on UI selection
+        int cols = 8; // Default value
+        
+        // Get board size from ComboBox if MainView is available
+        if (_mainView != null)
+        {
+            var cmbBoardSize = _mainView.FindControl<ComboBox>("cmbBoardSize");
+            if (cmbBoardSize != null)
+            {
+                cols = cmbBoardSize.SelectedIndex switch
+                {
+                    0 => 4,
+                    1 => 8,
+                    2 => 12,
+                    _ => 8
+                };
+            }
+        }
 
         _model.GameStateChanged -= Model_GameStateChanged;
         _model.GameOver -= Model_GameOver;
@@ -178,6 +285,22 @@ public partial class App : Application, IDisposable
         {
             GameRenderer.UpdateCanvasSize(_gameCanvas, _gameBorder, cols, 16);
             GameRenderer.DrawGame(_gameCanvas, _model);
+        }
+
+        // Update button states
+        if (_mainView != null)
+        {
+            var btnSave = _mainView.FindControl<Button>("btnSave");
+            var btnPause = _mainView.FindControl<Button>("btnPause");
+            var btnLoad = _mainView.FindControl<Button>("btnLoad");
+            
+            if (btnSave != null) btnSave.IsEnabled = false;
+            if (btnPause != null)
+            {
+                btnPause.Content = "Szünet";
+                btnPause.IsEnabled = true;
+            }
+            if (btnLoad != null) btnLoad.IsEnabled = false;
         }
     }
 
@@ -258,6 +381,32 @@ public partial class App : Application, IDisposable
                             if (_gameCanvas != null)
                             {
                                 GameRenderer.DrawGame(_gameCanvas, _model);
+                            }
+
+                            // Update ComboBox and button states
+                            if (_mainView != null)
+                            {
+                                var cmbBoardSize = _mainView.FindControl<ComboBox>("cmbBoardSize");
+                                if (cmbBoardSize != null)
+                                {
+                                    cmbBoardSize.SelectedIndex = gameState.Cols switch
+                                    {
+                                        4 => 0,
+                                        8 => 1,
+                                        12 => 2,
+                                        _ => 1
+                                    };
+                                }
+
+                                var btnPause = _mainView.FindControl<Button>("btnPause");
+                                var btnSave = _mainView.FindControl<Button>("btnSave");
+                                
+                                if (btnPause != null)
+                                {
+                                    btnPause.Content = "Folytatás";
+                                    btnPause.IsEnabled = true;
+                                }
+                                if (btnSave != null) btnSave.IsEnabled = true;
                             }
                         }
                     }
@@ -388,10 +537,32 @@ public partial class App : Application, IDisposable
         if (_model.IsTimerPaused)
         {
             _model.ResumeTimer();
+            
+            if (_mainView != null)
+            {
+                var btnPause = _mainView.FindControl<Button>("btnPause");
+                var btnSave = _mainView.FindControl<Button>("btnSave");
+                var btnLoad = _mainView.FindControl<Button>("btnLoad");
+                
+                if (btnPause != null) btnPause.Content = "Szünet";
+                if (btnSave != null) btnSave.IsEnabled = false;
+                if (btnLoad != null) btnLoad.IsEnabled = false;
+            }
         }
         else
         {
             _model.PauseTimer();
+            
+            if (_mainView != null)
+            {
+                var btnPause = _mainView.FindControl<Button>("btnPause");
+                var btnSave = _mainView.FindControl<Button>("btnSave");
+                var btnLoad = _mainView.FindControl<Button>("btnLoad");
+                
+                if (btnPause != null) btnPause.Content = "Folytatás";
+                if (btnSave != null) btnSave.IsEnabled = true;
+                if (btnLoad != null) btnLoad.IsEnabled = true;
+            }
         }
     }
 

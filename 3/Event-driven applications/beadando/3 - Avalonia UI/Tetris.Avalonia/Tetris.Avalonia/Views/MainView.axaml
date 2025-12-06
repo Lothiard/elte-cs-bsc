@@ -3,14 +3,87 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Tetris.Avalonia.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="575"
              x:Class="Tetris.Avalonia.Views.MainView"
-             x:DataType="vm:TetrisViewModel">
+             x:DataType="vm:TetrisViewModel"
+             x:Name="MainViewControl"
+             Focusable="True">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:TetrisViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="Tetris Game - UI coming soon!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Grid Margin="12">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="25"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <Border x:Name="GameBorder"
+            Grid.Column="0" 
+            BorderBrush="Black" 
+            BorderThickness="1"
+            Background="White"
+            VerticalAlignment="Top">
+      <Canvas x:Name="GameCanvas" 
+              Width="240" 
+              Height="480"
+              ClipToBounds="True"/>
+    </Border>
+
+    <StackPanel Grid.Column="2" 
+                Width="200"
+                VerticalAlignment="Top">
+      
+      <TextBlock Text="Pályaméret:" 
+                 Margin="0,0,0,5"/>
+      <ComboBox x:Name="cmbBoardSize"
+                Height="25"
+                Margin="0,0,0,15"
+                SelectedIndex="1">
+        <ComboBoxItem Content="4×16"/>
+        <ComboBoxItem Content="8×16" IsSelected="True"/>
+        <ComboBoxItem Content="12×16"/>
+      </ComboBox>
+
+      <Button x:Name="btnNewGame"
+              Content="Új játék"
+              Height="30"
+              Margin="0,0,0,20"
+              Command="{Binding NewGameCommand}"/>
+
+      <Button x:Name="btnPause"
+              Content="Szünet"
+              Height="30"
+              Margin="0,0,0,20"
+              IsEnabled="False"
+              Command="{Binding PauseGameCommand}"/>
+
+      <Button x:Name="btnSave"
+              Content="Mentés"
+              Height="30"
+              Margin="0,0,0,20"
+              IsEnabled="False"
+              Command="{Binding SaveGameCommand}"/>
+
+      <Button x:Name="btnLoad"
+              Content="Betöltés"
+              Height="30"
+              Margin="0,0,0,50"
+              Command="{Binding LoadGameCommand}"/>
+
+      <StackPanel Orientation="Horizontal" 
+                  Margin="0,0,0,10">
+        <TextBlock Text="Játékid?:" 
+                   Width="70"
+                   VerticalAlignment="Center"/>
+        <TextBlock x:Name="lblTimeValue" 
+                   Text="{Binding GameTime}"
+                   VerticalAlignment="Center"/>
+      </StackPanel>
+
+    </StackPanel>
+  </Grid>
 </UserControl>
