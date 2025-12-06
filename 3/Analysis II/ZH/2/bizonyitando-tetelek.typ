@@ -257,7 +257,7 @@ Következésképpen
 $
     I_*(f) = sup_(tau in cal(F)[a, b]) s(f, tau) <= F(b) - F(a) <= inf_(tau in cal(F)[a, b]) S(f, tau, xi) = I^*(f)
 $
-Mivel $f in R[a, b]$, ezért $I_*(f) = I*(f) = integral_a^b f$. Így
+Mivel $f in R[a, b]$, ezért $I_*(f) = I^*(f) = integral_a^b f$. Így
 $
     F(b) - F(a) = integral_a^b f(x) dif x.
 $
@@ -368,7 +368,7 @@ integrálfüggvényeket. Megmutatjuk, hogy
 $
     (*) "    " integral_(g(alpha))^(g(beta)) f = F(g(beta)) = G(beta) = integral_alpha^beta f circle.small g dot g'
 $
-Egyrészt $f in C[a, b] ==> F' = f$, másrészt $f circle.small dot g' in C[alpha, beta] ==> G' = f circle.small g dot g'$
+Egyrészt $f in C[a, b] ==> F' = f$, másrészt $f circle.small g' in C[alpha, beta] ==> G' = f circle.small g dot g'$
 
 Mivel $(F circle.small g)' = F' circle.small g dot g' = f circle.small g dot g'$, ezért $(F circle.small g - G)' = 0 ==> exists c in RR: F circle.small g - G = c$. Ugyanakkor $F(g(alpha)) = 0 = G(alpha) ==> c = 0$, következésképpen $F circle.small g = G ==> F(g(beta)) = G(beta)$\
 $(*)$ valóban teljesül.\
