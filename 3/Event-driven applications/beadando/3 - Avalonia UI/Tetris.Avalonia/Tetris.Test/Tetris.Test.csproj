@@ -21,4 +21,8 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tetris\Tetris.csproj" />
+  </ItemGroup>
+
 </Project>
