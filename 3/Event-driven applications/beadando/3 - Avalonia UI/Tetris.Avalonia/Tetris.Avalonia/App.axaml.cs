@@ -59,7 +59,6 @@ public partial class App : Application, IDisposable
         _model = new TetrisGameModel(rows: 16, cols: 8);
         _model.GameStateChanged += Model_GameStateChanged;
         _model.GameOver += Model_GameOver;
-        _model.Reset(); // Initialize board and spawn first tetromino
 
         // nézemodell létrehozása
         _viewModel = new TetrisViewModel(_model);
@@ -118,7 +117,7 @@ public partial class App : Application, IDisposable
         if (canvas != null && border != null)
         {
             GameRenderer.UpdateCanvasSize(canvas, border, 8, 16);
-            GameRenderer.DrawGame(canvas, _model);
+            // Don't draw game yet - wait for user to start a new game
         }
     }
 
