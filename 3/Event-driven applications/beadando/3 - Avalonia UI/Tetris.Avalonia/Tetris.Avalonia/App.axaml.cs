@@ -60,12 +60,10 @@ public partial class App : Application, IDisposable
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
 
-        // modell létrehozása
         _model = new TetrisGameModel(rows: 16, cols: 8);
         _model.GameStateChanged += Model_GameStateChanged;
         _model.GameOver += Model_GameOver;
 
-        // nézetmodell létrehozása
         _viewModel = new TetrisViewModel(_model);
         _viewModel.NewGame += ViewModel_NewGame;
         _viewModel.LoadGame += ViewModel_LoadGame;
@@ -73,7 +71,6 @@ public partial class App : Application, IDisposable
         _viewModel.ExitGame += ViewModel_ExitGame;
         _viewModel.PauseGame += ViewModel_PauseGame;
 
-        // időzítő létrehozása
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromMilliseconds(100);
         _timer.Tick += Timer_Tick;
@@ -87,7 +84,6 @@ public partial class App : Application, IDisposable
             
             desktop.MainWindow = mainWindow;
             
-            // Set up canvas and keyboard after window is opened
             mainWindow.Opened += (s, e) => SetupMainView(mainWindow);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
@@ -99,7 +95,6 @@ public partial class App : Application, IDisposable
             
             singleViewPlatform.MainView = mainView;
             
-            // Set up canvas and keyboard after view is attached
             mainView.AttachedToVisualTree += (s, e) => SetupMainView(mainView);
         }
 
@@ -111,14 +106,12 @@ public partial class App : Application, IDisposable
     /// </summary>
     private void SetupMainView(Control control)
     {
-        // Find MainView in the visual tree
         MainView? mainView = control is MainView mv ? mv : FindMainView(control);
         
         if (mainView != null)
         {
             _mainView = mainView;
             
-            // Get canvas and border references
             var gameCanvas = mainView.FindControl<Canvas>("GameCanvas");
             var gameBorder = mainView.FindControl<Control>("GameBorder");
             
@@ -127,7 +120,6 @@ public partial class App : Application, IDisposable
                 SetCanvasReferences(gameCanvas, gameBorder);
             }
             
-            // Set up keyboard handling
             mainView.KeyDown += MainView_KeyDown;
             mainView.Focus();
         }
@@ -219,7 +211,6 @@ public partial class App : Application, IDisposable
             _timer?.Stop();
             _model.StopTimer();
 
-            // Update button states
             if (_mainView != null)
             {
                 var btnSave = _mainView.FindControl<Button>("btnSave");
@@ -249,9 +240,8 @@ public partial class App : Application, IDisposable
     /// </summary>
     private void ViewModel_NewGame(object? sender, EventArgs e)
     {
-        int cols = 8; // Default value
+        int cols = 8;
         
-        // Get board size from ComboBox if MainView is available
         if (_mainView != null)
         {
             var cmbBoardSize = _mainView.FindControl<ComboBox>("cmbBoardSize");
@@ -287,7 +277,6 @@ public partial class App : Application, IDisposable
             GameRenderer.DrawGame(_gameCanvas, _model);
         }
 
-        // Update button states
         if (_mainView != null)
         {
             var btnSave = _mainView.FindControl<Button>("btnSave");
@@ -383,7 +372,6 @@ public partial class App : Application, IDisposable
                                 GameRenderer.DrawGame(_gameCanvas, _model);
                             }
 
-                            // Update ComboBox and button states
                             if (_mainView != null)
                             {
                                 var cmbBoardSize = _mainView.FindControl<ComboBox>("cmbBoardSize");

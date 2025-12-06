@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+ï»¿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,8 +9,6 @@
              x:Name="MainViewControl"
              Focusable="True">
   <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:TetrisViewModel />
   </Design.DataContext>
 
@@ -37,46 +35,46 @@
                 Width="200"
                 VerticalAlignment="Top">
       
-      <TextBlock Text="Pályaméret:" 
+      <TextBlock Text="PÃ¡lyamÃ©ret:" 
                  Margin="0,0,0,5"/>
       <ComboBox x:Name="cmbBoardSize"
                 Height="25"
                 Margin="0,0,0,15"
                 SelectedIndex="1">
-        <ComboBoxItem Content="4×16"/>
-        <ComboBoxItem Content="8×16" IsSelected="True"/>
-        <ComboBoxItem Content="12×16"/>
+        <ComboBoxItem Content="4Ã—16"/>
+        <ComboBoxItem Content="8Ã—16" IsSelected="True"/>
+        <ComboBoxItem Content="12Ã—16"/>
       </ComboBox>
 
       <Button x:Name="btnNewGame"
-              Content="Új játék"
+              Content="Ãšj jÃ¡tÃ©k"
               Height="30"
               Margin="0,0,0,20"
               Command="{Binding NewGameCommand}"/>
 
       <Button x:Name="btnPause"
-              Content="Szünet"
+              Content="SzÃ¼net"
               Height="30"
               Margin="0,0,0,20"
               IsEnabled="False"
               Command="{Binding PauseGameCommand}"/>
 
       <Button x:Name="btnSave"
-              Content="Mentés"
+              Content="MentÃ©s"
               Height="30"
               Margin="0,0,0,20"
               IsEnabled="False"
               Command="{Binding SaveGameCommand}"/>
 
       <Button x:Name="btnLoad"
-              Content="Betöltés"
+              Content="BetÃ¶ltÃ©s"
               Height="30"
               Margin="0,0,0,50"
               Command="{Binding LoadGameCommand}"/>
 
       <StackPanel Orientation="Horizontal" 
                   Margin="0,0,0,10">
-        <TextBlock Text="Játékid?:" 
+        <TextBlock Text="JÃ¡tÃ©kidÅ‘:" 
                    Width="70"
                    VerticalAlignment="Center"/>
         <TextBlock x:Name="lblTimeValue" 
