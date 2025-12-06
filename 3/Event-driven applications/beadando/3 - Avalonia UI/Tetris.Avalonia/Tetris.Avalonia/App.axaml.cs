@@ -117,7 +117,6 @@ public partial class App : Application, IDisposable
         if (canvas != null && border != null)
         {
             GameRenderer.UpdateCanvasSize(canvas, border, 8, 16);
-            // Don't draw game yet - wait for user to start a new game
         }
     }
 

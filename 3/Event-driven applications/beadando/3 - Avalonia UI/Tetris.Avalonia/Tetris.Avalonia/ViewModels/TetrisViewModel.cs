@@ -12,8 +12,8 @@ namespace Tetris.Avalonia.ViewModels
     {
         #region Fields
 
-        private TetrisGameModel _model; // modell
-        private int _selectedBoardSize = 1; // 0=4, 1=8, 2=12
+        private TetrisGameModel _model;
+        private int _selectedBoardSize = 1;
         private string _pauseButtonText = "Szünet";
         private bool _isSaveEnabled = false;
         private bool _isPauseEnabled = false;
