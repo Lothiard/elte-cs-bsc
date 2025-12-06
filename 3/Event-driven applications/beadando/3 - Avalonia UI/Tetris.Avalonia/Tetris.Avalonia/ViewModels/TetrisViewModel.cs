@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Tetris.Model;
 
@@ -8,7 +9,7 @@ namespace Tetris.Avalonia.ViewModels
     /// <summary>
     /// Tetris nézetmodell típusa.
     /// </summary>
-    public class TetrisViewModel : ViewModelBase
+    public class TetrisViewModel : ObservableObject
     {
         #region Fields
 
