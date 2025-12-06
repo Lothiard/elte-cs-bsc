@@ -11,14 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris", "Tetris\Tetris.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.Test", "Tetris.Test\Tetris.Test.csproj", "{965B12FC-AA86-4966-9472-6E21CA0E1F3B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "reference sample", "reference sample", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Avalonia", "..\minta\Sudoku_Avalonia\Sudoku_Avalonia\Sudoku.Avalonia\Sudoku.Avalonia.csproj", "{E2CB872E-F5D1-39FD-1D0E-68820D3A3399}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Avalonia.Desktop", "..\minta\Sudoku_Avalonia\Sudoku_Avalonia\Sudoku.Avalonia.Desktop\Sudoku.Avalonia.Desktop.csproj", "{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris.WPF", "..\..\2 - WPF\Tetris\Tetris.WPF\Tetris.WPF.csproj", "{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,26 +33,9 @@ Global
 		{965B12FC-AA86-4966-9472-6E21CA0E1F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{965B12FC-AA86-4966-9472-6E21CA0E1F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{965B12FC-AA86-4966-9472-6E21CA0E1F3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2CB872E-F5D1-39FD-1D0E-68820D3A3399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2CB872E-F5D1-39FD-1D0E-68820D3A3399}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2CB872E-F5D1-39FD-1D0E-68820D3A3399}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2CB872E-F5D1-39FD-1D0E-68820D3A3399}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{E2CB872E-F5D1-39FD-1D0E-68820D3A3399} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{6B75A15F-E9C7-E2E3-00AC-77197D2D8F6D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{C2807CED-CF87-8BB5-CA6B-B8F9C9346A22} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0F0EF5E-044F-4746-B3DF-14C4F0BA7D40}
