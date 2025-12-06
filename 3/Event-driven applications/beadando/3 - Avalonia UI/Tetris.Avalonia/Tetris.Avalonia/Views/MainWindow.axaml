@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:Tetris.Avalonia.Views"
         mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="575"
         x:Class="Tetris.Avalonia.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/tetris-icon.png"
         Title="Tetris"
         Width="650"
         Height="575"
