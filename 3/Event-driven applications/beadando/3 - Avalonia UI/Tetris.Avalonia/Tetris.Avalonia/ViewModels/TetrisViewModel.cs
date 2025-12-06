@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Windows.Threading;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using Tetris.Model;
 
-namespace Tetris.ViewModel
+namespace Tetris.Avalonia.ViewModels
 {
     /// <summary>
     /// Tetris nézetmodell típusa.
@@ -20,47 +21,47 @@ namespace Tetris.ViewModel
         /// <summary>
         /// Új játék kezdése parancs lekérdezése.
         /// </summary>
-        public DelegateCommand NewGameCommand { get; private set; }
+        public RelayCommand NewGameCommand { get; private set; }
 
         /// <summary>
         /// Játék betöltése parancs lekérdezése.
         /// </summary>
-        public DelegateCommand LoadGameCommand { get; private set; }
+        public RelayCommand LoadGameCommand { get; private set; }
 
         /// <summary>
         /// Játék mentése parancs lekérdezése.
         /// </summary>
-        public DelegateCommand SaveGameCommand { get; private set; }
+        public RelayCommand SaveGameCommand { get; private set; }
 
         /// <summary>
         /// Szüneteltetés parancs lekérdezése.
         /// </summary>
-        public DelegateCommand PauseGameCommand { get; private set; }
+        public RelayCommand PauseGameCommand { get; private set; }
 
         /// <summary>
         /// Kilépés parancs lekérdezése.
         /// </summary>
-        public DelegateCommand ExitCommand { get; private set; }
+        public RelayCommand ExitCommand { get; private set; }
 
         /// <summary>
         /// Balra mozgatás parancs lekérdezése.
         /// </summary>
-        public DelegateCommand MoveLeftCommand { get; private set; }
+        public RelayCommand MoveLeftCommand { get; private set; }
 
         /// <summary>
         /// Jobbra mozgatás parancs lekérdezése.
         /// </summary>
-        public DelegateCommand MoveRightCommand { get; private set; }
+        public RelayCommand MoveRightCommand { get; private set; }
 
         /// <summary>
         /// Forgatás parancs lekérdezése.
         /// </summary>
-        public DelegateCommand RotateCommand { get; private set; }
+        public RelayCommand RotateCommand { get; private set; }
 
         /// <summary>
         /// Lefelé mozgatás parancs lekérdezése.
         /// </summary>
-        public DelegateCommand MoveDownCommand { get; private set; }
+        public RelayCommand MoveDownCommand { get; private set; }
 
         /// <summary>
         /// Játéktábla lekérdezése.
@@ -177,16 +178,16 @@ namespace Tetris.ViewModel
             _model.GameStateChanged += new EventHandler(Model_GameStateChanged);
             _model.GameOver += new EventHandler(Model_GameOver);
 
-            NewGameCommand = new DelegateCommand(param => OnNewGame());
-            LoadGameCommand = new DelegateCommand(param => OnLoadGame());
-            SaveGameCommand = new DelegateCommand(param => OnSaveGame());
-            PauseGameCommand = new DelegateCommand(param => OnPauseGame());
-            ExitCommand = new DelegateCommand(param => OnExitGame());
+            NewGameCommand = new RelayCommand(OnNewGame);
+            LoadGameCommand = new RelayCommand(OnLoadGame);
+            SaveGameCommand = new RelayCommand(OnSaveGame);
+            PauseGameCommand = new RelayCommand(OnPauseGame);
+            ExitCommand = new RelayCommand(OnExitGame);
             
-            MoveLeftCommand = new DelegateCommand(param => OnMoveLeft());
-            MoveRightCommand = new DelegateCommand(param => OnMoveRight());
-            RotateCommand = new DelegateCommand(param => OnRotate());
-            MoveDownCommand = new DelegateCommand(param => OnMoveDown());
+            MoveLeftCommand = new RelayCommand(OnMoveLeft);
+            MoveRightCommand = new RelayCommand(OnMoveRight);
+            RotateCommand = new RelayCommand(OnRotate);
+            MoveDownCommand = new RelayCommand(OnMoveDown);
         }
 
         #endregion
@@ -237,9 +238,9 @@ namespace Tetris.ViewModel
         /// </summary>
         private void Model_GameStateChanged(object? sender, EventArgs e)
         {
-            if (!Dispatcher.CurrentDispatcher.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.CurrentDispatcher.BeginInvoke(() => { Model_GameStateChanged(sender, e); });
+                Dispatcher.UIThread.InvokeAsync(() => { Model_GameStateChanged(sender, e); });
                 return;
             }
 
@@ -256,9 +257,9 @@ namespace Tetris.ViewModel
         /// </summary>
         private void Model_GameOver(object? sender, EventArgs e)
         {
-            if (!Dispatcher.CurrentDispatcher.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.CurrentDispatcher.BeginInvoke(() => { Model_GameOver(sender, e); });
+                Dispatcher.UIThread.InvokeAsync(() => { Model_GameOver(sender, e); });
                 return;
             }
 

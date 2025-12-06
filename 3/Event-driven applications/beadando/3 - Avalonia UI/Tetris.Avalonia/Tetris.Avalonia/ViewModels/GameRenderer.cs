@@ -1,11 +1,12 @@
 using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Media;
+using Avalonia.Threading;
 using Tetris.Model;
 
-namespace Tetris.ViewModel
+namespace Tetris.Avalonia.ViewModels
 {
     /// <summary>
     /// Játék renderelési segédosztály.
@@ -21,9 +22,9 @@ namespace Tetris.ViewModel
         /// <param name="model">A játékmodell.</param>
         public static void DrawGame(Canvas canvas, TetrisGameModel model)
         {
-            if (!Application.Current.Dispatcher.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() => DrawGame(canvas, model)));
+                Dispatcher.UIThread.InvokeAsync(() => DrawGame(canvas, model));
                 return;
             }
 
@@ -92,10 +93,8 @@ namespace Tetris.ViewModel
             {
                 Line line = new Line
                 {
-                    X1 = col * CellSize,
-                    Y1 = 0,
-                    X2 = col * CellSize,
-                    Y2 = model.Rows * CellSize,
+                    StartPoint = new Point(col * CellSize, 0),
+                    EndPoint = new Point(col * CellSize, model.Rows * CellSize),
                     Stroke = gridBrush,
                     StrokeThickness = 1
                 };
@@ -106,10 +105,8 @@ namespace Tetris.ViewModel
             {
                 Line line = new Line
                 {
-                    X1 = 0,
-                    Y1 = row * CellSize,
-                    X2 = model.Cols * CellSize,
-                    Y2 = row * CellSize,
+                    StartPoint = new Point(0, row * CellSize),
+                    EndPoint = new Point(model.Cols * CellSize, row * CellSize),
                     Stroke = gridBrush,
                     StrokeThickness = 1
                 };
@@ -120,7 +117,7 @@ namespace Tetris.ViewModel
         /// <summary>
         /// Canvas és border méretének frissítése.
         /// </summary>
-        public static void UpdateCanvasSize(Canvas canvas, FrameworkElement border, int cols, int rows)
+        public static void UpdateCanvasSize(Canvas canvas, Control border, int cols, int rows)
         {
             double canvasWidth = cols * CellSize;
             double canvasHeight = rows * CellSize;
@@ -133,11 +130,11 @@ namespace Tetris.ViewModel
         }
 
         /// <summary>
-        /// System.Drawing.Color konvertálása System.Windows.Media.Color-ra.
+        /// System.Drawing.Color konvertálása Avalonia.Media.Color-ra.
         /// </summary>
-        private static System.Windows.Media.Color ConvertColor(System.Drawing.Color color)
+        private static Color ConvertColor(System.Drawing.Color color)
         {
-            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
     }
 }

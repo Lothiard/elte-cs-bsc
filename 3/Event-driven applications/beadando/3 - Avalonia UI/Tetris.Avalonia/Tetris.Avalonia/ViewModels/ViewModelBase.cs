@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Tetris.ViewModel
+namespace Tetris.Avalonia.ViewModels
 {
     /// <summary>
     /// Nézetmodell ősosztály típusa.

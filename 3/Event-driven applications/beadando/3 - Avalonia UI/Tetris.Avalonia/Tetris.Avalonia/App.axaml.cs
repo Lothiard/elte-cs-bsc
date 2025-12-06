@@ -1,15 +1,52 @@
-﻿using Avalonia;
+﻿using System;
+using System.ComponentModel;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using Tetris.Model;
+using Tetris.Persistence;
 using Tetris.Avalonia.ViewModels;
 using Tetris.Avalonia.Views;
 
 namespace Tetris.Avalonia;
 
-public partial class App : Application
+public partial class App : Application, IDisposable
 {
+    #region Fields
+
+    private TetrisGameModel _model = null!;
+    private TetrisViewModel _viewModel = null!;
+    private DispatcherTimer? _timer;
+    private Canvas? _gameCanvas;
+    private Control? _gameBorder;
+
+    #endregion
+
+    #region Properties
+
+    private TopLevel? TopLevel
+    {
+        get
+        {
+            return ApplicationLifetime switch
+            {
+                IClassicDesktopStyleApplicationLifetime desktop => global::Avalonia.Controls.TopLevel.GetTopLevel(desktop.MainWindow),
+                ISingleViewApplicationLifetime singleViewPlatform => global::Avalonia.Controls.TopLevel.GetTopLevel(singleViewPlatform.MainView),
+                _ => null
+            };
+        }
+    }
+
+    #endregion
+
+    #region Application methods
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -21,21 +58,384 @@ public partial class App : Application
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
 
+        // modell létrehozása
+        _model = new TetrisGameModel(rows: 16, cols: 8);
+        _model.GameStateChanged += Model_GameStateChanged;
+        _model.GameOver += Model_GameOver;
+
+        // nézetmodell létrehozása
+        _viewModel = new TetrisViewModel(_model);
+        _viewModel.NewGame += ViewModel_NewGame;
+        _viewModel.LoadGame += ViewModel_LoadGame;
+        _viewModel.SaveGame += ViewModel_SaveGame;
+        _viewModel.ExitGame += ViewModel_ExitGame;
+        _viewModel.PauseGame += ViewModel_PauseGame;
+
+        // időzítő létrehozása
+        _timer = new DispatcherTimer();
+        _timer.Interval = TimeSpan.FromMilliseconds(100);
+        _timer.Tick += Timer_Tick;
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = _viewModel
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = _viewModel
             };
         }
 
         base.OnFrameworkInitializationCompleted();
     }
+
+    #endregion
+
+    #region Public methods
+
+    /// <summary>
+    /// Canvas és border referenciák beállítása.
+    /// </summary>
+    public void SetCanvasReferences(Canvas gameCanvas, Control gameBorder)
+    {
+        _gameCanvas = gameCanvas;
+        _gameBorder = gameBorder;
+        
+        if (_gameCanvas != null && _gameBorder != null)
+        {
+            GameRenderer.UpdateCanvasSize(_gameCanvas, _gameBorder, 8, 16);
+            GameRenderer.DrawGame(_gameCanvas, _model);
+        }
+    }
+
+    #endregion
+
+    #region Model event handlers
+
+    /// <summary>
+    /// Játékmodell állapot megváltozásának eseménykezelője.
+    /// </summary>
+    private void Model_GameStateChanged(object? sender, EventArgs e)
+    {
+        if (_gameCanvas != null)
+        {
+            GameRenderer.DrawGame(_gameCanvas, _model);
+        }
+    }
+
+    /// <summary>
+    /// Játék végének eseménykezelője.
+    /// </summary>
+    private async void Model_GameOver(object? sender, EventArgs e)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            TimeSpan finalGameTime = _model.ElapsedTime;
+            
+            _timer?.Stop();
+            _model.StopTimer();
+
+            await MessageBoxManager.GetMessageBoxStandard(
+                    "Tetris",
+                    $"Vége a játéknak!{Environment.NewLine}Játékidő: {finalGameTime:mm\\:ss}",
+                    ButtonEnum.Ok,
+                    Icon.Info)
+                .ShowAsync();
+        });
+    }
+
+    #endregion
+
+    #region ViewModel event handlers
+
+    /// <summary>
+    /// Új játék indításának eseménykezelője.
+    /// </summary>
+    private void ViewModel_NewGame(object? sender, EventArgs e)
+    {
+        int cols = 8; // Default value, can be changed based on UI selection
+
+        _model.GameStateChanged -= Model_GameStateChanged;
+        _model.GameOver -= Model_GameOver;
+        _model.Dispose();
+
+        _model = new TetrisGameModel(rows: 16, cols: cols);
+        _model.GameStateChanged += Model_GameStateChanged;
+        _model.GameOver += Model_GameOver;
+
+        _viewModel.UpdateModel(_model);
+
+        _model.Reset();
+        _model.StartTimer();
+        _timer?.Start();
+
+        if (_gameCanvas != null && _gameBorder != null)
+        {
+            GameRenderer.UpdateCanvasSize(_gameCanvas, _gameBorder, cols, 16);
+            GameRenderer.DrawGame(_gameCanvas, _model);
+        }
+    }
+
+    /// <summary>
+    /// Játék betöltésének eseménykezelője.
+    /// </summary>
+    private async void ViewModel_LoadGame(object? sender, EventArgs e)
+    {
+        if (TopLevel == null)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                    "Tetris",
+                    "A fájlkezelés nem támogatott!",
+                    ButtonEnum.Ok, Icon.Error)
+                .ShowAsync();
+            return;
+        }
+
+        bool restartTimer = _model.IsTimerRunning && !_model.IsTimerPaused;
+
+        if (_model.IsTimerRunning && !_model.IsTimerPaused)
+        {
+            _model.PauseTimer();
+        }
+
+        try
+        {
+            var files = await TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Tetris játék betöltése",
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Tetris mentés")
+                    {
+                        Patterns = new[] { "*.tet" }
+                    }
+                }
+            });
+
+            if (files.Count > 0)
+            {
+                try
+                {
+                    var filePath = files[0].TryGetLocalPath();
+                    if (filePath != null)
+                    {
+                        var gameState = await TetrisPersistence.LoadAsync(filePath);
+                        
+                        if (gameState != null)
+                        {
+                            _model.GameStateChanged -= Model_GameStateChanged;
+                            _model.GameOver -= Model_GameOver;
+                            _model.Dispose();
+
+                            _model = new TetrisGameModel(gameState.Rows, gameState.Cols);
+                            _model.GameStateChanged += Model_GameStateChanged;
+                            _model.GameOver += Model_GameOver;
+
+                            _model.Board = gameState.Board!;
+                            _model.CurrentTetrominoIndex = gameState.CurrentTetrominoIndex;
+                            _model.CurrentBlock = gameState.CurrentBlock;
+                            _model.BlockRow = gameState.BlockRow;
+                            _model.BlockCol = gameState.BlockCol;
+
+                            _viewModel.UpdateModel(_model);
+
+                            if (_gameCanvas != null && _gameBorder != null)
+                            {
+                                GameRenderer.UpdateCanvasSize(_gameCanvas, _gameBorder, gameState.Cols, gameState.Rows);
+                            }
+
+                            _model.StartTimer();
+                            _model.PauseTimer();
+                            _model.SetTimerPausedTime(gameState.PausedTime);
+                            _timer?.Start();
+
+                            if (_gameCanvas != null)
+                            {
+                                GameRenderer.DrawGame(_gameCanvas, _model);
+                            }
+                        }
+                    }
+                }
+                catch (TetrisDataException)
+                {
+                    await MessageBoxManager.GetMessageBoxStandard(
+                            "Tetris",
+                            "A fájl betöltése sikertelen!",
+                            ButtonEnum.Ok,
+                            Icon.Error)
+                        .ShowAsync();
+                }
+            }
+        }
+        catch
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                    "Tetris",
+                    "A fájl betöltése sikertelen!",
+                    ButtonEnum.Ok,
+                    Icon.Error)
+                .ShowAsync();
+        }
+
+        if (restartTimer && !_model.IsGameOver)
+            _model.ResumeTimer();
+    }
+
+    /// <summary>
+    /// Játék mentésének eseménykezelője.
+    /// </summary>
+    private async void ViewModel_SaveGame(object? sender, EventArgs e)
+    {
+        if (TopLevel == null)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                    "Tetris",
+                    "A fájlkezelés nem támogatott!",
+                    ButtonEnum.Ok, Icon.Error)
+                .ShowAsync();
+            return;
+        }
+
+        if (!_model.IsTimerPaused)
+            return;
+
+        try
+        {
+            var file = await TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Tetris játék mentése",
+                FileTypeChoices = new[]
+                {
+                    new FilePickerFileType("Tetris mentés")
+                    {
+                        Patterns = new[] { "*.tet" }
+                    }
+                },
+                DefaultExtension = "tet"
+            });
+
+            if (file != null)
+            {
+                try
+                {
+                    var filePath = file.TryGetLocalPath();
+                    if (filePath != null)
+                    {
+                        var gameState = new TetrisPersistence.GameState
+                        {
+                            Rows = _model.Rows,
+                            Cols = _model.Cols,
+                            Board = _model.Board,
+                            CurrentTetrominoIndex = _model.CurrentTetrominoIndex,
+                            CurrentBlock = _model.CurrentBlock,
+                            BlockRow = _model.BlockRow,
+                            BlockCol = _model.BlockCol,
+                            PausedTime = _model.ElapsedTime,
+                            SaveTime = DateTime.Now
+                        };
+
+                        await TetrisPersistence.SaveAsync(filePath, gameState);
+                    }
+                }
+                catch (TetrisDataException)
+                {
+                    await MessageBoxManager.GetMessageBoxStandard(
+                            "Hiba!",
+                            $"Játék mentése sikertelen!{Environment.NewLine}Hibás az elérési út, vagy a könyvtár nem írható.",
+                            ButtonEnum.Ok,
+                            Icon.Error)
+                        .ShowAsync();
+                }
+            }
+        }
+        catch
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                    "Tetris",
+                    "A fájl mentése sikertelen!",
+                    ButtonEnum.Ok,
+                    Icon.Error)
+                .ShowAsync();
+        }
+    }
+
+    /// <summary>
+    /// Játékból való kilépés eseménykezelője.
+    /// </summary>
+    private void ViewModel_ExitGame(object? sender, EventArgs e)
+    {
+        var window = ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            ? desktop.MainWindow
+            : null;
+        
+        window?.Close();
+    }
+
+    /// <summary>
+    /// Játék szüneteltetésének/folytatásának eseménykezelője.
+    /// </summary>
+    private void ViewModel_PauseGame(object? sender, EventArgs e)
+    {
+        if (!_model.IsTimerRunning || _model.IsGameOver)
+            return;
+
+        if (_model.IsTimerPaused)
+        {
+            _model.ResumeTimer();
+        }
+        else
+        {
+            _model.PauseTimer();
+        }
+    }
+
+    #endregion
+
+    #region Timer event handlers
+
+    /// <summary>
+    /// Időzítő eseménykezelője.
+    /// </summary>
+    private void Timer_Tick(object? sender, EventArgs e)
+    {
+        _viewModel.RefreshGameTime();
+    }
+
+    #endregion
+
+    #region IDisposable
+
+    /// <summary>
+    /// Erőforrások felszabadítása.
+    /// </summary>
+    public void Dispose()
+    {
+        _timer?.Stop();
+        
+        if (_model != null)
+        {
+            _model.GameStateChanged -= Model_GameStateChanged;
+            _model.GameOver -= Model_GameOver;
+            _model.Dispose();
+        }
+        
+        if (_viewModel != null)
+        {
+            _viewModel.NewGame -= ViewModel_NewGame;
+            _viewModel.LoadGame -= ViewModel_LoadGame;
+            _viewModel.SaveGame -= ViewModel_SaveGame;
+            _viewModel.ExitGame -= ViewModel_ExitGame;
+            _viewModel.PauseGame -= ViewModel_PauseGame;
+        }
+
+        GC.SuppressFinalize(this);
+    }
+
+    #endregion
 }
