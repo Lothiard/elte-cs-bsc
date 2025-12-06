@@ -13,6 +13,11 @@ namespace Tetris.Avalonia.ViewModels
         #region Fields
 
         private TetrisGameModel _model; // modell
+        private int _selectedBoardSize = 1; // 0=4, 1=8, 2=12
+        private string _pauseButtonText = "Szünet";
+        private bool _isSaveEnabled = false;
+        private bool _isPauseEnabled = false;
+        private bool _isLoadEnabled = true;
 
         #endregion
 
@@ -135,6 +140,94 @@ namespace Tetris.Avalonia.ViewModels
             get { return _model.CurrentTetrominoIndex; }
         }
 
+        /// <summary>
+        /// Kiválasztott pályaméret index lekérdezése vagy beállítása.
+        /// </summary>
+        public Int32 SelectedBoardSize
+        {
+            get { return _selectedBoardSize; }
+            set
+            {
+                if (_selectedBoardSize != value)
+                {
+                    _selectedBoardSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Szünet gomb szövegének lekérdezése.
+        /// </summary>
+        public String PauseButtonText
+        {
+            get { return _pauseButtonText; }
+            set
+            {
+                if (_pauseButtonText != value)
+                {
+                    _pauseButtonText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Mentés gomb engedélyezett állapotának lekérdezése.
+        /// </summary>
+        public Boolean IsSaveEnabled
+        {
+            get { return _isSaveEnabled; }
+            set
+            {
+                if (_isSaveEnabled != value)
+                {
+                    _isSaveEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Szünet gomb engedélyezett állapotának lekérdezése.
+        /// </summary>
+        public Boolean IsPauseEnabled
+        {
+            get { return _isPauseEnabled; }
+            set
+            {
+                if (_isPauseEnabled != value)
+                {
+                    _isPauseEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Betöltés gomb engedélyezett állapotának lekérdezése.
+        /// </summary>
+        public Boolean IsLoadEnabled
+        {
+            get { return _isLoadEnabled; }
+            set
+            {
+                if (_isLoadEnabled != value)
+                {
+                    _isLoadEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Modell lekérdezése (a View rendereléshez).
+        /// </summary>
+        internal TetrisGameModel Model
+        {
+            get { return _model; }
+        }
+
         #endregion
 
         #region Events
@@ -229,6 +322,47 @@ namespace Tetris.Avalonia.ViewModels
             OnPropertyChanged(nameof(GameTime));
         }
 
+        /// <summary>
+        /// Játék állapot frissítése új játék indításakor.
+        /// </summary>
+        public void SetNewGameState()
+        {
+            IsSaveEnabled = false;
+            IsPauseEnabled = true;
+            IsLoadEnabled = false;
+            PauseButtonText = "Szünet";
+        }
+
+        /// <summary>
+        /// Játék állapot frissítése játék vége esetén.
+        /// </summary>
+        public void SetGameOverState()
+        {
+            IsSaveEnabled = false;
+            IsPauseEnabled = false;
+            IsLoadEnabled = true;
+        }
+
+        /// <summary>
+        /// Játék állapot frissítése szüneteltetéskor.
+        /// </summary>
+        public void SetPausedState()
+        {
+            PauseButtonText = "Folytatás";
+            IsSaveEnabled = true;
+            IsLoadEnabled = true;
+        }
+
+        /// <summary>
+        /// Játék állapot frissítése folytatáskor.
+        /// </summary>
+        public void SetResumedState()
+        {
+            PauseButtonText = "Szünet";
+            IsSaveEnabled = false;
+            IsLoadEnabled = false;
+        }
+
         #endregion
 
         #region Game event handlers
@@ -264,6 +398,7 @@ namespace Tetris.Avalonia.ViewModels
             }
 
             OnPropertyChanged(nameof(IsGameOver));
+            SetGameOverState();
         }
 
         #endregion

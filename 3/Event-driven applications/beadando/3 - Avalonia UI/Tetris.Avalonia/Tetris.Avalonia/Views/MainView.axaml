@@ -12,6 +12,13 @@
     <vm:TetrisViewModel />
   </Design.DataContext>
 
+  <UserControl.KeyBindings>
+    <KeyBinding Gesture="A" Command="{Binding MoveLeftCommand}" />
+    <KeyBinding Gesture="D" Command="{Binding MoveRightCommand}" />
+    <KeyBinding Gesture="W" Command="{Binding RotateCommand}" />
+    <KeyBinding Gesture="S" Command="{Binding MoveDownCommand}" />
+  </UserControl.KeyBindings>
+
   <Grid Margin="12">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
@@ -40,7 +47,7 @@
       <ComboBox x:Name="cmbBoardSize"
                 Height="25"
                 Margin="0,0,0,15"
-                SelectedIndex="1">
+                SelectedIndex="{Binding SelectedBoardSize}">
         <ComboBoxItem Content="4×16"/>
         <ComboBoxItem Content="8×16" IsSelected="True"/>
         <ComboBoxItem Content="12×16"/>
@@ -53,23 +60,24 @@
               Command="{Binding NewGameCommand}"/>
 
       <Button x:Name="btnPause"
-              Content="Szünet"
+              Content="{Binding PauseButtonText}"
               Height="30"
               Margin="0,0,0,20"
-              IsEnabled="False"
+              IsEnabled="{Binding IsPauseEnabled}"
               Command="{Binding PauseGameCommand}"/>
 
       <Button x:Name="btnSave"
               Content="Mentés"
               Height="30"
               Margin="0,0,0,20"
-              IsEnabled="False"
+              IsEnabled="{Binding IsSaveEnabled}"
               Command="{Binding SaveGameCommand}"/>
 
       <Button x:Name="btnLoad"
               Content="Betöltés"
               Height="30"
               Margin="0,0,0,50"
+              IsEnabled="{Binding IsLoadEnabled}"
               Command="{Binding LoadGameCommand}"/>
 
       <StackPanel Orientation="Horizontal" 
