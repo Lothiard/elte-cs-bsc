@@ -322,7 +322,7 @@ Ez azt jelenti, hogy
 $
     lim_(h arrow 0) ((F(d + h) - F(d))/h - f(d)) = 0 ==> lim_(h arrow 0) ((F(d + h) - F(d))/h) = f(d)
 $
-vagyis $F in D{d]$ és $F'(d) = f(d)$\
+vagyis $F in D{d}$ és $F'(d) = f(d)$\
 $square$
 
 #pagebreak()
