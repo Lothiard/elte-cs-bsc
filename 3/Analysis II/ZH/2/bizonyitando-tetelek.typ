@@ -368,7 +368,7 @@ integrálfüggvényeket. Megmutatjuk, hogy
 $
     (*) "    " integral_(g(alpha))^(g(beta)) f = F(g(beta)) = G(beta) = integral_alpha^beta f circle.small g dot g'
 $
-Egyrészt $f in C[a, b] ==> F' = f$, másrészt $f circle.small g' in C[alpha, beta] ==> G' = f circle.small g dot g'$
+Egyrészt $f in C[a, b] ==> F' = f$, másrészt $f circle.small g dot g' in C[alpha, beta] ==> G' = f circle.small g dot g'$
 
 Mivel $(F circle.small g)' = F' circle.small g dot g' = f circle.small g dot g'$, ezért $(F circle.small g - G)' = 0 ==> exists c in RR: F circle.small g - G = c$. Ugyanakkor $F(g(alpha)) = 0 = G(alpha) ==> c = 0$, következésképpen $F circle.small g = G ==> F(g(beta)) = G(beta)$\
 $(*)$ valóban teljesül.\
