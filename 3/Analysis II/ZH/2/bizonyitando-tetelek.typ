@@ -16,7 +16,7 @@ $
 $
 Legyen $tau := tau_1 union tau_2 in cal(F)[a, b]$. Ekkor $tau$ finomítása $tau_1, tau_2$-nek, ezért
 $
-  I(f) - epsilon/2 < s(f, tau_1) <= s(f, tau) <= I_*(f) <= I^*(f) <= S(f, tau) <= S(f, tau_2) <= I(f) + epsilon/2 ==> Omega(f, tau) = S(f, tau) - s(f, tau) < epsilon.
+  I(f) - epsilon/2 < s(f, tau_1) <= s(f, tau) <= I_*(f) <= I^*(f) <= S(f, tau) <= S(f, tau_2) < I(f) + epsilon/2 ==> Omega(f, tau) = S(f, tau) - s(f, tau) < epsilon.
 $
 
 / $<==$:
