@@ -339,7 +339,7 @@ Egyrészt
 $
     f in D[a, b] ==> f in C[a, b] ==> f in R[a, b]
 $
-Mivel $g' in RR$, ezért $f g' in R[a, b] " és " f'g in R[a, b]$. Így $f'g + f g' in R[a, b]$\
+Mivel $g' in R[a, b]$, ezért $f g' in R[a, b] " és " f'g in R[a, b]$. Így $f'g + f g' in R[a, b]$\
 Másrészt $f g$ primitív függvénye az $f'g + f g'$ függvénynek\
 A Newton-Leibniz-tétel szerint tehát
 $
