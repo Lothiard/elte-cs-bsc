@@ -1,0 +1,30 @@
+ID,Item,Price,Stock,Sold_Units,Calories,Sugar_g
+1,Vodka Baby Bottle,10,0,50,97,0
+2,Coke,3.50,50,120,140,39
+3,Water,2.00,30,250,0,0
+4,Chips (Salted),4.20,25,80,160,0.5
+5,Chocolate Bar,5.00,10,40,220,24
+6,Energy Drink,6.50,60,150,210,54
+7,Peanuts,3.80,,75,170,1
+8,Gummy Bears,2.80,20,30,100,20
+9,Coffee,4.50,15,60,5,0
+10,Soda (Diet),3.50,55,180,0,0
+11,Sandwich,7.00,5,15,350,2
+12,Pretzels,3.20,35,45,110,0
+13,Protein Bar,5.50,18,35,250,5
+14,Juice Box,3.00,40,110,120,28
+15,Cookies,4.80,,55,190,18
+16,Iced Tea,3.80,65,130,150,35
+17,Gum,1.50,80,220,10,2
+18,Muffin,5.20,12,25,320,30
+19,Milk (Small),2.50,22,70,150,12
+20,Trail Mix,6.00,15,30,280,7
+21,Crackers,2.50,33,65,130,1
+22,Yogurt,4.00,27,50,160,15
+23,Smoothie,5.80,,40,240,45
+24,Sparkling Water,2.20,70,190,0,0
+25,Candy,3.00,18,48,110,22
+26,Popcorn,3.50,42,85,140,0
+27,Fruit Snacks,2.75,25,50,90,15
+28,Cereal Bar,4.10,16,32,180,10
+29,Mints,1.20,75,150,5,0
