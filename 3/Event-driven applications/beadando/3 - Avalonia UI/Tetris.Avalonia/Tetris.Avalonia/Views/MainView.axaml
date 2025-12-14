@@ -26,16 +26,30 @@
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
-    <Border x:Name="GameBorder"
-            Grid.Column="0" 
+    <Border Grid.Column="0" 
             BorderBrush="Black" 
             BorderThickness="1"
             Background="White"
+            Width="{Binding CanvasWidth}"
+            Height="{Binding CanvasHeight}"
             VerticalAlignment="Top">
-      <Canvas x:Name="GameCanvas" 
-              Width="240" 
-              Height="480"
-              ClipToBounds="True"/>
+      <ItemsControl ItemsSource="{Binding BoardCells}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid Rows="{Binding Rows}" 
+                        Columns="{Binding Cols}"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Width="{Binding $parent[UserControl].((vm:TetrisViewModel)DataContext).CellSizeProperty}"
+                    Height="{Binding $parent[UserControl].((vm:TetrisViewModel)DataContext).CellSizeProperty}"
+                    Background="{Binding}"
+                    BorderBrush="LightGray"
+                    BorderThickness="0.5"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
     </Border>
 
     <StackPanel Grid.Column="2" 

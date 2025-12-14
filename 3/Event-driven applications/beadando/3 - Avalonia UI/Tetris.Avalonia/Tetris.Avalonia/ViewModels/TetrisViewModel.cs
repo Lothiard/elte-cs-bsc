@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,7 +12,7 @@ namespace Tetris.Avalonia.ViewModels
     /// <summary>
     /// Tetris nézetmodell típusa.
     /// </summary>
-    public class TetrisViewModel : ObservableObject
+    public partial class TetrisViewModel : ObservableObject
     {
         #region Fields
 
@@ -19,6 +22,8 @@ namespace Tetris.Avalonia.ViewModels
         private bool _isSaveEnabled = false;
         private bool _isPauseEnabled = false;
         private bool _isLoadEnabled = true;
+        private const int CellSize = 30;
+        private List<IBrush> _boardCells = new();
 
         #endregion
 
@@ -68,6 +73,43 @@ namespace Tetris.Avalonia.ViewModels
         /// Lefelé mozgatás parancs lekérdezése.
         /// </summary>
         public RelayCommand MoveDownCommand { get; private set; }
+
+        /// <summary>
+        /// Tábla cellák listája (egydimenziós, soronként).
+        /// </summary>
+        public List<IBrush> BoardCells
+        {
+            get { return _boardCells; }
+            set
+            {
+                _boardCells = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Canvas szélessége.
+        /// </summary>
+        public int CanvasWidth
+        {
+            get { return _model.Cols * CellSize; }
+        }
+
+        /// <summary>
+        /// Canvas magassága.
+        /// </summary>
+        public int CanvasHeight
+        {
+            get { return _model.Rows * CellSize; }
+        }
+
+        /// <summary>
+        /// Cella mérete.
+        /// </summary>
+        public int CellSizeProperty
+        {
+            get { return CellSize; }
+        }
 
         /// <summary>
         /// Játéktábla lekérdezése.
@@ -282,6 +324,8 @@ namespace Tetris.Avalonia.ViewModels
             MoveRightCommand = new RelayCommand(OnMoveRight);
             RotateCommand = new RelayCommand(OnRotate);
             MoveDownCommand = new RelayCommand(OnMoveDown);
+
+            UpdateBoardCells();
         }
 
         #endregion
@@ -304,6 +348,8 @@ namespace Tetris.Avalonia.ViewModels
             _model.GameStateChanged += Model_GameStateChanged;
             _model.GameOver += Model_GameOver;
 
+            UpdateBoardCells();
+
             OnPropertyChanged(nameof(Board));
             OnPropertyChanged(nameof(Rows));
             OnPropertyChanged(nameof(Cols));
@@ -313,6 +359,8 @@ namespace Tetris.Avalonia.ViewModels
             OnPropertyChanged(nameof(CurrentTetrominoIndex));
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(IsGameOver));
+            OnPropertyChanged(nameof(CanvasWidth));
+            OnPropertyChanged(nameof(CanvasHeight));
         }
 
         /// <summary>
@@ -366,6 +414,57 @@ namespace Tetris.Avalonia.ViewModels
 
         #endregion
 
+        #region Private methods
+
+        /// <summary>
+        /// Tábla cellák frissítése.
+        /// </summary>
+        private void UpdateBoardCells()
+        {
+            var cells = new List<IBrush>();
+
+            for (int row = 0; row < _model.Rows; row++)
+            {
+                for (int col = 0; col < _model.Cols; col++)
+                {
+                    cells.Add(GetCellBrush(row, col));
+                }
+            }
+
+            BoardCells = cells;
+        }
+
+        /// <summary>
+        /// Cella színének lekérdezése.
+        /// </summary>
+        private IBrush GetCellBrush(int row, int col)
+        {
+            if (_model.CurrentBlock != null && !_model.IsGameOver)
+            {
+                foreach (var (dr, dc) in _model.CurrentBlock)
+                {
+                    int blockRow = _model.BlockRow + dr;
+                    int blockCol = _model.BlockCol + dc;
+
+                    if (blockRow == row && blockCol == col)
+                    {
+                        var color = _model.TetrominoColors[_model.CurrentTetrominoIndex];
+                        return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+                    }
+                }
+            }
+
+            if (_model.Board[row, col] != 0)
+            {
+                var color = _model.TetrominoColors[_model.Board[row, col] - 1];
+                return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+            }
+
+            return Brushes.Transparent;
+        }
+
+        #endregion
+
         #region Game event handlers
 
         /// <summary>
@@ -378,6 +477,8 @@ namespace Tetris.Avalonia.ViewModels
                 Dispatcher.UIThread.InvokeAsync(() => { Model_GameStateChanged(sender, e); });
                 return;
             }
+
+            UpdateBoardCells();
 
             OnPropertyChanged(nameof(Board));
             OnPropertyChanged(nameof(CurrentBlock));

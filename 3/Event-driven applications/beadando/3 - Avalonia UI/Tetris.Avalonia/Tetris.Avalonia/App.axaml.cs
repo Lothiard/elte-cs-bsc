@@ -57,7 +57,6 @@ public partial class App : Application, IDisposable
 
         // modell létrehozása
         _model = new TetrisGameModel(rows: 16, cols: 8);
-        _model.GameStateChanged += Model_GameStateChanged;
         _model.GameOver += Model_GameOver;
 
         // nézemodell létrehozása
@@ -83,7 +82,6 @@ public partial class App : Application, IDisposable
 
             desktop.MainWindow.Opened += (s, e) =>
             {
-                InitialRender();
                 desktop.MainWindow.Focus();
             };
         }
@@ -99,7 +97,6 @@ public partial class App : Application, IDisposable
             {
                 control.AttachedToVisualTree += (s, e) =>
                 {
-                    InitialRender();
                     control.Focus();
                 };
             }
@@ -108,58 +105,9 @@ public partial class App : Application, IDisposable
         base.OnFrameworkInitializationCompleted();
     }
 
-    /// <summary>
-    /// Kezdeti renderelés.
-    /// </summary>
-    private void InitialRender()
-    {
-        var (canvas, border) = GetCanvasReferences();
-        if (canvas != null && border != null)
-        {
-            GameRenderer.UpdateCanvasSize(canvas, border, 8, 16);
-        }
-    }
-
-    /// <summary>
-    /// Canvas referenciák lekérése.
-    /// </summary>
-    private (Canvas? canvas, Control? border) GetCanvasReferences()
-    {
-        Control? rootControl = ApplicationLifetime switch
-        {
-            IClassicDesktopStyleApplicationLifetime desktop => desktop.MainWindow?.Content as Control,
-            ISingleViewApplicationLifetime singleViewPlatform => singleViewPlatform.MainView as Control,
-            _ => null
-        };
-
-        if (rootControl != null)
-        {
-            var canvas = rootControl.FindControl<Canvas>("GameCanvas");
-            var border = rootControl.FindControl<Control>("GameBorder");
-            return (canvas, border);
-        }
-
-        return (null, null);
-    }
-
     #endregion
 
     #region Model event handlers
-
-    /// <summary>
-    /// Játékmodell állapot megváltozásának eseménykezelője.
-    /// </summary>
-    private void Model_GameStateChanged(object? sender, EventArgs e)
-    {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var (canvas, _) = GetCanvasReferences();
-            if (canvas != null)
-            {
-                GameRenderer.DrawGame(canvas, _model);
-            }
-        });
-    }
 
     /// <summary>
     /// Játék végének eseménykezelője.
@@ -199,12 +147,10 @@ public partial class App : Application, IDisposable
             _ => 8
         };
 
-        _model.GameStateChanged -= Model_GameStateChanged;
         _model.GameOver -= Model_GameOver;
         _model.Dispose();
 
         _model = new TetrisGameModel(rows: 16, cols: cols);
-        _model.GameStateChanged += Model_GameStateChanged;
         _model.GameOver += Model_GameOver;
 
         _viewModel.UpdateModel(_model);
@@ -212,13 +158,6 @@ public partial class App : Application, IDisposable
         _model.Reset();
         _model.StartTimer();
         _timer?.Start();
-
-        var (canvas, border) = GetCanvasReferences();
-        if (canvas != null && border != null)
-        {
-            GameRenderer.UpdateCanvasSize(canvas, border, cols, 16);
-            GameRenderer.DrawGame(canvas, _model);
-        }
 
         _viewModel.SetNewGameState();
     }
@@ -271,12 +210,10 @@ public partial class App : Application, IDisposable
                         
                         if (gameState != null)
                         {
-                            _model.GameStateChanged -= Model_GameStateChanged;
                             _model.GameOver -= Model_GameOver;
                             _model.Dispose();
 
                             _model = new TetrisGameModel(gameState.Rows, gameState.Cols);
-                            _model.GameStateChanged += Model_GameStateChanged;
                             _model.GameOver += Model_GameOver;
 
                             _model.Board = gameState.Board!;
@@ -286,13 +223,6 @@ public partial class App : Application, IDisposable
                             _model.BlockCol = gameState.BlockCol;
 
                             _viewModel.UpdateModel(_model);
-
-                            var (canvas, border) = GetCanvasReferences();
-                            if (canvas != null && border != null)
-                            {
-                                GameRenderer.UpdateCanvasSize(canvas, border, gameState.Cols, gameState.Rows);
-                                GameRenderer.DrawGame(canvas, _model);
-                            }
 
                             _model.StartTimer();
                             _model.PauseTimer();
@@ -471,7 +401,6 @@ public partial class App : Application, IDisposable
         
         if (_model != null)
         {
-            _model.GameStateChanged -= Model_GameStateChanged;
             _model.GameOver -= Model_GameOver;
             _model.Dispose();
         }
