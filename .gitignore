@@ -419,3 +419,5 @@ FodyWeavers.xsd
 3/GPU programming/gyakorlat/gpu_course_opencl/opencl-04-reduce-local
 
 3/GPU programming/gyakorlat/gpu_course_opencl/src/opencl_06_opengl_nbody/build/
+
+.DS_Store
