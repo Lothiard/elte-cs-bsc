@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>~/ftp/x/datemain.cpp.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#e5e5e5" text="#000000">
+<pre>
+<font color="#a020f0">#include </font><span style="background-color: #f2f2f2"><font color="#ff00ff">&lt;iostream&gt;</font></span>
+
+<font color="#a020f0">#include </font><span style="background-color: #f2f2f2"><font color="#ff00ff">&quot;date.h&quot;</font></span>
+
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> std;
+
+<font color="#0000ff">/*</font><font color="#0000ff"> program a date osztály tesztelésére */</font>
+<font color="#2e8b57"><b>int</b></font> main()
+{
+    date d;
+
+    <font color="#a52a2a"><b>while</b></font> ( cin &gt;&gt; d )
+    {
+        cout &lt;&lt; (d+=<span style="background-color: #f2f2f2"><font color="#ff00ff">40</font></span>) &lt;&lt; endl;
+    }
+
+    date d2(<span style="background-color: #f2f2f2"><font color="#ff00ff">2004</font></span>,<span style="background-color: #f2f2f2"><font color="#ff00ff">3</font></span>);
+
+    <font color="#a52a2a"><b>if</b></font> ( d &lt; d2 )
+        ++d;
+
+    cout &lt;&lt; d &lt;&lt; endl;
+
+    <font color="#a52a2a"><b>return</b></font> <span style="background-color: #f2f2f2"><font color="#ff00ff">0</font></span>;
+}
+
+</pre>
+</body>
+</html>
