@@ -1,0 +1,20 @@
+Szempontok az 1. zh programjának értékeléséhez:
+
+teszt: (5 pont)
+- véletlen számokkal elõállított szimmetrikus mtx, melynek a megadott sajátértékei vannak. 4p
+- Teszt hívás minden paraméter átvételével. 1p
+
+qrmax: (16 pont)
+- function megadása a paraméterekkel, komment 2p
+- méret ellenõrzés 1p
+- szimmetria ellenõrzés 2p
+- a kimenti változókat lenullázza 1p
+- ciklus indítás N lépésre 1p
+- a qr-algoritmus alkalmazása 2p
+- a Gersgorin-tétel alkalmazása 2p
+- 3 vektor elemeinek rajzolás pontonként 3p
+- cím 1p
+
+
+
+
