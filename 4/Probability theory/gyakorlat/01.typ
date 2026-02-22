@@ -41,46 +41,63 @@ $
 #pagebreak()
 = 6) De Méré problémája, 1654.
 = De Méré lovag nagy szerencsejátékos volt, az alábbi két kérdéssel fordult Pascal-hoz:
-    - Ha egy kockát 4-szer feldobunk, akkor mi annak a valószínűsége, hogy legalább egy hatos dobás lesz?
-    - Ha két kockát 24-szer feldobunk, mi annak a valószínűsége, hogy legalább egy dupla hatos lesz?
+- Ha egy kockát 4-szer feldobunk, akkor mi annak a valószínűsége, hogy legalább egy hatos dobás lesz?
+- Ha két kockát 24-szer feldobunk, mi annak a valószínűsége, hogy legalább egy dupla hatos lesz?
 
 === a.) Számítsuk ki a két valószínűség pontos értékét!
 $
-    P("elso") = 1 - (5/6)^4 = 0,5177469136\
-    P("masodik") = 1 - (35/36)^24 = 0,4914038761\
+  P("elso") = 1 - (5/6)^4 = 0,5177469136\
+  P("masodik") = 1 - (35/36)^24 = 0,4914038761\
 $
 
 === b.) A két valószínűség miért van közel egymáshoz?
 $
-    1 - (5/6)^4 = 1 - (1 - 1/6)^(2/3 dot 6)\
-    1 - (35/36)^24 = 1 - (1 - 1/36)^(2/1 dot 36)\
-    (1 - 1/n)^(3/2 dot n) arrow_(n arrow infinity) 1/e^(2/3)
+  1 - (5/6)^4 = 1 - (1 - 1/6)^(2/3 dot 6)\
+  1 - (35/36)^24 = 1 - (1 - 1/36)^(2/1 dot 36)\
+  (1 - 1/n)^(3/2 dot n) arrow_(n arrow infinity) 1/e^(2/3)
 $
 
 = 7) Mintavétel: Adott N különböző termék, amik között van M selejtes. Veszünk n elemű mintát
 Mennyi a valószínűsége, hogy az n termékből pontosan k selejtest sikerült kiválasztanunk?
 === a.) visszatevés nélkül;
 $
-    P = (binom(M, k) binom(N - M, n - k))/binom(N, n)
+  P = (binom(M, k) binom(N - M, n - k))/binom(N, n)
 $
 
 === b.) visszatevéssel.
 $
-    P = (binom(n, k) M^k (N - M)^(k))/(N^n)
+  P = (binom(n, k) M^k (N - M)^(n - k))/(N^n)
 $
 
 = 8) A $(0, 1)$ intervallumot felosztjuk két véletlenül rádobott pont segítségével $3$ részre. Mennyi a valószínűsége, hogy
-=== a.) mindhárom szakasz hossza rövidebb $1/2$ -nél;
+=== a.) mindhárom szakasz hossza rövidebb $1/2$-nél;
 $
-    dots
+  P = 1/4
 $
 
 === b.) a 3 szakaszból háromszög alkotható;
 $
-
+  P = 1/4
 $
 
-=== c.) a legrövidebb szakasz hossza rövidebb $1/5$ -nél?
+=== c.) a legrövidebb szakasz hossza rövidebb $1/5$-nél?
+$
+  dots
 $
 
+= 9) Ha egy magyarkártya-csomagból visszatevés nélkül húzunk 3 lapot, akkor mi annak a valószínűsége, hogy
+=== a.) pontosan
+$
+  P("pontosan 1 piros") = (binom(8, 1) binom(24, 2))/(binom(32, 3))
+$
+
+=== b.) legalább egy piros színű lapot húzunk? És mi a helyzet visszatevéses esetben?
+$
+  P("legalább 1 piros") = sum_(i = 1)^3 (binom(8, i) binom(24, 3 - i))/(binom(32, 3))
+$
+
+=== c.) visszatevéssel
+$
+  P("pontosan 1 visszatevéssel") = (binom(3, 1) 8^1 (32 - 8)^(3 - 2))/(32^3) = (binom(3, 1) 8 dot 24^2)/(32^3)\
+  P("legalább 1 visszatevéssel") = sum_(i = 1)^3 (binom(3, i) 8^i 24^(3 - i))/(32^3)
 $
