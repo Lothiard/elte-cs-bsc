@@ -17,9 +17,10 @@ int main() {
     // 1. parameter formatstring, next parameter(s) variables
     // %s = string, %i = integer \n = new line e.g.
 
-    printf("The length of variable str1 \'%s\'\n  %i (with length()), %i (with "
-           "strlen())\n",
-           str1, length(str1), strlen(str1));
+    printf(
+        "The length of variable str1 \'%s\'\n  %i (with length()), %lu (with "
+        "strlen())\n",
+        str1, length(str1), strlen(str1));
     // The end of a string is a 0 character
     // There is the function strlen!! in string.h
 

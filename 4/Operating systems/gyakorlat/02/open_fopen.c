@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h> //open
+#include <unistd.h>
 
 void use_open_bin(char* fname) {
     printf("\n**********\nUsing open - binary \n****************\n");
@@ -69,7 +70,7 @@ int main(int argc, char** argv) {
         perror("Give a filename as a command line argument\n");
         exit(1);
     }
-    if (!access(argv[1], F_OK) == 0) {
+    if (!(access(argv[1], F_OK) == 0)) {
         perror("The file is not exist!\n");
         exit(1);
     }
