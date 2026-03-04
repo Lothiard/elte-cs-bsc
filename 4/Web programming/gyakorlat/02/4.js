@@ -13,4 +13,3 @@ function setColor() {
 red.addEventListener("input", setColor);
 green.addEventListener("input", setColor);
 blue.addEventListener("input", setColor);
-

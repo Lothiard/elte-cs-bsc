@@ -1,6 +1,6 @@
 const heading = document.querySelector("h1");
 heading.innerText = "Mas lettem"; // nem megy a formazas mint <i>
-heading.innerHTML = "<i>Mas</i> lettem" // itt mar igen mert HTML-e parseolja, de emiatt a masik kicsit gyorsabb elvileg
+heading.innerHTML = "<i>Mas</i> lettem"; // itt mar igen mert HTML-e parseolja, de emiatt a masik kicsit gyorsabb elvileg
 
 const par = document.querySelector("p");
 // qs mindig az ELSO illeszkedo elemet talalja meg.

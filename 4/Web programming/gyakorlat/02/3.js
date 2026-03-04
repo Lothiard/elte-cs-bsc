@@ -2,7 +2,7 @@ const hiddenNumber = Math.floor(Math.random() * 101);
 
 const submitButton = document.querySelector("button");
 const resultSpan = document.querySelector("span");
-const inputNumber = document.querySelector('input[type="number"]')
+const inputNumber = document.querySelector('input[type="number"]');
 
 function handleSubmitButtonClick() {
     if (inputNumber && resultSpan) {
