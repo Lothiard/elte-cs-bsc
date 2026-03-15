@@ -63,13 +63,14 @@ class BethPiperGenerator:
         if self._first:
             b2 = self.lfsr2.state[-1]
             self._first = False
+            self._lfsr2_last = self.lfsr2.clock()
         else:
             if self._lfsr1_prev == 1:
                 b2 = self.lfsr2.clock()
             else:
                 b2 = self._lfsr2_last
+            self._lfsr2_last = b2
         self._lfsr1_prev = b1
-        self._lfsr2_last = b2
         return b2 ^ b3
 
     def reset(self) -> None:
