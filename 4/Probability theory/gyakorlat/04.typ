@@ -71,12 +71,12 @@ Ebből $1/3 EE[X] = 5$, vagyis $EE[X] = 15 "perc".$
 / 7): Szerencsejátékot játszunk, amely során minden fordulóban a feltett tétet $1/2$ valószínűséggel megduplázzuk, $1/2$ valószínűséggel pedig elveszítjük. Kezdetben $1$ petákunk van. Addig folytatjuk, amíg $5$ petákunk nem lesz vagy el nem fogy az összes pénzünk. Várhatóan hány játszmát fogunk játszani, ha a mohó stratégiát követjük, azaz mindig akkora tétet választunk, amennyi az öthöz hiányzik, vagy ha ez nem lehetséges, akkor az összes pénzünket feltesszük? Várhatóan hány játszmát fogunk játszani, ha az óvatos stratégiát követjük, és minden lépésben egy petákot teszünk fel?
 *1. Mohó stratégia:* Mindig $min(5 - S, S)$ petákot teszünk fel.
 Jelölje $E_k$ a hátralévő játszmák várható számát, ha $k$ petákunk van.
-- $E_1 = 1 + 1/2 E_2$ (1-et teszünk fel, nyerünk: 2 lesz, veszítünk: 0)
-- $E_2 = 1 + 1/2 E_4$ (2-t teszünk fel)
-- $E_3 = 1 + 1/2 E_1$ (2-t teszünk fel, mert az 5-höz ennyi hiányzik)
-- $E_4 = 1 + 1/2 E_3$ (1-et teszünk fel)
-Ezt az egyenletrendszert visszahelyettesítéssel megoldva kapjuk, hogy *$E_1 = 2$*. Tehát várhatóan 2 játszmát játszunk.
+- $EE_1 = 1 + 1/2 EE_2$ (1-et teszünk fel, nyerünk: 2 lesz, veszítünk: 0)
+- $EE_2 = 1 + 1/2 EE_4$ (2-t teszünk fel)
+- $EE_3 = 1 + 1/2 EE_1$ (2-t teszünk fel, mert az 5-höz ennyi hiányzik)
+- $EE_4 = 1 + 1/2 EE_3$ (1-et teszünk fel)
+Ezt az egyenletrendszert visszahelyettesítéssel megoldva kapjuk, hogy *$EE_1 = 2$*. Tehát várhatóan 2 játszmát játszunk.
 
 *2. Óvatos stratégia:* Mindig $1$ petákot teszünk fel.
-Ez a klasszikus "bolyongás abszorpciós falakkal" probléma. Az $E_k = 1 + 1/2 E_(k-1) + 1/2 E_(k+1)$ egyenlet megoldása az $N=5$ végpontú pályán $E_k = k(N-k)$.
-$E_1 = 1(5-1) = 4$. Tehát várhatóan 4 játszmát fogunk játszani.
+Ez a klasszikus "bolyongás abszorpciós falakkal" probléma. Az $EE_k = 1 + 1/2 EE_(k-1) + 1/2 EE_(k+1)$ egyenlet megoldása az $N=5$ végpontú pályán $EE_k = k(N-k)$.
+$EE_1 = 1(5-1) = 4$. Tehát várhatóan 4 játszmát fogunk játszani.
