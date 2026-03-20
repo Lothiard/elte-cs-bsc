@@ -58,6 +58,8 @@ static int prompt_float(const char* prompt, float* value) {
     }
 }
 
+static int has_comma(const char* text) { return strchr(text, ',') != NULL; }
+
 static int parse_line(const char* line, data* row) {
     char buffer[1024];
     char* token;
@@ -224,6 +226,12 @@ void add_row(void) {
         return;
     }
 
+    if (has_comma(termohely_nev) || has_comma(tabla_nev) ||
+        has_comma(szolo_tipus)) {
+        printf("Hiba: a szöveges mezők nem tartalmazhatnak vesszőt.\n");
+        return;
+    }
+
     out = fopen(g_data_filename, "a");
     if (!out) {
         perror("Hiba a fájl megnyitása közben");
@@ -297,6 +305,13 @@ void modify_row(void) {
         !prompt_float("Új terület mérete (négyszögöl): ", &terulet_meret) ||
         !prompt_float("Új pusztulás százaléka: ", &pusztulas_szazalek)) {
         printf("Hiba: sikertelen adatbevitel.\n");
+        free_records(records, count);
+        return;
+    }
+
+    if (has_comma(termohely_nev) || has_comma(tabla_nev) ||
+        has_comma(szolo_tipus)) {
+        printf("Hiba: a szöveges mezők nem tartalmazhatnak vesszőt.\n");
         free_records(records, count);
         return;
     }
