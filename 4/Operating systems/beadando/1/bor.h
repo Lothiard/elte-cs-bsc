@@ -8,8 +8,8 @@ typedef struct {
         char winery_name[1024];
         char tabla_nev[1024];
         char szolo_tipus[1024];
-        float terulet_meret;
-        float pusztulas_szazalek;
+        int terulet_meret;
+        int pusztulas_szazalek;
     }* rows;
     int count;
     int capacity;
