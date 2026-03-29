@@ -45,11 +45,6 @@ void bor_init(BorData* db, const char* filename) {
 }
 
 void bor_free(BorData* db) {
-    for (int i = 0; i < db->count; ++i) {
-        free(db->rows[i].winery_name);
-        free(db->rows[i].tabla_nev);
-        free(db->rows[i].szolo_tipus);
-    }
     free(db->rows);
     db->rows = NULL;
     db->count = 0;
@@ -189,12 +184,9 @@ int bor_modify(BorData* db) {
         printf("Error: text fields cannot contain commas.\n");
         return 0;
     }
-    free(db->rows[index].winery_name);
-    free(db->rows[index].tabla_nev);
-    free(db->rows[index].szolo_tipus);
-    snprintf(db->rows[db->count].winery_name, 1024, "%s", winery_name);
-    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", tabla_nev);
-    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", szolo_tipus);
+    snprintf(db->rows[index].winery_name, 1024, "%s", winery_name);
+    snprintf(db->rows[index].tabla_nev, 1024, "%s", tabla_nev);
+    snprintf(db->rows[index].szolo_tipus, 1024, "%s", szolo_tipus);
     db->rows[index].terulet_meret = terulet_meret;
     db->rows[index].pusztulas_szazalek = pusztulas_szazalek;
     printf("Row successfully modified.\n");
@@ -216,9 +208,6 @@ int bor_delete(BorData* db) {
         printf("Invalid row number.\n");
         return 0;
     }
-    free(db->rows[index].winery_name);
-    free(db->rows[index].tabla_nev);
-    free(db->rows[index].szolo_tipus);
     for (int i = index; i < db->count - 1; ++i) {
         db->rows[i] = db->rows[i + 1];
     }
