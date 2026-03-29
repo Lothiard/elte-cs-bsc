@@ -28,7 +28,7 @@ static int prompt_int(const char* prompt, int* value) {
     char extra;
     if (!prompt_line(prompt, buffer, sizeof(buffer))) return 0;
     if (sscanf(buffer, " %d %c", value, &extra) != 1) {
-        printf("Invalid number format!\n");
+        printf("Érvénytelen szám formátum!");
         return 0;
     }
     return 1;
@@ -108,7 +108,7 @@ int bor_save(const BorData* db) {
 
 void bor_print(const BorData* db) {
     if (db->count == 0) {
-        printf("No data to list.\n");
+        printf("Az adatbázis üres.");
         return;
     }
     for (int i = 0; i < db->count; ++i) {
@@ -128,12 +128,12 @@ int bor_add(BorData* db) {
         !prompt_line("Szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
         !prompt_int("Terület mérete (négyszögöl): ", &terulet_meret) ||
         !prompt_int("Pusztulás százaléka: ", &pusztulas_szazalek)) {
-        printf("Input error.\n");
+        printf("Input hiba.\n");
         return 0;
     }
     if (has_comma(winery_name) || has_comma(tabla_nev) ||
         has_comma(szolo_tipus)) {
-        printf("Error: text fields cannot contain commas.\n");
+        printf("Hiba: Szövegben nem szerepelhet vessző.\n");
         return 0;
     }
     if (db->count == db->capacity) {
@@ -149,7 +149,7 @@ int bor_add(BorData* db) {
     db->rows[db->count].terulet_meret = terulet_meret;
     db->rows[db->count].pusztulas_szazalek = pusztulas_szazalek;
     db->count++;
-    printf("Row successfully added.\n");
+    printf("Sor sikeresen hozzáadva.");
     return bor_save(db);
 }
 
@@ -159,29 +159,29 @@ int bor_modify(BorData* db) {
     int terulet_meret, pusztulas_szazalek;
     printf("\n");
     if (db->count == 0) {
-        printf("No data to modify.\n");
+        printf("Az adatbázis üres.\n");
         return 0;
     }
     bor_print(db);
-    if (!prompt_line("Which row to modify? (number): ", input, sizeof(input)))
+    if (!prompt_line("Hanyas sorszámú sort szeretné módosítani?: ", input,
+                     sizeof(input)))
         return 0;
     int index = atoi(input) - 1;
     if (index < 0 || index >= db->count) {
-        printf("Invalid row number.\n");
+        printf("Érvénytelen sorszám.\n");
         return 0;
     }
-    if (!prompt_line("New termőhely neve: ", winery_name,
-                     sizeof(winery_name)) ||
-        !prompt_line("New tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
-        !prompt_line("New szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
-        !prompt_int("New terület mérete (négyszögöl): ", &terulet_meret) ||
-        !prompt_int("New pusztulás százaléka: ", &pusztulas_szazalek)) {
-        printf("Input error.\n");
+    if (!prompt_line("Új termőhely neve: ", winery_name, sizeof(winery_name)) ||
+        !prompt_line("Új tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
+        !prompt_line("Új szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
+        !prompt_int("Új terület mérete (négyszögöl): ", &terulet_meret) ||
+        !prompt_int("Új pusztulás százaléka: ", &pusztulas_szazalek)) {
+        printf("Input hiba.\n");
         return 0;
     }
     if (has_comma(winery_name) || has_comma(tabla_nev) ||
         has_comma(szolo_tipus)) {
-        printf("Error: text fields cannot contain commas.\n");
+        printf("Hiba: Szövegben nem szerepelhet vessző.\n");
         return 0;
     }
     snprintf(db->rows[index].winery_name, 1024, "%s", winery_name);
@@ -189,7 +189,7 @@ int bor_modify(BorData* db) {
     snprintf(db->rows[index].szolo_tipus, 1024, "%s", szolo_tipus);
     db->rows[index].terulet_meret = terulet_meret;
     db->rows[index].pusztulas_szazalek = pusztulas_szazalek;
-    printf("Row successfully modified.\n");
+    printf("Sor sikeresen módosítva.\n");
     return bor_save(db);
 }
 
@@ -197,22 +197,23 @@ int bor_delete(BorData* db) {
     char input[32];
     printf("\n");
     if (db->count == 0) {
-        printf("No data to delete.\n");
+        printf("Az adatbázis üres.\n");
         return 0;
     }
     bor_print(db);
-    if (!prompt_line("Which row to delete? (number): ", input, sizeof(input)))
+    if (!prompt_line("Hanyas sorszámú sort szeretné törölni?: ", input,
+                     sizeof(input)))
         return 0;
     int index = atoi(input) - 1;
     if (index < 0 || index >= db->count) {
-        printf("Invalid row number.\n");
+        printf("Érvénytelen sorszám.\n");
         return 0;
     }
     for (int i = index; i < db->count - 1; ++i) {
         db->rows[i] = db->rows[i + 1];
     }
     db->count--;
-    printf("Row successfully deleted.\n");
+    printf("Sor sikeresen törölve.\n");
     return bor_save(db);
 }
 
@@ -221,27 +222,27 @@ void bor_list_by_filter(const BorData* db) {
     int found = 0;
     printf("\n");
     if (db->count == 0) {
-        printf("No data to list.\n");
+        printf("Az adatbázis üres.\n");
         return;
     }
-    printf("1 - by termőhely\n");
-    printf("2 - by szőlő típus\n");
-    if (!prompt_line("Choose: ", mode, sizeof(mode))) return;
+    printf("1 - termőhely szerint\n");
+    printf("2 - szőlő típus szerint\n");
+    if (!prompt_line("Válasz: ", mode, sizeof(mode))) return;
     if (strcmp(mode, "1") != 0 && strcmp(mode, "2") != 0) {
-        printf("Invalid choice.\n");
+        printf("Érvénytelen választás.\n");
         return;
     }
-    if (!prompt_line("Filter text: ", needle, sizeof(needle))) return;
+    if (!prompt_line("Szűrő szöveg: ", needle, sizeof(needle))) return;
     for (int i = 0; i < db->count; ++i) {
         const char* field = (strcmp(mode, "1") == 0) ? db->rows[i].winery_name
                                                      : db->rows[i].szolo_tipus;
         if (strstr(field, needle)) {
-                 printf("%d. %s, %s, %s, %d négyszögöl, %d%%\n", i + 1,
+            printf("%d. %s, %s, %s, %d négyszögöl, %d%%\n", i + 1,
                    db->rows[i].winery_name, db->rows[i].tabla_nev,
                    db->rows[i].szolo_tipus, db->rows[i].terulet_meret,
                    db->rows[i].pusztulas_szazalek);
             found = 1;
         }
     }
-    if (!found) printf("No matches for the given filter.\n");
+    if (!found) printf("Nincs találat.\n");
 }
