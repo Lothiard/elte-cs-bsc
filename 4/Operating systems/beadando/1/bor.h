@@ -4,17 +4,26 @@
 #include <stdio.h>
 
 typedef struct {
-    char* termohely_nev;
-    char* tabla_nev;
-    char* szolo_tipus;
-    float terulet_meret, pusztulas_szazalek;
-} data;
+    struct {
+        char winery_name[1024];
+        char tabla_nev[1024];
+        char szolo_tipus[1024];
+        float terulet_meret;
+        float pusztulas_szazalek;
+    }* rows;
+    int count;
+    int capacity;
+    char filename[512];
+} BorData;
 
-void set_data_filename(const char* filename);
-void add_row(void);
-void read_all(void);
-void modify_row(void);
-void delete_row(void);
-void list_by_filter(void);
+void bor_init(BorData* db, const char* filename);
+void bor_free(BorData* db);
+int bor_load(BorData* db);
+int bor_save(const BorData* db);
+void bor_print(const BorData* db);
+int bor_add(BorData* db);
+int bor_modify(BorData* db);
+int bor_delete(BorData* db);
+void bor_list_by_filter(const BorData* db);
 
 #endif

@@ -4,439 +4,255 @@
 #include <stdlib.h>
 #include <string.h>
 
-static char g_data_filename[512] = "data.csv";
-
-static char* dup_text(const char* src) {
-    size_t len;
-    char* out;
-
-    if (!src) { return NULL; }
-
-    len = strlen(src);
-    out = malloc(len + 1);
-    if (!out) { return NULL; }
-
-    memcpy(out, src, len + 1);
-    return out;
-}
-
 static char* trim(char* str) {
     char* end;
-
-    while (*str && isspace((unsigned char)*str)) { str++; }
-    if (*str == '\0') { return str; }
-
+    while (*str && isspace((unsigned char)*str)) str++;
+    if (*str == '\0') return str;
     end = str + strlen(str) - 1;
     while (end > str && isspace((unsigned char)*end)) {
         *end = '\0';
         end--;
     }
-
     return str;
 }
 
 static int prompt_line(const char* prompt, char* out, size_t out_size) {
     printf("%s", prompt);
-    if (!fgets(out, (int)out_size, stdin)) { return 0; }
-
+    if (!fgets(out, (int)out_size, stdin)) return 0;
     out[strcspn(out, "\n")] = '\0';
     return 1;
 }
 
 static int prompt_float(const char* prompt, float* value) {
-    char buffer[128];
-    char* end;
-
+    char buffer[128], *end;
     while (1) {
-        if (!prompt_line(prompt, buffer, sizeof(buffer))) { return 0; }
-
+        if (!prompt_line(prompt, buffer, sizeof(buffer))) return 0;
         *value = strtof(buffer, &end);
-        while (*end && isspace((unsigned char)*end)) { end++; }
-
-        if (end != buffer && *end == '\0') { return 1; }
-        printf("Helytelen számformátum!\n");
+        while (*end && isspace((unsigned char)*end)) end++;
+        if (end != buffer && *end == '\0') return 1;
+        printf("Invalid number format!\n");
     }
 }
 
 static int has_comma(const char* text) { return strchr(text, ',') != NULL; }
 
-static int parse_line(const char* line, data* row) {
+void bor_init(BorData* db, const char* filename) {
+    db->rows = NULL;
+    db->count = 0;
+    db->capacity = 0;
+    strncpy(db->filename, filename, sizeof(db->filename) - 1);
+    db->filename[sizeof(db->filename) - 1] = '\0';
+}
+
+void bor_free(BorData* db) {
+    for (int i = 0; i < db->count; ++i) {
+        free(db->rows[i].winery_name);
+        free(db->rows[i].tabla_nev);
+        free(db->rows[i].szolo_tipus);
+    }
+    free(db->rows);
+    db->rows = NULL;
+    db->count = 0;
+    db->capacity = 0;
+}
+
+static int parse_line(const char* line, BorData* db) {
     char buffer[1024];
     char* token;
-    char* termohely;
-    char* tabla;
-    char* szolo;
-    char* terulet;
-    char* pusztulas;
-
+    char* fields[5];
     strncpy(buffer, line, sizeof(buffer) - 1);
     buffer[sizeof(buffer) - 1] = '\0';
 
+    int i = 0;
     token = strtok(buffer, ",");
-    if (!token) { return 0; }
-    termohely = trim(token);
+    while (token && i < 5) {
+        fields[i++] = trim(token);
+        token = strtok(NULL, ",");
+    }
+    if (i != 5) return 0;
 
-    token = strtok(NULL, ",");
-    if (!token) { return 0; }
-    tabla = trim(token);
-
-    token = strtok(NULL, ",");
-    if (!token) { return 0; }
-    szolo = trim(token);
-
-    token = strtok(NULL, ",");
-    if (!token) { return 0; }
-    terulet = trim(token);
-
-    token = strtok(NULL, ",");
-    if (!token) { return 0; }
-    pusztulas = trim(token);
-
-    row->termohely_nev = dup_text(termohely);
-    row->tabla_nev = dup_text(tabla);
-    row->szolo_tipus = dup_text(szolo);
-
-    if (!row->termohely_nev || !row->tabla_nev || !row->szolo_tipus) {
-        free(row->termohely_nev);
-        free(row->tabla_nev);
-        free(row->szolo_tipus);
-        return 0;
+    if (db->count == db->capacity) {
+        int newcap = db->capacity ? db->capacity * 2 : 8;
+        void* tmp = realloc(db->rows, newcap * sizeof(*db->rows));
+        if (!tmp) return 0;
+        db->rows = tmp;
+        db->capacity = newcap;
     }
 
-    if (sscanf(terulet, "%f", &row->terulet_meret) != 1 ||
-        sscanf(pusztulas, "%f", &row->pusztulas_szazalek) != 1) {
-        free(row->termohely_nev);
-        free(row->tabla_nev);
-        free(row->szolo_tipus);
+    snprintf(db->rows[db->count].winery_name, 1024, "%s", fields[0]);
+    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", fields[1]);
+    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", fields[2]);
+    if (sscanf(fields[3], "%f", &db->rows[db->count].terulet_meret) != 1 ||
+        sscanf(fields[4], "%f", &db->rows[db->count].pusztulas_szazalek) != 1)
         return 0;
-    }
-
+    db->count++;
     return 1;
 }
 
-static void free_records(data* records, int count) {
-    int i;
-    for (i = 0; i < count; i++) {
-        free(records[i].termohely_nev);
-        free(records[i].tabla_nev);
-        free(records[i].szolo_tipus);
-    }
-    free(records);
-}
-
-static int load_records(data** records, int* count) {
-    FILE* file;
+int bor_load(BorData* db) {
+    bor_free(db);
+    FILE* file = fopen(db->filename, "r");
+    if (!file) return 0;
     char line[1024];
-    data* loaded = NULL;
-    int loaded_count = 0;
-
-    *records = NULL;
-    *count = 0;
-
-    file = fopen(g_data_filename, "r");
-    if (!file) { return 0; }
-
-    while (fgets(line, sizeof(line), file)) {
-        data row;
-        data* temp;
-
-        if (!parse_line(line, &row)) { continue; }
-
-        temp = realloc(loaded, (size_t)(loaded_count + 1) * sizeof(data));
-        if (!temp) {
-            free(row.termohely_nev);
-            free(row.tabla_nev);
-            free(row.szolo_tipus);
-            free_records(loaded, loaded_count);
-            fclose(file);
-            return 0;
-        }
-
-        loaded = temp;
-        loaded[loaded_count] = row;
-        loaded_count++;
-    }
-
-    fclose(file);
-    *records = loaded;
-    *count = loaded_count;
-    return 1;
-}
-
-static int save_records(data* records, int count) {
-    FILE* file;
-    int i;
-
-    file = fopen(g_data_filename, "w");
-    if (!file) {
-        perror("Hiba mentés közben");
-        return 0;
-    }
-
-    for (i = 0; i < count; i++) {
-        fprintf(file, "%s,%s,%s,%.2f,%.2f\n", records[i].termohely_nev,
-                records[i].tabla_nev, records[i].szolo_tipus,
-                records[i].terulet_meret, records[i].pusztulas_szazalek);
-    }
-
+    while (fgets(line, sizeof(line), file)) { parse_line(line, db); }
     fclose(file);
     return 1;
 }
 
-static void print_records(data* records, int count) {
-    int i;
+int bor_save(const BorData* db) {
+    FILE* file = fopen(db->filename, "w");
+    if (!file) return 0;
+    for (int i = 0; i < db->count; ++i) {
+        fprintf(file, "%s,%s,%s,%.2f,%.2f\n", db->rows[i].winery_name,
+                db->rows[i].tabla_nev, db->rows[i].szolo_tipus,
+                db->rows[i].terulet_meret, db->rows[i].pusztulas_szazalek);
+    }
+    fclose(file);
+    return 1;
+}
 
-    if (count == 0) {
-        printf("Nincs listázható adat.\n");
+void bor_print(const BorData* db) {
+    if (db->count == 0) {
+        printf("No data to list.\n");
         return;
     }
-
-    for (i = 0; i < count; i++) {
+    for (int i = 0; i < db->count; ++i) {
         printf("%d. %s, %s, %s, %.2f négyszögöl, %.2f%%\n", i + 1,
-               records[i].termohely_nev, records[i].tabla_nev,
-               records[i].szolo_tipus, records[i].terulet_meret,
-               records[i].pusztulas_szazalek);
+               db->rows[i].winery_name, db->rows[i].tabla_nev,
+               db->rows[i].szolo_tipus, db->rows[i].terulet_meret,
+               db->rows[i].pusztulas_szazalek);
     }
 }
 
-void set_data_filename(const char* filename) {
-    if (!filename || filename[0] == '\0') { return; }
-
-    strncpy(g_data_filename, filename, sizeof(g_data_filename) - 1);
-    g_data_filename[sizeof(g_data_filename) - 1] = '\0';
-}
-
-void add_row(void) {
+int bor_add(BorData* db) {
+    char winery_name[100], tabla_nev[100], szolo_tipus[100];
+    float terulet_meret, pusztulas_szazalek;
     printf("\n");
-
-    char termohely_nev[100];
-    char tabla_nev[100];
-    char szolo_tipus[100];
-    float terulet_meret;
-    float pusztulas_szazalek;
-    FILE* out;
-
-    if (!prompt_line("Termőhely neve: ", termohely_nev,
-                     sizeof(termohely_nev)) ||
+    if (!prompt_line("Termőhely neve: ", winery_name, sizeof(winery_name)) ||
         !prompt_line("Tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
         !prompt_line("Szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
         !prompt_float("Terület mérete (négyszögöl): ", &terulet_meret) ||
         !prompt_float("Pusztulás százaléka: ", &pusztulas_szazalek)) {
-        printf("Hiba: sikertelen adatbevitel.\n");
-        return;
+        printf("Input error.\n");
+        return 0;
     }
-
-    if (has_comma(termohely_nev) || has_comma(tabla_nev) ||
+    if (has_comma(winery_name) || has_comma(tabla_nev) ||
         has_comma(szolo_tipus)) {
-        printf("Hiba: a szöveges mezők nem tartalmazhatnak vesszőt.\n");
-        return;
+        printf("Error: text fields cannot contain commas.\n");
+        return 0;
     }
-
-    out = fopen(g_data_filename, "a");
-    if (!out) {
-        perror("Hiba a fájl megnyitása közben");
-        return;
+    if (db->count == db->capacity) {
+        int newcap = db->capacity ? db->capacity * 2 : 8;
+        void* tmp = realloc(db->rows, newcap * sizeof(*db->rows));
+        if (!tmp) return 0;
+        db->rows = tmp;
+        db->capacity = newcap;
     }
-
-    fprintf(out, "%s,%s,%s,%.2f,%.2f\n", termohely_nev, tabla_nev, szolo_tipus,
-            terulet_meret, pusztulas_szazalek);
-    fclose(out);
-
-    printf("Sor sikeresen hozzáadva.\n");
+    snprintf(db->rows[db->count].winery_name, 1024, "%s", winery_name);
+    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", tabla_nev);
+    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", szolo_tipus);
+    db->rows[db->count].terulet_meret = terulet_meret;
+    db->rows[db->count].pusztulas_szazalek = pusztulas_szazalek;
+    db->count++;
+    printf("Row successfully added.\n");
+    return bor_save(db);
 }
 
-void read_all(void) {
-    printf("\n");
-
-    data* records = NULL;
-    int count = 0;
-
-    if (!load_records(&records, &count)) {
-        printf("Nem sikerült adatot beolvasni.\n");
-        return;
-    }
-
-    print_records(records, count);
-    free_records(records, count);
-}
-
-void modify_row(void) {
-    printf("\n");
-
-    data* records = NULL;
-    int count = 0;
+int bor_modify(BorData* db) {
     char input[32];
-    int index;
-    char termohely_nev[100];
-    char tabla_nev[100];
-    char szolo_tipus[100];
-    float terulet_meret;
-    float pusztulas_szazalek;
-
-    if (!load_records(&records, &count)) {
-        printf("Nem sikerült adatot beolvasni.\n");
-        return;
+    char winery_name[100], tabla_nev[100], szolo_tipus[100];
+    float terulet_meret, pusztulas_szazalek;
+    printf("\n");
+    if (db->count == 0) {
+        printf("No data to modify.\n");
+        return 0;
     }
-
-    if (count == 0) {
-        printf("Nincs módosítható adat.\n");
-        free_records(records, count);
-        return;
+    bor_print(db);
+    if (!prompt_line("Which row to modify? (number): ", input, sizeof(input)))
+        return 0;
+    int index = atoi(input) - 1;
+    if (index < 0 || index >= db->count) {
+        printf("Invalid row number.\n");
+        return 0;
     }
-
-    print_records(records, count);
-    if (!prompt_line("Melyik sor módosuljon? (sorszám): ", input,
-                     sizeof(input))) {
-        free_records(records, count);
-        return;
+    if (!prompt_line("New termőhely neve: ", winery_name,
+                     sizeof(winery_name)) ||
+        !prompt_line("New tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
+        !prompt_line("New szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
+        !prompt_float("New terület mérete (négyszögöl): ", &terulet_meret) ||
+        !prompt_float("New pusztulás százaléka: ", &pusztulas_szazalek)) {
+        printf("Input error.\n");
+        return 0;
     }
-
-    index = atoi(input) - 1;
-    if (index < 0 || index >= count) {
-        printf("Érvénytelen sorszám.\n");
-        free_records(records, count);
-        return;
-    }
-
-    if (!prompt_line("Új termőhely neve: ", termohely_nev,
-                     sizeof(termohely_nev)) ||
-        !prompt_line("Új tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
-        !prompt_line("Új szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
-        !prompt_float("Új terület mérete (négyszögöl): ", &terulet_meret) ||
-        !prompt_float("Új pusztulás százaléka: ", &pusztulas_szazalek)) {
-        printf("Hiba: sikertelen adatbevitel.\n");
-        free_records(records, count);
-        return;
-    }
-
-    if (has_comma(termohely_nev) || has_comma(tabla_nev) ||
+    if (has_comma(winery_name) || has_comma(tabla_nev) ||
         has_comma(szolo_tipus)) {
-        printf("Hiba: a szöveges mezők nem tartalmazhatnak vesszőt.\n");
-        free_records(records, count);
-        return;
+        printf("Error: text fields cannot contain commas.\n");
+        return 0;
     }
-
-    free(records[index].termohely_nev);
-    free(records[index].tabla_nev);
-    free(records[index].szolo_tipus);
-
-    records[index].termohely_nev = dup_text(termohely_nev);
-    records[index].tabla_nev = dup_text(tabla_nev);
-    records[index].szolo_tipus = dup_text(szolo_tipus);
-    records[index].terulet_meret = terulet_meret;
-    records[index].pusztulas_szazalek = pusztulas_szazalek;
-
-    if (!records[index].termohely_nev || !records[index].tabla_nev ||
-        !records[index].szolo_tipus) {
-        printf("Memóriafoglalási hiba.\n");
-        free_records(records, count);
-        return;
-    }
-
-    if (save_records(records, count)) { printf("Sor sikeresen módosítva.\n"); }
-
-    free_records(records, count);
+    free(db->rows[index].winery_name);
+    free(db->rows[index].tabla_nev);
+    free(db->rows[index].szolo_tipus);
+    snprintf(db->rows[db->count].winery_name, 1024, "%s", winery_name);
+    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", tabla_nev);
+    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", szolo_tipus);
+    db->rows[index].terulet_meret = terulet_meret;
+    db->rows[index].pusztulas_szazalek = pusztulas_szazalek;
+    printf("Row successfully modified.\n");
+    return bor_save(db);
 }
 
-void delete_row(void) {
-    printf("\n");
-
-    data* records = NULL;
-    int count = 0;
+int bor_delete(BorData* db) {
     char input[32];
-    int index;
-    int i;
-
-    if (!load_records(&records, &count)) {
-        printf("Nem sikerült adatot beolvasni.\n");
-        return;
+    printf("\n");
+    if (db->count == 0) {
+        printf("No data to delete.\n");
+        return 0;
     }
-
-    if (count == 0) {
-        printf("Nincs törölhető adat.\n");
-        free_records(records, count);
-        return;
+    bor_print(db);
+    if (!prompt_line("Which row to delete? (number): ", input, sizeof(input)))
+        return 0;
+    int index = atoi(input) - 1;
+    if (index < 0 || index >= db->count) {
+        printf("Invalid row number.\n");
+        return 0;
     }
-
-    print_records(records, count);
-    if (!prompt_line("Melyik sor törlődjön? (sorszám): ", input,
-                     sizeof(input))) {
-        free_records(records, count);
-        return;
+    free(db->rows[index].winery_name);
+    free(db->rows[index].tabla_nev);
+    free(db->rows[index].szolo_tipus);
+    for (int i = index; i < db->count - 1; ++i) {
+        db->rows[i] = db->rows[i + 1];
     }
-
-    index = atoi(input) - 1;
-    if (index < 0 || index >= count) {
-        printf("Érvénytelen sorszám.\n");
-        free_records(records, count);
-        return;
-    }
-
-    free(records[index].termohely_nev);
-    free(records[index].tabla_nev);
-    free(records[index].szolo_tipus);
-
-    for (i = index; i < count - 1; i++) { records[i] = records[i + 1]; }
-    count--;
-
-    if (save_records(records, count)) { printf("Sor sikeresen törölve.\n"); }
-
-    free_records(records, count);
+    db->count--;
+    printf("Row successfully deleted.\n");
+    return bor_save(db);
 }
 
-void list_by_filter(void) {
-    printf("\n");
-
-    data* records = NULL;
-    int count = 0;
-    char mode[32];
-    char needle[100];
-    int i;
+void bor_list_by_filter(const BorData* db) {
+    char mode[32], needle[100];
     int found = 0;
-
-    if (!load_records(&records, &count)) {
-        printf("Nem sikerült adatot beolvasni.\n");
+    printf("\n");
+    if (db->count == 0) {
+        printf("No data to list.\n");
         return;
     }
-
-    if (count == 0) {
-        printf("Nincs listázható adat.\n");
-        free_records(records, count);
-        return;
-    }
-
-    printf("1 - termőhely szerint\n");
-    printf("2 - szőlő típus szerint\n");
-    if (!prompt_line("Választás: ", mode, sizeof(mode))) {
-        free_records(records, count);
-        return;
-    }
-
+    printf("1 - by termőhely\n");
+    printf("2 - by szőlő típus\n");
+    if (!prompt_line("Choose: ", mode, sizeof(mode))) return;
     if (strcmp(mode, "1") != 0 && strcmp(mode, "2") != 0) {
-        printf("Érvénytelen választás.\n");
-        free_records(records, count);
+        printf("Invalid choice.\n");
         return;
     }
-
-    if (!prompt_line("Szűrő szöveg: ", needle, sizeof(needle))) {
-        free_records(records, count);
-        return;
-    }
-
-    for (i = 0; i < count; i++) {
-        const char* field = (strcmp(mode, "1") == 0) ? records[i].termohely_nev
-                                                     : records[i].szolo_tipus;
-
+    if (!prompt_line("Filter text: ", needle, sizeof(needle))) return;
+    for (int i = 0; i < db->count; ++i) {
+        const char* field = (strcmp(mode, "1") == 0) ? db->rows[i].winery_name
+                                                     : db->rows[i].szolo_tipus;
         if (strstr(field, needle)) {
             printf("%d. %s, %s, %s, %.2f négyszögöl, %.2f%%\n", i + 1,
-                   records[i].termohely_nev, records[i].tabla_nev,
-                   records[i].szolo_tipus, records[i].terulet_meret,
-                   records[i].pusztulas_szazalek);
+                   db->rows[i].winery_name, db->rows[i].tabla_nev,
+                   db->rows[i].szolo_tipus, db->rows[i].terulet_meret,
+                   db->rows[i].pusztulas_szazalek);
             found = 1;
         }
     }
-
-    if (!found) { printf("Nincs találat a megadott szűrésre.\n"); }
-
-    free_records(records, count);
+    if (!found) printf("No matches for the given filter.\n");
 }
