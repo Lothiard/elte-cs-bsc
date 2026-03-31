@@ -6,10 +6,10 @@
 typedef struct {
     struct {
         char winery_name[1024];
-        char tabla_nev[1024];
-        char szolo_tipus[1024];
-        int terulet_meret;
-        int pusztulas_szazalek;
+        char field_name[1024];
+        char grape_type[1024];
+        int field_size;
+        int loss;
     }* rows;
     int count;
     int capacity;

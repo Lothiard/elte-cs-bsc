@@ -75,10 +75,10 @@ static int parse_line(const char* line, BorData* db) {
     }
 
     snprintf(db->rows[db->count].winery_name, 1024, "%s", fields[0]);
-    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", fields[1]);
-    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", fields[2]);
-    if (sscanf(fields[3], "%d", &db->rows[db->count].terulet_meret) != 1 ||
-        sscanf(fields[4], "%d", &db->rows[db->count].pusztulas_szazalek) != 1)
+    snprintf(db->rows[db->count].field_name, 1024, "%s", fields[1]);
+    snprintf(db->rows[db->count].grape_type, 1024, "%s", fields[2]);
+    if (sscanf(fields[3], "%d", &db->rows[db->count].field_size) != 1 ||
+        sscanf(fields[4], "%d", &db->rows[db->count].loss) != 1)
         return 0;
     db->count++;
     return 1;
@@ -99,8 +99,8 @@ int bor_save(const BorData* db) {
     if (!file) return 0;
     for (int i = 0; i < db->count; ++i) {
         fprintf(file, "%s,%s,%s,%d,%d\n", db->rows[i].winery_name,
-                db->rows[i].tabla_nev, db->rows[i].szolo_tipus,
-                db->rows[i].terulet_meret, db->rows[i].pusztulas_szazalek);
+                db->rows[i].field_name, db->rows[i].grape_type,
+                db->rows[i].field_size, db->rows[i].loss);
     }
     fclose(file);
     return 1;
@@ -113,26 +113,26 @@ void bor_print(const BorData* db) {
     }
     for (int i = 0; i < db->count; ++i) {
         printf("%d. %s, %s, %s, %d négyszögöl, %d%%\n", i + 1,
-               db->rows[i].winery_name, db->rows[i].tabla_nev,
-               db->rows[i].szolo_tipus, db->rows[i].terulet_meret,
-               db->rows[i].pusztulas_szazalek);
+               db->rows[i].winery_name, db->rows[i].field_name,
+               db->rows[i].grape_type, db->rows[i].field_size,
+               db->rows[i].loss);
     }
 }
 
 int bor_add(BorData* db) {
-    char winery_name[100], tabla_nev[100], szolo_tipus[100];
-    int terulet_meret, pusztulas_szazalek;
+    char winery_name[100], field_name[100], grape_type[100];
+    int field_size, loss;
     printf("\n");
     if (!prompt_line("Termőhely neve: ", winery_name, sizeof(winery_name)) ||
-        !prompt_line("Tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
-        !prompt_line("Szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
-        !prompt_int("Terület mérete (négyszögöl): ", &terulet_meret) ||
-        !prompt_int("Pusztulás százaléka: ", &pusztulas_szazalek)) {
+        !prompt_line("Tábla neve: ", field_name, sizeof(field_name)) ||
+        !prompt_line("Szőlő típusa: ", grape_type, sizeof(grape_type)) ||
+        !prompt_int("Terület mérete (négyszögöl): ", &field_size) ||
+        !prompt_int("Pusztulás százaléka: ", &loss)) {
         printf("Input hiba.\n");
         return 0;
     }
-    if (has_comma(winery_name) || has_comma(tabla_nev) ||
-        has_comma(szolo_tipus)) {
+    if (has_comma(winery_name) || has_comma(field_name) ||
+        has_comma(grape_type)) {
         printf("Hiba: Szövegben nem szerepelhet vessző.\n");
         return 0;
     }
@@ -144,10 +144,10 @@ int bor_add(BorData* db) {
         db->capacity = newcap;
     }
     snprintf(db->rows[db->count].winery_name, 1024, "%s", winery_name);
-    snprintf(db->rows[db->count].tabla_nev, 1024, "%s", tabla_nev);
-    snprintf(db->rows[db->count].szolo_tipus, 1024, "%s", szolo_tipus);
-    db->rows[db->count].terulet_meret = terulet_meret;
-    db->rows[db->count].pusztulas_szazalek = pusztulas_szazalek;
+    snprintf(db->rows[db->count].field_name, 1024, "%s", field_name);
+    snprintf(db->rows[db->count].grape_type, 1024, "%s", grape_type);
+    db->rows[db->count].field_size = field_size;
+    db->rows[db->count].loss = loss;
     db->count++;
     printf("Sor sikeresen hozzáadva.");
     return bor_save(db);
@@ -155,8 +155,8 @@ int bor_add(BorData* db) {
 
 int bor_modify(BorData* db) {
     char input[32];
-    char winery_name[100], tabla_nev[100], szolo_tipus[100];
-    int terulet_meret, pusztulas_szazalek;
+    char winery_name[100], field_name[100], grape_type[100];
+    int field_size, loss;
     printf("\n");
     if (db->count == 0) {
         printf("Az adatbázis üres.\n");
@@ -172,23 +172,23 @@ int bor_modify(BorData* db) {
         return 0;
     }
     if (!prompt_line("Új termőhely neve: ", winery_name, sizeof(winery_name)) ||
-        !prompt_line("Új tábla neve: ", tabla_nev, sizeof(tabla_nev)) ||
-        !prompt_line("Új szőlő típusa: ", szolo_tipus, sizeof(szolo_tipus)) ||
-        !prompt_int("Új terület mérete (négyszögöl): ", &terulet_meret) ||
-        !prompt_int("Új pusztulás százaléka: ", &pusztulas_szazalek)) {
+        !prompt_line("Új tábla neve: ", field_name, sizeof(field_name)) ||
+        !prompt_line("Új szőlő típusa: ", grape_type, sizeof(grape_type)) ||
+        !prompt_int("Új terület mérete (négyszögöl): ", &field_size) ||
+        !prompt_int("Új pusztulás százaléka: ", &loss)) {
         printf("Input hiba.\n");
         return 0;
     }
-    if (has_comma(winery_name) || has_comma(tabla_nev) ||
-        has_comma(szolo_tipus)) {
+    if (has_comma(winery_name) || has_comma(field_name) ||
+        has_comma(grape_type)) {
         printf("Hiba: Szövegben nem szerepelhet vessző.\n");
         return 0;
     }
     snprintf(db->rows[index].winery_name, 1024, "%s", winery_name);
-    snprintf(db->rows[index].tabla_nev, 1024, "%s", tabla_nev);
-    snprintf(db->rows[index].szolo_tipus, 1024, "%s", szolo_tipus);
-    db->rows[index].terulet_meret = terulet_meret;
-    db->rows[index].pusztulas_szazalek = pusztulas_szazalek;
+    snprintf(db->rows[index].field_name, 1024, "%s", field_name);
+    snprintf(db->rows[index].grape_type, 1024, "%s", grape_type);
+    db->rows[index].field_size = field_size;
+    db->rows[index].loss = loss;
     printf("Sor sikeresen módosítva.\n");
     return bor_save(db);
 }
@@ -235,12 +235,12 @@ void bor_list_by_filter(const BorData* db) {
     if (!prompt_line("Szűrő szöveg: ", needle, sizeof(needle))) return;
     for (int i = 0; i < db->count; ++i) {
         const char* field = (strcmp(mode, "1") == 0) ? db->rows[i].winery_name
-                                                     : db->rows[i].szolo_tipus;
+                                                     : db->rows[i].grape_type;
         if (strstr(field, needle)) {
             printf("%d. %s, %s, %s, %d négyszögöl, %d%%\n", i + 1,
-                   db->rows[i].winery_name, db->rows[i].tabla_nev,
-                   db->rows[i].szolo_tipus, db->rows[i].terulet_meret,
-                   db->rows[i].pusztulas_szazalek);
+                   db->rows[i].winery_name, db->rows[i].field_name,
+                   db->rows[i].grape_type, db->rows[i].field_size,
+                   db->rows[i].loss);
             found = 1;
         }
     }
