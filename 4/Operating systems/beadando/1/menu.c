@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern BorData g_db;
-
 void menu_print(void) {
     printf("1 - felvetel\n");
     printf("2 - modositas\n");
@@ -18,7 +16,9 @@ void menu_print(void) {
 int menu_input(void) {
     char input[100];
     int num;
+
     if (!fgets(input, sizeof(input), stdin)) { return 0; }
+
     input[strcspn(input, "\n")] = 0;
     if (strcmp(input, "x") == 0) {
         return 0;
@@ -26,6 +26,7 @@ int menu_input(void) {
         num = atoi(input);
         if (num >= 1 && num <= 5 && strlen(input) == 1) { return num; }
     }
+
     printf("Helytelen bemenet!\n");
     return -1;
 }

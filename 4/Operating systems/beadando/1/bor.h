@@ -12,7 +12,6 @@ typedef struct {
         int loss;
     }* rows;
     int count;
-    int capacity;
     char filename[512];
 } BorData;
 
