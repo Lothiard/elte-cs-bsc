@@ -422,3 +422,5 @@ FodyWeavers.xsd
 3/GPU programming/gyakorlat/gpu_course_opencl/src/opencl_06_opengl_nbody/build/
 
 .DS_Store
+
+.php-cs-fixer.dist.php
