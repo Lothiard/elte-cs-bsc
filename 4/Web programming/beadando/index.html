@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bergengócia csővezetékei</title>
+        <link href="style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="app">
+            <h1>Bergengócia csővezetékei</h1>
+
+            <div id="menu-screen">
+                <div class="user-info">
+                    <input
+                        type="text"
+                        id="player-name"
+                        placeholder="Játékos neve"
+                    />
+                    <select id="difficulty">
+                        <option value="easy">Könnyű (4x4)</option>
+                        <option value="medium">Közepes (5x5)</option>
+                        <option value="hard">Nehéz (7x7)</option>
+                    </select>
+                    <button id="start-btn">Új Játék</button>
+                    <button id="resume-btn" disabled>Folytatás</button>
+                    <button id="rules-btn">Játékszabályok</button>
+                </div>
+                <aside>
+                    <h2>Eredménytábla</h2>
+                    <ul id="leaderboard"></ul>
+                </aside>
+            </div>
+
+            <div id="game-screen" class="hidden">
+                <header>
+                    <div class="stats">
+                        Játékos: <strong id="display-player-name"></strong> | 
+                        Idő: <span id="time-display">0:00</span>
+                    </div>
+                    <button id="save-quit-btn">Mentés és kilépés</button>
+                </header>
+                <main>
+                    <div id="game-board"></div>
+                </main>
+            </div>
+
+            <div id="modal" class="hidden">
+                <div class="modal-content">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-message"></p>
+                    <button id="modal-close">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>

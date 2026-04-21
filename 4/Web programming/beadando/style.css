@@ -1,0 +1,56 @@
+#game-board {
+    display: grid;
+    background-color: #333;
+    width: max-content;
+    gap: 1px;
+    border: 1px solid #333;
+    padding: 1px;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-sizing: border-box;
+}
+
+.cell-one_way {
+    background-image: url("assets/one_way.png");
+}
+.cell-two_way_corner {
+    background-image: url("assets/two_way_corner.png");
+}
+.cell-two_way_straight {
+    background-image: url("assets/two_way_straight.png");
+}
+.cell-three_way {
+    background-image: url("assets/three_way.png");
+}
+
+.cell.water-filled.cell-one_way {
+    background-image: url("assets/one_way_full.png");
+}
+.cell.water-filled.cell-two_way_corner {
+    background-image: url("assets/two_way_corner_full.png");
+}
+.cell.water-filled.cell-two_way_straight {
+    background-image: url("assets/two_way_straight_full.png");
+}
+.cell.water-filled.cell-three_way {
+    background-image: url("assets/three_way_full.png");
+}
+
+.cell-source {
+    background-image: url("assets/source.png");
+    background-color: white;
+    color: initial !important;
+}
+
+.hidden {
+    display: none !important;
+}
