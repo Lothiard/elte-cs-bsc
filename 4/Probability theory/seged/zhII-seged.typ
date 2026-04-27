@@ -33,7 +33,6 @@ Két változó közötti statisztikai kapcsolatot mérik.
   [Gamma $Gamma(lambda, alpha)$], [$alpha/lambda$], [$alpha/lambda^2$],
   [Pareto $(alpha, beta)$], [$beta / (alpha - 1)$], [$(alpha beta^2) / ((alpha-1)^2 (alpha-2))$],
 )
-*(Források:)*
 
 == Becslések és Határeloszlás-tételek
 - *Markov-egyenlőtlenség:* $P(xi >= c) <= (E xi) / c$.
