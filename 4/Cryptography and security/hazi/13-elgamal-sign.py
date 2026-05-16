@@ -43,8 +43,8 @@ class ElGamalSign:
     def __init__(self, p: int, g: int) -> None:
         self.parameters = (p, g)
         x = randint(10, p - 1)
-        # self.public_key =
-        # self.__private_key =
+        self.__private_key = x
+        self.public_key = (p, g, power_mod(g, x, p))
 
     @staticmethod
     def message_hash(message: bytes, p: int) -> int:
@@ -53,7 +53,19 @@ class ElGamalSign:
     def sign(self, message: bytes) -> tuple[bytes, int, int]:
         p, g, _ = self.public_key
         x = self.__private_key
-        raise NotImplementedError
+        h = self.message_hash(message, p)
+
+        while True:
+            z = randint(2, p - 2)
+            if gcd(z, p - 1) == 1:
+                z_inv = inv_mod(z, p - 1)
+                if z_inv is not None:
+                    s1 = power_mod(g, z, p)
+                    s2 = ((h - x * s1) * z_inv) % (p - 1)
+                    if s2 > 0:
+                        break
+
+        return (message, s1, s2)
 
     @staticmethod
     def verify(
@@ -61,7 +73,16 @@ class ElGamalSign:
     ) -> bool:
         message, s1, s2 = signed_message
         p, g, gx = public_key
-        raise NotImplementedError
+
+        if not (0 < s1 < p and 0 < s2 < p - 1):
+            return False
+
+        h = ElGamalSign.message_hash(message, p)
+
+        left_side = power_mod(g, h, p)
+        right_side = (power_mod(gx, s1, p) * power_mod(s1, s2, p)) % p
+
+        return left_side == right_side
 
 
 # DO NOT DELETE THIS FUNCTIONS (otherwise TMS tests will fail)
