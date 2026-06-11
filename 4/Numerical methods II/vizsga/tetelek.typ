@@ -11,9 +11,9 @@ A sajátérték-probléma (SÉP) a numerikus analízis egyik legfontosabb terül
 2. *Karakterisztikus polinom:* Az $A$ mátrix karakterisztikus polinomja a $p(lambda) = det(A - lambda I)$ összefüggéssel definiált polinom. A sajátértékek pontosan a karakterisztikus polinom gyökei ($p(lambda) = 0$).
 
 3. *Multiplicitások:*
-  - *Algebrai multiplicitás ($m_A(lambda)$):* A $lambda$ sajátérték mint gyök hányszoros gyöke a karakterisztikus polinomnak.
-  - *Geometriai multiplicitás ($m_G(lambda)$):* A $lambda$ sajátértékhez tartozó sajátaltér ($W_lambda$) dimenziója, ahol $W_lambda = (v in CC^n : A v = lambda v)$. Ez megadja a lineárisan független sajátvektorok maximális számát az adott sajátértékhez.
-  - *Tétel:* Minden sajátértékre igaz, hogy $m_A(lambda) >= m_G(lambda)$.
+  - *Algebrai multiplicitás ($m_A (lambda)$):* A $lambda$ sajátérték mint gyök hányszoros gyöke a karakterisztikus polinomnak.
+  - *Geometriai multiplicitás ($m_G (lambda)$):* A $lambda$ sajátértékhez tartozó sajátaltér ($W_lambda$) dimenziója, ahol $W_lambda = (v in CC^n : A v = lambda v)$. Ez megadja a lineárisan független sajátvektorok maximális számát az adott sajátértékhez.
+  - *Tétel:* Minden sajátértékre igaz, hogy $m_A (lambda) >= m_G (lambda)$.
 
 === Hasonlósági transzformáció
 
@@ -295,7 +295,7 @@ $ p_k(lambda) = (alpha_k - lambda) p_(k-1)(lambda) - beta_(k-1) gamma_(k-1) p_(k
 === Alkalmazás nemlineáris egyenletek megoldásánál
 Ez a rekurzió rendkívül stabil és hatékony. A sajátértékek keresésekor nem az együtthatókat számoljuk ki, hanem:
 1. *Intervallumfelezés:* A rekurzióval gyorsan ellenőrizhetjük a polinom előjelét és a gyökök számát egy intervallumban (Sturm-sorozatok elve).
-2. *Newton-módszer:* Ha szükségünk van a deriváltra, a rekurziót levezethetjük $lambda$ szerint is, így $p_n(lambda)$ és $p'_n(lambda)$ egyidejűleg számolható, és alkalmazható a $lambda_(j+1) = lambda_j - p_n(lambda_j)/p'_n(lambda_j)$ iteráció.
+2. *Newton-módszer:* Ha szükségünk van a deriváltra, a rekurziót levezethetjük $lambda$ szerint is, így $p_n (lambda)$ és $p'_n (lambda)$ egyidejűleg számolható, és alkalmazható a $lambda_(j+1) = lambda_j - p_n (lambda_j)/p'_n (lambda_j)$ iteráció.
 
 /*
 ### Magyarázat a tételhez (hogy "beszédes" legyen):
@@ -320,13 +320,13 @@ A Fagyejev-módszer (más néven Leverrier–Fagyejev algoritmus) egy elegáns r
 
 === Az algoritmus alapja
 Keressük a karakterisztikus polinomot az alábbi, 1-főegyütthatós alakban:
-$ p(lambda) = det(lambda I - A) = lambda^n + p_1 lambda^(n-1) + p_2 lambda^(n-2) + dots + p_n $.
+$ p(lambda) = det(lambda I - A) = lambda^n + p_1 lambda^(n-1) + p_2 lambda^(n-2) + dots + p_n $
 
 Az eljárás a mátrixhatványok nyomaira (trace) épít. Legyen $s_k = tr(A^k)$ az $A$ mátrix $k$-adik hatványának nyoma.
 
 === Az $s_k$ mennyiségek kapcsolata a sajátértékekkel
 *Tétel:* Az $s_k = tr(A^k)$ érték megegyezik a sajátértékek $k$-adik hatványösszegével:
-$ s_k = sum_(i=1)^n lambda_i^k $.
+$ s_k = sum_(i=1)^n lambda_i^k $
 
 *Bizonyítás:*
 1. Tudjuk, hogy minden $A$ mátrix hasonló egy $J$ Jordan-normálformához: $A = X J X^(-1)$.
@@ -573,7 +573,7 @@ Fontos megfigyelni, hogy $n+1$ darab adatunk van (pontpár), és ehhez keresünk
 Minden megadott $(x_i, y_i)$ számpár-sorozathoz (ahol az $x_i$-k különbözők) pontosan egy olyan $p_n in P_n$ polinom létezik, amely eleget tesz az interpolációs feltételeknek.
 
 === Bizonyítás (Határozatlan együtthatók módszerével)
-1. Keressük a polinomot a természetes bázisban: $p_n(x) = a_0 + a_1 x + a_2 x^2 + dots + a_n x^n$.
+1. Keressük a polinomot a természetes bázisban: $p_n (x) = a_0 + a_1 x + a_2 x^2 + dots + a_n x^n$.
 2. Írjuk fel az interpolációs feltételeket minden pontra. Ez egy $(n+1)$ egyenletből álló lineáris egyenletrendszert (LER) eredményez az $a_k$ együtthatókra:
 $ a_0 + a_1 x_0 + a_2 x_0^2 + dots + a_n x_0^n = y_0 $
 $ a_0 + a_1 x_1 + a_2 x_1^2 + dots + a_n x_1^n = y_1 $
@@ -610,7 +610,7 @@ Gyakori kérdés, hogy ha egy $f$ függvényt polinommal helyettesítünk, mekko
 
 === Tétel: Az interpoláció hibaformulája
 Legyen $f in C^(n+1) [a, b]$ (n-szer folytonosan differenciálható), és legyenek $x_0, ..., x_n$ az alappontok. Ekkor minden $x in [a, b]$ ponthoz létezik olyan $xi_x$ az alappontok és $x$ által kifeszített legkisebb intervallumban, hogy:
-$ f(x) - p_n(x) = f^((n+1)) (xi_x) / ((n+1)!) omega_n (x) $
+$ f(x) - p_n (x) = (f^((n+1)) (xi_x)) / ((n+1)!) omega_n (x) $
 ahol $omega_n (x) = product_(j=0)^n (x - x_j)$ a hiba-függvény (vagy csomóponti polinom).
 
 === Bizonyítás (Rolle-tétel alkalmazásával)
@@ -630,12 +630,12 @@ ahol $K$ egy olyan konstans, hogy $g(x) = 0$ legyen.
   - $p_n^((n+1)) (z) = 0$, mert $p_n$ egy $n$-edfokú polinom, és annak $(n+1)$-edik deriváltja már nulla.
   - $omega_n^((n+1)) (z) = (n+1)!$, mert $omega_n$ egy $n+1$-edfokú polinom $z^(n+1)$ főtaggal.
 7. Tehát $g^((n+1)) (xi_x) = f^((n+1)) (xi_x) - K(n+1)! = 0$.
-8. Ebből kifejezve $K$-t: $K = f^((n+1)) (xi_x) / ((n+1)!)$.
+8. Ebből kifejezve $K$-t: $K = (f^((n+1)) (xi_x)) / ((n+1)!)$.
 9. Mivel a konstrukció szerint $g(x) = f(x) - p_n (x) - K omega_n (x) = 0$, behelyettesítve $K$ értékét megkapjuk a tétel állítását.
 
 === Hibabecslés (Gyakorlati korlát)
 Mivel $xi_x$ pontos értékét nem ismerjük, a gyakorlatban felső becslést használunk:
-$ |f(x) - p_n(x)| <= M_(n+1) / ((n+1)!) |omega_n (x)| $
+$ |f(x) - p_n (x)| <= M_(n+1) / ((n+1)!) |omega_n (x)| $
 ahol $M_(n+1) = max_(z in [a,b]) |f^((n+1)) (z)|$.
 Ez a becslés mutatja, hogy a hiba két dologtól függ: a függvény "vadulásától" (magasabb deriváltak értéke) és az alappontok elhelyezkedésétől ($omega_n$ értéke).
 
@@ -663,7 +663,7 @@ Az interpoláció során nemcsak az a kérdés, hogy létezik-e a keresett polin
 
 === Az interpoláció alapfeladata (Emlékeztető)
 Adottak az $x_0, x_1, ..., x_n$ különböző alappontok és a hozzájuk tartozó $y_0, y_1, ..., y_n$ függvényértékek. Olyan legfeljebb $n$-edfokú $p_n$ polinomot keresünk, amelyre teljesül:
-$ p_n(x_i) = y_i, quad i = 0, 1, ..., n. $
+$ p_n (x_i) = y_i, quad i = 0, 1, ..., n. $
 Tudjuk, hogy ez a polinom létezik és egyértelmű.
 
 === Az osztott differenciák fogalma
@@ -679,29 +679,29 @@ Az osztott differenciák a függvény megváltozását mérik az alappontok füg
 === A Newton-féle bázis
 A Newton-alak felírásához egy speciális polinom-bázist használunk, amely a következő tagokból áll:
 $ 1, (x - x_0), (x - x_0)(x - x_1), ..., (x - x_0)(x - x_1)...(x - x_(n-1)). $
-Általánosan jelölve: $omega_0(x) = 1$ és $omega_k(x) = product_(j=0)^(k-1) (x - x_j)$.
+Általánosan jelölve: $omega_0(x) = 1$ és $omega_k (x) = product_(j=0)^(k-1) (x - x_j)$.
 
 === Az interpolációs polinom Newton-alakja
 A fenti bázisban felírt polinom együtthatói éppen a megfelelő rendű osztott differenciák:
-$ N_n(x) = f(x_0) + sum_(k=1)^n f[x_0, x_1, ..., x_k] dot omega_k(x). $
+$ N_n (x) = f(x_0) + sum_(k=1)^n f[x_0, x_1, ..., x_k] dot omega_k (x). $
 
 === A rekurziós formula
 A Newton-alak legfőbb előnye, hogy ha új $x_(n+1)$ alappontot veszünk fel, a korábban kiszámolt polinomot nem kell kidobni, hanem egyszerűen kiegészíthetjük:
-$ N_(n+1)(x) = N_n(x) + f[x_0, x_1, ..., x_(n+1)] dot omega_(n+1)(x). $
+$ N_(n+1)(x) = N_n (x) + f[x_0, x_1, ..., x_(n+1)] dot omega_(n+1)(x). $
 
 === A Newton-alak hibatétele és bizonyítása
 *Tétel:* Legyen $x$ egy olyan pont, amely nem alappont. Ekkor a hiba felírható osztott differencia segítségével:
-$ f(x) - N_n(x) = f[x, x_0, x_1, ..., x_n] dot omega_n(x). $
+$ f(x) - N_n (x) = f[x, x_0, x_1, ..., x_n] dot omega_n (x). $
 
 *Bizonyítás:*
 1. Tekintsünk egy olyan $N_(n+1)(z)$ polinomot, amely az $x_0, ..., x_n$ pontok mellett a rögzített $x$ helyen is interpolál.
 2. A Newton-alak rekurziója szerint:
-  $ N_(n+1)(z) = N_n(z) + f[x_0, ..., x_n, x] dot omega_n(z). $
+  $ N_(n+1)(z) = N_n (z) + f[x_0, ..., x_n, x] dot omega_n (z). $
 3. Mivel $N_(n+1)$ az $x$ helyen pontosan $f(x)$-et adja, helyettesítsünk be $z = x$-et:
-  $ f(x) = N_n(x) + f[x_0, ..., x_n, x] dot omega_n(x). $
+  $ f(x) = N_n (x) + f[x_0, ..., x_n, x] dot omega_n (x). $
 4. Az osztott differenciák szimmetriája miatt (lásd b rész) az indexek sorrendje felcserélhető:
   $ f[x_0, ..., x_n, x] = f[x, x_0, ..., x_n]. $
-5. Átrendezve kapjuk: $f(x) - N_n(x) = f[x, x_0, ..., x_n] dot omega_n(x)$.
+5. Átrendezve kapjuk: $f(x) - N_n (x) = f[x, x_0, ..., x_n] dot omega_n (x)$.
 
 == b) Az osztott differenciák tulajdonságai és a levezetés
 
@@ -718,9 +718,9 @@ Ez rávilágít arra, hogy az osztott differenciák valójában a magasabb rend�
 === Az interpolációs polinom Newton-alakjának levezetése
 A levezetés alapja a Lagrange-alak teleszkopikus felbontása:
 1. Legyen $l_k (x)$ a $k$ pontra illeszkedő polinom. Felírhatjuk:
-  $ L_n(x) = L_0(x) + (L_1(x) - L_0(x)) + ... + (L_n(x) - L_(n-1)(x)). $
-2. A $Q_k(x) = l_k (x) - L_(k-1)(x)$ különbség legfeljebb $k$-adfokú, és gyöke az összes korábbi $x_0, ..., x_(k-1)$ alappontnak (hiszen ott mindkét $L$ ugyanazt az értéket veszi fel).
-3. Így $Q_k(x) = c_k dot (x - x_0)...(x - x_(k-1)) = c_k dot omega_k(x)$.
+  $ L_n (x) = L_0(x) + (L_1 (x) - L_0 (x)) + ... + (L_n (x) - L_(n-1) (x)). $
+2. A $Q_k (x) = l_k (x) - L_(k-1) (x)$ különbség legfeljebb $k$-adfokú, és gyöke az összes korábbi $x_0, ..., x_(k-1)$ alappontnak (hiszen ott mindkét $L$ ugyanazt az értéket veszi fel).
+3. Így $Q_k (x) = c_k dot (x - x_0)...(x - x_(k-1)) = c_k dot omega_k (x)$.
 4. A $c_k$ konstans meghatározásához behelyettesítjük $x_k$-t, amiből levezethető, hogy $c_k$ pontosan a $k$-adrendű osztott differencia lesz.
 
 /*
@@ -771,7 +771,7 @@ amiből átrendezéssel pontosan a rekurziót kapjuk.
 === Főegyüttható és paritás
 A rekurzióból látható, hogy $T_2(x) = 2x^2 - 1$, $T_3(x) = 4x^3 - 3x$, és így tovább.
 * Megfigyelés: Minden lépésben a legmagasabb fokú tagot megszorozzuk $2x$-szel. Ebből következik, hogy $n >= 1$ esetén a $T_n$ polinom főegyütthatója $2^(n-1)$.
-* Paritás: $T_n$ paritása megegyezik $n$ paritásával. Ha $n$ páros, $T_n$ páros függvény ($T_n(-x) = T_n(x)$), ha $n$ páratlan, akkor $T_n$ páratlan.
+* Paritás: $T_n$ paritása megegyezik $n$ paritásával. Ha $n$ páros, $T_n$ páros függvény ($T_n (-x) = T_n (x)$), ha $n$ páratlan, akkor $T_n$ páratlan.
 
 === A gyökök meghatározása és bizonyítása
 A Csebisev-polinomoknak pontosan $n$ darab különböző valós gyöke van a $(-1, 1)$ nyílt intervallumban.
@@ -779,7 +779,7 @@ A Csebisev-polinomoknak pontosan $n$ darab különböző valós gyöke van a $(-
 $ x_k = cos((2k+1) / (2n) pi), quad k = 0, 1, dots, n-1. $
 
 *Bizonyítás:*
-A gyökökhöz meg kell oldanunk a $T_n(x) = 0$ egyenletet:
+A gyökökhöz meg kell oldanunk a $T_n (x) = 0$ egyenletet:
 $ cos(n arccos(x)) = 0. $
 Tudjuk, hogy a koszinusz akkor nulla, ha az argumentuma a $pi/2$ páratlan többszöröse:
 $ n arccos(x) = pi/2 + k pi = (2k+1)/2 pi. $
@@ -797,7 +797,7 @@ Megoldandó: $cos(n arccos(x)) = plus.minus 1$.
 A koszinusz akkor $plus.minus 1$, ha az argumentuma a $pi$ egész számú többszöröse:
 $ n arccos(x) = k pi arrow.r arccos(x) = (k pi) / n. $
 Visszahelyettesítve: $T_n (xi_k) = cos(n dot (k pi)/n) = cos(k pi) = (-1)^k$.
-Látható, hogy $k=0$-nál $xi_0 = 1$ és $T_n(1) = 1$, $k=n$-nél pedig $xi_n = -1$.
+Látható, hogy $k=0$-nál $xi_0 = 1$ és $T_n (1) = 1$, $k=n$-nél pedig $xi_n = -1$.
 
 == b) A Csebisev-tétel és szerepe az interpolációban
 
@@ -814,8 +814,8 @@ $ min_(P in P_n^((1))) ||P||_(oo) = ||tilde(T)_n||_(oo) = 1 / 2^(n-1). $
 2. Vizsgáljuk az $R = tilde(T)_n - Q$ különbséget. Mivel mindkét polinom főegyütthatója 1, a legmagasabb fokú tagok kiesnek, így $R$ egy legfeljebb $(n-1)$-edfokú polinom.
 3. Nézzük $R$ értékeit a $tilde(T)_n$ szélsőértékhelyein ($xi_k$). Tudjuk, hogy $tilde(T)_n (xi_k) = (-1)^k / 2^(n-1)$.
 4. Mivel feltettük, hogy $|Q(xi_k)| < 1 / 2^(n-1)$, ezért az $R$ különbség előjele minden pontban megegyezik a $tilde(T)_n$ előjelével:
-  - Ha $k$ páros, $tilde(T)_n(xi_k) > 0$, tehát $R(xi_k) > 0$.
-  - Ha $k$ páratlan, $tilde(T)_n(xi_k) < 0$, tehát $R(xi_k) < 0$.
+  - Ha $k$ páros, $tilde(T)_n (xi_k) > 0$, tehát $R(xi_k) > 0$.
+  - Ha $k$ páratlan, $tilde(T)_n (xi_k) < 0$, tehát $R(xi_k) < 0$.
 5. Ez azt jelenti, hogy az $R$ polinom $n+1$ darab pont között legalább $n$-szer vált előjelet.
 6. A Bolzano-tétel szerint $R$-nek ekkor legalább $n$ darab gyöke van.
 7. Egy legfeljebb $(n-1)$-edfokú polinomnak csak akkor lehet $n$ darab gyöke, ha az azonosan nulla ($R equiv 0$).
@@ -823,9 +823,9 @@ $ min_(P in P_n^((1))) ||P||_(oo) = ||tilde(T)_n||_(oo) = 1 / 2^(n-1). $
 
 === Szerepe az interpolációban (Hiba minimalizálása)
 Emlékezzünk az interpoláció hibaformulájára:
-$ f(x) - p_n(x) = (f^((n+1)) (xi)) / ((n+1)!) omega_n(x). $
-A hiba két fő részből áll: a függvény deriváltjából (amit nem tudunk befolyásolni) és az $omega_n(x) = product (x - x_i)$ csomóponti polinomból.
-Az interpoláció akkor lesz a legpontosabb, ha az $omega_n(x)$ kilengéseit minimalizáljuk.
+$ f(x) - p_n (x) = (f^((n+1)) (xi)) / ((n+1)!) omega_n (x). $
+A hiba két fő részből áll: a függvény deriváltjából (amit nem tudunk befolyásolni) és az $omega_n (x) = product (x - x_i)$ csomóponti polinomból.
+Az interpoláció akkor lesz a legpontosabb, ha az $omega_n (x)$ kilengéseit minimalizáljuk.
 Az $omega_n$ egy olyan $n+1$-edfokú polinom, amelynek főegyütthatója 1. A Csebisev-tétel szerint ez a polinom akkor lesz a "legkisebb" a $[-1, 1]$ intervallumon, ha megegyezik a $tilde(T)_(n+1)$ Csebisev-polinommal.
 *Következmény:* Az interpolációs hiba akkor lesz minimális, ha alappontoknak a Csebisev-polinom gyökeit választjuk.
 
@@ -876,22 +876,22 @@ A $Lambda_n$ egyfajta "hibaerősítési tényező". Megmutatja, hogy az alappont
 - *Csebisev-pontoknál:* A növekedés csak logaritmikus ($Lambda_n approx 2/pi log(n) + c$), ami a lehető leglassabb növekedés, tehát ez a legstabilabb pontrendszer.
 
 === Tétel: A Lagrange-interpoláció öröklött hibája
-Legyen $L_n(x)$ a pontos $f(x_i)$ értékekre, és $tilde(L)_n(x)$ a hibás $tilde(f)(x_i)$ értékekre felírt interpolációs polinom. Tegyük fel, hogy a bemenő adatok hibája korlátos: $|f(x_i) - tilde(f)(x_i)| <= epsilon$ minden $i$-re. Ekkor a két polinom eltérése:
-$ |L_n(x) - tilde(L)_n(x)| <= epsilon dot Lambda_n, quad x in [a, b]. $
+Legyen $L_n (x)$ a pontos $f(x_i)$ értékekre, és $tilde(L)_n (x)$ a hibás $tilde(f)(x_i)$ értékekre felírt interpolációs polinom. Tegyük fel, hogy a bemenő adatok hibája korlátos: $|f(x_i) - tilde(f)(x_i)| <= epsilon$ minden $i$-re. Ekkor a két polinom eltérése:
+$ |L_n (x) - tilde(L)_n (x)| <= epsilon dot Lambda_n, quad x in [a, b]. $
 
 === Bizonyítás
 1. Írjuk fel mindkét polinomot Lagrange-alakban:
-$ L_n(x) = sum_(i=0)^n f(x_i) l_i(x) quad "és" quad tilde(L)_n(x) = sum_(i=0)^n tilde(f)(x_i) l_i(x). $
+$ L_n (x) = sum_(i=0)^n f(x_i) l_i(x) quad "és" quad tilde(L)_n (x) = sum_(i=0)^n tilde(f)(x_i) l_i(x). $
 2. Vegyük a két polinom különbségét és használjuk a szumma linearitását:
-$ |L_n(x) - tilde(L)_n(x)| = abs(sum_(i=0)^n (f(x_i) - tilde(f)(x_i)) l_i(x)). $
+$ |L_n (x) - tilde(L)_n (x)| = abs(sum_(i=0)^n (f(x_i) - tilde(f)(x_i)) l_i(x)). $
 3. Alkalmazzuk a háromszög-egyenlőtlenséget (a szumma abszolút értéke kisebb-egyenlő, mint az abszolút értékek szummája):
-$ |L_n(x) - tilde(L)_n(x)| <= sum_(i=0)^n abs(f(x_i) - tilde(f)(x_i)) dot abs(l_i(x)). $
+$ |L_n (x) - tilde(L)_n (x)| <= sum_(i=0)^n abs(f(x_i) - tilde(f)(x_i)) dot abs(l_i(x)). $
 4. Használjuk fel a feltételt, hogy minden alappontban a hiba legfeljebb $epsilon$:
-$ |L_n(x) - tilde(L)_n(x)| <= epsilon sum_(i=0)^n |l_i(x)|. $
-5. Vegyük észre, hogy a jobb oldali szumma pontosan a $cal(L)_n(x)$ Lebesgue-függvény:
-$ |L_n(x) - tilde(L)_n(x)| <= epsilon dot cal(L)_n(x). $
-6. Mivel $cal(L)_n(x) <= Lambda_n$ minden $x$-re, megkaptuk a tétel állítását:
-$ |L_n(x) - tilde(L)_n(x)| <= epsilon dot Lambda_n. $
+$ |L_n (x) - tilde(L)_n (x)| <= epsilon sum_(i=0)^n |l_i(x)|. $
+5. Vegyük észre, hogy a jobb oldali szumma pontosan a $cal(L)_n (x)$ Lebesgue-függvény:
+$ |L_n (x) - tilde(L)_n (x)| <= epsilon dot cal(L)_n (x). $
+6. Mivel $cal(L)_n (x) <= Lambda_n$ minden $x$-re, megkaptuk a tétel állítását:
+$ |L_n (x) - tilde(L)_n (x)| <= epsilon dot Lambda_n. $
 
 == b) Az interpoláció konvergencia-kérdései és tételei
 
@@ -918,12 +918,12 @@ Vannak olyan "rosszul viselkedő" függvények és alappontrendszerek, ahol a fo
 
 *Bizonyítás:*
 1. Induljunk ki az interpoláció hibaformulájából:
-$ |f(x) - L_n(x)| = abs((f^((n+1)) (xi)) / ((n+1)!) omega_n(x)). $
+$ |f(x) - L_n (x)| = abs((f^((n+1)) (xi)) / ((n+1)!) omega_n (x)). $
 2. Becsüljük meg a tagokat:
   - A deriváltat a feltétel szerint: $|f^((n+1)) (xi)| <= M^(n+1)$.
-  - A csomóponti polinomot a legdurvább becsléssel: $|omega_n(x)| = abs(product_(i=0)^n (x - x_i)) <= (b - a)^(n+1)$.
+  - A csomóponti polinomot a legdurvább becsléssel: $|omega_n (x)| = abs(product_(i=0)^n (x - x_i)) <= (b - a)^(n+1)$.
 3. Helyettesítsük be ezeket:
-$ |f(x) - L_n(x)| <= (M dot (b-a))^(n+1) / ((n+1)!). $
+$ |f(x) - L_n (x)| <= (M dot (b-a))^(n+1) / ((n+1)!). $
 4. Vizsgáljuk a határátmenetet $n -> oo$ esetén. A kifejezés számlálójában egy konstans hatványa áll, a nevezőben pedig a faktoriális.
 5. Tudjuk az analízisből, hogy bármely $C$ konstansra $lim_(n -> oo) C^n / (n!) = 0$.
 6. Esetünkben $C = M(b-a)$, tehát a hiba nullához tart.
@@ -980,12 +980,12 @@ A feladat felírható egy $M times M$ méretű lineáris egyenletrendszerként, 
 
 === Tétel: Hermite-interpoláció hibaformulája
 Legyen $f in C^(m+1)[a, b]$, és legyen $H_m$ az $x_i$ pontokon $m_i$ multiplicitással illeszkedő Hermite-polinom. Ekkor minden $x in [a, b]$ ponthoz létezik olyan $xi_x$ az intervallumban, hogy:
-$ f(x) - H_m(x) = (f^((m+1))(xi_x))/((m+1)!) Omega_m(x) $
-ahol $Omega_m(x) = product_(i=0)^k (x - x_i)^(m_i)$ a Hermite-féle csomóponti polinom.
+$ f(x) - H_m (x) = (f^((m+1))(xi_x))/((m+1)!) Omega_m (x) $
+ahol $Omega_m (x) = product_(i=0)^k (x - x_i)^(m_i)$ a Hermite-féle csomóponti polinom.
 
 === Bizonyítás (Rolle-tétel általánosításával)
 1. Rögzítsünk egy $x$ pontot, ami nem alappont. Definiáljuk a segédfüggvényt:
-$ G(z) = f(z) - H_m(z) - K Omega_m(z), $
+$ G(z) = f(z) - H_m (z) - K Omega_m (z), $
 ahol $K$-t úgy választjuk, hogy $G(x) = 0$ legyen.
 2. Vizsgáljuk $G(z)$ gyökeit:
   - Van $k+1$ darab alappontunk, ahol $G$ a deriváltjaival együtt nulla (összesen $M$ feltétel).
@@ -1005,12 +1005,12 @@ Az inverz interpoláció egy elmés trükk nemlineáris egyenletek ($f(x) = 0$) 
 *Az alapötlet:* Tegyük fel, hogy az $f$ függvény szigorúan monoton (és így invertálható) az $[a, b]$ intervallumon. Ahelyett, hogy az $f(x)$ függvényt közelítenénk, az $f^(-1)$ inverz függvényt közelítjük egy polinommal.
 1. Ismerjük az $(x_i, y_i)$ pontokat, ahol $y_i = f(x_i)$.
 2. Tekintsük az $y$ értékeket "alappontoknak" és az $x$ értékeket a hozzájuk tartozó "függvényértékeknek".
-3. Készítsünk egy $Q_n(y)$ interpolációs polinomot, amelyre $Q_n(y_i) = x_i$.
-4. Ekkor $Q_n(y) approx f^(-1)(y)$.
+3. Készítsünk egy $Q_n (y)$ interpolációs polinomot, amelyre $Q_n (y_i) = x_i$.
+4. Ekkor $Q_n (y) approx f^(-1)(y)$.
 5. Mivel az eredeti egyenletünk $f(x) = 0$, a keresett gyök $x^* = f^(-1)(0)$.
-6. A gyök közelítése tehát egyszerűen a polinom értéke a nullában: $x^* approx Q_n(0)$.
+6. A gyök közelítése tehát egyszerűen a polinom értéke a nullában: $x^* approx Q_n (0)$.
 
-*Alkalmazás:* Ez a módszer rendkívül hasznos, mert elkerüli a $p_n(x) = 0$ magas fokszámú egyenlet megoldásának nehézségeit. Ha a deriváltakat is ismerjük, Hermite-típusú inverz interpolációt is végezhetünk, ami még gyorsabb konvergenciát eredményez (pl. a Newton-módszer egy speciális esete ennek).
+*Alkalmazás:* Ez a módszer rendkívül hasznos, mert elkerüli a $p_n (x) = 0$ magas fokszámú egyenlet megoldásának nehézségeit. Ha a deriváltakat is ismerjük, Hermite-típusú inverz interpolációt is végezhetünk, ami még gyorsabb konvergenciát eredményez (pl. a Newton-módszer egy speciális esete ennek).
 
 /*
 
@@ -1056,7 +1056,7 @@ A gyakorlati kiszámítás menete a következő:
 3. Azokban a sorokban, ahol az alappontok megegyeznek, a "hiányzó" osztott differenciák helyére behelyettesítjük a fenti deriváltas definíciókat ($f^((j))/j!$).
 4. A táblázat többi részét (ahol különböző pontok találkoznak) a megszokott rekurzióval töltjük ki.
 5. A polinom Newton-alakját a táblázat főátlójában (a legfelső értékek) szereplő $c_k$ együtthatókkal írjuk fel:
-  $ H_m(x) = c_0 + c_1(x-z_0) + c_2(x-z_0)(x-z_1) + ... + c_m(x-z_0)...(x-z_(m-1)), $
+  $ H_m (x) = c_0 + c_1(x-z_0) + c_2(x-z_0)(x-z_1) + ... + c_m (x-z_0)...(x-z_(m-1)), $
   ahol $z_i$ az "expanded" alappont-sorozat (a multiplicitásokkal felsorolt pontok).
 
 == b) Fejér–Hermite alappolinomok és a Lagrange-alak
@@ -1065,38 +1065,38 @@ Amikor minden alappontban pontosan a függvényértéket és az első deriválta
 
 === A Fejér–Hermite alappolinomok definíciója
 Olyan alappolinomokat keresünk, amelyek "szétválasztják" a függvényértékek és a deriváltak hatását.
-1. *Elsőfajú alappolinomok ($A_i$):* Ezeknél $A_i(x_j) = delta_(i j)$ és $A_i'(x_j) = 0$. (Csak az egyik pontban vesz fel 1-et, és sehol sincs meredeksége.)
-2. *Másodfajú alappolinomok ($B_i$):* Ezeknél $B_i(x_j) = 0$ és $B_i'(x_j) = delta_(i j)$. (Mindenhol nulla az értéke, de az egyik pontban 1 a meredeksége.)
+1. *Elsőfajú alappolinomok ($A_i$):* Ezeknél $A_i (x_j) = delta_(i j)$ és $A_i'(x_j) = 0$. (Csak az egyik pontban vesz fel 1-et, és sehol sincs meredeksége.)
+2. *Másodfajú alappolinomok ($B_i$):* Ezeknél $B_i (x_j) = 0$ és $B_i'(x_j) = delta_(i j)$. (Mindenhol nulla az értéke, de az egyik pontban 1 a meredeksége.)
 
 === Az alappolinomok képleteinek levezetése és bizonyítása
 Keressük az alappolinomokat $P_(2k+1)$ fokszámban. Tudjuk, hogy mindkét típusnak minden $j != i$ esetén kétszeres gyöke van az $x_j$ pontokban. Ezért mindegyik tartalmazni fogja az $l_i^2(x)$ tényezőt, ahol $l_i$ a klasszikus Lagrange-alappolinom.
 
 *A másodfajú ($B_i$) bizonyítása:*
-Tegyük fel, hogy $B_i(x) = (a x + b) l_i^2(x)$.
-Mivel $B_i(x_i) = 0$, ezért $a x_i + b = 0$, tehát a lineáris tag $(x - x_i)$ alakú.
-Legyen $B_i(x) = c (x - x_i) l_i^2(x)$.
+Tegyük fel, hogy $B_i (x) = (a x + b) l_i^2(x)$.
+Mivel $B_i (x_i) = 0$, ezért $a x_i + b = 0$, tehát a lineáris tag $(x - x_i)$ alakú.
+Legyen $B_i (x) = c (x - x_i) l_i^2(x)$.
 Nézzük a deriváltat $x_i$-ben: $B_i'(x_i) = c dot 1 dot l_i^2(x_i) + c(x_i - x_i) dot [l_i^2(x_i)]' = c dot 1 dot 1^2 + 0 = c$.
 Mivel azt akarjuk, hogy $B_i'(x_i) = 1$, ezért $c=1$.
-*Eredmény:* $B_i(x) = (x - x_i) l_i^2(x)$.
+*Eredmény:* $B_i (x) = (x - x_i) l_i^2(x)$.
 
 *Az elsőfajú ($A_i$) bizonyítása:*
-Legyen $A_i(x) = (a x + b) l_i^2(x)$.
-1. Feltétel ($A_i(x_i)=1$): $a x_i + b = 1$.
-2. Feltétel ($A_i'(x_i)=0$): Deriváljuk szorzatként: $A_i'(x) = a dot l_i^2(x) + (a x + b) dot 2 l_i(x) l_i'(x)$.
+Legyen $A_i (x) = (a x + b) l_i^2(x)$.
+1. Feltétel ($A_i (x_i)=1$): $a x_i + b = 1$.
+2. Feltétel ($A_i' (x_i)=0$): Deriváljuk szorzatként: $A_i'(x) = a dot l_i^2(x) + (a x + b) dot 2 l_i(x) l_i'(x)$.
 Behelyettesítve $x_i$-t: $A_i'(x_i) = a dot 1^2 + (1) dot 2 dot 1 dot l_i'(x_i) = a + 2 l_i'(x_i) = 0$.
 Ebből $a = -2 l_i'(x_i)$.
 Visszahelyettesítve a 1. feltételbe: $b = 1 - a x_i = 1 + 2 l_i'(x_i) x_i$.
 A lineáris tag: $a x + b = -2 l_i'(x_i) x + 1 + 2 l_i'(x_i) x_i = 1 - 2(x - x_i) l_i'(x_i)$.
-*Eredmény:* $A_i(x) = [1 - 2(x - x_i) l_i'(x_i)] l_i^2(x)$.
+*Eredmény:* $A_i (x) = [1 - 2(x - x_i) l_i'(x_i)] l_i^2(x)$.
 
 === Az interpolációs polinom Lagrange-alakjának bizonyítása
 *Tétel:* A Fejér–Hermite interpolációs polinom előállítható a következő alakban:
-$ H_(2k+1)(x) = sum_(i=0)^k f(x_i) A_i(x) + sum_(i=0)^k f'(x_i) B_i(x). $
+$ H_(2k+1)(x) = sum_(i=0)^k f(x_i) A_i (x) + sum_(i=0)^k f'(x_i) B_i (x). $
 
 *Bizonyítás:*
 Ellenőriznünk kell, hogy ez a lineáris kombináció teljesíti-e az interpolációs feltételeket tetszőleges $x_j$ pontban.
 1. *Függvényérték:* $H_(2k+1)(x_j) = sum f(x_i) A_i (x_j) + sum f'(x_i) B_i (x_j)$.
-  Az alappolinomok tulajdonságai miatt $A_i(x_j)$ csak akkor nem nulla, ha $i=j$ (ekkor 1), és $B_i(x_j)$ mindenhol nulla.
+  Az alappolinomok tulajdonságai miatt $A_i (x_j)$ csak akkor nem nulla, ha $i=j$ (ekkor 1), és $B_i (x_j)$ mindenhol nulla.
   Így $H_(2k+1) (x_j) = f(x_j) dot 1 + 0 = f(x_j)$. Megfelel.
 2. *Derivált:* $H'_(2k+1) (x_j) = sum f(x_i) A'_i (x_j) + sum f'(x_i) B'_i (x_j)$.
   Mivel $A'_i (x_j)$ mindenhol nulla, és $B'_i (x_j)$ csak akkor 1, ha $i=j$, különben nulla.
@@ -1111,7 +1111,7 @@ Amikor erről a tételről beszélsz, próbáld megvilágítani a *kétféle sze
 
 A *Newton-alaknál* a lényeg a *határátmenet*. Magyarázd el a vizsgáztatónak, hogy miért írjuk fel az alappontokat többször a táblázatban. Képzeld el, hogy van két pontod, $x_0$ és $x_1$, amik elkezdenek egymáshoz közeledni. A köztük lévő szelő meredeksége ($f[x_0, x_1]$) egyre jobban hasonlít az érintő meredekségére ($f'(x_0)$). Amikor a két pont teljesen egybeesik, a táblázatban a "0/0" helyett egyszerűen beírjuk a deriváltat. Ez egy rendkívül stabil és elegáns módja annak, hogy a klasszikus algoritmust "felokosítsuk" a deriváltak fogadására.
 
-A *Lagrange-alaknál* (a tétel b része) a geometria a kulcs. Itt nem egyben építjük a polinomot, hanem "alkatrészekből" rakjuk össze. Az $A_i(x)$ és $B_i(x)$ alappolinomok olyanok, mint a precíziós szerszámok:
+A *Lagrange-alaknál* (a tétel b része) a geometria a kulcs. Itt nem egyben építjük a polinomot, hanem "alkatrészekből" rakjuk össze. Az $A_i (x)$ és $B_i (x)$ alappolinomok olyanok, mint a precíziós szerszámok:
 - Az *$A_i$* alappolinom gondoskodik arról, hogy a függvényérték jó legyen, de közben vigyáz, hogy ne rontsa el a meredekséget (mert a deriváltja nulla az alappontokban).
 - A *$B_i$* pedig fordítva: ő csak a meredekséget állítja be, de közben nem mozdítja el a függvényértéket (mert az értéke nulla az alappontokban).
 
@@ -1141,10 +1141,10 @@ Az $l=1$ esetben a spline szakaszonként elsőfokú polinomokból (egyenesekből
 
 *Konstrukció lokális bázisban:*
 Minden $I_k = [x_(k-1), x_k]$ intervallumon a spline alakja:
-$ p_k(x) = a_0^((k)) + a_1^((k))(x - x_(k-1)) $
+$ p_k (x) = a_0^((k)) + a_1^((k))(x - x_(k-1)) $
 Az interpolációs feltételek a szakasz két végpontjára:
-- $p_k(x_(k-1)) = a_0^((k)) = y_(k-1)$
-- $p_k(x_k) = a_0^((k)) + a_1^((k))(x_k - x_(k-1)) = y_k$
+- $p_k (x_(k-1)) = a_0^((k)) = y_(k-1)$
+- $p_k (x_k) = a_0^((k)) + a_1^((k))(x_k - x_(k-1)) = y_k$
 Ebből az együtthatók közvetlenül adódnak: $a_0^((k)) = y_(k-1)$ és $a_1^((k)) = (y_k - y_(k-1)) / (x_k - x_(k-1)) = f[x_(k-1), x_k]$.
 Látható, hogy az elsőfokú spline-t az adatok egyértelműen meghatározzák, nincs szükség plusz peremfeltételekre.
 
@@ -1178,7 +1178,7 @@ Látjuk, hogy 1 szabad paraméter marad, ezért az egyértelműséghez szükség
 
 === Levezetés lokális bázisban (baloldali peremfeltétel esetén)
 Keressük a spline-t az $I_k$ szakaszon a következő alakban:
-$ p_k(x) = a_0^((k)) + a_1^((k))(x - x_(k-1)) + a_2^((k))(x - x_(k-1))^2 $
+$ p_k (x) = a_0^((k)) + a_1^((k))(x - x_(k-1)) + a_2^((k))(x - x_(k-1))^2 $
 Legyen adott az $m_1 = f'(x_0)$ kezdő meredekség. A célunk a spline-t szakaszról szakaszra, rekurzívan felépíteni.
 
 *1. szakasz ($I_1$):*
@@ -1249,13 +1249,13 @@ A célunk, hogy a $4n$ ismeretlenes óriási egyenletrendszert "legyaluljuk" egy
 
 === A polinom alakja és az együtthatók kimentése
 A $k$-adik szakaszon a polinomunk:
-$ p_k(x) = a_3^((k))(x - x_(k-1))^3 + a_2^((k))(x - x_(k-1))^2 + a_1^((k))(x - x_(k-1)) + a_0^((k)) $
+$ p_k (x) = a_3^((k))(x - x_(k-1))^3 + a_2^((k))(x - x_(k-1))^2 + a_1^((k))(x - x_(k-1)) + a_0^((k)) $
 - Az interpolációból azonnal tudjuk: $a_0^((k)) = y_(k-1)$.
-- Vezessük be a jelölést: $M_k = p''_k(x_(k-1)) = 2 a_2^((k))$. Tehát $a_2^((k)) = M_k / 2$.
+- Vezessük be a jelölést: $M_k = p''_k (x_(k-1)) = 2 a_2^((k))$. Tehát $a_2^((k)) = M_k / 2$.
 - Az $S'' in C$ feltétel miatt a $k$. szakasz végén a második derivált megegyezik a $(k+1)$. szakasz elejével: $6 a_3^((k)) h_k + 2 a_2^((k)) = 2 a_2^((k+1))$.
 - Ebből kifejezhető $a_3^((k)) = (a_2^((k+1)) - a_2^((k))) / (3 h_k)$.
 
-Látható, hogy már csak az $a_1^((k))$ (lineáris tag) és maguk az $a_2^((k))$ értékek az ismeretlenek. Az interpolációt a szakasz végére is felírva ($p_k(x_k) = y_k$), kimenthetjük $a_1^((k))$-t is az $a_2$ értékek segítségével.
+Látható, hogy már csak az $a_1^((k))$ (lineáris tag) és maguk az $a_2^((k))$ értékek az ismeretlenek. Az interpolációt a szakasz végére is felírva ($p_k (x_k) = y_k$), kimenthetjük $a_1^((k))$-t is az $a_2$ értékek segítségével.
 
 === A központi egyenlet felállítása
 A végső simasági feltétel az első deriváltak folytonossága: $p'_k (x_k) = p'_(k+1) (x_(k+1))$. Ha behelyettesítjük az összes korábban kifejezett együtthatót, egy gyönyörű, tridiagonális egyenletrendszert kapunk az $a_2^((k))$ értékekre:
@@ -1666,7 +1666,7 @@ Mivel $(partial p_n)/(partial a_k)(x_i) = x_i^k$, kapjuk:
 $ sum_(i=1)^N (y_i - p_n (x_i)) dot x_i^k = 0 => sum_(i=1)^N p_n (x_i) x_i^k = sum_(i=1)^N y_i x_i^k $
 
 === A Gauss-féle normálegyenletek
-Helyettesítsük vissza a polinom alakját ($p_n(x_i) = sum a_j x_i^j$):
+Helyettesítsük vissza a polinom alakját ($p_n (x_i) = sum a_j x_i^j$):
 $ sum_(j=0)^n a_j (sum_(i=1)^N x_i^(j+k)) = sum_(i=1)^N y_i x_i^k "  " (k = 0, dots, n) $
 Ez egy $(n+1) times (n+1)$ méretű lineáris egyenletrendszer. Mátrixos alakban ez pontosan a következő:
 $ A^T A a = A^T y $
@@ -1750,7 +1750,7 @@ A Gram-mátrix elemei ekkor a függvényrendszer *momentumai* lesznek:
 $ G_(i, j) = chevron.l x^i, x^j chevron.r_w = integral_a^b x^(i+j) w(x) dif x $
 A jobb oldali vektor elemei: $b_j = chevron.l f, x^j chevron.r_w = integral_a^b f(x) x^j w(x) dif x$.
 A megoldandó $G c = b$ rendszer ekkor pontosan a *Gauss-féle normálegyenleteket* adja vissza. A kapott $c_j$ értékekkel a négyzetesen legjobban közelítő polinom:
-$ p_n(x) = sum_(j=0)^n c_j x^j $
+$ p_n (x) = sum_(j=0)^n c_j x^j $
 
 Megjegyzés: Ha a hatványbázis helyett *ortogonális polinomokat* választunk bázisnak (mint a 22. tételben), a Gram-mátrix diagonális lesz, így az együtthatók meghatározása stabilabbá és gyorsabbá válik.
 
@@ -1889,7 +1889,7 @@ A numerikus integrálás (kvadratúra) célja az $I(f) = integral_a^b f(x) w(x) 
 === Az interpolációs kvadratúra formula alapötlete
 Vegyünk egy $a <= x_0 < x_1 < dots < x_n <= b$ felosztást. Közelítsük az $f$ függvényt az ezen pontokra illeszkedő $L_n$ Lagrange-interpolációs polinommal:
 $
-  integral_a^b f(x) w(x) dif x approx integral_a^b L_n(x) w(x) dif x = integral_a^b sum_(k=0)^n f(x_k) l_k (x) w(x) dif x
+  integral_a^b f(x) w(x) dif x approx integral_a^b L_n (x) w(x) dif x = integral_a^b sum_(k=0)^n f(x_k) l_k (x) w(x) dif x
 $
 A szummát kiemelve kapjuk a kvadratúra formula általános alakját:
 $ sum_(k=0)^n A_k f(x_k), quad "ahol" quad A_k = integral_a^b l_k (x) w(x) dif x. $
@@ -2042,9 +2042,9 @@ Osszuk fel az $[a, b]$ intervallumot $m$ darab egyenlő, $h = (b-a)/m$ hosszús�
 1. Minden $[x_(k-1), x_k]$ szakaszon alkalmazzuk a trapéz-formulát:
   $ integral_(x_(k-1))^(x_k) f(x) dif x approx frac(h, 2) (f(x_(k-1)) + f(x_k)). $
 2. Az elemi integrálok összegzésével megkapjuk a teljes közelítést:
-  $ T_m(f) = sum_(k=1)^m frac(h, 2) (f(x_(k-1)) + f(x_k)). $
+  $ T_m (f) = sum_(k=1)^m frac(h, 2) (f(x_(k-1)) + f(x_k)). $
 3. A belső pontok kétszer szerepelnek a szummában, így a végleges alak:
-  $ T_m(f) = frac(b - a, 2m) (f(a) + 2 sum_(k=1)^(m-1) f(x_k) + f(b)). $
+  $ T_m (f) = frac(b - a, 2m) (f(a) + 2 sum_(k=1)^(m-1) f(x_k) + f(b)). $
 A súlyok sorozata esztétikusan: $1, 2, 2, dots, 2, 1$.
 
 === Az összetett Simpson formula (Simpson-szabály) levezetése
@@ -2052,25 +2052,25 @@ A Simpson-szabályhoz páros számú ($m$) részintervallumra van szükség, miv
 1. Alkalmazzuk a Simpson-formulát az $[x_(2k-2), x_(2k)]$ szakaszokon (melyek hossza $2h$):
   $ integral_(x_(2k-2))^(x_(2k)) f(x) dif x approx frac(2h, 6) (f(x_(2k-2)) + 4 f(x_(2k-1)) + f(x_(2k))). $
 2. Összegezve a $k=1, dots, m/2$ szakaszokra:
-  $ S_m(f) = frac(b - a, 3m) [f(a) + 4 sum_(k=1)^(m/2) f(x_(2k-1)) + 2 sum_(k=1)^(m/2-1) f(x_(2k)) + f(b)]. $
+  $ S_m (f) = frac(b - a, 3m) [f(a) + 4 sum_(k=1)^(m/2) f(x_(2k-1)) + 2 sum_(k=1)^(m/2-1) f(x_(2k)) + f(b)]. $
 A súlyok sorozata itt: $1, 4, 2, 4, 2, dots, 4, 1$.
 
 == b) Az összetett formulák hibabecslése és levezetése
 
 === A trapéz összetett formula hibája
 *Tétel:* Ha $f in C^2[a, b]$, akkor létezik olyan $eta in [a, b]$, hogy:
-$ integral_a^b f(x) dif x - T_m(f) = - frac((b-a)^3, 12m^2) f''(eta). $
+$ integral_a^b f(x) dif x - T_m (f) = - frac((b-a)^3, 12m^2) f''(eta). $
 
 *Bizonyítás:*
 1. Írjuk fel a hibát a részintervallumok hibáinak összegeként:
-  $ I(f) - T_m(f) = sum_(k=1)^m (- frac(h^3, 12) f''(eta_k)). $
+  $ I(f) - T_m (f) = sum_(k=1)^m (- frac(h^3, 12) f''(eta_k)). $
 2. Emeljünk ki konstansokat: $-(h^3/12) sum f''(eta_k) = -(b-a)^3/(12m^3) sum f''(eta_k)$.
 3. Vigyünk be egy $1/m$ szorzót: $- frac((b-a)^3, 12m^2) [frac(1, m) sum_(k=1)^m f''(eta_k)]$.
 4. Mivel $f''$ folytonos, a szögletes zárójelben lévő számtani középértéket a függvény felveszi egy $eta$ pontban (Darboux-tétel), így megkapjuk az állítást.
 
 === A Simpson összetett formula hibája
 *Tétel:* Ha $f in C^4[a, b]$, akkor létezik olyan $eta in [a, b]$, hogy:
-$ integral_a^b f(x) dif x - S_m(f) = - frac((b-a)^5, 180m^4) f^((4))(eta). $
+$ integral_a^b f(x) dif x - S_m (f) = - frac((b-a)^5, 180m^4) f^((4))(eta). $
 
 *Bizonyítás:*
 A levezetés analóg a trapéz esettel, de itt az elemi szakasz hossza $2h = 2(b-a)/m$.
@@ -2079,7 +2079,7 @@ A levezetés analóg a trapéz esettel, de itt az elemi szakasz hossza $2h = 2(b
 
 === Richardson-féle extrapoláció
 Ez egy technika a pontosság növelésére két különböző felosztás ($m$ és $2m$) felhasználásával. A trapéz szabály esetén belátható, hogy:
-$ S_m(f) = frac(1, 3) (4 T_(2m)(f) - T_m(f)). $
+$ S_m (f) = frac(1, 3) (4 T_(2m)(f) - T_m (f)). $
 
 /*
 
@@ -2130,13 +2130,13 @@ A formula általános alakú ($sum A_k f(x_k)$), de az alappontokat úgy válasz
 *Tétel:* A kvadratúra-formula pontos minden $f in P_(2n+1)$ polinomra akkor és csak akkor, ha az alappontok az $n+1$-edfokú ortogonális polinom gyökei.
 
 *Bizonyítás ($arrow.l$ irány):*
-1. Legyen $f in P_(2n+1)$ tetszőleges polinom. Osszuk el $f$-et maradékosan az $omega_n(x) = product (x - x_k)$ csomóponti polinommal:
-  $ f(x) = omega_n(x) q(x) + r(x), "  ahol " q, r in P_n. $
+1. Legyen $f in P_(2n+1)$ tetszőleges polinom. Osszuk el $f$-et maradékosan az $omega_n (x) = product (x - x_k)$ csomóponti polinommal:
+  $ f(x) = omega_n (x) q(x) + r(x), "  ahol " q, r in P_n. $
 2. Integráljuk mindkét oldalt a súlyfüggvénnyel:
   $ integral_a^b f w = integral_a^b omega_n q w + integral_a^b r w. $
 3. Mivel $omega_n$ az $n+1$-edfokú ortogonális polinom, merőleges minden nála kisebb fokszámú polinomra, így $integral omega_n q w = 0$.
 4. Az $r in P_n$ maradékra a formula interpolációs volta miatt pontos: $integral r w = sum A_k r(x_k)$.
-5. Mivel $f(x_k) = omega_n(x_k) q(x_k) + r(x_k) = 0 dot q(x_k) + r(x_k) = r(x_k)$, a közelítés pontos.
+5. Mivel $f(x_k) = omega_n (x_k) q(x_k) + r(x_k) = 0 dot q(x_k) + r(x_k) = r(x_k)$, a közelítés pontos.
 
 === Hibaformula és bizonyítása
 *Tétel:* Ha $f in C^(2n+2)[a, b]$, akkor létezik olyan $eta in [a, b]$, hogy a hiba:
@@ -2202,13 +2202,13 @@ $ 0 < integral_a^b l_k^2(x) w(x) dif x = sum_(j=0)^n A_j l_k^2(x_j). $
 *Tétel:* A $sum_(k=0)^n A_k f(x_k)$ kvadratúra formula akkor és csak akkor pontos minden $f in P_(2n+1)$ polinomra, ha interpolációs típusú és az $x_0, dots, x_n$ alappontok az $n+1$-edfokú súlyozott ortogonális polinom gyökei.
 
 *Bizonyítás ($arrow.l$ irány):*
-1. Legyen $f in P_(2n+1)$ egy tetszőleges polinom. Osszuk el $f$-et maradékosan az $omega_n(x) = product_(k=0)^n (x - x_k)$ csomóponti polinommal:
-$ f(x) = omega_n(x) q(x) + r(x), "  ahol " q, r in P_n. $
+1. Legyen $f in P_(2n+1)$ egy tetszőleges polinom. Osszuk el $f$-et maradékosan az $omega_n (x) = product_(k=0)^n (x - x_k)$ csomóponti polinommal:
+$ f(x) = omega_n (x) q(x) + r(x), "  ahol " q, r in P_n. $
 2. Integráljuk mindkét oldalt a súlyfüggvénnyel:
 $ integral_a^b f w = integral_a^b omega_n q w + integral_a^b r w. $
 3. Mivel $omega_n$ az $n+1$-edfokú ortogonális polinom, definíció szerint merőleges minden nála kisebb fokszámú polinomra, így a $q in P_n$ polinomra is. Tehát $integral_a^b omega_n q w = chevron.l omega_n, q chevron.r_w = 0$.
 4. Az $r in P_n$ maradékpolinomra a formula az interpolációs volta miatt pontos: $integral_a^b r w = sum_(k=0)^n A_k r(x_k)$.
-5. Vizsgáljuk meg a függvényértékeket az alappontokban: $f(x_k) = omega_n(x_k) q(x_k) + r(x_k)$. Mivel $x_k$ az $omega_n$ gyökei, $omega_n(x_k) = 0$, így $f(x_k) = r(x_k)$.
+5. Vizsgáljuk meg a függvényértékeket az alappontokban: $f(x_k) = omega_n (x_k) q(x_k) + r(x_k)$. Mivel $x_k$ az $omega_n$ gyökei, $omega_n (x_k) = 0$, így $f(x_k) = r(x_k)$.
 6. Összegezve: $integral_a^b f w = 0 + integral_a^b r w = sum A_k r(x_k) = sum A_k f(x_k)$.
 7. Tehát a formula valóban pontos minden $2n+1$-edfokú polinomra.
 
