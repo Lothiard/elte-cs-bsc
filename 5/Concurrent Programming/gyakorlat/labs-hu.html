@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="hu" xml:lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Konkurens programozás feladatsor</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="labs.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Konkurens programozás feladatsor</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#java-ismétlés" id="toc-java-ismétlés">Java
+ismétlés</a></li>
+<li><a href="#szálak-készítése" id="toc-szálak-készítése">Szálak
+készítése</a></li>
+<li><a href="#synchronized" id="toc-synchronized"><code
+class="sourceCode java"><span class="kw">synchronized</span></code></a></li>
+<li><a href="#executorservice" id="toc-executorservice"><code
+class="sourceCode java"><span class="bu">ExecutorService</span></code></a></li>
+<li><a href="#szinkronizált-adatszerkezetek"
+id="toc-szinkronizált-adatszerkezetek">Szinkronizált
+adatszerkezetek</a></li>
+<li><a href="#holtpont" id="toc-holtpont">Holtpont</a></li>
+<li><a href="#wait-notify" id="toc-wait-notify"><code
+class="sourceCode java">wait</code>-<code
+class="sourceCode java">notify</code></a></li>
+<li><a href="#explicit-zárak" id="toc-explicit-zárak">Explicit
+zárak</a></li>
+<li><a href="#gyakorló-feladat" id="toc-gyakorló-feladat">Gyakorló
+feladat</a></li>
+<li><a href="#beadandó-feladatok" id="toc-beadandó-feladatok">Beadandó
+feladatok</a></li>
+</ul>
+</nav>
+<!--
+Compile it like this:
+    pandoc labs.md -s --toc -L scripts/slides.lua -V lang=en -o labs-en.html
+    pandoc labs.md -s --toc -L scripts/slides.lua -V lang=hu -o labs-hu.html
+-->
+<h1 class="hu" id="java-ismétlés">Java ismétlés</h1>
+<ol type="1">
+<li><p>Egyszerű Java osztály</p>
+<p>Készíts egy osztályt <code>Employee</code> néven. Az
+<code>Employee</code> osztálynak két privát adattagja van,
+<code>name</code> (név) és <code>salary</code> (fizetés). Készíts az
+osztályhoz nyilvános konstruktort, ami inicializálja ezt a két mezőt.
+Ezenkívül készíts lekérdező metódust mindkét mezőhöz, valamint egy olyan
+metódust, amely a fizetést egy adott százalékkal megemeli (paraméterként
+átadott lebegőpontos érték).</p>
+<p>Ehhez a feladathoz és a következőkhöz is készíts egy
+<code>main</code> függvénnyel rendelkező osztályt, amelyik kipróbálja az
+összes. Fordítsd le és futtasd a kódot.</p></li>
+<li><p>Absztrakt osztály és öröklődés</p>
+<p>Tedd az <code>Employee</code> osztályt absztrakttá. Készíts két
+osztályt, amely belőle származik le <code>Manager</code> és
+<code>Subordinate</code> (beosztott) néven. Tedd az
+<code>Employee</code> osztály <code>salary</code> mezőjének lekérdező
+metódusát absztrakttá, az eredeti működést meg tedd át egy ezt
+felüldefiniáló metódusba a <code>Subordinate</code> osztályban.</p>
+<p>A <code>Manager</code> osztály tároljon egy listát, amelyben
+<code>Employee</code> típusú elemek szerepelnek. Készíts metódusokat a
+<code>Manager</code> osztályba, amelyek <code>Employee</code>
+példányokat adnak hozzá és törölnek. Definiáld felül a
+<code>getSalary()</code> metódust a <code>Manager</code> osztályban is
+olyan módon, hogy a saját fizetéséhez adja hozzá a listájában szereplő
+összes <code>Employee</code> fizetésének 5%-át, és ezt az értéket adja
+vissza.</p></li>
+<li><p>Interfész</p>
+<p>Készíts egy interfészt <code>SalariedEntity</code> néven, amelynek
+egyetlen <code>getSalary()</code> metódusa van. Módosítsd az
+<code>Employee</code> osztályt úgy, hogy valósítsa meg ezt az
+interfészt. Ezen kívül készíts egy az interfészt szintén megvalósító
+<code>Subcontractor</code> (alvállalkozó) osztályt is. Az
+alvállalkozóknak a nevük helyett az adószámát (<code>long</code>)
+tároljuk.</p></li>
+<li><p>🏠 Házi feladat</p>
+<p>Készíts egy <code>Company</code> nevű osztályt, amely egy
+<code>SalariedEntities</code> elemekből álló listát tartalmaz. Készíts
+metódusokat, amelyek ehhez a listához adnak elemeket, illetve törölnek
+belőle, valamint egy olyat is, amely az <code>Employee</code> típusú
+elemek fizetését egy adott százalékkal megemeli.</p></li>
+</ol>
+<h1 class="hu" id="szálak-készítése">Szálak készítése</h1>
+<ol type="1">
+<li><p>Készíts két szálat és futtasd őket. A szálak írják ki a
+<code>hello</code> és a <code>world</code> szövegeket sokszor (pl.
+egymás után <code>10_000</code> alkalommal) a
+<code>System.out.println()</code> használatával.</p>
+<p>A szálak logikáját a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html"><code>Thread</code></a>
+osztály általad készített leszármazottjának <code>run</code> metódusába
+kell leírni, a szálak indításához pedig példányosítás után a
+<code>start()</code> metódust kell meghívni.</p>
+<ol type="a">
+<li>Figyeld meg, hogy a kimenetek összefésülődnek.
+<ol type="a">
+<li>Írj olyan megoldást is, ahol karakterről karakterre írod ki a
+szövegeket, a <code>System.out</code> objektum <code>print()</code>
+műveletét használva, nem a <code>println()</code> segítségével.</li>
+</ol></li>
+<li>Próbáld ki, mi történik, ha szálindítás helyett a fenti két kiírást
+nem a <code>start()</code>, hanem a <code>run()</code> metódus
+meghívásával futtatod.</li>
+<li>Készíts olyan megoldást is, ahol a sztenderd kimenet helyett egy
+fájlba írod a kimenetet <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/PrintWriter.html"><code>PrintWriter</code></a>
+használatával.</li>
+<li>Oldd meg a feladatot úgy is, hogy a <code>Thread</code> objektumokat
+különféle módokon készíted el. Gondold meg mindegyik esetben, hogy le
+lehet-e úgy írni a kódot, hogy a két szál tevékenységének közös része
+(ki kell írni valamit) nem ismétlődik a kódban, hanem csak egyszer
+jelenik meg, és a szálak ezt paraméterezik azzal, hogy pontosan milyen
+szöveget kell kiírni.
+<ul>
+<li><code>Thread</code> leszármazott osztállyal</li>
+<li><code>Runnable</code> interfészt megvalósító osztállyal</li>
+<li><code>Thread</code>-ből származó névtelen osztállyal</li>
+<li><code>Runnable</code>-ből származó névtelen osztállyal</li>
+<li><code>Thread</code> konstruktorának lambda átadásával</li>
+</ul></li>
+</ol></li>
+<li><p>Kísérletezz szálakkal.</p>
+<ul>
+<li>Nevezd el a szálakat (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#setName(java.lang.String)"><code>setName</code></a>).</li>
+<li>Készíts egy <a
+href="https://download.java.net/java/early_access/loom/docs/api/java.base/java/lang/ThreadGroup.html"><code>ThreadGroup</code></a>
+példányt, és add azt át a szálak első paraméterének.
+<ul>
+<li>Az osztály <a
+href="https://download.java.net/java/early_access/loom/docs/api/java.base/java/lang/ThreadGroup.html#activeCount()"><code>activeCount()</code></a>
+és <a
+href="https://download.java.net/java/early_access/loom/docs/api/java.base/java/lang/ThreadGroup.html#list()"><code>list()</code></a>
+metódusait használva figyeld meg a szálak futását.</li>
+</ul></li>
+<li>➿ Opcionális: IDE segítségével szüneteltesd a szálak futását
+<em>debug</em> módban (suspend).
+<ul>
+<li>Vizsgáld meg a változóik tartalmát a Debugger segítségével.</li>
+<li>Írd át a változók értékét, és folytasd a futtatást.</li>
+</ul></li>
+</ul></li>
+<li><p>🏠 Házi feladat: Ellenőrizd, hogy a több szálon való végrehajtás
+jelentős gyorsulást okoz(hat).</p>
+<ul>
+<li>Add össze az <code>1..1_000_000_000</code> intervallum számait egy
+szálon. Mérd ki a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#nanoTime()"><code>System.nanoTime()</code></a>
+felhasználásával, ez mennyi időbe telik.</li>
+<li>Ezután indíts <code>10</code> szálat, amik segítségével add össze az
+<code>1..1_000_000_000</code> intervallum számait:
+<ul>
+<li>Az első szál: az <code>1..100_000_000</code> intervallumon dolgozik,
+a második szál a <code>100_000_001..200_000_000</code> intervallumon,
+stb.</li>
+<li>Az összegzést egy <code>static</code> változóba vezesd.</li>
+<li>Mérd ki a <code>System.nanoTime()</code> felhasználásával, ez mennyi
+időbe telik, és ezt írd ki a szál lefutásának végén.</li>
+</ul></li>
+</ul></li>
+<li><p>📺 Példa: alternatív módszer szálak létrehozására; szálak
+bevárása, szálakon belüli várakozás, és szálak megszakítása</p>
+<p>A <code>DemoBasicThreading.java</code> futtatása bemutat néhány
+alapvető szálműveletet. Mindegyik művelethez külön fájl tartozik, a
+<code>DemoBasicThreadingHelper.java</code> pedig segédfüggvényeket
+tartalmaz.</p>
+<ol type="1">
+<li>Szál létrehozása örökléssel:
+<code>ClassExtendingThread.java</code></li>
+<li>Szál létrehozása interfész megvalósítással:
+<code>ClassImplementingRunnable.java</code></li>
+<li>Szál indítása: <code>ThreadCreationExample.java</code></li>
+<li>Szál bevárása, altatás és szinkronizált metódusok:
+<code>JoinSleepSynchronizedExample.java</code></li>
+<li>Szál megszakítása: <code>LifecycleInterruptExample.java</code></li>
+</ol></li>
+<li><p>Join, sleep, interrupt</p>
+<ol type="a">
+<li>Alakítsd át a <strong>Készíts két szálat…</strong> feladatot úgy,
+hogy miután mindkét szál végzett, írja ki a <code>kész</code> szót.
+<ul>
+<li>Hogy gyorsabban végezzen a program, írd át 1000-re a terminálási
+feltételben szereplő konstanst.</li>
+<li>Használd a <code>Thread</code> osztály <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#join()"><code>join</code></a>
+metódusát egy szál bevárásához.
+<ul>
+<li>Ne felejtsd el elkapni az <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/InterruptedException.html"><code>InterruptedException</code></a>
+kivételt.</li>
+</ul></li>
+</ul></li>
+<li>Várakozás szálon belül<br />
+Alakítsd át az előző programot úgy, hogy minden két kiírás között 5
+ezredmásodpercet várakozzon. Ehhez használd a <code>Thread</code>
+osztály <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#sleep(long)"><code>sleep</code></a>
+statikus metódusát.
+<ul>
+<li>Ne felejtsd el elkapni az <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/InterruptedException.html"><code>InterruptedException</code></a>
+kivételt.</li>
+<li>Megjegyzés: a Javában van egy <code>wait()</code> nevű, szintén
+közismert metódus, de annak teljesen más a szerepe.</li>
+</ul></li>
+<li>Szálak futásának megszakítása<br />
+Szakítsd meg az előző programban a szálakat egy másodperc futás után.
+Ehhez használd a <code>Thread</code> osztály <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#interrupt()"><code>interrupt</code></a>.</li>
+<li>Megszakított szál újraindítása?<br />
+Próbáld meg újraindítani a megszakított szálakat. Mi történik?</li>
+</ol></li>
+<li><p>Join, sleep, interrupt #2</p>
+<ul>
+<li>Indíts el 10 szálat, mely mind elszámol <code>1</code>-től
+<code>10_000</code>-ig és minden számot kiír egy fájlba (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/PrintWriter.html"><code>PrintWriter</code></a>),
+melynek a neve legyen azonos a szál nevével (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#getName()"><code>getName()</code></a>),
+kiterjesztése tetszőleges.
+<ul>
+<li>Fontos, hogy minden egyes kiírásnál újra nyisd meg, majd zárd be a
+fájlt.</li>
+<li>Elegendő, ha a fájl mindig csak az utolsó iterált számot tartalmazza
+(felül lehet írni a korábbit).</li>
+</ul></li>
+<li>A szálakat indító metódus várjon 1mp-et (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#sleep(long)"><code>Thread.sleep</code></a>),
+majd írja ki a szálakhoz tartozó fájlok utolsó sorát a sztenderd
+kimenetre. Észreveszel-e valami furcsaságot?</li>
+<li>Módosítsd a megoldást úgy, hogy még a kiírás előtt <em>bevárod</em>
+a szálakat. Ehhez hívd meg minden szálon a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#join()"><code>join()</code></a>
+műveletet.</li>
+<li>A <code>Thread.sleep</code> és a <code>Thread.join</code> műveletek
+ellenőrzött kivételeket dobhatnak, melyeket megfelelő
+<code>try-catch</code> blokkal kell kezelni. A feladat megoldásához most
+elég egy üres <code>catch</code> ágat létrehozni, nem kell
+“kivételkezelő logika”.</li>
+</ul></li>
+<li><p>🏠 Házi feladat</p>
+<p>A “<strong>Szálak bevárása</strong>” feladat megoldását bővítsd egy
+olyan szállal, amelyik másodpercenként kiírja, hány szál aktív még
+(<code>Thread.currentThread().getThreadGroup().activeCount()</code>). Ha
+már csak ez a szál maradt meg, lépjen ki.</p>
+<ul>
+<li>A másodpercenkénti működést először a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Thread.html#sleep(long)"><code>Thread.sleep</code></a>
+hívásával oldd meg.</li>
+<li>➿ Opcionális: Készíts egy másik megoldást is, ebben a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Timer.html"><code>Timer</code></a>
+osztály <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Timer.html#scheduleAtFixedRate(java.util.TimerTask,long,long)"><code>scheduleAtFixedRate</code></a>
+metódusát használd.</li>
+</ul></li>
+<li><p>🏠 Házi feladat: Bányászok és építők</p>
+<p>A feladat egy szimuláció létrehozása, ahol kétféle dolgozó (ezeket
+szálak testesítik meg) próbál felépíteni 5 házat – a bányászok (miner)
+az aranybányából bányásznak aranyat, amiből az építészek (builder)
+tudnak házakat építeni.</p>
+<ul>
+<li><code>Configuration.java</code>: Ez az osztály a szimuláció
+konfigurációját tartalmazza: meddig tartson egy építkezés, hány
+dolgozónk legyen stb. A megoldás során ehhez nem kell hozzányúlni.</li>
+<li><code>Resources.java</code>: Ez az osztály felel azért, hogy nyomon
+kövesse, mennyi aranyat lehet még bányászni a bányából, mennyi arannyal
+rendelkeznek a dolgozók, illetve hány házat építettek már fel. Egyelőre
+ehhez sem kell hozzányúlni.</li>
+<li><code>ThreadCraft.java</code>: Itt található a <code>main</code>
+metódus, illetve a dolgozók implementációja. A feladat a következőkből
+áll:
+<ul>
+<li>Elindítani a dolgozók (bányászok és építészek) szálait
+(<code>mineAction()</code> és <code>buildAction()</code>)</li>
+<li>Elindítani egy logoló szálat, ami bizonyos időközönként kiírja a
+szimuláció haladtát (<code>loggingAction()</code>)</li>
+<li>A <code>main</code>en belül megvárni, amíg a dolgozók szálai
+befejezik a munkát, majd kiírni, hogy vége a szimulációnak</li>
+<li>Implementálni a <code>sleepForMsec(int msec)</code> metódust, ami
+azért felel, hogy az azt meghívó szálat ,,sleepeltesse’’ a megszabott
+ideig</li>
+</ul></li>
+</ul>
+<p>Csak a <code>ThreadCraft.java</code> állományt töltsd fel.</p></li>
+</ol>
+<h1 class="hu" id="synchronized"><code
+class="sourceCode java"><span class="kw">synchronized</span></code></h1>
+<ol type="1">
+<li><p>Közösen használt adatok</p>
+<p>Indíts el két szálat, melyek egy közösen elért listába tesznek bele
+értékeket az <code>1..1_000_000</code> intervallumból úgy, hogy az egyik
+a páratlan, a másik páros értékeit teszi be. A listába az elemek
+beírását még ne szinkronizáld.</p>
+<ul>
+<li>Várd meg a szálak lefutását az ismert módszerrel.</li>
+<li>Vizsgáld meg milyen meglepő jelenségek figyelhetők meg a listában:
+<ul>
+<li>Hány eleme van a listának? (egymilliót várnánk)
+<ul>
+<li>Tipp: a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/List.html#subList(int,int)"><code>subList</code></a>
+művelettel megvizsgálható a listának egy kis része.</li>
+<li>Vagy: ki lehet írni a listában az inverziók (nagyobb érték után
+kisebb jön) számát.</li>
+</ul></li>
+<li>Sorrendben vannak-e az elemek?</li>
+<li>Több futtatás esetén kivétel is felléphet.</li>
+</ul></li>
+<li>Használj <code>synchronized</code> blokkot azon (és csak azon) a
+ponton, ahol az elemeket a listához adod. A szinkronizálás kulcsa legyen
+maga a lista.
+<ul>
+<li>Hogyan változik a lista tartalma? Hány eleme van?</li>
+<li>Mi a helyzet a lista elemek sorrendjével?</li>
+</ul></li>
+<li>➿ Opcionális: módosítsd a számok listába helyezését úgy, hogy,
+mindig növekvő sorrendben kerüljenek bele az elemek. Ehhez bővítsd ki a
+<code>synchronized</code> blokk hatókörét úgy, hogy legyen benne egy
+elágazás, ami garantálja, hogy mindig csak a rákövetkező elem kerüljön
+be a listába. Ügyelj rá, hogy ne maradjanak ki elemek.
+<ul>
+<li>Hogyan változik a program futási ideje ettől a módosítástól?</li>
+</ul></li>
+</ul></li>
+<li><p>🏠 Házi feladat</p>
+<p>Általánosítsd a “<strong>Közösen használt adatok</strong>” feladatot
+a következőképp.</p>
+<ul>
+<li>Kettő helyett <code>n</code> szál dolgozzon. Mindegyik az
+intervallum <code>n</code>-edik értékét tegye be a listába.</li>
+<li>Egy <code>isSynchronized</code> logikai érték adja meg, hogy az
+érték beillesztésének művelete szinkronizált legyen-e vagy sem.</li>
+<li>Egy <code>isInOrder</code> egy logikai érték adja meg, hogy az
+értékek sorrendben kerüljenek-e beillesztésre.</li>
+<li>➿ Opcionális: oldd meg, hogy a kód, amit a szálak futtatnak, csak
+egyszer legyen leírva a forráskódba egy segédmetódusban, és a szálak
+készítésekor ezt hívd meg a megfelelő paraméterezéssel.
+<ul>
+<li>Tipp: a segédmetódus visszatérési értéke <code>Runnable</code>.</li>
+</ul></li>
+<li>A főprogram helyett legyen egy segédfüggvény
+(<code>useThreads</code>), ami a fenti logikát vezérli (létrehozza,
+elindítja, bevárja a szálakat). Ennek a paraméterei legyenek az előbb
+megadottak (<code>n</code>, <code>isSynchronized</code>,
+<code>isInOrder</code>).</li>
+<li>A főprogramban hívd meg a <code>useThreads</code>-et több különböző
+paraméterezés mellett és mérd ki a futási időket a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#nanoTime()"><code>System.nanoTime()</code></a>
+segítségével. A futási időket a főprogram végén írd ki a sztenderd
+kimenetre.</li>
+</ul></li>
+<li><p><code>ThreadSafeMutableInteger</code> osztály, a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html"><code>java.util.concurrent.atomic.AtomicInteger</code></a>
+egyszerű megfelelője</p>
+<ol type="a">
+<li><p>Implementáld a <code>ThreadSafeMutableInteger</code> osztályt,
+mely a beépített <code>int</code> fölötti absztrakció és lehetővé teszi,
+hogy több szál is olvashassa/írhassa az általa tárolt számot szálbiztos
+módon. Ehhez használd a <code>synchronized</code> kulcsszót vagy blokk
+vagy metódus szinten. Az osztály alapműveletei a következők
+legyenek:</p>
+<ul>
+<li>két konstruktor: <code>ThreadSafeMutableInteger()</code> és
+<code>ThreadSafeMutableInteger(int)</code></li>
+<li>érték olvasása: <code>int get()</code></li>
+<li>érték írása: <code>void set(int)</code></li>
+</ul></li>
+<li><p>Próbáld ki a megoldást 10 szállal és egy közösen használt
+<code>ThreadSafeMutableInteger</code>rel, melyet minden szál
+<code>10_000_000</code>-szer növeljen meg eggyel. A szálak bevárása után
+írd ki a végeredményt.</p></li>
+<li><p>Atomicitást biztosító műveletek:</p>
+<ul>
+<li><code>int getAndIncrement()</code></li>
+<li><code>int getAndDecrement()</code></li>
+<li><code>int getAndAdd(int v)</code></li>
+<li><code>int incrementAndGet()</code></li>
+<li><code>int decrementAndGet()</code></li>
+<li><code>addAndGet(int v)</code></li>
+</ul></li>
+<li><p>Próbáld ki a többi műveletet is. Ellenőrizd, hogy a végeredmény
+megfelel-e az elvártnak.</p>
+<ul>
+<li>A szálak fele növelje, másik fele csökkentse eggyel. Ehhez használd
+az <code>getAndIncrement</code> és <code>getAndDecrement</code>
+műveleteket.</li>
+<li>A szálak fele növelje, másik fele csökkentse kettővel az
+<code>addAndGet</code> metódus használatával.</li>
+</ul></li>
+<li><p>Vizsgáld meg, mi történik, ha az <code>getAndIncrement</code> és
+<code>getAndDecrement</code> helyett a <code>get</code> és
+<code>set</code> műveletek segítségével próbálod növelni az értéket. Mit
+tapasztalsz? Miért lehet ez?</p></li>
+<li><p>➿ Opcionális: implementáld azokat a metódusokat, melyek
+tetszőleges akciók atomikus végrehajtását teszik lehetővé az adaton,
+majd teszteld a megoldást:</p>
+<ul>
+<li><code>int getAndUpdate(IntUnaryOperator)</code></li>
+<li><code>int updateAndGet(IntUnaryOperator)</code></li>
+</ul></li>
+</ol></li>
+<li><p>🏠 Házi feladat: <code>ThreadSafeMutableIntArray</code> osztály,
+a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/atomic/AtomicIntegerArray.html"><code>java.util.concurrent.atomic.AtomicIntegerArray</code></a>
+egyszerű megfelelője</p>
+<ol type="a">
+<li><p>Készítsd el a <code>ThreadSafeMutableIntArray</code>
+adatszerkezetet, mely egy szálbiztos <code>int</code> tömböt valósít
+meg.</p>
+<ul>
+<li>A <code>ThreadSafeMutableIntArray</code> elemei létrehozáskor
+<code>0</code>-ra inicializálódnak.</li>
+<li>A reprezentációban használj sima <code>int[]</code>-öt.</li>
+<li>⚠️ Fontos: eltérő elemeket különböző szálakból blokkolás nélkül
+lehessen elérni.
+<ul>
+<li>Ezért nem szabad az egész tömböt egyszerre zárolni a műveletekben,
+vagyis a <code>synchronized</code> metódus <strong>nem jó</strong>.</li>
+<li>Ehelyett hozz létre egy <code>capacity</code> méretű
+<code>locks</code> tömböt <code>Object</code> típusú elemekből. Ennek
+segítségével a tömbelemek egyedileg zárolhatók.</li>
+</ul></li>
+</ul></li>
+<li><p>Definiáld a következő műveleteket az osztályban:</p>
+<ul>
+<li>Konstruktor: <code>ThreadSafeMutableIntArray(int capacity)</code>,
+mely a <code>capacity</code> méretű <code>int</code> tömböt, valamint az
+egyes elemekhez tartozó zárakat tartalmazó <code>Object</code> tömböt
+hozza létre.
+<ul>
+<li>Ügyelj rá, hogy míg az <code>int[]</code> alapból megfelelően van
+inicializálva, addig az <code>Object[]</code> elemeit neked kell
+inicializálni. Elegendő egyszerű <code>Object</code> példányokat
+beletenni.</li>
+</ul></li>
+<li>Az <code>idx</code> indexű elem lekérdezése:
+<code>int get(int idx)</code>. Ez a művelet zárolja az
+<code>idx</code>-edik elemhez tartozó kulcsot.</li>
+<li>Az <code>idx</code> indexű elem írása:
+<code>void set(int idx, int newValue)</code>. Ez a művelet zárolja az
+<code>idx</code>-edik elemhez tartozó kulcsot.</li>
+</ul></li>
+<li><p>Próbáld ki a megvalósítást a főprogramban. Ehhez hozz létre 10
+szálat és egy közösen használt, kételemű
+<code>ThreadSafeMutableIntArray</code>-t. A szálak fele a
+<code>0</code>-ás indexű elemet, másik fele az <code>1</code>-es indexű
+elemet írja.</p>
+<ul>
+<li>Minden szál növelje egyesével az általa használt elemet egészen
+<code>10_000_000</code>-ig.</li>
+<li>Írd ki az eredményeket a sztenderd kimenetre.</li>
+<li>Tapasztalsz-e valamilyen furcsaságot? Hogyan lehetne ezt
+megszüntetni?</li>
+</ul></li>
+<li><p>➿ Opcionális: atomicitást biztosító műveletek:</p>
+<ul>
+<li><code>int updateAndGet(int n, IntUnaryOperator)</code></li>
+<li><code>int getAndUpdate(int n, IntUnaryOperator)</code></li>
+</ul></li>
+</ol></li>
+</ol>
+<h1 class="hu" id="executorservice"><code
+class="sourceCode java"><span class="bu">ExecutorService</span></code></h1>
+<ol type="1">
+<li><p>Ábrázoljunk egy olyan rendszert, amelyben néhány ügyfél
+kölcsönöket vesz fel egy banktól.</p>
+<p>Az <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/Executors.html#newFixedThreadPool(int)">Executors.newFixedThreadPool</a>
+segítségével létrehozott poolba kerüljenek be a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ExecutorService.html#submit(java.lang.Runnable)">submit()</a>
+művelet segítségével az ügyfeleket ábrázoló szálak.</p>
+<p>A szálak megadott számú (pl. 10000) fordulón keresztül vesznek fel
+kölcsönöket. A <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ThreadLocalRandom.html#nextInt(int,int)">ThreadLocalRandom.current().nextInt(min,
+max)</a> sorsolja ki a kölcsön nagyságát minden fordulóban, pl. 100 és
+1000 érték között. A banknak van egy központi számlálója, ahol az eddig
+felvett kölcsönök összegét tárolja, ennek elérése legyen megfelelően
+szinkronizált. Továbbá az ügyfelek is tárolják külön-külön, mennyi
+kölcsönt vettek fel; ezt az értéket a futásuk végén írják be egy tömb
+megfelelő pozíciójára.</p>
+<p>A pool várja be a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ExecutorService.html#shutdown()">shutdown()</a>
+és az <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ExecutorService.html#awaitTermination(long,java.util.concurrent.TimeUnit)">awaitTermination()</a>
+műveletek segítségével, hogy mindegyik ügyfélszál befejezze a futását,
+majd a program végén ellenőrizzük, hogy a közösen nyilvántartott
+számláló értéke megegyezik-e az ügyfelenként nyilvántartott kölcsönök
+összegével.</p></li>
+<li><p>Ugyanaz a feladat, mint az előző részben, azonban most <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ExecutorService.html#submit(java.util.concurrent.Callable)">ezt
+a submit() műveletet</a> használjuk.</p>
+<p>Az ügyfél kölcsöneinek összege most ne tömbbe íródjon a szál
+futásának a végén, hanem a <code>submit()</code>-nak átadott névtelen
+metódus a visszatérési értéke legyen. A <code>submit()</code>
+visszatérési értéke egy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/Future.html">Future</a>,
+amelyből a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/Future.html#get()">get()</a>
+művelettel lehet kikérni a kiszámított értéket.</p>
+<p>A program csak a kétféle módon összesített kölcsönök egyezésének
+megvizsgálása után hívja meg a <code>shutdown()</code> műveletet a
+poolra.</p></li>
+<li><p>🏠 Házi feladat: a <code>Switcheroo</code> osztály főprogramja
+indítson el 10 szálat. Legyen a rendszerben egy közösen elért, 100 elemű
+tömb, amelynek minden eleme kezdetben az 1000 értéket tartalmazza. A
+szálak 10000 lépésen keresztül a következőt teszik: véletlenszerűen
+kiválasztják a tömb két pozícióját, és véletlenszerű értéket áttesznek
+egyikből a másikba (legfeljebb annyit, amennyi az első indexen elérhető
+volt). Az áttétel művelete legyen megfelelően szinkronizálva.</p>
+<p>A program lefutása végén ellenőrzendő, hogy a tömb összege
+megmaradt.</p></li>
+<li><p>🏠 Házi feladat: az <code>InefficientSorter</code> osztály
+főprogramja indítson el 10 szálat. Legyen a rendszerben egy közösen
+elért, 100 elemű tömb, amelynek minden eleme kezdetben véletlenszerű
+értékeket tartalmazzon. A szálak 10000 lépésen keresztül a következőt
+teszik: véletlenszerűen kiválasztják a tömb két pozícióját, és ha a
+kisebb indexen a másiknál nagyobb érték található, akkor megcserélik a
+kettőt. A csere művelete legyen megfelelően szinkronizálva.</p>
+<p>A legtöbb lefutás végén a tömbnek rendezetté kell válnia.
+Ellenőrzendő, hogy ez megtörtént-e, és az is, hogy a tömb elemei mind
+rendben megmaradtak-e.</p></li>
+</ol>
+<h1 class="hu" id="szinkronizált-adatszerkezetek">Szinkronizált
+adatszerkezetek</h1>
+<ol type="1">
+<li><p>Szinkronizált listák</p>
+<ol type="a">
+<li><p>Készítsd el a <code>nonSyncIterate</code> metódust, amely egy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Collection.html"><code
+class="sourceCode java">java<span class="op">.</span><span class="fu">util</span><span class="op">.</span><span class="fu">Collection</span><span class="op">&lt;</span><span class="bu">Integer</span><span class="op">&gt;</span></code></a>
+adatszerkezetet jár be elemenként egy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Iterator.html"><code
+class="sourceCode java"><span class="bu">Iterator</span><span class="op">&lt;</span><span class="bu">Integer</span><span class="op">&gt;</span></code></a>
+bejáró segítségével, és kiírja az érintett elemeket. A metódus kapjon
+meg továbbá egy számot is, ami szerepeljen a kiírásban. A
+<code>syncIterate</code> metódus hívjon át az előbbi metódusra úgy, hogy
+körülveszi a hívást egy <code>synchronized</code> blokkal, amelynek a
+kulcsa legyen a paraméterként megkapott adatszerkezet.</p>
+<p>Készíts az alábbi módokon listát sok (pl. <code>100_000</code>)
+elemből.</p>
+<ul>
+<li>Egyszerű <code>ArrayList</code>.</li>
+<li>Egyszerű <code>LinkedList</code>.</li>
+<li>Egyszerű <code>Vector</code>.</li>
+<li>Valamelyik fentiből <a
+href=""><code>Collections.synchronizedCollection</code></a> segítségével
+készített, szinkronizált adatszerkezet.</li>
+<li>Valamelyik fentiből <a
+href=""><code>Collections.synchronizedList</code></a> segítségével
+készített, szinkronizált adatszerkezet.</li>
+</ul>
+<p>A metódusok és az adatszerkezetek minél több kombinációjával próbáld
+ki az alábbiakat, és figyeld meg a kimenet szerkezetét.</p>
+<p>Indíts két szálat. Mindkét szál hívja meg a kiválasztott metódust,
+átadva a kiválasztott lista hivatkozását és a saját sorszámát.</p></li>
+<li><p>🏠 Házi feladat: van egy közösen elért listánk
+(<code>original</code>), amely kezdetben az <code>1, 2, ...</code>
+értékekkel van feltöltve. Az utolsó érték
+<code>THREAD_COUNT * ELEMS_PER_THREAD</code>, ahol
+<code>THREAD_COUNT</code> tetszőleges érték (legalább 2),
+<code>ELEMS_PER_THREAD</code> pedig viszonylag nagy (pl.
+<code>100_000</code>). Legyen egy másik közösen elért listánk is
+(<code>result</code>), ez kezdetben üres.</p>
+<ul>
+<li>Egy <code>ExecutorService</code> hajtson végre
+<code>THREAD_COUNT</code> feladatot, amelyek
+<code>ELEMS_PER_THREAD</code> lépésen keresztül leveszik
+<code>original</code> első elemét (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/List.html#remove(int)"><code>remove</code></a>),
+és beteszik <code>result</code> elejére (<a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/List.html#add(int,E)"><code>add</code></a>).</li>
+<li>Állítsd le az <code>ExecutorService</code>t, majd írasd ki
+<code>result</code> első 100 elemét.
+<ul>
+<li>A legtöbb lefutás során <code>ConcurrentModificationException</code>
+lép fel.</li>
+<li>Próbáld ki: ha mindkét lista szinkronizált, akkor nem lép fel a
+kivétel.</li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li><p><code>ConcurrentMap</code></p>
+<ol type="a">
+<li><p>Van egy naptárunk, amelybe találkozók időpontját jegyezzük be.
+Egy-egy találkozó 10 perces, és egymással nem ütközhetnek. A naptárba 10
+szál betesz 5000-5000 db találkozót, miközben másik 10 szál 2500-2500 db
+találkozót töröl belőle folyamatosan. Egy külön szál
+századmásodpercenként megkeresi és kiírja a következő esedékes találkozó
+időpontját. Ennek a feladatnak a megoldása a
+<code>MeetingCalendar.java</code> fájlban érhető el.</p>
+<p>Mivel a program sima <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/HashMap.html"><code>java.util.HashMap</code></a>-et
+használ a találkozók tárolására, ami nem szálbiztos, általában nem fut
+végig, hanem valamelyik szál <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/ConcurrentModificationException.html"><code>ConcurrentModificationException</code></a>
+kivételt vált ki.</p>
+<p>Javítsd ki a programot. Ehhez használd a már tanult <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Collections.html#synchronizedMap(java.util.Map)"><code>java.util.Collections.synchronizedMap()</code></a>
+metódust, az iterációt pedig külön szinkronizáld.</p></li>
+<li><p>Módosítsd az előző feladat megoldását úgy, hogy a
+<code>java.util.Collections.synchronizedMap()</code> metódus használata
+helyett az egész adatszerkezetet cseréld ki <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html"><code>java.util.concurrent.ConcurrentHashMap</code></a>-re.
+Töröld az iteráció körül levő szinkronizációt is, mert ennél az
+adatszerkezetnél erre nincs szükség. Figyeld meg (a kiíró szál
+kiírásainak száma alapján), hogy melyik megoldás a gyorsabb.</p></li>
+<li><p>Készíts olyan programot, ami egy szinkronizált fajta
+<code>Map</code>-et használ: betevő, kivevő, bejáró műveleteket hív meg
+rá sok szálból. A program legyen minél egyszerűbb, az előző feladatban
+levő bonyolultságát nem kell megközelítenie.</p>
+<p>A programmal demonstráld, hogy egyfajta paraméterezés (pl. a szálak
+számának vagy a <code>Map</code>-be kerülő elemek számának módosítása)
+esetén a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Collections.html#synchronizedMap(java.util.Map)"><code>synchronizedMap()</code></a>,
+másfajta paraméterezés esetén a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html"><code>ConcurrentHashMap</code></a>
+tud gyorsabb lenni.</p></li>
+<li><p>🏠 Házi feladat: szimuláld egy tőzsde (egyszerűsített) működését.
+A részvények (3 nagybetű) árát (lebegőpontos) egy map adatszerkezet
+tárolja. Minden részvény 100 $-ról indul. 100 bróker 10000 körön át vesz
+vagy ad el részvényt. Ha egy részvény vesznek, akkor az 1%-kal drágul,
+ha pedig eladják, akkor ugyanennyivel csökkent az ára. Van egy további
+szál is, amely másodpercenként egyszer kiírja az aktuális árfolyamokat.
+Használd a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Collections.html#synchronizedMap(java.util.Map)"><code>Collections.synchronizedMap()</code></a>
+hívást az adatszerkezet szálbiztossá tételéhez.</p></li>
+<li><p>🏠 Házi feladat: alakítsd át az előző megoldásodat úgy, hogy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Collections.html#synchronizedMap(java.util.Map)"><code>ConcurrentHashMap</code></a>
+adatszerkezetet használsz. Mivel az egyes részvényárfolyamok egymástól
+függetlenek, ne lassítsd a programot az iteráció felesleges
+szinkronizációjával.</p></li>
+</ol></li>
+<li><p><code>BlockingQueue</code></p>
+<p>Az alábbi feladatokhoz elérhető váz <code>PipelineN.java</code> néven
+(<code>N</code>=1,2,3).</p>
+<p>Készíts adatcsatornát (pipeline) a következőképpen.</p>
+<ol type="a">
+<li>Az adatcsatorna álljon két <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>ból,
+az első szövegeket, a második számokat szállít.
+<ul>
+<li>Példányosításhoz <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/ArrayBlockingQueue.html"><code>ArrayBlockingQueue</code></a>
+vagy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/LinkedBlockingQueue.html"><code>LinkedBlockingQueue</code></a>
+használható.</li>
+<li>Egy szál feltölti az elsőt néhány előre megadott szöveggel.
+<ul>
+<li>Variáns: a szövegek jöhetnek egy fájlból is.</li>
+</ul></li>
+<li>Egy másik szál kiolvassa az elemeket az első sorból, és a hosszukat
+beteszi a másodikba.</li>
+<li>Egy harmadik szál kiolvassa az elemeket a másodikból, és kiírja őket
+a sztenderd kimenetre.</li>
+<li>Azt, hogy a sorból nem olvasható további elem, jelezd extremális
+elemmel (<code>""</code>, <code>Integer.MAX_VALUE</code>).
+<ul>
+<li>Ezeknek célszerű szimbolikus nevet is adni, pl.
+<code>NO_FURTHER_INPUT1</code> és <code>NO_FURTHER_INPUT2</code>.</li>
+</ul></li>
+<li>Ha az adatcsatorna szálait thread pool kezeli, ne felejtsd el
+leállítani.</li>
+<li>Bónusz feladat: kísérletezz az adatcsatorna paramétereivel.
+<ul>
+<li>A csatorna mérete legyen (sokkal) kisebb, mint ahány sort a fájl
+tartalmaz.</li>
+<li>A betevő és kivevő műveletek közül használj különböző
+jellegűeket.</li>
+<li>Szimuláld az elemek előállításának/feldolgozásának idejét
+várakozással.</li>
+</ul></li>
+</ul></li>
+<li>Készíts sok komponensből álló adatcsatornát.
+<ul>
+<li>Adott sok metódus, ilyen formában (de más-más képlettel):
+<code>Function&lt;Integer, Integer&gt; fun = n -&gt; 2 * n + 1;</code>
+<ul>
+<li>Ehhez importálni kell: <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/function/Function.html"><code>java.util.function.Function</code></a></li>
+<li>Használni így lehet: <code>fun.apply(123)</code></li>
+</ul></li>
+<li>Készíts olyan adatcsatornát, ami sok szálat és <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>t
+használ.
+<ul>
+<li>Az első szál elővesz néhány számot, és beteszi az első <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>ba.</li>
+<li>A következő szálak kiveszik az elemeket a megfelelő <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>ból,
+és a megfelelő függvény segítségével átalakítva beteszik a
+következőbe.</li>
+<li>A végső szál a kiérkező elemeket kiírja a sztenderd kimenetre.</li>
+</ul></li>
+</ul></li>
+<li>Készíts adatcsatornát prímek szűrésére.
+<ul>
+<li>A csatorna álljon <code>stageCount</code> darabszámú komponensből.
+Páronként legyenek összekötve egy-egy <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>val,
+és legyen még egy további <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>
+is.</li>
+<li>Az első <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>
+kapja meg a 3, 5, 7, … bemenetet valamilyen felső korlátig, és végül az
+<code>Integer.MAX_VALUE</code> értéket, ami a bemenet végét jelzi.</li>
+<li>Egy thread poolba kerüljön bele <code>stageCount</code> darab
+<code>Callable</code>, amelyek a következőket tegyék.
+<ul>
+<li>Mindegyik <code>Callable</code> ismer két szomszédos
+<code>BlockingQueue</code>t.</li>
+<li>Először is felveszi a legelső beérkező számot. Ez lesz a
+<code>Callable</code>höz tartozó prímszám.</li>
+<li>Ezután sorban felveszi a többi számot is.
+<ul>
+<li>Ha <code>Integer.MAX_VALUE</code>t talál, azt továbbküldi, majd
+befejezi a futását.</li>
+<li>Egyébként: ha a szám osztható a prímmel, kiszűri (elteszi egy
+listába), ha nem osztható, akkor továbbküldi a másik <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html"><code>BlockingQueue</code></a>ba.</li>
+</ul></li>
+<li>A futása végén visszatér a kiszűrt számok listájával.</li>
+</ul></li>
+<li>A thread pool az <code>invokeAll</code> hívás segítségével elindítja
+a csatorna összes komponensét és kiveszi belőlük a kiszűrt számok
+listáit, amelyeket írj ki.</li>
+<li>Az utolsó csatornából szintén írd ki a (majdnem garantáltan)
+prímszámok listáját.</li>
+<li>A kimenet az alábbihoz hasonló kinézetű legyen.</li>
+</ul>
+<pre><code>[9, 15, 21, 27, 33, 39, 45, 51, 57, 63, 69, 75, 81, 87, 93, 99]
+[25, 35, 55, 65, 85, 95]
+[49, 77, 91]
+[]
+[]
+[]
+[]
+Remaining: [23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]</code></pre>
+<ul>
+<li>Ha a <code>Callable</code>ök eltárolják egy (rajtuk kívül
+elhelyezett) tömbben a prímszámaik értékét, akkor így is kinézhet a
+kiírás.</li>
+</ul>
+<pre><code>Filtered by 3: [9, 15, 21, 27, 33, 39, 45, 51, 57, 63, 69, 75, 81, 87, 93, 99]
+Filtered by 5: [25, 35, 55, 65, 85, 95]
+Filtered by 7: [49, 77, 91]
+Filtered by 11: []
+Filtered by 13: []
+Filtered by 17: []
+Filtered by 19: []
+Remaining: [23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]</code></pre></li>
+</ol></li>
+</ol>
+<h1 class="hu" id="holtpont">Holtpont</h1>
+<ol type="1">
+<li><p>Étkező filozófusok</p>
+<p>Öt csendes filozófus ül egy kerek asztalnál, az asztal közepén egy
+tál spagetti. Öt villa is van az asztalon, minden két filozófus között
+egy. Minden filozófus felváltva gondolkodik és eszik. Egy filozófus csak
+akkor tud enni, ha mindkét kezében villa van. Minden villát egyszerre
+csak egy filozófus használhat, tehátt csak akkor tud vele enni, ha más
+nem használja. Miután a filozófus befejezte az evést, visszateszi a
+villákat, hogy a szomszédai is tudják őket használni. A filozófus csak
+akkor tudja felvenni a bal vagy a jobb villáját, ha azok az asztalon
+vannak, és csak azokkal tudja megkezdeni az evést.</p>
+<p>Ezt a jelenetet szimulálja a <code>Philosophers</code> osztály.
+Sajnos, a szimuláció időnként holtpontba kerül, ha az összes filozófus
+egyszerre veszi fel a bal villáját, és vár a jobbra.</p>
+<p>Javítsd ki a szimulációt úgy, hogy minden filozófus előbb az
+alacsonyabb sorszámú villát vegye el, és utána a magasabb sorszámút, így
+elkerülve a holtpontot.</p></li>
+<li><p>Egy termelő szál egy sorba elemeket helyez, amelyeket onnan egy
+fogyasztó szál kivesz, és kiír a képernyőre. Időnként egy harmadik szál
+pillanatképet ír ki a sor állapotáról.</p>
+<p>Sajnos a <code>ProducerConsumer</code> osztály hibásan működik, mert
+a sor elérése során versenyhelyzetek állnak fenn.</p>
+<p>Javítsd meg a programot úgy, hogy szálbiztossá teszed a sor elérését.
+A képernyőre írást is tedd konzisztenssé.</p></li>
+</ol>
+<h1 class="hu" id="wait-notify"><code
+class="sourceCode java">wait</code>-<code
+class="sourceCode java">notify</code></h1>
+<ol type="1">
+<li><p>Az alvó borbély probléma</p>
+<ol type="a">
+<li><p>Egy borbélynak van egy széke a munkatermében és van egy váróterme
+adott számú székkel. Amint levágja egy ügyfelének a haját, átmegy a
+váróterembe, és megnézi, hogy vannak-e ott mások. Ha van, akkor beengedi
+egyiküket a munkaterembe, és levágja a haját. Ha nincsenek, akkor
+visszamegy a munkatermébe, és alszik a székében. Amint érkezik egy új
+ügyfél, megnézi, hogy mit csinál a borbély. Ha alszik, akkor
+felébreszti, és beül a munkaterembe. Ha hajat vág, akkor a váróteremben
+marad. Ha ott van szabad szék, akkor kivárja a sorát, ha nincs, akkor
+elmegy.</p>
+<p>A szimuláció részleges megvalósítása a <code>BarberShop.java</code>
+állományban található. A feladat a hiányzó részek kitöltése, amelyek a
+borbély alvó és az ügyfelek ébresztő tevékenységei. Valósítsd meg ezeket
+a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html#wait()"><code>wait()</code></a>
+és a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html#notify()"><code>notify()</code></a>
+metódusok segítségével.</p></li>
+<li><p>Továbbfejlesztés</p>
+<p>A <code>Barber</code> szál megszakítása nem igazán elegáns. Ehelyett
+használjuk inkább a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html#wait(long)"><code>wait(long timeoutMillis)</code></a>
+metódust, amivel korlátozni tudjuk a borbély alvásának hosszát.</p></li>
+</ol></li>
+<li><p>🏠 Házi feladat: saját blokkoló sor</p>
+<ol type="a">
+<li>Valósítsd meg a saját blokkoló sorodat a várakozás és ébresztés
+technika segítségével! Használd az egyik korábbi feladatunk megoldását a
+teszteléséhez! Elég, ha a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/BlockingQueue.html#take()"><code>take()</code></a>
+műveletet megírod. Mivel a sor nem tartja nyilván, hogy ki várakozik rá,
+hagynáld a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html#notifyAll()"><code>notifyAll()</code></a>
+metódust, amely minden várakozó szálat felébreszt! Terjeszd ki a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/Queue.html"><code>Queue</code></a>
+interfészt és valamelyik megvalósítását, pl. az <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/ArrayDeque.html"><code>ArrayDeque</code></a>-t.</li>
+</ol></li>
+</ol>
+<h1 class="hu" id="explicit-zárak">Explicit zárak</h1>
+<ol type="1">
+<li><p>Írók és olvasók</p>
+<p>Egy adatbázist párhuzamosan írnak és olvasnak különböző szálak. Az
+egyszerűség kedvéért most feltételezzük, hogy az adatbázist csak egyben
+lehet zárolni.</p>
+<p>A szimuláció megvalósítása a <code>ReadersWriters.java</code>
+állományban található. Vedd körül az olvasást és az írást
+szinkronizációs blokkokkal.</p></li>
+<li><p>Olvasási és írási zárak</p>
+<p>A szinkronizációs blokkok használata jelentősen lerontja a
+teljesítményt. Ugyanakkor a konkurens írások soha nem jelentenek
+problémát. Kizárólag a konkurens írásokat kell megakadályoznunk, és az
+írásokkal konkurens olvasásokat. Cseréld ki a szinkronizációs programok
+használatát olvasási és írási zárakra a <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/locks/ReadWriteLock.html">ReadWriteLock</a>
+objektumok használatával.</p></li>
+<li><p>Igazságos sorrend</p>
+<p>Ha túl sok az olvasó, akkor kiéheztethetik az írókat. Ezt
+megakadályozhatjuk igazságos sorrend biztosításával az olvasási és írási
+zárakban: <a
+href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html#%3Cinit%3E(boolean)">ReentrantReadWriteLock(boolean
+fair)</a>. Hasonlítsd össze az eredményeket az előzőekkel.</p></li>
+</ol>
+<h1 class="hu" id="gyakorló-feladat">Gyakorló feladat</h1>
+<ol type="1">
+<li><p>Aukció</p>
+<p>Egy aukciós ház reprezentációját fogjuk elkészíteni. Az aukciós ház
+modern művészeket foglalkoztat, akik <a
+href="https://en.wikipedia.org/wiki/Non-fungible_token">Non-fungible
+token</a>, röviden NFT technológia segítségével értékesítik a műveiket.
+Mi ezeket az NFT-ket fogjuk kezelni, maguk a műtárgyak nem jelennek meg
+a programban.</p>
+<p>A szövegben a nagybetűvel szedett értékek konstansok, a kiinduló
+<code>AuctionHouse.java</code> fájlban találhatók meg. Ugyanebben a
+fájlban van a <code>runChecks()</code> metódus, amire a főprogram az
+utolsó lépésében áthív, ez a tesztelő kód – nem garantálja a program
+működésének helyességét, de ha azt írja, hogy valami rossz, akkor minden
+bizonnyal még nem helyes a program.</p>
+<p>A fájl végén található <code>sleepForMsec</code> segédfüggvényt lehet
+használni várakozáshoz, a <code>getRandomBetween</code> segédfüggvényt
+pedig véletlenszámok generálására.</p>
+<ol type="a">
+<li><p>Művész</p>
+<p>Ebben a feladatban is és minden további részben is úgy kell megírni a
+kódot, hogy ne fordulhasson benne elő se versenyhelyzet, se
+holtpont.</p>
+<p>A megoldás részletei TODO alakban olvashatók a letölthető, kiinduló
+<code>AuctionHouse.java</code> fájlban.</p>
+<p>A főprogram elindítja a művészeket (és majd a további feladatokban a
+többi szereplőt is) egy-egy szálként és bevárja, hogy mindenki
+elkészüljön. A helyesen működő programban minden szereplő önmagától le
+kell, hogy álljon pár másodpercen belül.</p>
+<p>A programban <code>ARTIST_COUNT</code> művészt foglalkoztatunk, akik
+20 ezredmásodpercenként létrehoznak egy-egy műalkotást véletlenszerűen
+100..1000 közötti áron, és beteszik az <code>nfts</code> tömb soron
+következő elemébe. Ha már több műalkotás nem fér be a <code>nfts</code>
+tömbbe, vagy ha a <code>remainingNftPrice</code> értéknél ezzel már több
+lenne a műalkotások összértéke, akkor a művész befejezi az
+alkotást.</p></li>
+<li><p>🏠 Házi feladat: Árverésvezető</p>
+<p>Az árverésvezető addig dolgozik, amíg a művészek közül még van aktív,
+illetve azután, hogy minden művész elkészült, még 100 árverést folytat
+le.</p>
+<ul>
+<li>Másik szál működését az <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#isAlive()"><code>isAlive()</code>
+művelet</a> meghívásával lehet lekérdezni.</li>
+</ul>
+<p>Mindegyik árverés úgy kezdődik, hogy az árverésvezető kiválaszt egy
+elérhető NFT-t, és az <code>auctionQueue</code> változón keresztül
+elérhetővé tesz egy <code>BlockingQueue</code>-t, amibe
+<code>AuctionOffer</code> elemeket küldenek majd be a 3. részfeladat
+műgyűjtői.</p>
+<ul>
+<li>Ebben a feladatban még senki sem fog licitálni, de nem baj,
+felkészülünk erre az eshetőségre.</li>
+<li>Az árverésvezető legfeljebb <code>MAX_AUCTION_OFFERS</code>
+alkalommal vár licitet az <code>auctionQueue</code>n keresztül, minden
+alkalommal legfeljebb egy ezredmásodpercig vár arra, hogy megjelenjen
+egy új licit. Ha a licit jobb árat ajánl, mint a korábbiak, akkor azt
+tekinti a nyerőnek.
+<ul>
+<li>Vigyázat, a futás elején előfordulhat, hogy még nem készült el egy
+NFT sem, akkor persze még nem lehet árverést indítani.</li>
+</ul></li>
+<li>Ha nem jön új licit az időkorláton belül, vagy
+<code>MAX_AUCTION_OFFERS</code> licitkör már lezajlott, akkor az
+árverésvezető lezárja a licitet.
+<ul>
+<li>Eltárolja a licit győztesének a nevét. Mást nem kell számon tartani
+róluk, csak azt, hogy kik győztek (legalább egyszer) árverésen.</li>
+<li>A <code>soldItemCount</code> értéke nőjön eggyel.</li>
+<li>Az aukciós ház jutaléka (<code>totalCommission</code>) nőjön meg a
+teljes vételár (az NFT alapára plusz a legjobb ajánlat) 10%-ával.</li>
+</ul></li>
+<li>Két árverés között legyen 3 ezredmásodperc “szünet”, ez alatt az
+<code>auctionQueue</code> legyen <code>null</code>.</li>
+</ul></li>
+<li><p>🏠 Házi feladat: Műgyűjtő</p>
+<p>Legyen <code>COLLECTOR_COUNT</code> darab műgyűjtő
+<code>Collector1</code>, <code>Collector2</code> stb. néven, akik addig
+licitálnak a következők szerint, amíg az árverésvezető dolgozik (működik
+a szála).</p>
+<p>A műgyűjtő minden licitálási kísérlet előtt véletlenszerűen vár
+<code>COLLECTOR_MIN_SLEEP</code>..<code>COLLECTOR_MAX_SLEEP</code>
+másodpercig.</p>
+<p>Ezután megnézi, hogy van-e elérhető árverés (az
+<code>auctionQueue</code> tartalmaz-e érvényes objektumot), ha nem,
+megnöveli a <code>noAuctionAvailableCount</code> változó értékét, és
+újra vár.</p>
+<p>Ha elérhető aukció, tesz egy
+<code>1</code>..<code>MAX_COLLECTOR_OFFER</code> közötti értékű
+ajánlatot, kivéve, ha ez egy olyan aukció, amin már részt vett.</p></li>
+</ol></li>
+</ol>
+<h1 class="hu" id="beadandó-feladatok">Beadandó feladatok</h1>
+<ol type="1">
+<li><p>Később lesz elérhető.</p></li>
+<li><p>Később lesz elérhető.</p></li>
+</ol>
+</body>
+</html>
