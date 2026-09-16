@@ -1,3 +1,46 @@
+= Alapfogalmak
+
+- *Sávszélesség (Bandwidth, $C$):* legnagyobb adatsebesség (b/s). Példa: $1 "Gbit/s"$.
+- *Késleltetés (Latency, $L$):* egy csomag egyirányú ideje (s). RTT: oda-vissza idő.
+- *Jitter:* késleltetés ingadozása (szórás vagy max–min).
+- *Kihasználtság (Utilization, $rho$):* terhelés/kapacitás arány.
+
+== Prefixek & átváltások
+
+Gyakori átváltások:
+- $1 "B" = 8 "b"$
+- $1 "MB/s" ("decimális") = 8 "Mb/s"$
+- $1 "Gbit/s" = 1000 "Mbit/s" = 10^9 "b/s"$
+
+*Példa:* $125 "MB/s" = 1000 "Mb/s" = 1 "Gb/s"$.
+
+== Késleltetés
+
+- *Terjedési késleltetés (Propagation, $L_p$):*
+  - *Képlet:* $L_p = "távolság" / "terjedési sebesség"$
+  - Vákuum $approx 3 times 10^8 "m/s"$; vezeték $approx 2 times 10^8 "m/s"$ ($approx 5 mu "s/km"$)
+- *Egyéb:* pl. Sorosítási késleltetés (Serialization, $L_s$), Feldolgozási késleltetés (Processing, $L_"proc"$), Sorbanállási késleltetés (Queuing, $L_q$)
+- $ "RTT" approx 2 L_p [+ "egyéb"] $
+
+*Gyakorlati példák (egyirányú):*
+- $100 "km"$ szál: $L_p approx 100 "km" times 5 mu "s/km" = 0.5 "ms"$.
+- $1000 "km"$ szál: $approx 5 "ms"$.
+
+#figure(
+  image("kesleltetesek.gif", width: 80%),
+)
+
+== Alap képletek (sebesség, idő, méret)
+
+- *Bitidő:* $t_b = 1 / C$
+- *Idő egy keretre:* $t = "méret_bitben" / C$
+- *Átvihető adat adott idő alatt:* $"adat" = C times t$
+
+== Hasznos hatásfok ($E$)
+
+- $E = "hasznos_bitek" / "összes_átvitt_bit"$
+- $"Goodput" = E times C$
+
 = 1. Egyszerű feladatok
 
 == 1.1 Átviteli idő
