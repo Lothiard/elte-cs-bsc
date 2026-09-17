@@ -1,13 +1,11 @@
-= Alapfogalmak
-
-- *Sávszélesség (Bandwidth, $C$):* legnagyobb adatsebesség (b/s). Példa: $1 "Gbit/s"$.
-- *Késleltetés (Latency, $L$):* egy csomag egyirányú ideje (s). RTT: oda-vissza idő.
-- *Jitter:* késleltetés ingadozása (szórás vagy max–min).
+== Alapfogalmak
+- *Sávszélesség (Bandwidth, $C$):* legnagyobb adatsebesség (b/s). Példa: 1 Gbit/s.
+- *Késleltetés (Latency, $L$):* egy csomag egyirányú ideje (s). *RTT:* oda-vissza idő.
+- *Jitter:* késleltetés ingadozása (szórás vagy max-min).
 - *Kihasználtság (Utilization, $rho$):* terhelés/kapacitás arány.
 
 == Prefixek & átváltások
-
-Gyakori átváltások:
+*Gyakori átváltások:*
 - $1 "B" = 8 "b"$
 - $1 "MB/s" ("decimális") = 8 "Mb/s"$
 - $1 "Gbit/s" = 1000 "Mbit/s" = 10^9 "b/s"$
@@ -15,133 +13,192 @@ Gyakori átváltások:
 *Példa:* $125 "MB/s" = 1000 "Mb/s" = 1 "Gb/s"$.
 
 == Késleltetés
-
 - *Terjedési késleltetés (Propagation, $L_p$):*
-  - *Képlet:* $L_p = "távolság" / "terjedési sebesség"$
-  - Vákuum $approx 3 times 10^8 "m/s"$; vezeték $approx 2 times 10^8 "m/s"$ ($approx 5 mu "s/km"$)
-- *Egyéb:* pl. Sorosítási késleltetés (Serialization, $L_s$), Feldolgozási késleltetés (Processing, $L_"proc"$), Sorbanállási késleltetés (Queuing, $L_q$)
-- $ "RTT" approx 2 L_p [+ "egyéb"] $
+  - Képlet: $L_p = "Távolság" / "terjedési sebesség"$
+  - Vákum = $3 times 10^8 "m/s"$; vezeték = $2 times 10^8 "m/s"$ ($approx 5 mu "s/km"$)
+- *Egyéb késleltetési összetevők:*
+  - $L_s$: Sorbaállítási késleltetés (Serialization)
+  - $L_("proc")$: Feldolgozási késleltetés (Processing)
+  - $L_q$: Sorbanállási késleltetés (Queuing)
+- *RTT képlet:* $"RTT" = 2 dot L_p + "egyéb"$
 
-*Gyakorlati példák (egyirányú):*
-- $100 "km"$ szál: $L_p approx 100 "km" times 5 mu "s/km" = 0.5 "ms"$.
-- $1000 "km"$ szál: $approx 5 "ms"$.
+*Gyakorlati példák (egyirányú terjedés):*
+- 100 km szál: $L_p = 100 "km" dot 5 mu "s/km" = 0.5 "ms"$.
+- 1000 km szál: $L_p = 1000 "km" dot 5 mu "s/km" = 5 "ms"$.
 
 #figure(
   image("kesleltetesek.gif", width: 80%),
 )
 
 == Alap képletek (sebesség, idő, méret)
-
 - *Bitidő:* $t_b = 1 / C$
 - *Idő egy keretre:* $t = "méret_bitben" / C$
-- *Átvihető adat adott idő alatt:* $"adat" = C times t$
+- *Átvitt adat adott idő alatt:* $"adat" = C dot t$
 
-== Hasznos hatásfok ($E$)
+*Hasznos hatásfok ($E$):*
+- $E = "hasznos_biteket" / "összes_átvitt_bit"$
+- $"Goodput" = E dot C$
 
-- $E = "hasznos_bitek" / "összes_átvitt_bit"$
-- $"Goodput" = E times C$
+== Egyszerű feladatok – Kidolgozás és Megoldás
 
-= 1. Egyszerű feladatok
+=== 1. Átviteli idő
+_Feladat:_ Mennyi idő alatt továbbítunk 60 MB adatot egy 100 Mbit/s linken (overhead nélkül)?
 
-== 1.1 Átviteli idő
-- *Adatállomány:* $50 "MB" = 50 times 8 "Mbit" = 400 "Mbit"$
-- *Sávszélesség ($C$):* $100 "Mbit/s"$
-- *Számítás:*
-$ t = "méret" / "kapacitás" = (400 "Mbit") / (100 "Mbit/s") = 4.0 "másodperc" $
+*Megoldás:*
+- Adatméret bitben: $D = 60 "MB" = 60 dot 8 "Mbit" = 480 "Mbit" = 480 dot 10^6 "bit"$.
+- Link sebessége: $C = 100 "Mbit/s" = 100 dot 10^6 "bit/s"$.
+- Átviteli idő: $t = D / C = (480 "Mbit") / (100 "Mbit/s") =$ *4.8 mp*
 
-== 1.2 Propagációs késés
-- *Távolság:* $200 "km"$
-- *Terjedési sebesség optikai szálon:* $5 mu "s/km"$
-- *Számítás:*
-$ L_p = 200 "km" times 5 mu s"/km" = 1000 mu s = 1.0 "ms" $
+=== 2. Propagációs késés
+_Feladat:_ Mennyi a terjedési késleltetés 200 km hosszú optikai szálon ($5 mu "s/km"$)?
 
-== 1.3 RTT becslés
-- *Egyirányú terjedési késleltetés:* $1000 "km" times 5 mu "s/km" = 5000 mu s = 5 "ms"$
-- *Egyirányú hálózati eszközök feldolgozási ideje:* $+ 2 "ms"$
-- *Egyirányú teljes késleltetés:* $5 "ms" + 2 "ms" = 7 "ms"$
-- *RTT (Round Trip Time, oda-vissza idő):*
-$ "RTT" approx 2 times 7 "ms" = 14 "ms" $
+*Megoldás:*
+- $L_p = 200 "km" dot 5 mu "s/km" = 1000 mu "s" =$ *1 ms*
 
-== 1.4 Hasznos hatásfok és Goodput
-- *Keretméret (MTU):* $1500 "B"$
-- *Fejlécek mérete (Overhead):* "IP fejléc" (20 B) + "TCP fejléc" (20 B) = 40 B
-- *Hasznos teher (Payload):* $1500 B - 40 B = 1460 B$
-- *Hasznos hatásfok ($E$):*
-$ E = "hasznos bitek" / "összes átvitt bit" = (1460 B) / (1500 B) approx 0.97333 ==> 97.33% $
-- *Goodput 1 Gbps ($1000 "Mbit/s"$) linken:*
-$ "Goodput" = E times C = 0.97333 times 1000 "Mbit/s" = 973.33 "Mbit/s" quad (0.9733 "Gbit/s") $
+=== 3. RTT becslés
+_Feladat:_ Egy adatcsomag 1000 km szálon halad ($5 mu "s/km"$). Becsüld meg az RTT-t, úgy hogy a hálózati eszközök feldolgozása további fix 2 ms késleltetést ad irányonként!
 
-#v(1em)
+*Megoldás:*
+- Egyirányú terjedési késleltetés: $L_p = 1000 "km" dot 5 mu "s/km" = 5 "ms"$.
+- Egyirányú teljes késleltetés: $L_("egyirányú") = L_p + L_("proc") = 5 "ms" + 2 "ms" = 7 "ms"$.
+- Oda-vissza idő (RTT): $"RTT" = 2 dot L_("egyirányú") = 2 dot 7 "ms" =$ *14 ms*
 
-#pagebreak()
-= 2. Komplexebb feladatok
+=== 4. Hasznos hatásfok
+_Feladat:_ Maximális csomagméret (MTU) = 1500 B, ebből az IP fejléc (min): 20 B, TCP fejléc (min): 20 B. Számoljuk ki a hasznos hatásfokot százalékban. Mennyi a goodput 1 Gbps linken?
 
-== 2.1 Adatközpont költöztetés – hálózati mentés vs. fizikai szállítás
+*Megoldás:*
+- Fejlécek összege: $20 "B" + 20 "B" = 40 "B"$.
+- Hasznos teher (payload): $1500 "B" - 40 "B" = 1460 "B"$.
+- Hasznos hatásfok: $E = 1460 / 1500 = 73 / 75 approx$ *97.33%*.
+- Goodput 1 Gbps linken: $"Goodput" = E dot C = 0.97333 dot 1 "Gbps" =$ *973.33 Mbps*.
 
-Adott költségfüggvények:
-- $C_"net"(V) = 500 + 20 V quad ["€"]$
-- $C_"phys"(V) = 2000 + 5 V quad ["€"]$
+== Komplexebb feladatok – Kidolgozás és Megoldás
 
-=== a) Költségek 40 TB és 300 TB esetén:
-- * $V = 40 "TB"$ esetén:*
-  - $C_"net"(40) = 500 + 20 times 40 = 500 + 800 = 1300 "€"$
-  - $C_"phys"(40) = 2000 + 5 times 40 = 2000 + 200 = 2200 "€"$
-  - *Eredmény:* $40 "TB"$ esetén a *hálózati adatmentés* az olcsóbb.
+=== Adatközpont költöztetés – hálózati mentés vs. fizikai szállítás
+*Adatok:* $V$ (TB) adat, 3000 km távolság.
+- Hálózati költség: $C_("net")(V) = 500 + 20 V$ [€]
+- Fizikai költség: $C_("phys")(V) = 2000 + 5 V$ [€]
 
-- * $V = 300 "TB"$ esetén:*
-  - $C_"net"(300) = 500 + 20 times 300 = 500 + 6000 = 6500 "€"$
-  - $C_"phys"(300) = 2000 + 5 times 300 = 2000 + 1500 = 3500 "€"$
-  - *Eredmény:* $300 "TB"$ esetén a *fizikai szállítás* az olcsóbb.
+*a) Költségek 40 TB és 300 TB esetén:*
+- *40 TB esetén:*
+  - $C_("net")(40) = 500 + 20 dot 40 = 500 + 800 =$ *1300 €*
+  - $C_("phys")(40) = 2000 + 5 dot 40 = 2000 + 200 =$ *2200 €*
+  - *Eredmény:* 40 TB-nál a *hálózati átvitel olcsóbb* (1300 € < 2200 €).
+- *300 TB esetén:*
+  - $C_("net")(300) = 500 + 20 dot 300 = 500 + 6000 =$ *6500 €*
+  - $C_("phys")(300) = 2000 + 5 dot 300 = 2000 + 1500 =$ *3500 €*
+  - *Eredmény:* 300 TB-nál a *fizikai szállítás olcsóbb* (3500 € < 6500 €).
 
-=== b) Azonos költségű $V^*$ adatméret (fedezeti pont):
-$ C_"net"(V^*) = C_"phys"(V^*) $
-$ 500 + 20 V^* = 2000 + 5 V^* $
-$ 15 V^* = 1500 ==> V^* = 100 "TB" $
-*(Megjegyzés: $100 "TB"$ alatt a hálózati átvitel, $100 "TB"$ felett a fizikai szállítás a gazdaságosabb).*
+*b) Egyensúlyi adatméret ($V^*$):*
+- Feltétel: $C_("net")(V^*) = C_("phys")(V^*)$
+- $500 + 20 V^* = 2000 + 5 V^* arrow.r 15 V^* = 1500 arrow.r$ *$V^*$ = 100 TB*
+- $V < 100 "TB"$ esetén a hálózat, $V > 100 "TB"$ esetén a fizikai szállítás éri meg jobban.
 
-=== c) Átviteli idő 100 TB hálózati átvitele esetén (10 Gbit/s, 80% hatásfok):
-- *Effektív sebesség:* $10 "Gbit/s" times 0.80 = 8 "Gbit/s" = 8 times 10^9 "bit/s"$
-- *Átvintendő adat:* $100 "TB" = 100 times 10^(12) "B" = 800 times 10^(12) "bit" = 8 times 10^(14) "bit"$
-- *Átviteli idő ($t$):*
-$
-  t = (8 times 10^(14) "bit") / (8 times 10^(9) "bit/s") = 100 000 "s" approx 27.78 "óra" quad (approx 1 "nap" 3.8 "óra")
-$
-- *Összehasonlítás:* A hálózati átvitel kb. *27,8 órát* vesz igénybe, ami lényegesen gyorsabb, mint a fizikai szállítás *3 napos (72 órás)* várható átfutási ideje.
+*c) Átviteli idő 10 Gbit/s linken (80% hatékonyság) 100 TB-ra:*
+- Hatékony sávszélesség: $C_("eff") = 0.8 dot 10 "Gbit/s" = 8 "Gbit/s" = 8 dot 10^9 "bit/s"$.
+- Adatméret (decimális konvencióval): $100 "TB" = 100 dot 10^12 "B" = 800 dot 10^12 "bit"$.
+- Idő: $t = (800 dot 10^12 "bit") / (8 dot 10^9 "bit/s") = 10^5 "s" =$ *27.78 óra* (kb. 1 nap 3 óra 47 perc).
+- *(Bináris $1 "TiB" = 2^40 "B"$ esetén: $t approx 30.54 "óra"$.)*
+- *Összehasonlítás:* A hálózati átvitel (~27.8 óra) lényegesen gyorsabb a fizikai szállítás *3 napos (72 órás)* átfutási idejénél, miközben $100 "TB"$-nál a költségük azonos (2500 €).
 
-#pagebreak()
-== 2.2 Hibrid adatmentési stratégia
+=== Hibrid adatmentési stratégia
+Költségmodell: $C_("hybrid")(N) = F + a dot N + b dot (V - N) + c dot (V - N)^2$, ahol $0 <= N <= V$.
 
-Költségmodell:
-$ C_"hybrid"(N) = F + a N + b(V - N) + c(V - N)^2 quad (0 <= N <= V) $
+*1. Első derivált és lokális szélsőérték ($N^*$):*
+- Deriváljunk $N$ szerint (a láncszabályt alkalmazva a $(V-N)^2$ tagra):
+  $ (d C_("hybrid")) / (d N) = a - b + c dot 2(V - N) dot (-1) = a - b - 2c(V - N) $
+- Szélsőérték feltétele ($(d C) / (d N) = 0$):
+  $ a - b - 2c(V - N^*) = 0 arrow.r 2c(V - N^*) = a - b arrow.r V - N^* = (a - b) / (2c) $
+  $N^* = V - (a - b) / (2c)$
 
-=== 1. Első derivált és az általános lokális szélsőérték ($N^*$):
-Fejtsük ki a deriváltat $N$ szerint:
-$ (d C_"hybrid") / (d N) = a - b - 2c(V - N) $
+*2. Második derivált és a szélsőérték jellege:*
+- $ (d^2 C_("hybrid")) / (d N^2) = (d) / (d N) [a - b - 2c V + 2c N] = 2c $
+- Mivel $c > 0$, így a második derivált szigorúan pozitív ($2c > 0$), tehát az $N^*$ pontban *lokális minimum* van.
 
-A szélsőérték feltétele $(d C) / (d N) = 0$:
-$ a - b - 2c(V - N) = 0 ==> 2c(V - N) = a - b $
-$ V - N = (a - b) / (2c) ==> N^* = V - (a - b) / (2c) $
+*3. Numerikus példa:*
+- Paraméterek: $V = 150 "TB", F = 3500 "€", a = 30 "€/TB", b = 20 "€/TB", c = 0.05 "€/TB"^2$.
+- *$N^*$ kiszámítása:*
+  $N^* = 150 - (30 - 20) / (2 dot 0.05) = 150 - 10 / 0.1 = 150 - 100 =$ *50 TB*
+  - *Intervallum ellenőrzése:* $N^* = 50 "TB" in [0, 150]$, tehát az érvényes tartományba esik.
+- *Költségek kiszámítása:*
+  - $C(N^*) = C(50) = 3500 + 30(50) + 20(100) + 0.05(100)^2 = 3500 + 1500 + 2000 + 500 =$ *7500 €*
+  - $C(0) = 3500 + 30(0) + 20(150) + 0.05(150)^2 = 3500 + 3000 + 1125 =$ *7625 €*
+  - $C(150) = 3500 + 30(150) + 20(0) + 0.05(0)^2 = 3500 + 4500 + 0 =$ *8000 €*
+- *Magyarázat:* Ha $N < 50$ (túl kevés fizikai szállítás), a hálózati kvadratikus torlódási díj túlságosan megdrágítja az átvitelt. Ha $N > 50$ (túl sok fizikai szállítás), a fizikai szállítás magasabb alapdíját ($a = 30$ vs $b = 20$) fizetjük feleslegesen. Az $N^* = 50 "TB"$ biztosítja a minimális összköltséget ($7500 "€"$).
 
-=== 2. Második derivált és a szélsőérték jellege ($c > 0$):
-$ (d^2 C_"hybrid") / (d N^2) = d / (d N) [a - b - 2c(V - N)] = 2c $
-Mivel $c > 0$, a második derivált értéke *szigorúan pozitív* ($(d^2 C) / (d N^2) = 2c > 0$), így $N^*$-nál *lokális MINIMUM* található.
+= Keretezés – bit és bájtbeszúrás
 
-=== 3. Numerikus példa:
-Adatok: $V = 150 "TB"$, $F = 3500 "€"$, $a = 30 "€/TB"$, $b = 20 "€/TB"$, $c = 0.05 "€/TB"^2$.
+== Bitbeszúrás (bit stuffing)
+- *Használata:* pl. HDLC és CAN protokollokban.
+- *Működése:* minden 5 egymást követő 1-es bit után a küldő automatikusan 0-át szúr be.
+- *Cél:* biztosítani, hogy a kerethatároló speciális bitmintája (pl. `01111110`) ne jelenjen meg a hasznos adatban.
+- A vevő oldalon a dekódoló eltávolítja ezeket a beszúrt 0-kat.
 
-- * $N^*$ kiszámítása:*
-$ N^* = 150 - (30 - 20) / (2 times 0.05) = 150 - 10 / 0.1 = 150 - 100 = 50 "TB" $
-- *Ellenőrzés:* $50 in$, tehát az optimum a megengedett intervallumon belülre esik.
+*Példa:*
+- Adat: `01111110` (megegyezik a kerethatárt jelző flag-gel)
+- Küldő bit stuffing után: `011111010`
+- Vevő: felismeri és eltávolítja a beszúrt 0-t, így visszakapja az eredeti bitmintát.
 
-- *Költségek kiszámítása ($C(N^*)$, $C(0)$, $C(150)$):*
-  - *Optimális pont ($N^* = 50 "TB"$ fizikai, $100 "TB"$ hálózati):*
-    $ C(50) = 3500 + 30(50) + 20(100) + 0.05(100)^2 = 3500 + 1500 + 2000 + 500 = 7500 "€" $
-  - *Tiszta hálózati átvitel ($N = 0 "TB"$):*
-    $ C(0) = 3500 + 30(0) + 20(150) + 0.05(150)^2 = 3500 + 3000 + 1125 = 7625 "€" $
-  - *Tiszta fizikai szállítás ($N = 150 "TB"$):*
-    $ C(150) = 3500 + 30(150) + 20(0) + 0.05(0)^2 = 3500 + 4500 = 8000 "€" $
+== Bájtbeszúrás (byte stuffing, karakterbeszúrás)
+- *Használata:* pl. PPP és más byte-orientált protokollokban.
+- *Működése:* ha a hasznos adat tartalmazza a vezérlő karaktert (pl. `0x7E` = keretflag), akkor előtte beszúrnak egy escape karaktert (pl. `0x7D`).
+- Ha az adat maga escape karaktert (`0x7D`) tartalmaz, akkor azt is kiegészítik (pl. `0x7D` $arrow.r$ `0x7D7D`).
+- A vevő oldalon az escape szekvenciákat visszaalakítják az eredeti adatra.
 
-- *Miért éri meg az $N^*$ pont? (Magyarázat):*
-  - Ha *túl keveset viszünk fizikailag* ($N < 50$), a hálózaton küldött adatmennyiség ($V-N$) nagy lesz. A hálózati díj kvadratikus tagja ($c dot (V-N)^2$) miatt a költségek meredeken elkezdenek növekedni (pl. hálózati torlódás, sávszélességi felárak miatt).
-  - Ha *túl sokat viszünk fizikailag* ($N > 50$), a magasabb lineáris fizikai egységár ($a = 30 "€/TB"$ vs. $b = 20 "€/TB"$) növeli meg az összköltséget.
-  - Az *$N^"*" = 50 "TB"$* megosztás pontosan kiegyensúlyozza ezt a két hatást, és biztosítja a *lehető legalacsonyabb összköltséget ($7500 "€"$)*.
+*Példa:*
+- Keret flag: `0x7E`, Escape: `0x7D`
+- Adat: `0xAA` $arrow.r$ nincs átalakítás: `0xAA`
+- Adat: `0x7E` $arrow.r$ átalakítva: `0x7D7E`
+- Adat: `0x7D` $arrow.r$ átalakítva: `0x7D7D`
+
+== Összehasonlítás
+- *Bit stuffing:* bitenként működik, bitorientált protokollokban.
+- *Byte stuffing:* bájtonként működik, karakterorientált protokollokban.
+Mindkét módszer biztosítja, hogy a vezérlő szimbólumok ne keveredjenek az adattal, de egyben növelik a tényleges adat méretét (overhead).
+
+== Feladatok – Kidolgozás és Megoldás
+
+=== 1. Bitbeszúrás feladat
+_Feladat:_ Az `11111110011111` üzenet hogy fog kinézni a bitbeszúrásos módszer (5 egymást követő 1-es után 0 beszúrása) alkalmazása után?
+
+*Megoldás:*
+- Bontsuk elemeire az eredeti bitfolyamot az 1-esek számlálásával:
+  - `1 1 1 1 1` (5 db 1-es) $arrow.r$ *beszúrás:* `0`
+  - `1 1 0 0` (folytatás, a számláló törlődik a nulláknál)
+  - `1 1 1 1 1` (újabb 5 db 1-es) $arrow.r$ *beszúrás:* `0`
+- Eredeti: `11111` `1` `100` `11111`
+- Beszúrt bitekkel: `11111`*0*`1100``11111`*0*
+- *Végeredmény:* *1111101100111110*
+
+=== 2. Bájtbeszúrás feladat
+_Feladat:_ Hogy kerül átvitelre a következő adat:
+#figure(
+  image("byte.png", width: 80%),
+)
+
+*Megoldás:*
+- Minden `FLAG` elé egy `ESC` karaktert szúrunk be.
+- Minden `ESC` elé egy `ESC` karaktert szúrunk be.
+- Átalakítás lépésről lépésre:
+  - `FLAG` $arrow.r$ `ESC FLAG`
+  - `ESC` $arrow.r$ `ESC ESC`
+- *Végeredmény (adatmező):*
+  *[ A ] [ B ] [ C ] [ ESC ] [ FLAG ] [ D ] [ ESC ] [ ESC ] [ ESC ] [ FLAG ] [ E ] [ F ] [ ESC ] [ FLAG ] [ ESC ] [ FLAG ] [ G ]*
+_(A teljes keretnél a keret elejére és végére egy-egy nyitó/záró `[ FLAG ]` is kerül.)_
+
+
+=== 3. Kerethossz és eredeti adatméret feladat
+_Feladat:_ Bájt-alapú protokoll, keretek nyitó és záró `FLAG` bájttal. 8 keret küldése, összhossz a médiumon: 2048 Byte. Az eredeti adatban 16 `ESC` és 8 `FLAG` bájt volt. Hány bájtból állt az eredeti adat?
+
+*Megoldás:*
+- Jelölje $D_("orig")$ az eredeti adat bájtszámát.
+- *1. Kerethatárolók:* 8 keret $times 2$ (`FLAG` keretenként) = 16 Byte overhead.
+- *2. Bájtbeszúrás overhead:*
+  - 8 eredeti `FLAG` miatt $+8$ `ESC` bájt beszúrása.
+  - 16 eredeti `ESC` miatt $+16$ `ESC` bájt beszúrása.
+  - Összes beszúrt bájt (overhead) = $8 + 16 = 24$ Byte.
+- *Egyenlet:*
+  $ "Teljes méret" = D_("orig") + "Kerethatárolók" + "Beszúrt ESC bájtok" $
+  $ 2048 = D_("orig") + 16 + 24 $
+  $ 2048 = D_("orig") + 40 $
+  $D_("orig") = 2048 - 40 =$ *2008 Byte*
