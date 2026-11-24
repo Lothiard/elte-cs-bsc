@@ -196,8 +196,8 @@ A szeparábilis differenciálegyenletek az elsőrendű közönséges differenci�
 
   *2. Lépés: Integrálás a láncszabállyal.* \
   Az összetett függvény deriválási szabálya alapján:
-  $ (H circle phi)'(t) = H'(phi(t)) dot phi'(t) = 1 / h(phi(t)) dot phi'(t) = g(t) = G'(t). $
-  Innen $(H circle phi - G)'(t) = 0$, így a $D_phi$ nyílt intervallumon fennáll:
+  $ (H compose phi)'(t) = H'(phi(t)) dot phi'(t) = 1 / h(phi(t)) dot phi'(t) = g(t) = G'(t). $
+  Innen $(H compose phi - G)'(t) = 0$, így a $D_phi$ nyílt intervallumon fennáll:
   $ H(phi(t)) - G(t) = c quad (c in bb(R) "konstans"). $
 
   *3. Lépés: A kezdeti feltétel és az inverz létezése.* \
