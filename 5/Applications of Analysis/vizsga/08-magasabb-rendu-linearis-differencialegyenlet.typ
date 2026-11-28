@@ -260,7 +260,7 @@ Az átviteli elv segítségével a megoldástér szerkezete visszavezethető a l
 
 Az állandók variálásának módszere általános eljárás az inhomogén egyenlet egy $y_p (x)$ partikuláris megoldásának meghatározására, ha ismerjük a homogén egyenlet egy $(phi_1, dots, phi_n)$ alaprendszerét.
 
-#theorembox("Tétel és algoritmus: az állandók variálása $n$-edrendben", [
+#theorembox([Tétel és algoritmus: az állandók variálása $n$-edrendben], [
   Keressük az inhomogén egyenlet partikuláris megoldását
   $ y_p (x) = sum_(k=1)^n c_k (x) phi_k (x) = c_1 (x) phi_1 (x) + c_2 (x) phi_2 (x) + dots + c_n (x) phi_n (x) $
   alakban, ahol a homogén megoldás $c_k$ konstansai helyett ismeretlen $c_k (x)$ együtthatófüggvények állnak.
@@ -303,7 +303,7 @@ Az állandók variálásának módszere általános eljárás az inhomogén egye
 
 #v(8pt)
 
-#theorembox("A $c_k (x)$ együtthatófüggvények kiszámítása", [
+#theorembox([A $c_k (x)$ együtthatófüggvények kiszámítása], [
   Az egyenletrendszer együtthatómátrixa a $Phi(x)$ Wronski-mátrix, és az alaprendszer miatt $det Phi(x) = W(x) != 0$. Ezért a Cramer-szabállyal a $c'_k$ függvények egyértelműen kifejezhetők:
   $ c'_k (x) = (W_k (x)) / (W(x)) quad (k = 1, 2, dots, n), $
   ahol $W_k (x)$ a Wronski-determinánsból úgy adódik, hogy annak $k$-adik oszlopát a $(0, 0, dots, 0, c(x))^T$ jobb oldali vektorra cseréljük.

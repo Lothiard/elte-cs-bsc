@@ -286,7 +286,7 @@ Ekkor a mátrix nem diagonalizálható. Csak egyetlen (skalárszorosától eltek
 $ (A - lambda I) v = 0. $
 A második független megoldást $y_2 (x) = e^(lambda x) (w + x v)$ alakban keressük, ahol $w in bb(R)^2$ az úgynevezett *általánosított sajátvektor* (fővektor).
 
-#theorembox("Tétel: alaprendszer Jordan-blokk esetén (n = 2)", [
+#theorembox([Tétel: alaprendszer Jordan-blokk esetén ($n = 2$)], [
   Legyen $(A - lambda I) v = 0$ ($v != 0$), és legyen $w in bb(R)^2$ az alábbi lineáris egyenletrendszer egy megoldása:
   $ (A - lambda I) w = v. $
   Ekkor az $y' = A y$ rendszer egy valós alaprendszere:
